@@ -1,6 +1,6 @@
 {
   "name": "@dxos/data-client",
-  "version": "1.0.0-beta.93",
+  "version": "1.0.1-alpha.0",
   "license": "GPL-3.0",
   "author": "DxOS.org",
   "main": "dist/es/index.js",
@@ -62,8 +62,8 @@
     "babel-jest": "^25.1.0",
     "babel-plugin-add-module-exports": "^1.0.0",
     "jest": "^25.1.0",
-    "semistandard": "^14.2.0",
     "random-access-memory": "^3.1.1",
+    "semistandard": "^14.2.0",
     "tempy": "^0.4.0",
     "wait-for-expect": "^3.0.2"
   },
