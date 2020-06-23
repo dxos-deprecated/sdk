@@ -9,17 +9,14 @@
 // TODO(dboreham): Reduce these tests to the minimum to prove end to end functionality not already tested in
 //   party-manager. Possibly these tests don't need to be in data-client at all (similar tests exist in ./tests).
 
-import debug from 'debug';
 import ram from 'random-access-memory';
 import waitForExpect from 'wait-for-expect';
 
 import { Keyring, KeyType } from '@dxos/credentials';
-import { createId, createKeyPair, keyToString, randomBytes, sign, verify, SIGNATURE_LENGTH } from '@dxos/crypto'
+import { createId, createKeyPair, keyToString, randomBytes, sign, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { DefaultModel } from '@dxos/model-factory';
 
 import { createClient } from './client';
-
-const log = debug('dxos:client:test');
 
 /**
  * Writes a message on each client and looks for it on the others.

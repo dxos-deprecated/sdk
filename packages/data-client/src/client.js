@@ -28,7 +28,6 @@ const MAX_WAIT = 1000;
  * Data client.
  */
 class Client {
-
   /**
    * @param {FeedStore} feedStore
    * @param {NetworkManager} networkManager
@@ -37,7 +36,7 @@ class Client {
    * @param {Object} config
    */
   // TODO(burdon): Create builder pattern (for factory) rather than complex constructors.
-  constructor(feedStore, networkManager, partyManager, keyring, config) {
+  constructor (feedStore, networkManager, partyManager, keyring, config) {
     assert(feedStore);
     assert(config);
 
@@ -61,7 +60,7 @@ class Client {
     this.onFeedUpdate(feedStore);
   }
 
-  async destroy() {
+  async destroy () {
     await this._partyManager.destroy();
     await this._networkManager.close();
     this._feedStore.removeListener('feed', this.onFeedUpdate);
@@ -81,34 +80,34 @@ class Client {
     metrics.set('feed-store.descriptors', descriptors.length);
   };
 
-  get config() {
+  get config () {
     return this._config;
   }
 
-  get keyring() {
+  get keyring () {
     return this._keyring;
   }
 
-  get feedStore() {
+  get feedStore () {
     return this._feedStore;
   }
 
-  get modelFactory() {
+  get modelFactory () {
     return this._modelFactory;
   }
 
   // TODO(dboreham): What about get swarmFactory?
-  get networkManager() {
+  get networkManager () {
     return this._networkManager;
   }
 
   // TODO(burdon): Remove.
-  get partyManager() {
+  get partyManager () {
     return this._partyManager;
   }
 
   // TODO(burdon): Consistent pattern for delete (e.g., db and objects). Shut down all objects.
-  async reset() {
+  async reset () {
     await this._feedStore.close();
     if (this._feedStore.storage.destroy) {
       await this._feedStore.storage.destroy();
@@ -119,7 +118,7 @@ class Client {
   }
 
   // TODO(telackey): Does this belong here, in PartyManager, or up to the user?
-  async _waitForPartiesToBeOpen() {
+  async _waitForPartiesToBeOpen () {
     const partyWaiters = [];
     for (const { publicKey } of this._partyManager.getPartyInfoList()) {
       if (!this._partyManager.hasParty(publicKey)) {
@@ -130,7 +129,7 @@ class Client {
     await Promise.all(partyWaiters);
   }
 
-  async _appendMessage(message, topic) {
+  async _appendMessage (message, topic) {
     let append = this._partyWritters[topic];
     if (append) {
       return append(message);
@@ -147,7 +146,7 @@ class Client {
     return append(message);
   }
 
-  async _getOwnershipInformation(message, topic) {
+  async _getOwnershipInformation (message, topic) {
     if (!topic) return message;
 
     // obtaining the ownership information. We can add a map/index for faster lookups as needed.
