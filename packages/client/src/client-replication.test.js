@@ -1,5 +1,5 @@
 //
-// Copyright 2019 Wireline, Inc.
+// Copyright 2020 DXOS.
 //
 
 // TODO(dboreham): Enable running this test in browser. It is currently not enabled for browser execution
