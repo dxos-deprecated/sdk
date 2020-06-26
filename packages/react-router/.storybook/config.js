@@ -1,5 +1,5 @@
 //
-// Copyright 2018 Wireline, Inc.
+// Copyright 2020 DXOS.
 //
 
 import { configure, addDecorator } from '@storybook/react';
