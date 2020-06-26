@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-router",
-  "version": "1.0.0-beta.99",
+  "version": "1.0.0-beta.100",
   "description": "React router utils.",
   "keywords": [],
   "license": "GPL-3.0",
@@ -34,9 +34,9 @@
     "@storybook/addon-actions": "^5.2.5",
     "@storybook/addon-knobs": "^5.2.5",
     "@storybook/react": "^5.2.5",
-    "babel-loader": "^8.0.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "^1.0.0",
     "jest": "^25.1.0",
     "semistandard": "14.2.0",
@@ -59,7 +59,7 @@
     "ignore": [
       "dist"
     ]
-  },  
+  },
   "publishConfig": {
     "access": "public"
   }
