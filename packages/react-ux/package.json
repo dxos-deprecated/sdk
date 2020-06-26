@@ -1,0 +1,66 @@
+{
+  "name": "@dxos/react-ux",
+  "version": "1.0.0-beta.99",
+  "description": "React components",
+  "keywords": [],
+  "license": "GPL-3.0",
+  "author": "DxOS.org",
+  "main": "dist/es/index.js",
+  "scripts": {
+    "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \"**/*.test.js\" --source-maps inline",
+    "build:watch": "yarn run build --watch",
+    "clean": "rm -rf dist",
+    "lint": "semistandard",
+    "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
+    "test": "jest --rootDir ./src --verbose --passWithNoTests"
+  },
+  "dependencies": {
+    "@dxos/crypto": "^1.0.0-beta.1",
+    "@dxos/debug": "^1.0.0-beta.73",
+    "@material-ui/core": "^4.9.0",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.42",
+    "clsx": "^1.0.4",
+    "lodash.isplainobject": "^4.0.6",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@storybook/addon-actions": "^5.2.5",
+    "@storybook/addon-knobs": "^5.2.5",
+    "@storybook/react": "^5.2.5",
+    "babel-loader": "^8.0.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.1.0",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "jest": "^25.1.0",
+    "semistandard": "14.2.0"
+  },
+  "peerDependencies": {
+    "react": "16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "browserslist": [
+    "> 5%"
+  ],
+  "semistandard": {
+    "parser": "babel-eslint",
+    "env": [
+      "jest",
+      "node",
+      "browser"
+    ],
+    "ignore": [
+      "dist"
+    ]
+  },  
+  "publishConfig": {
+    "access": "public"
+  }
+}
