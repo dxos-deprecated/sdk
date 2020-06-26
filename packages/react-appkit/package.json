@@ -1,0 +1,84 @@
+{
+  "name": "@dxos/react-appkit",
+  "version": "1.0.0-beta.99",
+  "description": "Application framework components",
+  "keywords": [],
+  "license": "GPL-3.0",
+  "author": "DxOS.org",
+  "main": "dist/es/index.js",
+  "scripts": {
+    "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \"**/*.test.js\" --source-maps inline",
+    "build:watch": "yarn run build --watch",
+    "clean": "rm -rf dist",
+    "lint": "semistandard",
+    "prepublishOnly": "npm run build && npm run test",
+    "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
+    "test": "jest --rootDir ./src --verbose --passWithNoTests"
+  },
+  "dependencies": {
+    "@dxos/botkit-client": "^1.0.0-beta.99",
+    "@dxos/credentials": "^1.0.1-beta.4",
+    "@dxos/crypto": "^1.0.0-beta.1",
+    "@dxos/debug": "^1.0.0-beta.73",
+    "@dxos/metrics": "^1.0.0-beta.6",
+    "@dxos/party-manager": "^1.0.1-beta.18",
+    "@dxos/react-client": "^1.0.0-beta.99",
+    "@dxos/react-json-tree": "^0.11.3",
+    "@dxos/react-router": "^1.0.0-beta.99",
+    "@dxos/react-ux": "^1.0.0-beta.99",
+    "@material-ui/core": "^4.9.0",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.42",
+    "chance": "^1.1.6",
+    "clsx": "^1.0.4",
+    "color-hash": "^1.0.3",
+    "lodash.defaults": "^4.2.0",
+    "lodash.defaultsdeep": "^4.6.1",
+    "moment": "^2.24.0",
+    "react-copy-to-clipboard": "^5.0.2",
+    "react-hotkeys": "^2.0.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@storybook/addon-actions": "^5.2.5",
+    "@storybook/addon-knobs": "^5.2.5",
+    "@storybook/react": "^5.2.5",
+    "babel-loader": "^8.0.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.1.0",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "jest": "^25.1.0",
+    "semistandard": "14.2.0",
+    "storybook-react-router": "^1.0.8"
+  },
+  "peerDependencies": {
+    "react": "16.12.0",
+    "react-copy-to-clipboard": "^5.0.2",
+    "react-dom": "^16.12.0"
+  },
+  "browserslist": [
+    "> 5%"
+  ],
+  "semistandard": {
+    "parser": "babel-eslint",
+    "env": [
+      "jest",
+      "node",
+      "browser"
+    ],
+    "ignore": [
+      "dist"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
