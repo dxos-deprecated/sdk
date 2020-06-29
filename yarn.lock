@@ -1028,10 +1028,10 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/credentials@^1.0.1-beta.18":
-  version "1.0.1-beta.18"
-  resolved "https://registry.yarnpkg.com/@dxos/credentials/-/credentials-1.0.1-beta.18.tgz#eea7062b5bb14a3b7455fc56b4446693440429e8"
-  integrity sha512-b+1tJuV1BmL3IgttZGx9772Eq7ntE8xF9Kn+2zeLM7In0LeELKTOu5YV/hU7Aw0UEAVyPjJxkpxspLJ2VicT4A==
+"@dxos/credentials@^1.0.1-beta.19":
+  version "1.0.1-beta.19"
+  resolved "https://registry.yarnpkg.com/@dxos/credentials/-/credentials-1.0.1-beta.19.tgz#50c64e184646e3f1366e49784a1970220925b7b8"
+  integrity sha512-w2AjmEEZFHG90IqMnkm5uwa6lR4LXv6clbBdNiP15bGXfqFmIATtLqLrY+1CJ7ULW3HLTaJjd63J2kkLG30Gow==
   dependencies:
     "@dxos/codec-protobuf" "^1.1.0-beta.10"
     "@dxos/crypto" "^1.0.0-beta.1"
@@ -1298,13 +1298,13 @@
     debug "^4.1.1"
     wrtc "^0.4.3"
 
-"@dxos/party-manager@^1.0.1-beta.18":
-  version "1.0.1-beta.18"
-  resolved "https://registry.yarnpkg.com/@dxos/party-manager/-/party-manager-1.0.1-beta.18.tgz#32214b95f9eaf6a0bc21425d6d079ab2d0328749"
-  integrity sha512-nTJEc6ExXOWAXThe2F/p3NfUJvj2eWq4iLD44AaoJbv6qTOLSysNfXEO9sMYMIXrFItIv06E09SMuUHlWloYSQ==
+"@dxos/party-manager@^1.0.1-beta.19":
+  version "1.0.1-beta.19"
+  resolved "https://registry.yarnpkg.com/@dxos/party-manager/-/party-manager-1.0.1-beta.19.tgz#42acb6a29f68706cb5fffe110bc58e710c04dda2"
+  integrity sha512-/cZ7PGKxcOnB76jvk8Te88eTyKVn8GlMrRG8Q/kQ10McDWacvfBliHaQjBST706pL5Y2YANeEn9VPoc3cmel2w==
   dependencies:
     "@dxos/async" "^1.0.0-beta.1"
-    "@dxos/credentials" "^1.0.1-beta.18"
+    "@dxos/credentials" "^1.0.1-beta.19"
     "@dxos/crypto" "^1.0.0-beta.1"
     "@dxos/echo-db" "^1.0.0-beta.20"
     "@dxos/model-factory" "^1.0.0-beta.20"
@@ -1314,6 +1314,7 @@
     assert "^2.0.0"
     crypto-js "^3.1.9-1"
     debug "^4.1.1"
+    deep-diff "^1.0.2"
     json-stable-stringify "^1.0.1"
     mississippi "^4.0.0"
 
@@ -6107,6 +6108,11 @@ dedent@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
   integrity sha1-JJXduvbrh0q7Dhvp3yLS5aVEMmw=
+
+deep-diff@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/deep-diff/-/deep-diff-1.0.2.tgz#afd3d1f749115be965e89c63edc7abb1506b9c26"
+  integrity sha512-aWS3UIVH+NPGCD1kki+DCU9Dua032iSsO43LqQpcs4R3+dVv7tX0qBGjiVHJHjplsoUM2XRO/KB92glqc68awg==
 
 deep-equal@^1.1.1:
   version "1.1.1"
