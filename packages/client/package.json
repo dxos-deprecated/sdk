@@ -22,7 +22,7 @@
     "@dxos/metrics": "^1.0.0-beta.6",
     "@dxos/model-factory": "^1.0.0-beta.17",
     "@dxos/network-manager": "^1.0.0-beta.93",
-    "@dxos/party-manager": "^1.0.1-beta.18",
+    "@dxos/party-manager": "^1.0.1-beta.19",
     "@dxos/protocol": "^1.1.0-alpha.4",
     "@dxos/protocol-plugin-replicator": "^1.1.0-alpha.4",
     "@geut/discovery-swarm-webrtc": "^3.0.0-beta.3",
