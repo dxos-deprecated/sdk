@@ -1028,10 +1028,10 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/credentials@^1.0.1-beta.19":
-  version "1.0.1-beta.19"
-  resolved "https://registry.yarnpkg.com/@dxos/credentials/-/credentials-1.0.1-beta.19.tgz#50c64e184646e3f1366e49784a1970220925b7b8"
-  integrity sha512-w2AjmEEZFHG90IqMnkm5uwa6lR4LXv6clbBdNiP15bGXfqFmIATtLqLrY+1CJ7ULW3HLTaJjd63J2kkLG30Gow==
+"@dxos/credentials@^1.0.1-beta.21":
+  version "1.0.1-beta.21"
+  resolved "https://registry.yarnpkg.com/@dxos/credentials/-/credentials-1.0.1-beta.21.tgz#0587d0e07979f3c482b2a21bfac46c1066f8d3b5"
+  integrity sha512-FKrH8kgiUvLU+Ok1XzULcbIPEWwFS9Srh2ziq3jwevQ6sTCJaQG5TgGsP88r2n2vTO5uixPrvRet1pZGOT0gZQ==
   dependencies:
     "@dxos/codec-protobuf" "^1.1.0-beta.10"
     "@dxos/crypto" "^1.0.0-beta.1"
@@ -1298,13 +1298,13 @@
     debug "^4.1.1"
     wrtc "^0.4.3"
 
-"@dxos/party-manager@^1.0.1-beta.19":
-  version "1.0.1-beta.19"
-  resolved "https://registry.yarnpkg.com/@dxos/party-manager/-/party-manager-1.0.1-beta.19.tgz#42acb6a29f68706cb5fffe110bc58e710c04dda2"
-  integrity sha512-/cZ7PGKxcOnB76jvk8Te88eTyKVn8GlMrRG8Q/kQ10McDWacvfBliHaQjBST706pL5Y2YANeEn9VPoc3cmel2w==
+"@dxos/party-manager@^1.0.1-beta.20":
+  version "1.0.1-beta.21"
+  resolved "https://registry.yarnpkg.com/@dxos/party-manager/-/party-manager-1.0.1-beta.21.tgz#bfefec890bf70f6aadc838d4e2e0c876624d14fd"
+  integrity sha512-p/mMgfpnv+Hh0z7O0rDmxzFH4YfAc6vPZ296dSBIQ4CE6zFt2aEoIbIx0YLVQ3DxX08vgjK2FeAtjSl5Hjp1fw==
   dependencies:
     "@dxos/async" "^1.0.0-beta.1"
-    "@dxos/credentials" "^1.0.1-beta.19"
+    "@dxos/credentials" "^1.0.1-beta.21"
     "@dxos/crypto" "^1.0.0-beta.1"
     "@dxos/echo-db" "^1.0.0-beta.20"
     "@dxos/model-factory" "^1.0.0-beta.20"
