@@ -20,9 +20,7 @@ export const DefaultRouter = {
     register: '/register',
     auth: '/auth',
     keys: '/keys',
-    members: '/members',
-    feed: '/feed',
-    store: '/store'
+    members: '/members'
   },
 
   template: `/:path/:topic(${ROUTE_KEY_FORMAT})?/:item?`,
