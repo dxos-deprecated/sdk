@@ -993,13 +993,13 @@
   resolved "https://registry.yarnpkg.com/@dxos/async/-/async-1.0.0-beta.1.tgz#53978e0be8f88915ce901a0619bd12041b2fb4dc"
   integrity sha512-0orf1DtPKmS/eIkz9LWJ4FDtnHN4HhV1y8+Di33z7FW622rScK8eBT/W/wiKG1uORhQ2OgEZE8PUidpEpZr0jg==
 
-"@dxos/botkit-client@^1.0.0-beta.101":
-  version "1.0.0-beta.101"
-  resolved "https://registry.yarnpkg.com/@dxos/botkit-client/-/botkit-client-1.0.0-beta.101.tgz#ac1e24f2df774c91bd8f0f2d295b89c1c6e53133"
-  integrity sha512-RNOzShHW0LGoVNEu5OXKlRJ1b6BPkLROPqXMyyQjk+sDtax3RrT+S1EpaeE75R6oemP3vErp4W9BXpR8TblK3g==
+"@dxos/botkit-client@^1.0.0-beta.102":
+  version "1.0.0-beta.102"
+  resolved "https://registry.yarnpkg.com/@dxos/botkit-client/-/botkit-client-1.0.0-beta.102.tgz#5ffc9d58ea31800d7e601c23df65e059a02e7d19"
+  integrity sha512-EWGHKtx4Z4rfy1Uan2wPo6h+x5g0hYAUM4lLswQ54SAkNMW7QeCXha2ABteR0wSI0hfJYe1ioEV74n10ywbMYg==
   dependencies:
     "@dxos/async" "^1.0.0-beta.1"
-    "@dxos/client" "^1.0.0-beta.98"
+    "@dxos/client" "^1.0.0-beta.104"
     "@dxos/crypto" "^1.0.0-beta.1"
     "@dxos/debug" "^1.0.0-beta.73"
     "@dxos/network-manager" "^1.0.0-beta.94"
