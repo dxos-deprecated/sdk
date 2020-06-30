@@ -16,7 +16,7 @@
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
   "dependencies": {
-    "@dxos/botkit-client": "^1.0.0-beta.99",
+    "@dxos/botkit-client": "^1.0.0-beta.101",
     "@dxos/credentials": "^1.0.1-beta.4",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
