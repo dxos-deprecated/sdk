@@ -1,0 +1,101 @@
+//
+// Copyright 2020 DXOS.
+//
+
+import assert from 'assert';
+import fs from 'fs-extra';
+import os from 'os';
+import path from 'path';
+import download from 'download';
+import deepGet from 'lodash.get';
+import url from 'url';
+
+import { Registry } from '@wirelineio/registry-client';
+
+import { log } from './log';
+
+// Directory inside `cwd` in which bot packages are downloaded and extracted.
+export const BOT_PACKAGE_DOWNLOAD_DIR = 'out/bots';
+
+// File inside local bot folder to run.
+export const LOCAL_BOT_MAIN_FILE = 'src/main.js';
+
+// Binary file inside downloaded bot package to run.
+export const BOT_MAIN_FILE = 'main.bin';
+
+/**
+ * Get platform info.
+ */
+export const getPlatformInfo = () => {
+  let platform = os.type().toLowerCase();
+  platform = (platform === 'darwin' ? 'macos' : platform);
+
+  const arch = os.arch();
+
+  return { platform, arch };
+};
+
+export class SourceManager {
+  constructor (config) {
+    this._config = config;
+
+    this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
+    this._localDev = this._config.get('bot.localDev');
+  }
+
+  /**
+   * Get the install directory and executable file paths for the botId (WRN).
+   * Downloads the bot to the expected path/directory if required.
+   * @param {string} botId
+   */
+  async getBotPathInfo (botId) {
+    // Local bot development mode, bypasses WNS/IPFS.
+    if (this._localDev) {
+      return {
+        installDirectory: process.cwd(),
+        file: LOCAL_BOT_MAIN_FILE
+      };
+    }
+
+    const result = await this._registry.resolveRecords([botId]);
+    if (!result.length) {
+      return null;
+    }
+
+    const [{ id, attributes }] = result;
+    const { platform, arch } = getPlatformInfo();
+    const packageAttrName = `${platform}.${arch}`;
+
+    const ipfsArtifactCID = deepGet(attributes.package || false, packageAttrName);
+    if (!ipfsArtifactCID) {
+      throw new Error(`Package '${packageAttrName}' not found for bot '${id}'.`);
+    }
+
+    const installDirectory = path.join(process.cwd(), BOT_PACKAGE_DOWNLOAD_DIR, id);
+    if (!fs.existsSync(installDirectory)) {
+      await this._downloadBot(installDirectory, ipfsArtifactCID);
+    }
+
+    return {
+      installDirectory,
+      file: path.join(installDirectory, BOT_MAIN_FILE)
+    };
+  }
+
+  /**
+   * Download the bot package from IPFS.
+   * @param {string} baseDirectory
+   * @param {string} ipfsCID
+   */
+  async _downloadBot (baseDirectory, ipfsCID) {
+    assert(baseDirectory);
+    assert(ipfsCID);
+
+    // eslint-disable-next-line node/no-deprecated-api
+    const botPackageUrl = url.resolve(this._config.get('services.ipfs.gateway'), ipfsCID);
+    log(`Downloading bot package: ${botPackageUrl}`);
+    await fs.ensureDir(baseDirectory);
+    await download(botPackageUrl, baseDirectory, { extract: true });
+    log(`Bot package downloaded: ${baseDirectory}`);
+  }
+}
