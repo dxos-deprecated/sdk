@@ -18,16 +18,22 @@ const watchParty = async (client, condition) => {
   await broker.createSignal();
   console.log('> signal started');
 
-  const client1 = await broker.createPeer();
-  const client2 = await broker.createPeer();
+  const peer1 = await broker.createPeer();
+  console.log('> peer1 created');
 
-  const { publicKey } = await client1.call('createParty');
+  const peer2 = await broker.createPeer();
+  console.log('> peer2 created');
 
-  const invitation = await client1.call('createInvitation', { publicKey });
+  const { publicKey } = await peer1.call('createParty');
+  console.log('> party created', publicKey.toString('hex'));
 
-  await client2.call('joinParty', { invitation });
+  const invitation = await peer1.call('createInvitation', { publicKey });
+  console.log('> invitation created', invitation);
 
-  await watchParty(client1, partyInfo => partyInfo.members.length === 2);
+  await peer2.call('joinParty', { invitation });
+
+  await watchParty(peer1, partyInfo => partyInfo.members.length === 2);
+  console.log('> peer2 joined to the party');
 
   await broker.destroy();
 })();
