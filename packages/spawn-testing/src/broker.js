@@ -9,8 +9,8 @@ const pEvent = require('p-event');
 
 const createRPC = require('./create-rpc');
 
-const signalLog = debug('signal');
-const peerLog = debug('peer');
+const signalLog = debug('spawn-testing:signal');
+const peerLog = debug('spawn-testing:peer');
 
 function spawn (command, args) {
   const child = execa(command, args, {
