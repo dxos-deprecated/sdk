@@ -1,0 +1,10 @@
+#
+# Default config
+#
+
+bot:
+  botSpec: null
+  invitation: null
+  localDev: false
+  ipc:
+    port: 8999
