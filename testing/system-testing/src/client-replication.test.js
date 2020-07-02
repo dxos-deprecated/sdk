@@ -12,11 +12,10 @@
 import ram from 'random-access-memory';
 import waitForExpect from 'wait-for-expect';
 
+import { createClient } from '@dxos/client';
 import { Keyring, KeyType } from '@dxos/credentials';
 import { createId, createKeyPair, keyToString, randomBytes, sign, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { DefaultModel } from '@dxos/model-factory';
-
-import { createClient } from '@dxos/client/src/client';
 
 /**
  * Writes a message on each client and looks for it on the others.
