@@ -21,7 +21,7 @@ const { error } = logs('react-client:Provider');
  * Feed provider container.
  */
 const ClientContextProvider = ({ config, children }) => {
-  const { client: clientConfig } = config;
+  const { client: clientConfig = {} } = config;
 
   const [client, setClient] = useState(null);
   const [reset, setReset] = useState(null);
@@ -67,19 +67,26 @@ const ClientContextProvider = ({ config, children }) => {
         });
 
         try {
-          feedStorage = createStorage(clientConfig.feedStorage.root, clientConfig.feedStorage.type);
-          keyStorage = clientConfig.keyStorage.type === 'memory' ? memdown()
-            : leveljs(`${clientConfig.keyStorage.root}/keystore`);
+          // TODO(burdon): Move sensible defaults to `createStorage`.
+          const { 
+            feedStorage: feedStorageConfig = { root: 'data' }, 
+            keyStorage: keyStorageConfig = { type: 'memory' } 
+          } = clientConfig;
 
+          console.log('###', feedStorageConfig, keyStorageConfig);
+
+          feedStorage = createStorage(feedStorageConfig.root, feedStorageConfig.type);
+
+          keyStorage = keyStorageConfig.type === 'memory' ? memdown() : leveljs(`${keyStorageConfig.root}/keystore`);
           const keyring = new Keyring(new KeyStore(keyStorage));
           await keyring.load();
 
           const client = await createClient(feedStorage, keyring, clientConfig);
 
-          metrics.set('storage.root', feedStorage.root);
-          metrics.set('storage.type', feedStorage.type);
-          metrics.set('keyring.storage.root', clientConfig.keyStorage.root);
-          metrics.set('keyring.storage.type', clientConfig.keyStorage.type);
+          metrics.set('storage.root', feedStorageConfig.root);
+          metrics.set('storage.type', feedStorageConfig.type);
+          metrics.set('keyring.storage.root', keyStorageConfig.root);
+          metrics.set('keyring.storage.type', keyStorageConfig.type);
 
           // Console access.
           if (config.debug.mode === 'development' || clientConfig.devtools) {

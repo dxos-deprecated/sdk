@@ -11,12 +11,6 @@ import grey from '@material-ui/core/colors/grey';
 
 // https://material-ui.com/customization/theming
 const theme = createMuiTheme({
-  props: {
-    MuiButtonBase: {
-      disableRipple: true
-    }
-  },
-
   overrides: {
     MuiCssBaseline: {
       '@global': {
@@ -28,9 +22,18 @@ const theme = createMuiTheme({
     }
   },
 
+  // TODO(burdon): Configure.
   palette: {
     primary: blue
-  }
+  },
+
+  props: {
+    MuiButtonBase: {
+      disableRipple: true
+    }
+  },
+  
+  // shadows: ['none'],
 });
 
 const Theme = ({ children }) => (

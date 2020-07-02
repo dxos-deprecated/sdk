@@ -30,7 +30,7 @@ export const useActionHandler = () => {
   return (action, props) => {
     switch (action) {
       case Action.RELOAD: {
-        reload(config.app.publicUrl);
+        reload(config.app.publicUrl || '/');
         break;
       }
 

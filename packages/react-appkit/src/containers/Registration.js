@@ -31,8 +31,7 @@ import { useQuery, createUrl } from '@dxos/react-router';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    width: 600,
-    maxWidth: 600,
+    minWidth: 600,
     minHeight: 300
   },
 
@@ -45,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   choice: {
     width: 260,
     height: 240,
+    margin: theme.spacing(1),
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
@@ -84,6 +84,7 @@ const Registration = () => {
   const classes = useStyles();
   const client = useClient();
   const config = useConfig();
+  const [open, setOpen] = useState(true);
 
   // TODO(burdon): Replace with router.
   // Redirect to initial URL.
@@ -104,7 +105,10 @@ const Registration = () => {
   const usernameRef = useRef();
   const seedPhraseRef = useRef();
 
+  // TODO(burdon): Error if pressed twice (add mutex and disable button).
   const handleFinish = async (seedPhrase) => {
+    setOpen(false);
+    
     // TODO(telackey): Replace with feedStore.deleteAll() once that is published in @dxos/feed-store
     // cf. https://github.com/dxos/feed-store/pull/13
     await Promise.all(client.feedStore.getDescriptors().map(({ path }) => client.feedStore.deleteDescriptor(path)));
@@ -115,6 +119,7 @@ const Registration = () => {
       identityDisplayName: username || keyToString(client.partyManager.identityManager.publicKey),
       deviceDisplayName: keyToString(client.partyManager.identityManager.deviceManager.publicKey)
     });
+
     history.push(createUrl(redirectUrl, rest));
   };
 
@@ -194,13 +199,14 @@ const Registration = () => {
     />
   );
 
+  // TODO(burdon): Configure title.
   const getStage = stage => {
     // eslint-disable-next-line default-case
     switch (stage) {
       case STAGE_START: {
         return (
           <>
-            <DialogTitle>Welcome to DxOS</DialogTitle>
+            <DialogTitle>User Profile</DialogTitle>
             <DialogContent className={classes.container}>
               <div>
                 <Paper className={classes.choice} variant='outlined'>
@@ -301,7 +307,7 @@ const Registration = () => {
 
   return (
     <FullScreen>
-      <Dialog open classes={{ paper: classes.paper }}>
+      <Dialog open={open} maxWidth="md" classes={{ paper: classes.paper }}>
         <>{getStage(stage)}</>
       </Dialog>
     </FullScreen>
