@@ -39,3 +39,5 @@ version.json
 *.log*
 
 .vscode
+.idea
+
