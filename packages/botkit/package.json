@@ -1,0 +1,82 @@
+{
+  "name": "@dxos/botkit",
+  "version": "1.0.0-beta.108",
+  "description": "Botkit",
+  "keywords": [],
+  "license": "GPL-3.0",
+  "author": "DxOS.org",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run clean && npm run build:protobuf && npm run dist",
+    "build:protobuf": "pbjs -t json src/ipc/schema.proto -o src/ipc/schema.json && cpy src/ipc/schema.json dist/ipc",
+    "build:watch": "yarn run build --watch",
+    "clean": "rm -rf dist",
+    "dist": "babel ./src --out-dir ./dist --ignore \"**/*.test.js\"",
+    "lint": "semistandard",
+    "prepublishOnly": "npm run build && npm run test",
+    "test": "jest --rootDir ./src --verbose --passWithNoTests"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "@dxos/client": "^1.0.0-beta.108",
+    "@dxos/codec-protobuf": "^1.1.0-beta.7",
+    "@dxos/config": "^1.0.0-beta.73",
+    "@dxos/credentials": "^1.0.1-beta.4",
+    "@dxos/crypto": "^1.0.0-beta.1",
+    "@dxos/network-manager": "^1.0.0-beta.94",
+    "@dxos/party-manager": "^1.0.1-beta.21",
+    "@dxos/protocol-plugin-bot": "^1.1.0-beta.11",
+    "@dxos/protocol-plugin-messenger": "^1.1.0-alpha.4",
+    "@dxos/random-access-multi-storage": "^1.1.0-beta.2",
+    "@wirelineio/registry-client": "^0.4.8",
+    "assert": "^2.0.0",
+    "cpy-cli": "2.0.0",
+    "debug": "^4.1.1",
+    "download": "^7.1.0",
+    "fs-extra": "^8.1.0",
+    "hypercore-crypto": "^1.0.0",
+    "js-yaml": "^3.13.1",
+    "jsondown": "1.0.0",
+    "lodash.defaults": "^4.2.0",
+    "lodash.defaultsdeep": "^4.6.1",
+    "lodash.get": "^4.4.2",
+    "lodash.isempty": "^4.4.0",
+    "memdown": "^5.1.0",
+    "moment": "^2.24.0",
+    "node-ipc": "^9.1.1",
+    "node-watch": "^0.6.4",
+    "random-access-memory": "^3.1.1",
+    "tree-kill": "^1.2.2",
+    "uuidv4": "^6.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.0",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "babel-plugin-inline-import": "^3.0.0",
+    "jest": "^25.1.0",
+    "semistandard": "14.2.0"
+  },
+  "semistandard": {
+    "parser": "babel-eslint",
+    "env": [
+      "jest",
+      "node",
+      "browser"
+    ],
+    "ignore": [
+      "dist"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
