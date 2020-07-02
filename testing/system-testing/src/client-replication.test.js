@@ -1,5 +1,5 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 // TODO(dboreham): Enable running this test in browser. It is currently not enabled for browser execution
