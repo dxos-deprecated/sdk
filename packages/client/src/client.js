@@ -66,6 +66,7 @@ class Client {
     this._feedStore.removeListener('feed', this.onFeedUpdate);
   }
 
+  // TODO(burdon): Remove?
   onFeedUpdate = () => {
     const descriptors = this._feedStore.getDescriptors();
 
@@ -225,6 +226,7 @@ export const createClient = async (feedStorage, keyring, config = {}, plugins) =
   const swarmProvider = new SwarmProvider(config.swarm, metrics);
   // TODO(dboreham): plugins parameter not yet implemented in NetworkManager.
   const networkManager = new NetworkManager(feedStore, swarmProvider, plugins);
+
   const partyManager = new PartyManager(feedStore, keyring, networkManager);
   await partyManager.initialize();
 
