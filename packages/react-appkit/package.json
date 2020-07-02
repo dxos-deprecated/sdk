@@ -4,7 +4,7 @@
   "description": "Application framework components",
   "keywords": [],
   "license": "GPL-3.0",
-  "author": "DxOS.org",
+  "author": "DXOS.org",
   "main": "dist/es/index.js",
   "scripts": {
     "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \"**/*.test.js\" --source-maps inline",
