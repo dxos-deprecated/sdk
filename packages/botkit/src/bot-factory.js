@@ -6,6 +6,7 @@ import assert from 'assert';
 import ram from 'random-access-memory';
 import crypto from 'hypercore-crypto';
 
+import { waitForCondition } from '@dxos/async';
 import { keyToBuffer, keyToString, discoveryKey } from '@dxos/crypto';
 
 import {
@@ -33,6 +34,8 @@ import { BotManager } from './bot-manager';
 import { COMMAND_SIGN, startIPCServer, createSignResponse, createInvitationMessage } from './ipc';
 
 import { log } from './log';
+
+const BOT_SPAWN_TIMEOUT = 10000;
 
 /**
  * Bot factory.
@@ -98,6 +101,7 @@ export class BotFactory {
     switch (message.__type_url) {
       case COMMAND_SPAWN: {
         const botUID = await this._botManager.spawnBot(message.botId);
+        await waitForCondition(() => this._ipcServer.clientConnected(botUID), BOT_SPAWN_TIMEOUT);
         return createSpawnResponse(botUID);
       }
 
