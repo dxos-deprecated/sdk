@@ -30,6 +30,6 @@ export function createRPC (ipc) {
   });
 
   return nanomessagerpc(stream, {
-    timeout: undefined
+    // timeout: Infinity
   });
 }

@@ -7,17 +7,19 @@ import { createRPC } from './create-rpc';
 
 (async () => {
   try {
-    const rpc = createRPC(process);
+    const rpc = createRPC(process, true);
 
     const app = new TestApp();
 
     await rpc
       .actions({
+        ping: () => 'pong',
         createParty: () => app.createParty(),
         createInvitation: ({ publicKey }) => app.createInvitation(publicKey),
         joinParty: ({ invitation }) => app.joinParty(invitation),
         createObjectModel: ({ publicKey, options }) => app.createObjectModel(publicKey, options),
-        createItem: ({ modelId, type, properties }) => app.createItem(modelId, type, properties)
+        createItem: ({ modelId, type, properties }) => app.createItem(modelId, type, properties),
+        createManyItems: ({ modelId, type, max }) => app.createManyItems(modelId, type, max)
       })
       .open();
 

@@ -5,16 +5,16 @@
 const { Broker } = require('./');
 
 const watch = async (client, event, condition) => {
-  let done = false;
-  while (!done) {
-    const result = await client.once(event);
-    done = condition(result);
+  for await (const result of client.events(event)) {
+    if (condition(result)) {
+      break;
+    }
   }
 };
 
 (async () => {
-  const maxPeers = 4;
-  const maxMessagesByPeer = 1000;
+  const maxPeers = 2;
+  const maxMessagesByPeer = 10000;
   const peers = [];
 
   const broker = new Broker();
@@ -30,8 +30,8 @@ const watch = async (client, event, condition) => {
 
     if (prev === null) {
       const { publicKey } = await peer.call('createParty');
-      partyKey = publicKey;
       console.log('> party created', publicKey.toString('hex'));
+      partyKey = publicKey;
       peers.push(peer);
       prev = peer;
       continue;
@@ -42,11 +42,13 @@ const watch = async (client, event, condition) => {
 
     await peer.call('joinParty', { invitation });
     console.log(`> peer${i} joined to the party`);
+
     peers.push(peer);
     prev = peer;
   }
 
   await watch(peers[0], 'party-update', partyInfo => partyInfo.members.length === maxPeers);
+  console.log('> network full connected');
 
   // create models
   const type = 'example.com/Test';
@@ -55,21 +57,23 @@ const watch = async (client, event, condition) => {
     const { id } = await peer.call('createObjectModel', { publicKey: partyKey, options: { type } });
     models.push({ peer, modelId: id });
   }
+  console.log('> models created');
 
-  // create 1000 items in every peer
-  for (const { peer, modelId } of models) {
-    for (let i = 0; i < maxMessagesByPeer; i++) {
-      peer.call('createItem', { modelId, type, properties: { value: `message/${modelId}/${i}` } });
-    }
-  }
-
-  await Promise.all(peers.map(peer => {
+  // wait for every peer receive all the messages
+  const waitForSync = Promise.all(peers.map(peer => {
     let count = 0;
     return watch(peer, 'model-update', ({ messages }) => {
       count += messages.length;
       return count === maxMessagesByPeer * peers.length;
     });
   }));
+
+  // create 1000 items in every peer
+  for (const { peer, modelId } of models) {
+    await peer.call('createManyItems', { modelId, type, max: maxMessagesByPeer });
+  }
+
+  await waitForSync;
 
   await broker.destroy();
 })();

@@ -10,6 +10,8 @@ import { createStorage, STORAGE_RAM } from '@dxos/random-access-multi-storage';
 import { Keyring, KeyType } from '@dxos/credentials';
 import { ObjectModel } from '@dxos/echo-db';
 
+const shortKey = (key) => key.toString('hex').slice(0, 6);
+
 export class TestApp extends EventEmitter {
   constructor (opts = {}) {
     super();
@@ -61,10 +63,11 @@ export class TestApp extends EventEmitter {
   async createObjectModel (partyPublicKey, options) {
     const id = randomBytes(32).toString('hex');
     const model = await this._client.modelFactory.createModel(ObjectModel, { ...options, topic: partyPublicKey.toString('hex') });
-    this._models.set(id, model);
     model.on('update', (_, messages) => {
-      this.emit('model-update', { clientPublicKey: this.clientPublicKey, partyPublicKey, modelId: id, messages });
+      console.log(`model-update client=${shortKey(this.identityPublicKey)} messages=${messages.length}`);
+      this.emit('model-update', { identityPublicKey: this.identityPublicKey, partyPublicKey, modelId: id, messages });
     });
+    this._models.set(id, model);
     return { id };
   }
 
@@ -74,5 +77,17 @@ export class TestApp extends EventEmitter {
     }
     const id = this._models.get(modelId).createItem(type, properties);
     return { id };
+  }
+
+  async createManyItems (modelId, type, max) {
+    if (!this._models.has(modelId)) {
+      throw new Error('model not found');
+    }
+    const model = this._models.get(modelId);
+
+    console.log(`create-many-items client=${shortKey(this.identityPublicKey)} max=${max}`);
+    for (let i = 0; i < max; i++) {
+      model.createItem(type, { value: `val/${modelId}/${i}` });
+    }
   }
 }

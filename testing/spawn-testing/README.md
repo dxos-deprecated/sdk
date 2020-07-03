@@ -9,7 +9,9 @@ Description...
 
 ## Usage
 
-...
+```
+$ npm run example
+```
 
 ## Contributing
 

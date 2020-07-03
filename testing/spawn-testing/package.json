@@ -11,7 +11,8 @@
     "build:watch": "npm run build -- --watch",
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
-    "test": "node -r @babel/register src/index.js"
+    "test": "node -r @babel/register src/index.js",
+    "example": "npm run build && DEBUG=\"spawn*\" node example.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
@@ -23,6 +24,7 @@
     "@dxos/random-access-multi-storage": "^1.1.0-beta.4",
     "@geut/discovery-swarm-webrtc": "^3.0.0-beta.3",
     "debug": "^4.1.1",
+    "duplexify": "^4.1.1",
     "execa": "^4.0.2",
     "nanomessage-rpc": "^1.2.1",
     "p-event": "^4.2.0",
