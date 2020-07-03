@@ -18,7 +18,7 @@ const watchParty = async (client, condition) => {
   await broker.createSignal();
   console.log('> signal started');
 
-  const peer1 = await broker.createPeer();
+  const peer1 = await broker.createBrowser();
   console.log('> peer1 created');
 
   const { publicKey } = await peer1.call('createParty');

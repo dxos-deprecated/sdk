@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
+    "@dxos/browser-runner": "^1.0.0-beta.0",
     "@dxos/client": "^1.0.0-beta.107",
     "@dxos/credentials": "^1.0.1-beta.4",
     "@dxos/debug": "^1.0.0-beta.73",
@@ -25,6 +26,7 @@
     "execa": "^4.0.2",
     "nanomessage-rpc": "^1.2.1",
     "p-event": "^4.2.0",
+    "puppeteer-ipc": "^1.1.0",
     "streamx": "^2.6.4"
   },
   "devDependencies": {

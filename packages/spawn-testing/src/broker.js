@@ -6,6 +6,8 @@ const path = require('path');
 const execa = require('execa');
 const debug = require('debug');
 const pEvent = require('p-event');
+const EventEmitter = require('events');
+const browserRunner = require('@dxos/browser-runner');
 
 const createRPC = require('./create-rpc');
 
@@ -46,6 +48,13 @@ function fork (file, args, opts = {}) {
   return child;
 }
 
+async function forkBrowser() {
+  const child = await browserRunner.run({
+    src: path.resolve('./src/peer.js'),
+  });
+  return child
+}
+
 module.exports = class Broker {
   constructor () {
     this._signal = null;
@@ -68,10 +77,28 @@ module.exports = class Broker {
 
   async createPeer () {
     const child = fork(path.resolve('./src/peer.js'));
+    console.log('forked')
     const rpc = createRPC(child);
     this._peers.add(rpc);
     await rpc.open();
+    console.log('open')
+
     await rpc.once('ready');
+    console.log('ready')
+
+    return rpc;
+  }
+
+  async createBrowser() {
+    const child = await forkBrowser()
+    console.log('forked')
+    const rpc = createRPC(child);
+    this._peers.add(rpc);
+    await rpc.open();
+    console.log('open')
+    await rpc.once('ready');
+    console.log('ready')
+
     return rpc;
   }
 
@@ -81,3 +108,4 @@ module.exports = class Broker {
     await Promise.all(this.peers.map(peer => peer.close()));
   }
 };
+
