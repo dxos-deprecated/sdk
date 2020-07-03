@@ -14,7 +14,7 @@ const watch = async (client, event, condition) => {
 
 (async () => {
   const maxPeers = 2;
-  const maxMessagesByPeer = 10000;
+  const maxMessagesByPeer = 1000;
   const peers = [];
 
   const broker = new Broker();
@@ -74,6 +74,7 @@ const watch = async (client, event, condition) => {
   }
 
   await waitForSync;
+  console.log('> sync successful');
 
   await broker.destroy();
 })();

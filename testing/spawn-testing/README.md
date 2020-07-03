@@ -10,7 +10,7 @@ Description...
 ## Usage
 
 ```
-$ npm run example
+$ yarn example
 ```
 
 ## Contributing
