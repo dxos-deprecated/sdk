@@ -21,19 +21,24 @@ const watchParty = async (client, condition) => {
   const peer1 = await broker.createPeer();
   console.log('> peer1 created');
 
-  const peer2 = await broker.createPeer();
-  console.log('> peer2 created');
-
   const { publicKey } = await peer1.call('createParty');
   console.log('> party created', publicKey.toString('hex'));
 
-  const invitation = await peer1.call('createInvitation', { publicKey });
-  console.log('> invitation created', invitation);
+  const max = 3;
+  let prev = peer1;
+  for (let i = 0; i < max; i++) {
+    const peerI = await broker.createPeer();
+    console.log(`> peer${i + 1} created`);
 
-  await peer2.call('joinParty', { invitation });
+    const invitation = await prev.call('createInvitation', { publicKey });
+    console.log('> invitation created', invitation);
 
-  await watchParty(peer1, partyInfo => partyInfo.members.length === 2);
-  console.log('> peer2 joined to the party');
+    await peerI.call('joinParty', { invitation });
+    console.log(`> peer${i + 1} joined to the party`);
+    prev = peerI;
+  }
+
+  await watchParty(peer1, partyInfo => partyInfo.members.length === max + 1);
 
   await broker.destroy();
 })();
