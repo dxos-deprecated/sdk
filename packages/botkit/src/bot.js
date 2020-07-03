@@ -77,6 +77,8 @@ export class Bot {
       await this._client.partyManager.identityManager.initializeForNewIdentity();
       log(`Identity initialized: ${this._client.partyManager.identityManager.publicKey}`);
     }
+
+    this._ipcClient.confirmConnection();
   }
 
   /**

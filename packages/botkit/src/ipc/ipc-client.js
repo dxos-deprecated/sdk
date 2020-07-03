@@ -42,8 +42,6 @@ export class IPCClient {
         }
       }
     });
-
-    this._confirmConnection();
   }
 
   /**
@@ -64,7 +62,7 @@ export class IPCClient {
     });
   }
 
-  _confirmConnection () {
+  confirmConnection () {
     const buffer = codec.encode(createConnectConfirmMessage(this._id));
     this._ipc.of[this._serverId].emit(buffer);
   }
