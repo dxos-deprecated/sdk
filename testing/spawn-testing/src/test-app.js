@@ -2,14 +2,15 @@
 // Copyright 2020 DXOS.
 //
 
-const { randomBytes } = require('crypto');
-const { EventEmitter } = require('events');
+import { randomBytes } from 'crypto';
+import { EventEmitter } from 'events';
 
-const { createClient } = require('@dxos/client');
-const { createStorage, STORAGE_RAM } = require('@dxos/random-access-multi-storage');
-const { Keyring, KeyType } = require('@dxos/credentials');
+import { createClient } from '@dxos/client';
+import { createStorage, STORAGE_RAM } from '@dxos/random-access-multi-storage';
+import { Keyring, KeyType } from '@dxos/credentials';
+import { ObjectModel } from '@dxos/echo-db';
 
-module.exports = class Client extends EventEmitter {
+export class TestApp extends EventEmitter {
   constructor (opts = {}) {
     super();
 
@@ -18,13 +19,14 @@ module.exports = class Client extends EventEmitter {
     this._storageType = storageType;
     this._secret = '0000';
     this._client = null;
+    this._models = new Map();
 
     this._greeterSecretProvider = () => Buffer.from(this._secret);
     this._greeterSecretValidator = (invitation, secret) => secret && secret.equals(invitation.secret);
     this._inviteeSecretProvider = () => Buffer.from(this._secret);
   }
 
-  get publicKey () {
+  get identityPublicKey () {
     return this._client.partyManager.identityManager.deviceManager.publicKey;
   }
 
@@ -44,8 +46,8 @@ module.exports = class Client extends EventEmitter {
     return { publicKey: party.publicKey };
   }
 
-  createInvitation (publicKey) {
-    return this._client.partyManager.inviteToParty(publicKey, this._greeterSecretProvider, this._greeterSecretValidator);
+  createInvitation (partyPublicKey) {
+    return this._client.partyManager.inviteToParty(partyPublicKey, this._greeterSecretProvider, this._greeterSecretValidator);
   }
 
   async joinParty (invitation) {
@@ -55,4 +57,22 @@ module.exports = class Client extends EventEmitter {
       this.emit('party-update', partyInfo);
     });
   }
-};
+
+  async createObjectModel (partyPublicKey, options) {
+    const id = randomBytes(32).toString('hex');
+    const model = await this._client.modelFactory.createModel(ObjectModel, { ...options, topic: partyPublicKey.toString('hex') });
+    this._models.set(id, model);
+    model.on('update', (_, messages) => {
+      this.emit('model-update', { clientPublicKey: this.clientPublicKey, partyPublicKey, modelId: id, messages });
+    });
+    return { id };
+  }
+
+  async createItem (modelId, type, properties) {
+    if (!this._models.has(modelId)) {
+      throw new Error('model not found');
+    }
+    const id = this._models.get(modelId).createItem(type, properties);
+    return { id };
+  }
+}

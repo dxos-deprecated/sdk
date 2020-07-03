@@ -2,17 +2,17 @@
 // Copyright 2020 DXOS.
 //
 
-const path = require('path');
-const execa = require('execa');
-const debug = require('debug');
-const pEvent = require('p-event');
+import path from 'path';
+import execa from 'execa';
+import debug from 'debug';
+import pEvent from 'p-event';
 
-const createRPC = require('./create-rpc');
+import { createRPC } from './create-rpc';
 
 const signalLog = debug('spawn-testing:signal');
 const peerLog = debug('spawn-testing:peer');
 
-function spawn (command, args) {
+function spawn (command, args = []) {
   const child = execa(command, args, {
     serialization: 'advanced',
     preferLocal: true
@@ -29,7 +29,7 @@ function spawn (command, args) {
   return child;
 }
 
-function fork (file, args, opts = {}) {
+function fork (file, args = [], opts = {}) {
   const child = execa.node(file, args, {
     serialization: 'advanced',
     preferLocal: true
@@ -46,7 +46,7 @@ function fork (file, args, opts = {}) {
   return child;
 }
 
-module.exports = class Broker {
+export class Broker {
   constructor () {
     this._signal = null;
     this._peers = new Set();
@@ -67,11 +67,11 @@ module.exports = class Broker {
   }
 
   async createPeer () {
-    const child = fork(path.resolve('./src/peer.js'));
+    const child = fork(path.resolve(path.join(__dirname, 'peer.js')));
     const rpc = createRPC(child);
     this._peers.add(rpc);
     await rpc.open();
-    await rpc.once('ready');
+    await rpc.once('app-ready');
     return rpc;
   }
 
@@ -80,4 +80,4 @@ module.exports = class Broker {
     await this._signal.catch(() => {});
     await Promise.all(this.peers.map(peer => peer.close()));
   }
-};
+}

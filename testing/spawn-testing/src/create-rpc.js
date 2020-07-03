@@ -2,10 +2,10 @@
 // Copyright 2020 DXOS.
 //
 
-const { Duplex } = require('streamx');
-const nanomessagerpc = require('nanomessage-rpc');
+import { Duplex } from 'streamx';
+import nanomessagerpc from 'nanomessage-rpc';
 
-module.exports = function createRPC (ipc) {
+export function createRPC (ipc) {
   const stream = new Duplex({
     write (data, cb) {
       ipc.send(data);
@@ -29,5 +29,7 @@ module.exports = function createRPC (ipc) {
     stream.push(data);
   });
 
-  return nanomessagerpc(stream);
-};
+  return nanomessagerpc(stream, {
+    timeout: undefined
+  });
+}
