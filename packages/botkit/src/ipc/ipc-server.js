@@ -62,6 +62,10 @@ export class IPCServer {
     return this._id;
   }
 
+  clientConnected (id) {
+    return this._clients.has(id);
+  }
+
   /**
    * Send message to IPC client.
    * @param {String} botUID
