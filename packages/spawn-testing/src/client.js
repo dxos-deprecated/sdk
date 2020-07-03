@@ -32,7 +32,7 @@ module.exports = class Client extends EventEmitter {
     const keyring = new Keyring();
     await keyring.createKeyRecord({ type: KeyType.IDENTITY });
     this._client = await createClient(createStorage(`.temp/${randomBytes(32).toString('hex')}`, this._storageType), keyring);
-    this._client.partyManager.identityManager.initializeForNewIdentity();
+    await this._client.partyManager.identityManager.initializeForNewIdentity();
   }
 
   async createParty () {
