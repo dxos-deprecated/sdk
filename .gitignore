@@ -17,6 +17,8 @@ build/
 out/
 dist/
 gen/
+public/
+.cache
 
 # IDE
 .idea/workspace.xml
