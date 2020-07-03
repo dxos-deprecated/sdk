@@ -2103,10 +2103,10 @@
   dependencies:
     debug "^4.1.1"
 
-"@dxos/docs-theme@^1.0.0-beta.5":
-  version "1.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@dxos/docs-theme/-/docs-theme-1.0.0-beta.5.tgz#14b7092cef0830be495c9f1eaacb06b285a8f3cc"
-  integrity sha512-UUFnXVhRbkFypUZuBdCZL2jtUcucWT7GG41KZ+qbygNvQ0fIb2wZF8uA4a39TLCXBbjxgI+RNVZyF+d8kJUyXw==
+"@dxos/docs-theme@^1.0.0-beta.6":
+  version "1.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@dxos/docs-theme/-/docs-theme-1.0.0-beta.6.tgz#4c3e1ed2dc4ed8d7873ce40d7e3dbeb278f637e2"
+  integrity sha512-K+6XTZNk1SlHucQjPYelCTiQzk8chLvT3ZOl2AoW0lyMqfRyPVtObDmFAvHS5E/iSKC5tPSiDByAWBIb4dFaVw==
   dependencies:
     gatsby-image "^2.4.9"
     react "^16.11.0"
