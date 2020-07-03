@@ -3,7 +3,7 @@
   "version": "1.0.0-beta.112",
   "license": "GPL-3.0",
   "author": "DXOS.org",
-  "pirvate": true,
+  "private": true,
   "scripts": {
     "lint": "semistandard",
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
