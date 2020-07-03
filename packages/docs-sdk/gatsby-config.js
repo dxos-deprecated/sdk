@@ -12,11 +12,11 @@ module.exports = {
         ...themeOptions,
         root: __dirname,
         description: 'DXOS - The Decentralized Operating System',
-        subtitle: 'DXOS Templates',
+        subtitle: 'SDK',
         sidebarCategories: {
           null: [
             'index',
-            'template'
+            'sdk'
           ]
         }
       }
