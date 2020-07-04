@@ -29,7 +29,7 @@ function spawn (command, args = []) {
   return child;
 }
 
-function fork (file, args = [], opts = {}) {
+function fork (file, args = []) {
   const child = execa.node(file, args, {
     serialization: 'advanced',
     preferLocal: true
@@ -66,8 +66,8 @@ export class Broker {
     });
   }
 
-  async createPeer () {
-    const child = fork(path.resolve(path.join(__dirname, 'peer.js')));
+  async createPeer (typeApp = 'ClientApp') {
+    const child = fork(path.resolve(path.join(__dirname, 'peer.js')), ['--typeApp', typeApp]);
     const rpc = createRPC(child);
     this._peers.add(rpc);
     await rpc.open();

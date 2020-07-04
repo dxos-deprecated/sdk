@@ -2,14 +2,19 @@
 // Copyright 2020 DXOS.
 //
 
-import { TestApp } from './test-app';
+import mri from 'mri';
+import * as apps from './test-app';
 import { createRPC } from './create-rpc';
 
 (async () => {
   try {
-    const rpc = createRPC(process, true);
+    const options = mri(process.argv.slice(2));
 
-    const app = new TestApp();
+    const rpc = createRPC(process);
+
+    const ClassApp = options.typeApp ? apps[options.typeApp] : apps.ClientApp;
+
+    const app = new ClassApp();
 
     await rpc
       .actions({
@@ -24,11 +29,7 @@ import { createRPC } from './create-rpc';
       .open();
 
     app.on('party-update', (partyInfo) => {
-      const members = partyInfo.members.map(m => ({
-        publicKey: m.publicKey,
-        displayName: m.displayName
-      }));
-      rpc.emit('party-update', { publicKey: partyInfo.publicKey, members });
+      rpc.emit('party-update', partyInfo);
     });
 
     app.on('model-update', data => {
