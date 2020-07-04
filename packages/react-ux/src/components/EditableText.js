@@ -1,9 +1,9 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
-import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -12,7 +12,10 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles(theme => ({
   text: {
     letterSpacing: 'normal',
-    color: 'inherit'
+    color: 'inherit',
+    overflow: 'hidden',
+    textOverflow: 'ellipses',
+    whiteSpace: 'nowrap'
   },
 
   placeholder: {},
@@ -31,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * Editable text field.
  */
-const EditableText = ({ value, onUpdate, variant = 'body1', classes: clazzes = {} }) => {
+const EditableText = ({ value, disabled = false, variant = 'body1', classes: clazzes = {}, onUpdate }) => {
   const classes = useStyles({ variant });
   const [editable, setEditable] = useState(false);
   const [text, setText] = useState(value);
@@ -74,27 +77,31 @@ const EditableText = ({ value, onUpdate, variant = 'body1', classes: clazzes = {
     handleUpdate(value);
   };
 
-  return editable ? (
-    <TextField
-      value={text}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      onBlur={handleBlur}
-      autoFocus
-      fullWidth
-      InputProps={{
-        disableUnderline: true,
-        classes: { root: clsx(classes.text, classes.editable, classes.editing, clazzes.root) },
-        inputProps: {
-          spellCheck: false
-        }
-      }}
-    />
-  ) : (
+  if (editable) {
+    return (
+      <TextField
+        value={text}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
+        autoFocus
+        fullWidth
+        InputProps={{
+          disableUnderline: true,
+          classes: { root: clsx(classes.text, classes.editable, classes.editing, clazzes.root) },
+          inputProps: {
+            spellCheck: false
+          }
+        }}
+      />
+    );
+  }
+
+  return (
     <Typography
       classes={{ root: clsx(classes.text, !text && classes.placeholder, clazzes.root) }}
       variant={variant}
-      onClick={() => setEditable(true)}
+      onClick={disabled ? null : () => setEditable(true)}
     >
       {text}
     </Typography>
