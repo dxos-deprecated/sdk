@@ -28,13 +28,13 @@ const LeftLayoutStory = () => {
   const Main = () => {
     return (
       <div className={classes.root}>
-        <AppBar position='static'>
+        <AppBar position='static' elevation={0}>
           <Toolbar variant='dense'>
             <IconButton
               color='inherit'
               aria-label='open drawer'
               edge='start'
-              onClick={setOpen(!open)}
+              onClick={() => setOpen(!open)}
             >
               <MenuIcon />
             </IconButton>

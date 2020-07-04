@@ -35,7 +35,7 @@ const LayoutStory = () => {
     <FullScreen>
       <RightDrawer open={right} component={<div className={classes.drawer}>Right</div>}>
         <LeftDrawer open={left} component={<div className={classes.drawer}>Left</div>}>
-          <AppBar position='static'>
+          <AppBar position='static' elevation={0}>
             <Toolbar variant='dense'>
               <IconButton
                 color='inherit'
