@@ -7,8 +7,7 @@ const createRPC = require('./create-rpc');
 
 (async () => {
   try {
-    console.log(process.send)
-    const rpc = createRPC(process);
+    const rpc = createRPC(typeof window !== 'undefined' ? window.process : process);
 
     const client = new Client();
 
