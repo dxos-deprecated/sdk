@@ -12,7 +12,7 @@
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
     "test": "node -r @babel/register src/index.js",
-    "example": "npm run build && DEBUG=\"spawn*\" node example.js"
+    "example": "npm run build && DEBUG=\"dxos:spawn-testing*\" node example.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",

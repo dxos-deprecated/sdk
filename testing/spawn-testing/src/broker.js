@@ -9,8 +9,8 @@ import pEvent from 'p-event';
 
 import { createRPC } from './create-rpc';
 
-const signalLog = debug('spawn-testing:signal');
-const peerLog = debug('spawn-testing:peer');
+const signalLog = debug('dxos:spawn-testing:signal');
+const peerLog = debug('dxos:spawn-testing:peer');
 
 function spawn (command, args = []) {
   const child = execa(command, args, {
