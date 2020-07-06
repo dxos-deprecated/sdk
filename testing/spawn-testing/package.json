@@ -27,6 +27,7 @@
     "@dxos/protocol-plugin-replicator": "^1.1.0-beta.11",
     "@dxos/random-access-multi-storage": "^1.1.0-beta.4",
     "@geut/discovery-swarm-webrtc": "^3.0.0-beta.3",
+    "browser-runner": "^2.0.0",
     "buffer-json-encoding": "^1.0.2",
     "debug": "^4.1.1",
     "execa": "^4.0.2",
