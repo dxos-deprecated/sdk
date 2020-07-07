@@ -1428,15 +1428,15 @@
     json-stable-stringify "^1.0.1"
     mississippi "^4.0.0"
 
-"@dxos/protocol-plugin-bot@^1.1.0-beta.11":
-  version "1.1.0-beta.11"
-  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.11.tgz#b7e0bd1478f6a77ecc553736397114b881cf6e5c"
-  integrity sha512-9VJITVhvGOoKOJMEr4exEIyObEao2jo0hes390Q8drS5lDWJrPfzLoMJyZmyl2hHdxPh3QR5vclTvWB7aQekJA==
+"@dxos/protocol-plugin-bot@^1.1.0-beta.12":
+  version "1.1.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.12.tgz#40e6dde90be28b133937269eed9a370863b30fbd"
+  integrity sha512-E5qomlrCZ7xnNL51G6s76L1nNYk83Kj6GxhBjgWB0qhVuU8gBQpkEWEdKJR3KdAU27DUp9qa4VfsRNg5cVlbyw==
   dependencies:
     "@dxos/broadcast" "^1.0.0-beta.6"
     "@dxos/codec-protobuf" "^1.1.0-beta.7"
     "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/protocol" "^1.1.0-beta.11"
+    "@dxos/protocol" "^1.1.0-beta.12"
     debug "^4.1.1"
     source-map-support "^0.5.12"
 
@@ -1494,6 +1494,24 @@
   version "1.1.0-beta.11"
   resolved "https://registry.yarnpkg.com/@dxos/protocol/-/protocol-1.1.0-beta.11.tgz#0c4c79da03b2937a12634d0781f1b6417bb6bc1e"
   integrity sha512-PIf+h5V9fsS10MJiEZfWiYC/mbbngXtD/W4xgZ60oWu3mReMjiLx70GlNWEMB3L+Mk8js1BpEFXy7yk0O7OiQA==
+  dependencies:
+    "@dxos/codec-protobuf" "^1.1.0-beta.9"
+    assert "^2.0.0"
+    buffer-json-encoding "^1.0.2"
+    debug "^4.1.1"
+    end-of-stream "^1.4.1"
+    humanhash "^1.0.4"
+    hypercore-protocol "^6.11.1"
+    nanoerror "^1.1.0"
+    nanomessage "^5.2.5"
+    nanoresource-promise "^1.2.0"
+    signal-promise "^1.0.3"
+    source-map-support "^0.5.12"
+
+"@dxos/protocol@^1.1.0-beta.12":
+  version "1.1.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol/-/protocol-1.1.0-beta.12.tgz#a03aa297fb31597e48aa55ad2e1369ea362a5eec"
+  integrity sha512-IqAie47zwgNSQZmDzQ4A1IsxiCjtFq+Qc2hLSa1I2NqVzCOnNR6BrVBj3spX5CnE+h8zRoevKa9kqoINYWTuqA==
   dependencies:
     "@dxos/codec-protobuf" "^1.1.0-beta.9"
     assert "^2.0.0"
