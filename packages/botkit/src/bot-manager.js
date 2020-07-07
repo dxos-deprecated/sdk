@@ -95,7 +95,7 @@ export class BotManager {
     const { command, args } = this._getCommand(botPathInfo);
 
     const { attributes: { displayName } } = botRecord;
-    const name = `bot:${displayName}-${chance.animal()}`;
+    const name = `bot:${displayName} ${chance.animal()}`;
 
     return this._startBot(botUID, { childDir, botId, command, args, name });
   }
