@@ -1,20 +1,15 @@
 //
 // Copyright 2020 DXOS.
 //
+
 const debug = require('debug');
-const { Broker } = require('./');
+const { Broker } = require('../');
 
 const log = debug('dxos:spawn-testing:example');
 
-const watch = async (client, event, condition) => {
-  for await (const result of client.events(event)) {
-    if (condition(result)) {
-      break;
-    }
-  }
-};
+async function run (opts = {}) {
+  const { browser = false, app = 'ClientApp' } = opts;
 
-(async () => {
   const maxPeers = 10;
   const maxMessagesByPeer = 1000;
   const peers = [];
@@ -27,7 +22,7 @@ const watch = async (client, event, condition) => {
   let partyKey = null;
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
-    const peer = await broker.createPeer('BasicApp', { browser: true });
+    const peer = await broker.createPeer(app, { browser: browser });
     log(`> peer${i} created`);
 
     if (prev === null) {
@@ -49,7 +44,7 @@ const watch = async (client, event, condition) => {
     prev = peer;
   }
 
-  await watch(peers[0], 'party-update', partyInfo => partyInfo.members.length === maxPeers);
+  await broker.watch(peers[0], 'party-update', partyInfo => partyInfo.members.length === maxPeers);
   log('> network full connected');
 
   // create models
@@ -64,7 +59,7 @@ const watch = async (client, event, condition) => {
   // wait for every peer receive all the messages
   const waitForSync = Promise.all(peers.map(peer => {
     let count = 0;
-    return watch(peer, 'model-update', ({ messages }) => {
+    return broker.watch(peer, 'model-update', ({ messages }) => {
       count += messages.length;
       return count === maxMessagesByPeer;
     });
@@ -82,4 +77,6 @@ const watch = async (client, event, condition) => {
   console.timeEnd('sync');
 
   await broker.destroy();
-})();
+}
+
+module.exports = run;
