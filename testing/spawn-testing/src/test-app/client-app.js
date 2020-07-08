@@ -1,5 +1,5 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 import { createClient } from '@dxos/client';
@@ -41,7 +41,8 @@ export class ClientApp extends BaseApp {
   }
 
   createInvitation (partyPublicKey) {
-    return this._client.partyManager.inviteToParty(partyPublicKey, this._greeterSecretProvider, this._greeterSecretValidator);
+    return this._client.partyManager.inviteToParty(
+      partyPublicKey, this._greeterSecretProvider, this._greeterSecretValidator);
   }
 
   async joinParty (invitation) {
@@ -55,6 +56,7 @@ export class ClientApp extends BaseApp {
       publicKey: m.publicKey,
       displayName: m.displayName
     }));
+
     this.emit('party-update', { publicKey: partyInfo.publicKey, members });
   }
 }

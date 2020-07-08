@@ -1,8 +1,9 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 const debug = require('debug');
+
 const { Broker } = require('../');
 
 const log = debug('dxos:spawn-testing:example');
@@ -45,7 +46,7 @@ async function run (opts = {}) {
   await broker.watch(peers[0], 'party-update', partyInfo => partyInfo.members.length === maxPeers);
   log('> network full connected');
 
-  // create models
+  // Create models
   const type = 'example.com/Test';
   const tests = [];
   for (const peer of peers) {
@@ -54,7 +55,7 @@ async function run (opts = {}) {
   }
   log('> models created');
 
-  // wait for every peer receive all the messages
+  // Wait for every peer receive all the messages.
   const waitForSync = Promise.all(peers.map(peer => {
     let count = 0;
     return broker.watch(peer, 'model-update', ({ messages }) => {
@@ -64,7 +65,6 @@ async function run (opts = {}) {
   }));
 
   log('> sync started');
-
   console.time('sync');
 
   await tests[0].peer.call('createManyItems', { modelId: tests[0].modelId, type, max: maxMessagesByPeer });
