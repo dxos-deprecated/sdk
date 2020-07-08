@@ -10,7 +10,7 @@ import { createRPC } from './create-rpc';
   try {
     const options = mri(process.argv.slice(2));
 
-    const rpc = createRPC(process);
+    const rpc = createRPC(typeof window !== 'undefined' && window.process ? window.process : process);
 
     const ClassApp = options.typeApp ? apps[options.typeApp] : apps.ClientApp;
 

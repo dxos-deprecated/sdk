@@ -6,6 +6,7 @@ import path from 'path';
 import execa from 'execa';
 import debug from 'debug';
 import pEvent from 'p-event';
+import { run as runInBrowser } from '@dxos/browser-runner';
 
 import { createRPC } from './create-rpc';
 
@@ -66,8 +67,11 @@ export class Broker {
     });
   }
 
-  async createPeer (typeApp = 'ClientApp') {
-    const child = fork(path.resolve(path.join(__dirname, 'peer.js')), ['--typeApp', typeApp]);
+  async createPeer (typeApp = 'ClientApp', { browser = false } = {}) {
+    const scriptPath = path.resolve(path.join(__dirname, 'peer.js'));
+    const child = browser
+      ? await runInBrowser({ src: scriptPath, watch: true }) // TODO(marik-d): pass --typeApp
+      : fork(scriptPath, ['--typeApp', typeApp]);
     const rpc = createRPC(child);
     this._peers.add(rpc);
     await rpc.open();

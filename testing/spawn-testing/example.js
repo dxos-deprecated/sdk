@@ -27,7 +27,7 @@ const watch = async (client, event, condition) => {
   let partyKey = null;
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
-    const peer = await broker.createPeer();
+    const peer = await broker.createPeer('BasicApp', { browser: true });
     log(`> peer${i} created`);
 
     if (prev === null) {
