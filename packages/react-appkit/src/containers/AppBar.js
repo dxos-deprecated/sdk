@@ -22,6 +22,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
 import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { InviteType, InviteDetails } from '@dxos/party-manager';
 import { useClient, useConfig, useProfile } from '@dxos/react-client';
 
 import BotDialog from '../components/BotDialog';
@@ -102,8 +103,10 @@ const AppBar = ({ topic, children, onToggleNav }) => {
 
     const invitation = await client.partyManager.inviteToParty(
       keyToBuffer(topic),
-      secretValidator,
-      secretProvider,
+      new InviteDetails(InviteType.INTERACTIVE, {
+        secretValidator,
+        secretProvider
+      }),
       {
         onFinish: () => {
           botFactoryClient.close();
@@ -125,12 +128,14 @@ const AppBar = ({ topic, children, onToggleNav }) => {
       const partyKey = keyToBuffer(topic);
       const invitation = await client.partyManager.inviteToParty(
         partyKey,
-        (invitation, secret) => secret && secret.equals(invitation.secret),
-        () => {
-          const passcode = generatePasscode();
-          setPasscode(passcode);
-          return Buffer.from(passcode);
-        },
+        new InviteDetails(InviteType.INTERACTIVE, {
+          secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
+          secretProvider: () => {
+            const passcode = generatePasscode();
+            setPasscode(passcode);
+            return Buffer.from(passcode);
+          }
+        }),
         {
           onFinish: () => setDialog()
         }
