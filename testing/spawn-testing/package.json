@@ -2,7 +2,7 @@
   "name": "@dxos/spawn-testing",
   "version": "1.0.0-beta.123",
   "license": "GPL-3.0",
-  "author": "DxOS.org",
+  "author": "DXOS.org",
   "main": "dist/es/index.js",
   "private": true,
   "scripts": {
@@ -72,8 +72,5 @@
     "ignore": [
       "dist"
     ]
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
