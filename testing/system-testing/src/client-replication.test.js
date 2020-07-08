@@ -3,8 +3,8 @@
 //
 
 // TODO(dboreham): Enable running this test in browser. It is currently not enabled for browser execution
-// because the test takes more than 5s to run (depending on machine speed) and the browser jest testing
-// environment has a hard, not changable, timeout of 5s.
+//   because the test takes more than 5s to run (depending on machine speed) and the browser jest testing
+//   environment has a hard, not changable, timeout of 5s.
 
 // TODO(dboreham): Reduce these tests to the minimum to prove end to end functionality not already tested in
 //   party-manager. Possibly these tests don't need to be in data-client at all (similar tests exist in ./tests).

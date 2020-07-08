@@ -4,7 +4,7 @@
   "description": "Botkit",
   "keywords": [],
   "license": "GPL-3.0",
-  "author": "DxOS.org",
+  "author": "DXOS.org",
   "main": "dist/index.js",
   "scripts": {
     "build": "npm run clean && npm run build:protobuf && npm run dist",

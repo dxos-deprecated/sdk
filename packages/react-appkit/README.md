@@ -1,6 +1,6 @@
 # @dxos/react-appkit
 
-An opinionated application framework for DxOS apps.
+An opinionated application framework for DXOS apps.
 
 ## Install
 
@@ -33,4 +33,4 @@ PRs accepted.
 
 ## License
 
-GPL-3.0 © DxOS
+GPL-3.0 © DXOS
