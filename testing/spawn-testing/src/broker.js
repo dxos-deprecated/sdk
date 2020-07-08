@@ -79,6 +79,14 @@ export class Broker {
     return rpc;
   }
 
+  async watch (client, event, condition) {
+    for await (const result of client.events(event)) {
+      if (condition && condition(result)) {
+        break;
+      }
+    }
+  }
+
   async destroy () {
     process.nextTick(() => this._signal.cancel());
     await this._signal.catch(() => {});
