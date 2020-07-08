@@ -10,7 +10,7 @@ Description...
 ## Usage
 
 ```
-$ yarn example
+$ yarn example <exampleName> [...args]
 ```
 
 ## Contributing
