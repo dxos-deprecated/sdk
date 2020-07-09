@@ -2,15 +2,17 @@
 // Copyright 2020 DXOS.org
 //
 
+import defaultsDeep from 'lodash.defaultsdeep';
 import React from 'react';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
-import grey from '@material-ui/core/colors/grey';
+
+import primary from '@material-ui/core/colors/blue';
+import secondary from '@material-ui/core/colors/blueGrey';
 
 // https://material-ui.com/customization/theming
-const theme = createMuiTheme({
+export const defaultThemeProperties = {
   props: {
     MuiButtonBase: {
       disableRipple: true
@@ -21,20 +23,26 @@ const theme = createMuiTheme({
     MuiCssBaseline: {
       '@global': {
         body: {
-          overflow: 'hidden', // Prevent scroll bounce.
-          backgroundColor: grey[50]
+          overflow: 'hidden' // Prevent scroll bounce.
         }
       }
     }
   },
 
+  // TODO(burdon): DXOS Palette.
   palette: {
-    primary: blue
+    primary,
+    secondary
   }
-});
+};
 
+export const createTheme = (base) => createMuiTheme(
+  defaultsDeep(base, defaultThemeProperties)
+);
+
+// TODO(burdon): Rename ThemeProvider or Remove.
 const Theme = ({ children }) => (
-  <MuiThemeProvider theme={theme}>
+  <MuiThemeProvider theme={createTheme()}>
     <CssBaseline />
     {children}
   </MuiThemeProvider>
