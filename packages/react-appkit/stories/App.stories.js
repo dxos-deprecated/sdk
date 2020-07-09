@@ -12,6 +12,7 @@ import { ClientContextProvider } from '@dxos/react-client';
 
 import { AppKitContextProvider } from '../src/containers';
 
+// TODO(burdon): Goal to test context provider (currently doesn't work).
 // TODO(burdon): Dummy client (in-memory).
 const config = {};
 
@@ -21,7 +22,7 @@ const Test = () => <div>Test</div>;
 
 storiesOf('AppKit', module)
   .addDecorator(StoryRouter())
-  .add('Test', () => (
+  .add('Context provider', () => (
     <ClientContextProvider config={config}>
       <AppKitContextProvider initialState={initialState} errorHandler={new ErrorHandler()}>
         <Switch>
