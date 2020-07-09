@@ -68,14 +68,16 @@ export class Broker {
   }
 
   async createPeer (typeApp = 'ClientApp', { browser = false } = {}) {
+    const start = Date.now();
     const scriptPath = path.resolve(path.join(__dirname, 'peer.js'));
     const child = browser
-      ? await runInBrowser({ src: scriptPath, watch: true }) // TODO(marik-d): pass --typeApp
+      ? await runInBrowser({ src: scriptPath, argv: ['--typeApp', typeApp], timeout: 0, log: peerLog })
       : fork(scriptPath, ['--typeApp', typeApp]);
     const rpc = createRPC(child);
     this._peers.add(rpc);
     await rpc.open();
     await rpc.once('app-ready');
+    peerLog(`Peer started in ${Date.now() - start} ms`);
     return rpc;
   }
 
