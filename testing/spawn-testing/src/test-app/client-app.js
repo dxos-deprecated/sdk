@@ -4,6 +4,7 @@
 
 import { createClient } from '@dxos/client';
 import { Keyring, KeyType } from '@dxos/credentials';
+import { InviteDetails, InviteType } from '@dxos/party-manager';
 
 import { BaseApp } from './base-app';
 
@@ -42,7 +43,12 @@ export class ClientApp extends BaseApp {
 
   createInvitation (partyPublicKey) {
     return this._client.partyManager.inviteToParty(
-      partyPublicKey, this._greeterSecretProvider, this._greeterSecretValidator);
+      partyPublicKey,
+      new InviteDetails(InviteType.INTERACTIVE, {
+        secretProvider: this._greeterSecretProvider,
+        secretValidator: this._greeterSecretValidator
+      })
+    );
   }
 
   async joinParty (invitation) {
