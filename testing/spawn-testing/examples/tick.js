@@ -57,7 +57,7 @@ async function run (opts = {}) {
 
   // Wait for every peer receive all the messages.
   const waitForSync = Promise.all(peers.map(peer => 
-      broker.watch(peer, 'model-update', ({ total }) => total === maxPeers * maxMessagesByPeer)));
+      broker.watch(peer, 'model-update', ({ objectCount }) => objectCount === maxPeers * maxMessagesByPeer)));
 
   log('> sync started');
   console.time('sync');

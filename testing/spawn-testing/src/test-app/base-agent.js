@@ -73,8 +73,8 @@ export class BaseAgent extends EventEmitter {
     const model = await this._modelFactory.createModel(ObjectModel, { ...options, topic: partyPublicKey.toString('hex') });
     model.on('update', (_, messages) => {
       total += messages.length;
-      this._log('model-update', { messages: messages.length, total });
-      this.emit('model-update', { identityPublicKey: this._identityPublicKey, partyPublicKey, total });
+      this._log('model-update', { messages: messages.length, total, objectCount: [...model._model._objectById.values()].length });
+      this.emit('model-update', { identityPublicKey: this._identityPublicKey, partyPublicKey, messageCount: total, objectCount: [...model._model._objectById.values()].length });
     });
     this._model = model;
     return model;
