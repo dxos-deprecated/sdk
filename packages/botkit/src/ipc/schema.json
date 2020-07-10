@@ -63,6 +63,10 @@
                         "hash": {
                           "type": "string",
                           "id": 3
+                        },
+                        "type": {
+                          "type": "string",
+                          "id": 4
                         }
                       }
                     }
