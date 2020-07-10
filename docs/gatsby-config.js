@@ -5,7 +5,6 @@
 const themeOptions = require('@dxos/docs-theme/theme-options');
 
 module.exports = {
-  pathPrefix: '/sdkDocs',
   plugins: [
     {
       resolve: 'gatsby-theme-apollo-docs',
