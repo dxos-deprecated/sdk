@@ -29,11 +29,10 @@ export const BOT_STORAGE = '/data';
 export class Bot {
   /**
    * @constructor
-   * @param {Object} ModelConstructor
    * @param {Object} config
    * @param {Object} options
    */
-  constructor (ModelConstructor, config, options = {}) {
+  constructor (config, options = {}) {
     const { uid, persistent = true, restarted = false, cwd, name } = config.get('bot');
 
     this._uid = uid;
@@ -42,9 +41,7 @@ export class Bot {
     this._cwd = cwd;
     this._name = name;
 
-    this._modelConstructor = ModelConstructor;
     this._options = options;
-
     this._config = config;
   }
 
@@ -119,7 +116,7 @@ export class Bot {
         return secret;
       };
 
-      log(`Joining party with invitation: ${invitation}`);
+      log(`Joining party with invitation: ${JSON.stringify(invitation)}`);
       await this._client.partyManager.joinParty(InvitationDescriptor.fromQueryParameters(invitation),
         secretProvider);
     }
