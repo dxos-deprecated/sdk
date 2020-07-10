@@ -24,7 +24,9 @@ import { createRPC } from './create-rpc';
         joinParty: ({ invitation }) => app.joinParty(invitation),
         createObjectModel: ({ publicKey, options }) => app.createObjectModel(publicKey, options),
         createItem: ({ modelId, type, properties }) => app.createItem(modelId, type, properties),
-        createManyItems: ({ modelId, type, max }) => app.createManyItems(modelId, type, max)
+        createManyItems: ({ modelId, type, max }) => app.createManyItems(modelId, type, max),
+        tick: () => app.tick(),
+        dumpState: () => app.dumpState()
       })
       .open();
 

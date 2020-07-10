@@ -30,6 +30,7 @@
     "@geut/discovery-swarm-webrtc": "^3.0.0-beta.3",
     "buffer-json-encoding": "^1.0.2",
     "debug": "^4.1.1",
+    "dequal": "^1.0.0",
     "execa": "^4.0.2",
     "mri": "^1.1.5",
     "nanomessage-rpc": "^1.2.1",
