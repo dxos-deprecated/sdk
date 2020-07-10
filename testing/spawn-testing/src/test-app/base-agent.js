@@ -7,7 +7,7 @@ import { randomBytes } from '@dxos/crypto';
 
 export class BaseAgent extends EventEmitter {
   constructor () {
-    super(); 
+    super();
 
     this._secret = '0000';
     this._client = null;
@@ -24,7 +24,7 @@ export class BaseAgent extends EventEmitter {
   async init (opts = {}) {
     const keyring = new Keyring();
     await keyring.createKeyRecord({ type: KeyType.IDENTITY });
-    const storage = createStorage(`.temp/${randomBytes(32).toString('hex')}`, opts.storage)
+    const storage = createStorage(`.temp/${randomBytes(32).toString('hex')}`, opts.storage);
     this._client = await createClient(storage, keyring);
     await this._client.partyManager.identityManager.initializeForNewIdentity();
     this._identityPublicKey = this._client.partyManager.identityManager.deviceManager.publicKey;
@@ -80,7 +80,7 @@ export class BaseAgent extends EventEmitter {
     return model;
   }
 
-  dumpState() {
+  dumpState () {
     return [...this._model._model._objectById.values()];
   }
 }

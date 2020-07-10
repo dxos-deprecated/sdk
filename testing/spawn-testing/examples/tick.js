@@ -23,7 +23,7 @@ async function run (opts = {}) {
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
     const peer = await broker.createPeer('TestAgent', { browser: opts.browser });
-    await peer.call('init', { storage: opts.storage })
+    await peer.call('init', { storage: opts.storage });
     log(`> peer${i} created`);
 
     if (prev === null) {
@@ -56,23 +56,23 @@ async function run (opts = {}) {
   log('> models created');
 
   // Wait for every peer receive all the messages.
-  const waitForSync = Promise.all(peers.map(peer => 
-      broker.watch(peer, 'model-update', ({ objectCount }) => objectCount === maxPeers * maxMessagesByPeer)));
+  const waitForSync = Promise.all(peers.map(peer =>
+    broker.watch(peer, 'model-update', ({ objectCount }) => objectCount === maxPeers * maxMessagesByPeer)));
 
   log('> sync started');
   console.time('sync');
 
-  for(let i = 0; i < maxMessagesByPeer; i++) {
-    for(const peer of peers) {
+  for (let i = 0; i < maxMessagesByPeer; i++) {
+    for (const peer of peers) {
       await peer.call('tick');
     }
   }
-  log('> finished creating items')
-  
+  log('> finished creating items');
+
   await waitForSync;
 
-  const states = await Promise.all(peers.map(peer => peer.call('dumpState')))
-  const statesEqual = states.slice(1).every(state => compareModelStates(states[0], state))
+  const states = await Promise.all(peers.map(peer => peer.call('dumpState')));
+  const statesEqual = states.slice(1).every(state => compareModelStates(states[0], state));
   log('> state compare', { statesEqual });
 
   log('> sync successful');
@@ -83,7 +83,7 @@ async function run (opts = {}) {
 
 module.exports = run;
 
-function compareModelStates(stateA, stateB) {
-  if(stateA.length !== stateB.length) return false
-  return stateA.every(a => stateB.some(b => a.id === b.id && dequal(a, b)))
+function compareModelStates (stateA, stateB) {
+  if (stateA.length !== stateB.length) return false;
+  return stateA.every(a => stateB.some(b => a.id === b.id && dequal(a, b)));
 }
