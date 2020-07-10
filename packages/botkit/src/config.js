@@ -1,5 +1,5 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 import yaml from 'js-yaml';
@@ -10,6 +10,8 @@ import { Config, mapFromKeyValues } from '@dxos/config';
 
 import defaults from '../defaults.yml';
 import envmap from '../env-map.yml';
+
+export const BOT_CONFIG_FILENAME = 'bot.yml';
 
 /**
  * Get config from default or specified .yml file.

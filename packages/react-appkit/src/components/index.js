@@ -15,4 +15,4 @@ export { MemberList } from './MemberList';
 export PartyTree, { PartyTreeAddItemButton, PartyTreeItem } from './PartyTree';
 export Sidebar from './Sidebar';
 export StatusBar from './StatusBar';
-export Theme from './Theme';
+export Theme, { createTheme, defaultThemeProperties } from './Theme';

@@ -1,5 +1,5 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 import assert from 'assert';
@@ -35,7 +35,8 @@ import { COMMAND_SIGN, startIPCServer, createSignResponse, createInvitationMessa
 
 import { log } from './log';
 
-const BOT_SPAWN_TIMEOUT = 10000;
+const BOT_SPAWN_TIMEOUT = 50000;
+const BOT_SPAWN_CHECK_INTERVAL = 50;
 
 /**
  * Bot factory.
@@ -101,7 +102,7 @@ export class BotFactory {
     switch (message.__type_url) {
       case COMMAND_SPAWN: {
         const botUID = await this._botManager.spawnBot(message.botId);
-        await waitForCondition(() => this._ipcServer.clientConnected(botUID), BOT_SPAWN_TIMEOUT);
+        await waitForCondition(() => this._ipcServer.clientConnected(botUID), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
         return createSpawnResponse(botUID);
       }
 

@@ -3,8 +3,8 @@
 //
 
 // TODO(dboreham): Enable running this test in browser. It is currently not enabled for browser execution
-// because the test takes more than 5s to run (depending on machine speed) and the browser jest testing
-// environment has a hard, not changable, timeout of 5s.
+//   because the test takes more than 5s to run (depending on machine speed) and the browser jest testing
+//   environment has a hard, not changable, timeout of 5s.
 
 // TODO(dboreham): Reduce these tests to the minimum to prove end to end functionality not already tested in
 //   party-manager. Possibly these tests don't need to be in data-client at all (similar tests exist in ./tests).
@@ -16,6 +16,7 @@ import { createClient } from '@dxos/client';
 import { Keyring, KeyType } from '@dxos/credentials';
 import { createId, createKeyPair, keyToString, randomBytes, sign, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { DefaultModel } from '@dxos/model-factory';
+import { InviteDetails, InviteType } from '@dxos/party-manager';
 
 /**
  * Writes a message on each client and looks for it on the others.
@@ -82,7 +83,8 @@ test('Create 2-Node credential Party with Greeting and Replication (signature in
   };
 
   // Issue the invitation on clientA.
-  const invitationDescriptor = await clientA.partyManager.inviteToParty(party.publicKey, greeterSecretValidator);
+  const invitationDescriptor = await clientA.partyManager.inviteToParty(party.publicKey,
+    new InviteDetails(InviteType.INTERACTIVE, { secretValidator: greeterSecretValidator }));
 
   // The `secret` Buffer is composed of the signature (fixed length) followed by the message (variable length).
   const inviteeSecretProvider = async () => {
@@ -135,7 +137,11 @@ test('Create 3-Node credential Party with Greeting and Replication (secret invit
   {
     // Issue the invitation on clientA.
     const invitationToB = await clientA.partyManager.inviteToParty(party.publicKey,
-      greeterSecretProvider, greeterSecretValidator);
+      new InviteDetails(InviteType.INTERACTIVE, {
+        secretProvider: greeterSecretProvider,
+        secretValidator: greeterSecretValidator
+      })
+    );
 
     // And then redeem it on clientB.
     await clientB.partyManager.joinParty(invitationToB, inviteeSecretProvider);
@@ -144,7 +150,11 @@ test('Create 3-Node credential Party with Greeting and Replication (secret invit
   {
     // Issue the invitation to clientC now.
     const invitationToC = await clientB.partyManager.inviteToParty(party.publicKey,
-      greeterSecretProvider, greeterSecretValidator);
+      new InviteDetails(InviteType.INTERACTIVE, {
+        secretProvider: greeterSecretProvider,
+        secretValidator: greeterSecretValidator
+      })
+    );
 
     // And then redeem it on clientC.
     await clientC.partyManager.joinParty(invitationToC, inviteeSecretProvider);

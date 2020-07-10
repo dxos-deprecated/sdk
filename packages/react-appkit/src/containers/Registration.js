@@ -200,7 +200,7 @@ const Registration = () => {
       case STAGE_START: {
         return (
           <>
-            <DialogTitle>Welcome to DxOS</DialogTitle>
+            <DialogTitle>Welcome to DXOS</DialogTitle>
             <DialogContent className={classes.container}>
               <div>
                 <Paper className={classes.choice} variant='outlined'>

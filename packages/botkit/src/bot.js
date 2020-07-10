@@ -1,5 +1,5 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 import debug from 'debug';
@@ -34,12 +34,13 @@ export class Bot {
    * @param {Object} options
    */
   constructor (ModelConstructor, config, options = {}) {
-    const { uid, persistent = true, restarted = false, cwd } = config.get('bot');
+    const { uid, persistent = true, restarted = false, cwd, name } = config.get('bot');
 
     this._uid = uid;
     this._persistent = persistent;
     this._restarted = restarted;
     this._cwd = cwd;
+    this._name = name;
 
     this._modelConstructor = ModelConstructor;
     this._options = options;
@@ -74,7 +75,10 @@ export class Bot {
     this._client = await createClient(feedStorage, this._keyRing, getClientConfig(this._config));
 
     if (!this._restarted || !this._persistent) {
-      await this._client.partyManager.identityManager.initializeForNewIdentity();
+      await this._client.partyManager.identityManager.initializeForNewIdentity({
+        identityDisplayName: this._name,
+        deviceDisplayName: this._name
+      });
       log(`Identity initialized: ${this._client.partyManager.identityManager.publicKey}`);
     }
 

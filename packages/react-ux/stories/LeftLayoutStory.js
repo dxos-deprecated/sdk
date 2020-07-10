@@ -26,7 +26,7 @@ const LeftLayoutStory = () => {
   return (
     <FullScreen>
       <LeftDrawer open={open} component={<div className={classes.drawer}>Left</div>}>
-        <AppBar position='static'>
+        <AppBar position='static' elevation={0}>
           <Toolbar variant='dense'>
             <IconButton
               color='inherit'

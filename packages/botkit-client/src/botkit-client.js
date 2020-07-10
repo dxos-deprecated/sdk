@@ -1,5 +1,5 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 import assert from 'assert';
@@ -60,6 +60,9 @@ export class BotFactoryClient {
     log(`Sending spawn request for bot ${botId}`);
     const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
       createSpawnCommand(botId));
+
+    assert(spawnResponse, `Unable to spawn bot ${botId}`);
+
     const { message: { botUID } } = spawnResponse;
 
     return botUID;

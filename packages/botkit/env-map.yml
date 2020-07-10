@@ -24,6 +24,8 @@ WIRE_IPC_PORT:
   type: number
 WIRE_BOT_UID:
   path: bot.uid
+WIRE_BOT_NAME:
+  path: bot.name
 WIRE_BOT_CWD:
   path: bot.cwd
 WIRE_BOT_RESTARTED:
