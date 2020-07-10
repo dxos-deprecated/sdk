@@ -21,18 +21,15 @@ export class BaseAgent extends EventEmitter {
     return this._identityPublicKey;
   }
 
-  async open () {
+  async init (opts = {}) {
     const keyring = new Keyring();
     await keyring.createKeyRecord({ type: KeyType.IDENTITY });
-    this._client = await createClient(this._createStorage(), keyring);
+    const storage = createStorage(`.temp/${randomBytes(32).toString('hex')}`, opts.storage)
+    this._client = await createClient(storage, keyring);
     await this._client.partyManager.identityManager.initializeForNewIdentity();
     this._identityPublicKey = this._client.partyManager.identityManager.deviceManager.publicKey;
     this._feedStore = this._client.feedStore;
     this._modelFactory = this._client.modelFactory;
-  }
-
-  _createStorage () {
-    return createStorage(`.temp/${randomBytes(32).toString('hex')}`, this._storageType);
   }
 
   _log (name, props = {}) {

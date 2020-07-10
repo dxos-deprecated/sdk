@@ -23,6 +23,7 @@ async function run (opts = {}) {
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
     const peer = await broker.createPeer('TestAgent', { browser: opts.browser });
+    await peer.call('init', { storage: opts.storage })
     log(`> peer${i} created`);
 
     if (prev === null) {
