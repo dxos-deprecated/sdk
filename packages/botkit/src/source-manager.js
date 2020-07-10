@@ -1,5 +1,5 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 import assert from 'assert';
@@ -9,8 +9,6 @@ import path from 'path';
 import download from 'download';
 import deepGet from 'lodash.get';
 import url from 'url';
-
-import { Registry } from '@wirelineio/registry-client';
 
 import { log } from './log';
 
@@ -39,16 +37,15 @@ export class SourceManager {
   constructor (config) {
     this._config = config;
 
-    this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
     this._localDev = this._config.get('bot.localDev');
   }
 
   /**
    * Get the install directory and executable file paths for the botId (WRN).
    * Downloads the bot to the expected path/directory if required.
-   * @param {string} botId
+   * @param {object} botRecord
    */
-  async getBotPathInfo (botId) {
+  async getBotPathInfo (botRecord) {
     // Local bot development mode, bypasses WNS/IPFS.
     if (this._localDev) {
       return {
@@ -57,12 +54,7 @@ export class SourceManager {
       };
     }
 
-    const result = await this._registry.resolveRecords([botId]);
-    if (!result.length) {
-      return null;
-    }
-
-    const [{ id, attributes }] = result;
+    const { id, attributes } = botRecord;
     const { platform, arch } = getPlatformInfo();
     const packageAttrName = `${platform}.${arch}`;
 

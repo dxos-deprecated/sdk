@@ -1,5 +1,5 @@
 //
-// Copyright 2020 DXOS.
+// Copyright 2020 DXOS.org
 //
 
 import debug from 'debug';
@@ -10,11 +10,17 @@ import path from 'path';
 import { spawn } from 'child_process';
 import moment from 'moment';
 import kill from 'tree-kill';
+import yaml from 'js-yaml';
+import { Chance } from 'chance';
 
 import { keyToString, createKeyPair } from '@dxos/crypto';
+import { Registry } from '@wirelineio/registry-client';
 
 import { log, logBot } from './log';
 import { SourceManager } from './source-manager';
+import { BOT_CONFIG_FILENAME } from './config';
+
+const chance = new Chance();
 
 const logInfo = debug('dxos:botkit');
 
@@ -32,7 +38,7 @@ export const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
 
 export class BotManager {
   /**
-   * @type {Map<String, {botUID: String, process: Process, type: String, parties: Array, timeState: Object, command: String, args: Array, watcher: Object, stopped: Boolean}>}
+   * @type {Map<String, {botUID: String, process: Process, type: String, parties: Array, timeState: Object, command: String, args: Array, watcher: Object, stopped: Boolean, name: String}>}
    */
   _bots = new Map();
 
@@ -43,6 +49,7 @@ export class BotManager {
     this._localDev = this._config.get('bot.localDev');
     this._botsFile = path.join(process.cwd(), BOTS_DUMP_FILE);
 
+    this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
     this._sourceManager = new SourceManager(config);
 
     ensureFileSync(this._botsFile);
@@ -72,7 +79,9 @@ export class BotManager {
 
     log(`Spawn bot request for ${botId}`);
 
-    const botPathInfo = await this._sourceManager.getBotPathInfo(botId);
+    const botRecord = await this._getBotRecord(botId);
+
+    const botPathInfo = await this._sourceManager.getBotPathInfo(botRecord);
     const botUID = keyToString(createKeyPair().publicKey);
 
     if (!botPathInfo) {
@@ -85,7 +94,10 @@ export class BotManager {
 
     const { command, args } = this._getCommand(botPathInfo);
 
-    return this._startBot(botUID, { childDir, botId, command, args });
+    const { attributes: { displayName } } = botRecord;
+    const name = `bot:${displayName} ${chance.animal()}`;
+
+    return this._startBot(botUID, { childDir, botId, command, args, name });
   }
 
   /**
@@ -189,16 +201,18 @@ export class BotManager {
   async _startBot (botUID, options = {}) {
     const botInfo = this._bots.get(botUID);
 
-    let { childDir, command, args } = options; // || botInfo;
+    let { childDir, command, args, name } = options; // || botInfo;
     if (botInfo) {
       command = botInfo.command;
       args = botInfo.args;
       childDir = botInfo.childDir;
+      name = botInfo.name;
     }
 
     const wireEnv = {
       WIRE_BOT_IPC_SERVER: this._ipcServerId,
       WIRE_BOT_UID: botUID,
+      WIRE_BOT_NAME: name,
       WIRE_BOT_CWD: childDir,
       WIRE_BOT_RESTARTED: !!botInfo
     };
@@ -247,7 +261,8 @@ export class BotManager {
         command,
         args,
         watcher,
-        stopped: false
+        stopped: false,
+        name
       });
     }
     await this._saveBotsToFile();
@@ -320,9 +335,10 @@ export class BotManager {
   }
 
   async _saveBotsToFile () {
-    const data = [...this._bots.values()].map(({ botUID, type, childDir, parties, command, args, stopped }) => ({
+    const data = [...this._bots.values()].map(({ botUID, type, childDir, parties, command, args, stopped, name }) => ({
       botUID,
       type,
+      name,
       childDir,
       parties,
       command,
@@ -344,5 +360,20 @@ export class BotManager {
     data.forEach(({ botUID, ...rest }) => {
       this._bots.set(botUID, { botUID, ...rest });
     });
+  }
+
+  async _getBotRecord (botId) {
+    if (this._localDev) {
+      const botInfo = yaml.load(
+        await fs.readFile(path.join(process.cwd(), BOT_CONFIG_FILENAME))
+      );
+      return { attributes: { displayName: botInfo.name } };
+    }
+    const records = await this._registry.resolveRecords([botId]);
+    if (!records.length) {
+      log(`Bot not found: ${botId}.`);
+      throw new Error(`Invalid bot: ${botId}`);
+    }
+    return records[0];
   }
 }

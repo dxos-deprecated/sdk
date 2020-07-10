@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
 const AppContainer = ({ appBarContent, sidebarContent, children }) => {
   const classes = useStyles();
   const config = useConfig();
-  const { topic } = useParams();
+  const { topic } = useParams(); // TODO(burdon): Remove and make component?
   const [{ exceptions: errors }, setErrors] = useErrorReducer();
   const [{ showSidebar, showDebug }, setLayout] = useLayoutReducer();
   const [showKeyMap, setShowKeyMap] = useState(false);
@@ -117,6 +117,7 @@ const AppContainer = ({ appBarContent, sidebarContent, children }) => {
           appBar={(
             <AppBar
               topic={topic}
+              elevation={0}
               onToggleNav={sidebarContent ? () => setLayout({ showSidebar: !showSidebar }) : undefined}
             >
               {appBarContent}
