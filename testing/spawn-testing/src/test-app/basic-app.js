@@ -22,7 +22,7 @@ export class BasicApp extends BaseApp {
     this._partyPublicKey = null;
   }
 
-  async open () {
+  async init () {
     this._identityPublicKey = randomBytes(32);
     this._feedStore = await FeedStore.create(this._createStorage(), {
       feedOptions: {
