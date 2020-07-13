@@ -3,7 +3,8 @@
   "version": "1.0.0-beta.133",
   "license": "GPL-3.0",
   "author": "DXOS.org",
-  "main": "dist/es/index.js",
+  "main": "index.js",
+  "browser": "dist/es/index-browser.js",
   "private": true,
   "scripts": {
     "clean": "rm -rf dist",
@@ -16,7 +17,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
-    "@dxos/browser-runner": "^v1.0.0-beta.11",
+    "@dxos/browser-runner": "^v1.0.0-beta.12",
     "@dxos/client": "^1.0.0-beta.133",
     "@dxos/credentials": "^1.0.1-beta.28",
     "@dxos/crypto": "^1.0.0-beta.1",

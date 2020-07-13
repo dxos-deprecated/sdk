@@ -67,7 +67,7 @@ export class Broker {
     });
   }
 
-  async createPeer ({ agent, browser = false, puppeteerOptions = {} } = {}) {
+  async createPeer ({ agent, storage, browser = false, puppeteerOptions = {} } = {}) {
     const start = Date.now();
     const scriptPath = path.resolve(path.join(__dirname, 'peer.js'));
     const child = browser
@@ -75,7 +75,8 @@ export class Broker {
       : fork(scriptPath, agent && ['--agent', agent]);
     const rpc = createRPC(child);
     await rpc.open();
-    const { publicKey } = await rpc.once('app-ready');
+    await rpc.once('agent-ready');
+    const { publicKey } = await rpc.call('init', { storage });
     this._peers.set(publicKey.toString('hex'), rpc);
     peerLog(`Peer started in ${Date.now() - start} ms`);
     return rpc;

@@ -39,7 +39,7 @@ class ModelDescriptor {
   get state () {
     return {
       ...this._state,
-      objectsCount: this.objects.lenght
+      objectCount: this.objects.length
     };
   }
 
@@ -77,17 +77,19 @@ export class BaseAgent extends EventEmitter {
   }
 
   get state () {
-    const totalState = { appended: 0, updated: 0, errors: this._errors };
-    const modelState = {};
+    const totalState = { appended: 0, updated: 0, objectCount: 0, errors: this._errors };
+    const stateByModel = {};
     for (const descriptor of this.modelDescriptors) {
-      totalState.appended += descriptor.state.appended;
-      totalState.updated += descriptor.state.updated;
-      modelState[descriptor.id] = descriptor.state;
+      const modelState = descriptor.state;
+      totalState.appended += modelState.appended;
+      totalState.updated += modelState.updated;
+      totalState.objectCount += modelState.objectCount;
+      stateByModel[descriptor.id] = modelState;
     }
 
     return {
       total: totalState,
-      models: modelState
+      models: stateByModel
     };
   }
 
@@ -119,12 +121,19 @@ export class BaseAgent extends EventEmitter {
     const model = await this._modelFactory.createModel(ModelClass, { ...options, topic: partyPublicKey.toString('hex') });
     const descriptor = new ModelDescriptor(model);
     model.on('update', (_, messages) => {
-      this._log('model-update', { messages: messages.length, state: descriptor.state });
-      this.emit('model-update', { identityPublicKey: this._identityPublicKey, partyPublicKey, modelId: descriptor.id, messages });
+      const state = descriptor.state;
+      this._log('model-update', { messages: messages.length, state });
+      this.emit('model-update', { identityPublicKey: this._identityPublicKey, partyPublicKey, modelId: descriptor.id, messages, state });
     });
     this._modelDescriptors.set(descriptor.id, descriptor);
     model[kModelDescriptor] = descriptor;
     return model;
+  }
+
+  getModelObjects () {
+    return this.models.reduce((prev, curr) => {
+      return [...prev, ...curr[kModelDescriptor].objects];
+    }, []);
   }
 
   _createStorage (storageType) {

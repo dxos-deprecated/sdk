@@ -22,8 +22,11 @@ async function run (opts = {}) {
   let partyKey = null;
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
-    const peer = await broker.createPeer({ browser: opts.browser });
-    await peer.call('init', { storage: opts.storage });
+    const peer = await broker.createPeer({
+      agent: opts.agent,
+      storage: opts.storage,
+      browser: opts.browser
+    });
     log(`> peer${i} created`);
 
     if (prev === null) {
@@ -51,13 +54,13 @@ async function run (opts = {}) {
   // Create models
   const type = 'example.com/Test';
   for (const peer of peers) {
-    await peer.call('createObjectModel', { publicKey: partyKey, options: { type } });
+    await peer.call('createModel', { publicKey: partyKey, options: { type } });
   }
   log('> models created');
 
   // Wait for every peer receive all the messages.
   const waitForSync = Promise.all(peers.map(peer =>
-    broker.watch(peer, 'model-update', ({ objectCount }) => objectCount === maxPeers * maxMessagesByPeer)));
+    broker.watch(peer, 'model-update', ({ state }) => state.objectCount === maxPeers * maxMessagesByPeer)));
 
   log('> sync started');
   console.time('sync');
@@ -71,8 +74,8 @@ async function run (opts = {}) {
 
   await waitForSync;
 
-  const states = await Promise.all(peers.map(peer => peer.call('dumpState')));
-  const statesEqual = states.slice(1).every(state => compareModelStates(states[0], state));
+  const modelObjects = await Promise.all(peers.map(peer => peer.call('getModelObjects')));
+  const statesEqual = modelObjects.slice(1).every(state => compareModelStates(modelObjects[0], state));
   log('> state compare', { statesEqual });
 
   log('> sync successful');
