@@ -24,7 +24,7 @@ export class ClientApp extends BaseApp {
     return this._identityPublicKey;
   }
 
-  async open () {
+  async init () {
     const keyring = new Keyring();
     await keyring.createKeyRecord({ type: KeyType.IDENTITY });
     this._client = await createClient(this._createStorage(), keyring);

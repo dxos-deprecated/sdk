@@ -24,6 +24,7 @@ async function run (opts = {}) {
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
     const peer = await broker.createPeer(app, { browser: browser });
+    await peer.call('init');
     log(`> peer${i} created`);
 
     if (prev === null) {
