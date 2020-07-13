@@ -10,9 +10,18 @@ const { Broker } = require('../dist/es');
 const log = debug('dxos:spawn-testing:example');
 
 async function run (opts = {}) {
-  const maxPeers = opts.peers || 2;
-  const maxMessagesByPeer = opts.messages || 10;
-  const agent = opts.agent || 'CreatingAgent';
+  const config = {
+    agent: opts.agent || 'CreatingAgent',
+    peers: opts.peers || 2,
+    messages: opts.messages || 10,
+    platform: opts.platform || 'node',
+    storage: opts.storage,
+  }
+  console.log('Running with config:')
+  console.log(JSON.stringify(config, null, 4))
+
+  const { peers: maxPeers, messages: maxMessagesByPeer, agent } = config;
+
   const peers = [];
 
   const broker = new Broker();
@@ -23,8 +32,8 @@ async function run (opts = {}) {
   let partyKey = null;
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
-    const peer = await broker.createPeer('AgentRunner', { platform: opts.platform });
-    await peer.call('init', { storage: opts.storage, agent });
+    const peer = await broker.createPeer('AgentRunner', { platform: config.platform });
+    await peer.call('init', { storage: config.storage, agent });
     log(`> peer${i} created`);
 
     if (prev === null) {
