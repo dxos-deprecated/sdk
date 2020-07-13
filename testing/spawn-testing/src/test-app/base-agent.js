@@ -52,7 +52,7 @@ export class BaseAgent extends EventEmitter {
   createInvitation (partyPublicKey) {
     return this._client.partyManager.inviteToParty(partyPublicKey, new InviteDetails(InviteType.INTERACTIVE, {
       secretValidator: this._greeterSecretValidator,
-      secretProvider: this._greeterSecretProvider,
+      secretProvider: this._greeterSecretProvider
     }));
   }
 
