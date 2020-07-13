@@ -148,6 +148,23 @@ const client = new Client({
 ```
 
 
+Update(July 13th):
+- NetworkManager also required a feedStore as first param.
+- Remove NetworkManager. Add swarm config. Create SwarmProvider and NetworkManager internally.
+- Rename feedStorage -> storage.
+- Remove Keyring in favor of just KeyStore. Create Keyring internally.
+
+```
+// Reduced API Surface for Client deps.
+
+const client = new Client({
+  swarm: { signal, ice }, // For NetworkManager
+  storage: createStorage(clientConfig.feedStorage.root, clientConfig.feedStorage.type), // for FeedStore, optional?
+  keyStore: new KeyStore({ type, name }) // for Keyring, optional.
+})
+```
+
+
 ### Implementation Details
 
 
