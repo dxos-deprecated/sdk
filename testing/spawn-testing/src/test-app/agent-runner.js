@@ -6,7 +6,9 @@ import { ObjectModel } from '@dxos/echo-db';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { randomBytes } from '@dxos/crypto';
 
-export class BaseAgent extends EventEmitter {
+import * as agents from './index';
+
+export class AgentRunner extends EventEmitter {
   constructor () {
     super();
 
@@ -31,6 +33,8 @@ export class BaseAgent extends EventEmitter {
     this._identityPublicKey = this._client.partyManager.identityManager.deviceManager.publicKey;
     this._feedStore = this._client.feedStore;
     this._modelFactory = this._client.modelFactory;
+
+    this._agentClass = agents[opts.agent]
   }
 
   _log (name, props = {}) {
@@ -71,16 +75,23 @@ export class BaseAgent extends EventEmitter {
     this.emit('party-update', { publicKey: partyInfo.publicKey, members });
   }
 
-  async createObjectModel (partyPublicKey, options) {
+  async initAgent (partyPublicKey) {
     let total = 0;
-    const model = await this._modelFactory.createModel(ObjectModel, { ...options, topic: partyPublicKey.toString('hex') });
+    const { model: modelType, options } = this._agentClass.config;
+    const model = await this._modelFactory.createModel(modelType, { ...options, topic: partyPublicKey.toString('hex') });
     model.on('update', (_, messages) => {
       total += messages.length;
       this._log('model-update', { messages: messages.length, total, objectCount: [...model._model._objectById.values()].length });
       this.emit('model-update', { identityPublicKey: this._identityPublicKey, partyPublicKey, messageCount: total, objectCount: [...model._model._objectById.values()].length });
     });
     this._model = model;
+
+    this._agent = new this._agentClass(model);
     return model;
+  }
+  
+  tick() {
+    this._agent.tick();
   }
 
   dumpState () {

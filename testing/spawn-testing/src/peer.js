@@ -24,6 +24,7 @@ import { createRPC } from './create-rpc';
         createInvitation: ({ publicKey }) => app.createInvitation(publicKey),
         joinParty: ({ invitation }) => app.joinParty(invitation),
         createObjectModel: ({ publicKey, options }) => app.createObjectModel(publicKey, options),
+        initAgent: ({ publicKey }) => app.initAgent(publicKey),
         createItem: ({ modelId, type, properties }) => app.createItem(modelId, type, properties),
         createManyItems: ({ modelId, type, max }) => app.createManyItems(modelId, type, max),
         tick: () => app.tick(),

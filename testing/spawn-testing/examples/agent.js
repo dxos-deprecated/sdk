@@ -5,14 +5,14 @@
 const debug = require('debug');
 const dequal = require('dequal');
 
-const { Broker } = require('../');
+const { Broker } = require('../dist/es');
 
 const log = debug('dxos:spawn-testing:example');
 
 async function run (opts = {}) {
   const maxPeers = opts.peers || 2;
   const maxMessagesByPeer = opts.messages || 10;
-  const agent = opts.agent || 'TestAgent';
+  const agent = opts.agent || 'CreatingAgent';
   const peers = [];
 
   const broker = new Broker();
@@ -23,8 +23,8 @@ async function run (opts = {}) {
   let partyKey = null;
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
-    const peer = await broker.createPeer(agent, { platform: opts.platform });
-    await peer.call('init', { storage: opts.storage });
+    const peer = await broker.createPeer('AgentRunner', { platform: opts.platform });
+    await peer.call('init', { storage: opts.storage, agent });
     log(`> peer${i} created`);
 
     if (prev === null) {
@@ -50,9 +50,8 @@ async function run (opts = {}) {
   log('> network full connected');
 
   // Create models
-  const type = 'example.com/Test';
   for (const peer of peers) {
-    await peer.call('createObjectModel', { publicKey: partyKey, options: { type } });
+    await peer.call('initAgent', { publicKey: partyKey });
   }
   log('> models created');
 
