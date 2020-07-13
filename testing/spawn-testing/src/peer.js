@@ -27,7 +27,8 @@ import { createRPC } from './create-rpc';
         createItem: ({ modelId, type, properties }) => app.createItem(modelId, type, properties),
         createManyItems: ({ modelId, type, max }) => app.createManyItems(modelId, type, max),
         tick: () => app.tick(),
-        dumpState: () => app.dumpState()
+        dumpState: () => app.dumpState(),
+        exit: () => process.exit(0),
       })
       .open();
 

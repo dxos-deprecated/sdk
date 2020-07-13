@@ -92,6 +92,9 @@ export class Broker {
   async destroy () {
     process.nextTick(() => this._signal.cancel());
     await this._signal.catch(() => {});
-    await Promise.all(this.peers.map(peer => peer.close()));
+    await Promise.all(this.peers.map(async peer => {
+      await peer.call('exit')
+      await peer.close()
+    }));
   }
 }
