@@ -12,6 +12,7 @@ const log = debug('dxos:spawn-testing:example');
 async function run (opts = {}) {
   const maxPeers = opts.peers || 2;
   const maxMessagesByPeer = opts.messages || 10;
+  const agent = opts.agent || 'TestAgent';
   const peers = [];
 
   const broker = new Broker();
@@ -22,7 +23,7 @@ async function run (opts = {}) {
   let partyKey = null;
   let prev = null;
   for (let i = 0; i < maxPeers; i++) {
-    const peer = await broker.createPeer('TestAgent', { platform: opts.platform });
+    const peer = await broker.createPeer(agent, { platform: opts.platform });
     await peer.call('init', { storage: opts.storage });
     log(`> peer${i} created`);
 
