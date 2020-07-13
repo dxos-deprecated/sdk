@@ -19,7 +19,6 @@ import { patchPartyManager } from './patchPartyMananger';
 // TODO(elmasse): Remove once PartyManager has been updated.
 patchPartyManager(PartyManager);
 
-const MAX_WAIT = 5000;
 const log = debug('dxos:client');
 
 /**
