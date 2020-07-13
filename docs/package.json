@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "rm -rf ./.cache ./public",
     "dev": "gatsby develop --port 8003",
-    "build": "yarn clean && gatsby build --prefix-paths",
+    "build": "gatsby build --prefix-paths && mkdir -p sdk && mv public/* sdk && mv sdk public/",
     "serve": "gatsby serve --prefix-paths",
     "test": "jest --rootDir ./content --passWithNoTests"
   },
