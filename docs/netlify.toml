@@ -1,0 +1,11 @@
+[[redirects]]
+    from = "/"
+    to = "/sdk"
+    status = 200
+    force = true
+
+[[redirects]]
+    from = "/*"
+    to = "/sdk/:splat"
+    status = 200
+    force = true
