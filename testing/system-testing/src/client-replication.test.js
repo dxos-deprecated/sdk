@@ -57,7 +57,7 @@ export const destroyClients = async (clients) => {
   return Promise.all(clients.map(client => client.destroy()));
 };
 
-test('Create 2-Node credential Party with Greeting and Replication (signature invitation)', async () => {
+test.skip('Create 2-Node credential Party with Greeting and Replication (signature invitation)', async () => {
   const keyringA = new Keyring();
   await keyringA.createKeyRecord({ type: KeyType.IDENTITY });
   const keyringB = new Keyring();
@@ -104,7 +104,7 @@ test('Create 2-Node credential Party with Greeting and Replication (signature in
 });
 
 // TODO(telackey): This test is currently taking too long for the in-browser test limit of 5s.
-test('Create 3-Node credential Party with Greeting and Replication (secret invitation)', async () => {
+test.skip('Create 3-Node credential Party with Greeting and Replication (secret invitation)', async () => {
   const keyringA = new Keyring();
   await keyringA.createKeyRecord({ type: KeyType.IDENTITY });
   const keyringB = new Keyring();

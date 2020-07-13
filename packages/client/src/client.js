@@ -211,19 +211,13 @@ export const createClient = async (feedStorage, keyring, config = {}, plugins) =
 
   log('Creating client...', JSON.stringify(config, undefined, 2));
 
-  const feedStore = await FeedStore.create(feedStorage, {
-    feedOptions: {
-      // TODO(burdon): Use codec.
-      // TODO(dboreham): This buffer-json codec is required for party-manager to function.
-      valueEncoding: 'buffer-json'
-    },
-    codecs: {
-      'buffer-json': bufferJson
-    }
-  });
+  // TODO(burdon): Replace valueEncoding with codec (and SDK Envelope proto).
+  // TODO(dboreham): buffer-json codec is required for party-manager to function.
+  const feedStore = await FeedStore.create(feedStorage, { valueEncoding: bufferJson });
 
   // TODO(dboreham): NetworkManager and SwarmProvider should be not owned by Client.
   const swarmProvider = new SwarmProvider(config.swarm, metrics);
+
   // TODO(dboreham): plugins parameter not yet implemented in NetworkManager.
   const networkManager = new NetworkManager(feedStore, swarmProvider, plugins);
 
