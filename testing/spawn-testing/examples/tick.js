@@ -73,7 +73,11 @@ async function run (opts = {}) {
 
   const states = await Promise.all(peers.map(peer => peer.call('dumpState')));
   const statesEqual = states.slice(1).every(state => compareModelStates(states[0], state));
-  log('> state compare', { statesEqual });
+  if(!statesEqual) {
+    console.error('peer state mismatch')
+    console.error(states)
+    process.exit(-1)
+  }
 
   log('> sync successful');
   console.timeEnd('sync');
