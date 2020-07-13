@@ -3,7 +3,11 @@
 //
 
 import mri from 'mri';
-import * as apps from './test-app';
+import hrtime from 'browser-process-hrtime';
+import prettyHrtime from 'pretty-hrtime';
+
+import { getModelDescriptor } from './agents';
+import TestAgent from './agents/test-agent';
 import { createRPC } from './create-rpc';
 
 (async () => {
@@ -12,9 +16,18 @@ import { createRPC } from './create-rpc';
 
     const rpc = createRPC(typeof window !== 'undefined' && window.process ? window.process : process);
 
-    const ClassApp = options.typeApp ? apps[options.typeApp] : apps.ClientApp;
+    const errors = [];
+    process.on('unhandledRejection', (err) => {
+      errors.push(err);
+    });
 
-    const app = new ClassApp();
+    process.on('uncaughtException', (err) => {
+      errors.push(err);
+    });
+
+    const app = options.agent ? require(options.agent) : new TestAgent();
+
+    const startTime = hrtime();
 
     await rpc
       .actions({
@@ -23,11 +36,23 @@ import { createRPC } from './create-rpc';
         createParty: () => app.createParty(),
         createInvitation: ({ publicKey }) => app.createInvitation(publicKey),
         joinParty: ({ invitation }) => app.joinParty(invitation),
-        createObjectModel: ({ publicKey, options }) => app.createObjectModel(publicKey, options),
-        createItem: ({ modelId, type, properties }) => app.createItem(modelId, type, properties),
-        createManyItems: ({ modelId, type, max }) => app.createManyItems(modelId, type, max),
+        createObjectModel: async ({ publicKey, options }) => {
+          const model = await app.createObjectModel(publicKey, { options });
+          return getModelDescriptor(model).id;
+        },
         tick: () => app.tick(),
-        dumpState: () => app.dumpState()
+        getState: () => {
+          const state = app.state;
+
+          const liveTime = hrtime(startTime);
+
+          return {
+            liveTimeFormat: `~${prettyHrtime(liveTime)} (${liveTime[0]} s + ${liveTime[1]} ns)`,
+            liveTime,
+            app: state,
+            unhandledErrors: errors
+          };
+        }
       })
       .open();
 

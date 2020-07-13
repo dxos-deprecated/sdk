@@ -12,9 +12,9 @@ import { ModelFactory } from '@dxos/model-factory';
 import { Protocol } from '@dxos/protocol';
 import { DefaultReplicator } from '@dxos/protocol-plugin-replicator';
 
-import { BaseApp } from './base-app';
+import { BaseAgent } from './base-agent';
 
-export class BasicApp extends BaseApp {
+export class MinimalAgent extends BaseAgent {
   constructor (opts = {}) {
     super(opts);
 
@@ -22,9 +22,9 @@ export class BasicApp extends BaseApp {
     this._partyPublicKey = null;
   }
 
-  async init () {
+  async init (opts = {}) {
     this._identityPublicKey = randomBytes(32);
-    this._feedStore = await FeedStore.create(this._createStorage(), {
+    this._feedStore = await FeedStore.create(this._createStorage(opts.storage), {
       feedOptions: {
         valueEncoding: 'buffer-json'
       },

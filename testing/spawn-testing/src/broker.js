@@ -50,7 +50,7 @@ function fork (file, args = []) {
 export class Broker {
   constructor () {
     this._signal = null;
-    this._peers = new Set();
+    this._peers = new Map();
   }
 
   get peers () {
@@ -67,16 +67,16 @@ export class Broker {
     });
   }
 
-  async createPeer (typeApp = 'ClientApp', { browser = false, puppeteerOptions = {} } = {}) {
+  async createPeer ({ agent, browser = false, puppeteerOptions = {} } = {}) {
     const start = Date.now();
     const scriptPath = path.resolve(path.join(__dirname, 'peer.js'));
     const child = browser
-      ? await runInBrowser({ src: scriptPath, argv: ['--typeApp', typeApp], timeout: 0, log: peerLog, puppeteerOptions })
-      : fork(scriptPath, ['--typeApp', typeApp]);
+      ? await runInBrowser({ src: scriptPath, alias: agent && [`./agents/test-agent:${agent}`], timeout: 0, log: peerLog, puppeteerOptions })
+      : fork(scriptPath, agent && ['--agent', agent]);
     const rpc = createRPC(child);
-    this._peers.add(rpc);
     await rpc.open();
-    await rpc.once('app-ready');
+    const { publicKey } = await rpc.once('app-ready');
+    this._peers.set(publicKey.toString('hex'), rpc);
     peerLog(`Peer started in ${Date.now() - start} ms`);
     return rpc;
   }
@@ -87,6 +87,16 @@ export class Broker {
         break;
       }
     }
+  }
+
+  async getStats () {
+    const statsByPeer = {};
+    await Promise.all(Array.from(this._peers.keys()).map(async peerId => {
+      const peer = this._peers.get(peerId);
+      const stats = await peer.call('stats');
+      statsByPeer[peerId] = stats;
+    }));
+    return statsByPeer;
   }
 
   async destroy () {

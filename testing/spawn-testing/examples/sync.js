@@ -11,7 +11,7 @@ const log = debug('dxos:spawn-testing:example');
 async function run (opts = {}) {
   const { browser = false, app = 'ClientApp' } = opts;
 
-  const maxPeers = 10;
+  const maxPeers = 2;
   const maxMessagesByPeer = 1000;
   const peers = [];
 
@@ -75,6 +75,8 @@ async function run (opts = {}) {
 
   log('> sync successful');
   console.timeEnd('sync');
+
+  console.log(await broker.stats());
 
   await broker.destroy();
 }
