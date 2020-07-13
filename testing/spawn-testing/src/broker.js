@@ -73,12 +73,12 @@ export class Broker {
     const child = platform === 'node'
       ? fork(scriptPath, ['--typeApp', typeApp])
       : await runInBrowser({
-          src: scriptPath,
-          argv: ['--typeApp', typeApp],
-          timeout: 0,
-          log: peerLog,
-          puppeteerOptions: { ...puppeteerOptions, product: platform },
-        })
+        src: scriptPath,
+        argv: ['--typeApp', typeApp],
+        timeout: 0,
+        log: peerLog,
+        puppeteerOptions: { ...puppeteerOptions, product: platform }
+      });
     const rpc = createRPC(child);
     this._peers.add(rpc);
     await rpc.open();
@@ -99,8 +99,8 @@ export class Broker {
     process.nextTick(() => this._signal.cancel());
     await this._signal.catch(() => {});
     await Promise.all(this.peers.map(async peer => {
-      await peer.call('exit')
-      await peer.close()
+      await peer.call('exit');
+      await peer.close();
     }));
   }
 }

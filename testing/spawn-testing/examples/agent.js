@@ -15,10 +15,10 @@ async function run (opts = {}) {
     peers: opts.peers || 2,
     messages: opts.messages || 10,
     platform: opts.platform || 'node',
-    storage: opts.storage,
-  }
-  console.log('Running with config:')
-  console.log(JSON.stringify(config, null, 4))
+    storage: opts.storage
+  };
+  console.log('Running with config:');
+  console.log(JSON.stringify(config, null, 4));
 
   const { peers: maxPeers, messages: maxMessagesByPeer, agent } = config;
 
@@ -82,10 +82,10 @@ async function run (opts = {}) {
 
   const states = await Promise.all(peers.map(peer => peer.call('dumpState')));
   const statesEqual = states.slice(1).every(state => compareModelStates(states[0], state));
-  if(!statesEqual) {
-    console.error('peer state mismatch')
-    console.error(states)
-    process.exit(-1)
+  if (!statesEqual) {
+    console.error('peer state mismatch');
+    console.error(states);
+    process.exit(-1);
   }
 
   log('> sync successful');

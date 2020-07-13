@@ -2,7 +2,6 @@ import { EventEmitter } from 'events';
 import { createClient } from '@dxos/client';
 import { Keyring, KeyType } from '@dxos/credentials';
 import { InviteDetails, InviteType } from '@dxos/party-manager';
-import { ObjectModel } from '@dxos/echo-db';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { randomBytes } from '@dxos/crypto';
 
@@ -34,7 +33,7 @@ export class AgentRunner extends EventEmitter {
     this._feedStore = this._client.feedStore;
     this._modelFactory = this._client.modelFactory;
 
-    this._agentClass = agents[opts.agent]
+    this._agentClass = agents[opts.agent];
   }
 
   _log (name, props = {}) {
@@ -89,8 +88,8 @@ export class AgentRunner extends EventEmitter {
     this._agent = new this._agentClass(model);
     return model;
   }
-  
-  tick() {
+
+  tick () {
     this._agent.tick();
   }
 
