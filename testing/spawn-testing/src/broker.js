@@ -67,12 +67,18 @@ export class Broker {
     });
   }
 
-  async createPeer (typeApp = 'ClientApp', { browser = false, puppeteerOptions = {} } = {}) {
+  async createPeer (typeApp = 'ClientApp', { platform = 'node', puppeteerOptions = {} } = {}) {
     const start = Date.now();
     const scriptPath = path.resolve(path.join(__dirname, 'peer.js'));
-    const child = browser
-      ? await runInBrowser({ src: scriptPath, argv: ['--typeApp', typeApp], timeout: 0, log: peerLog, puppeteerOptions })
-      : fork(scriptPath, ['--typeApp', typeApp]);
+    const child = platform === 'node'
+      ? fork(scriptPath, ['--typeApp', typeApp])
+      : await runInBrowser({
+          src: scriptPath,
+          argv: ['--typeApp', typeApp],
+          timeout: 0,
+          log: peerLog,
+          puppeteerOptions: { ...puppeteerOptions, product: platform },
+        })
     const rpc = createRPC(child);
     this._peers.add(rpc);
     await rpc.open();
