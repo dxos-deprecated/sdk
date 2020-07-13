@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { createClient } from '@dxos/client';
 import { Keyring, KeyType } from '@dxos/credentials';
+import { InviteDetails, InviteType } from '@dxos/party-manager';
 import { ObjectModel } from '@dxos/echo-db';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { randomBytes } from '@dxos/crypto';
@@ -49,8 +50,10 @@ export class BaseAgent extends EventEmitter {
   }
 
   createInvitation (partyPublicKey) {
-    return this._client.partyManager.inviteToParty(
-      partyPublicKey, this._greeterSecretProvider, this._greeterSecretValidator);
+    return this._client.partyManager.inviteToParty(partyPublicKey, new InviteDetails(InviteType.INTERACTIVE, {
+      secretValidator: this._greeterSecretValidator,
+      secretProvider: this._greeterSecretProvider,
+    }));
   }
 
   async joinParty (invitation) {
