@@ -25,7 +25,7 @@ export class BaseApp extends EventEmitter {
     return this._identityPublicKey;
   }
 
-  async open () {
+  async init () {
     throw new Error('not implemented');
   }
 

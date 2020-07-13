@@ -19,12 +19,15 @@ import { createRPC } from './create-rpc';
     await rpc
       .actions({
         ping: () => 'pong',
+        init: (opts) => app.init(opts),
         createParty: () => app.createParty(),
         createInvitation: ({ publicKey }) => app.createInvitation(publicKey),
         joinParty: ({ invitation }) => app.joinParty(invitation),
         createObjectModel: ({ publicKey, options }) => app.createObjectModel(publicKey, options),
         createItem: ({ modelId, type, properties }) => app.createItem(modelId, type, properties),
-        createManyItems: ({ modelId, type, max }) => app.createManyItems(modelId, type, max)
+        createManyItems: ({ modelId, type, max }) => app.createManyItems(modelId, type, max),
+        tick: () => app.tick(),
+        dumpState: () => app.dumpState()
       })
       .open();
 
@@ -35,8 +38,6 @@ import { createRPC } from './create-rpc';
     app.on('model-update', data => {
       rpc.emit('model-update', data);
     });
-
-    await app.open();
 
     rpc.emit('app-ready', ({ publicKey: app.identityPublicKey }));
   } catch (err) {
