@@ -3,7 +3,8 @@
   "version": "1.0.0-beta.133",
   "license": "GPL-3.0",
   "author": "DXOS.org",
-  "main": "dist/es/index.js",
+  "main": "index.js",
+  "browser": "dist/es/index-browser.js",
   "private": true,
   "scripts": {
     "clean": "rm -rf dist",
@@ -16,7 +17,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
-    "@dxos/browser-runner": "^v1.0.0-beta.11",
+    "@dxos/browser-runner": "^v1.0.0-beta.12",
     "@dxos/client": "^1.0.0-beta.133",
     "@dxos/credentials": "^1.0.1-beta.28",
     "@dxos/crypto": "^1.0.0-beta.1",
@@ -28,6 +29,7 @@
     "@dxos/protocol-plugin-replicator": "^1.1.0-beta.11",
     "@dxos/random-access-multi-storage": "^1.1.0-beta.4",
     "@geut/discovery-swarm-webrtc": "^3.0.0-beta.3",
+    "browser-process-hrtime": "^1.0.0",
     "buffer-json-encoding": "^1.0.2",
     "debug": "^4.1.1",
     "dequal": "^1.0.0",
@@ -35,6 +37,7 @@
     "mri": "^1.1.5",
     "nanomessage-rpc": "^1.2.1",
     "p-event": "^4.2.0",
+    "pretty-hrtime": "^1.0.3",
     "source-map-support": "^0.5.19",
     "streamx": "^2.6.4",
     "wrtc": "^0.4.5"
