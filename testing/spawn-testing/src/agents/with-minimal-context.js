@@ -12,9 +12,23 @@ import { ModelFactory } from '@dxos/model-factory';
 import { Protocol } from '@dxos/protocol';
 import { DefaultReplicator } from '@dxos/protocol-plugin-replicator';
 
-import { BaseAgent } from './base-agent';
+import { BaseContext as BaseContext } from './base-context';
 
-export class MinimalAgent extends BaseAgent {
+export function withMinimalContext(AgentClass) {
+  return class Context extends MinimalClient {
+    async init(opts) {
+      await super.init(opts);
+
+      this._agent = new AgentClass(this);
+    }
+
+    async tick() {
+      await this._agent.tick();
+    }
+  }
+}
+
+export class MinimalClient extends BaseContext {
   constructor (opts = {}) {
     super(opts);
 

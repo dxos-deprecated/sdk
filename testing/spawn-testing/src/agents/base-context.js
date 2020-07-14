@@ -54,7 +54,7 @@ class ModelDescriptor {
 
 export const getModelDescriptor = (model) => model[kModelDescriptor];
 
-export class BaseAgent extends EventEmitter {
+export class BaseContext extends EventEmitter {
   constructor (opts = {}) {
     super();
 

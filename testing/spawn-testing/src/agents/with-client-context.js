@@ -1,14 +1,20 @@
-//
-// Copyright 2020 DXOS.org
-//
+import { BaseContext } from "./base-context";
 
-import { createClient } from '@dxos/client';
-import { Keyring, KeyType } from '@dxos/credentials';
-import { InviteDetails, InviteType } from '@dxos/party-manager';
+export function withClientContext(AgentClass) {
+  return class Context extends ClientContext {
+    async init(opts) {
+      await super.init(opts);
 
-import { BaseAgent } from './base-agent';
+      this._agent = new AgentClass(this);
+    }
 
-export class Agent extends BaseAgent {
+    async tick() {
+      await this._agent.tick();
+    }
+  }
+}
+
+export class ClientContext extends BaseContext {
   constructor (opts = {}) {
     super(opts);
 

@@ -2,10 +2,17 @@
 // Copyright 2020 DXOS.org
 //
 
-import { MinimalAgent as Agent } from './';
+import { withMinimalContext } from "./with-minimal-context";
 
-export default class TestAgent extends Agent {
+class TestAgent {
+  constructor(ctx) {
+    this._ctx = ctx;
+  }
+
   tick () {
-    this.models[0].createItem('example.com/Test', { foo: 1 });
+    this._ctx.models[0].createItem('example.com/Test', { foo: 1 });
   }
 }
+
+
+export default withMinimalContext(TestAgent);
