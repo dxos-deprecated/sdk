@@ -10,8 +10,8 @@ const { Broker } = require('../');
 const log = debug('dxos:spawn-testing:example');
 
 async function run (opts = {}) {
-  const maxPeers = 2;
-  const maxMessagesByPeer = 10;
+  const maxPeers = opts.peers || 2;
+  const maxMessagesByPeer = opts.messages || 10;
 
   const broker = new Broker();
 
