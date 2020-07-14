@@ -18,6 +18,7 @@ export Layout from './Layout';
 export PartyList from './PartyList';
 export { MemberList } from './MemberList';
 export PartyTree, { PartyTreeAddItemButton, PartyTreeItem } from './PartyTree';
+export RegistrationDialog from './RegistrationDialog';
 export Sidebar from './Sidebar';
 export StatusBar from './StatusBar';
 export Theme, { createTheme, defaultThemeProperties } from './Theme';
