@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import copy from 'copy-to-clipboard';
 
+import { useTheme } from '@material-ui/styles';
 import { makeStyles, withStyles } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -38,7 +39,7 @@ import { humanize, keyToBuffer, verify, SIGNATURE_LENGTH, keyToString } from '@d
 import { InviteDetails, InviteType } from '@dxos/party-manager';
 import { useClient } from '@dxos/react-client';
 
-import MemberAvatar from './MemberAvatar';
+import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 import BotDialog from './BotDialog';
 import { useAppRouter } from '../hooks/router';
 import { useAsync } from '../hooks/async';
@@ -211,7 +212,7 @@ const PartySettingsDialog = ({ party, open, onClose }) => {
               {pendingInvitations.map((pending) => (
                 <TableRow key={pending.invitation.secret}>
                   <TableCell classes={{ root: classes.colAvatar }}>
-                    <Avatar>
+                    <Avatar style={getAvatarStyle(useTheme())}>
                       <FaceIcon />
                     </Avatar>
                   </TableCell>
