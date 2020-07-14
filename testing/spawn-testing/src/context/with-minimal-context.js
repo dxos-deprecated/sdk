@@ -12,24 +12,24 @@ import { ModelFactory } from '@dxos/model-factory';
 import { Protocol } from '@dxos/protocol';
 import { DefaultReplicator } from '@dxos/protocol-plugin-replicator';
 
-import { BaseContext as BaseContext } from './base-context';
+import { BaseContext } from './base-context';
 
-export function withMinimalContext(AgentClass) {
+export function withMinimalContext (AgentClass) {
   return class Context extends MinimalClient {
-    async init(opts) {
+    async init (opts) {
       await super.init(opts);
 
       this._agent = new AgentClass(this);
     }
 
-    async initAgent() {
+    async initAgent () {
       await this._agent.init();
     }
 
-    async tick() {
+    async tick () {
       await this._agent.tick();
     }
-  }
+  };
 }
 
 export class MinimalClient extends BaseContext {
@@ -75,7 +75,7 @@ export class MinimalClient extends BaseContext {
     this._swarm.join(discoveryKey(publicKey));
   }
 
-  getParties() {
+  getParties () {
     return [{ topic: this._partyPublicKey.toString('hex') }];
   }
 

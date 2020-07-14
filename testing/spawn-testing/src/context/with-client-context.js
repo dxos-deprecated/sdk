@@ -1,21 +1,24 @@
-import { BaseContext } from "./base-context";
+import { BaseContext } from './base-context';
+import { createClient } from '@dxos/client';
+import { Keyring, KeyType } from '@dxos/credentials';
+import { InviteDetails, InviteType } from '@dxos/party-manager';
 
-export function withClientContext(AgentClass) {
+export function withClientContext (AgentClass) {
   return class Context extends ClientContext {
-    async init(opts) {
+    async init (opts) {
       await super.init(opts);
 
       this._agent = new AgentClass(this);
     }
 
-    async initAgent() {
+    async initAgent () {
       await this._agent.init();
     }
 
-    async tick() {
+    async tick () {
       await this._agent.tick();
     }
-  }
+  };
 }
 
 export class ClientContext extends BaseContext {
