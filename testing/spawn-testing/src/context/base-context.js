@@ -5,7 +5,6 @@
 import { EventEmitter } from 'events';
 
 import { randomBytes } from '@dxos/crypto';
-import { ObjectModel } from '@dxos/echo-db';
 import { createStorage } from '@dxos/random-access-multi-storage';
 
 const kModelDescriptor = Symbol('modelDescriptor');
@@ -54,7 +53,7 @@ class ModelDescriptor {
 
 export const getModelDescriptor = (model) => model[kModelDescriptor];
 
-export class BaseAgent extends EventEmitter {
+export class BaseContext extends EventEmitter {
   constructor (opts = {}) {
     super();
 
@@ -117,13 +116,18 @@ export class BaseAgent extends EventEmitter {
     throw new Error('not implemented');
   }
 
-  async createModel (partyPublicKey, { ModelClass = ObjectModel, options }) {
-    const model = await this._modelFactory.createModel(ModelClass, { ...options, topic: partyPublicKey.toString('hex') });
+  getParties () {
+    throw new Error('not implemented');
+  }
+
+  async createModel (ModelClass, options = {}) {
+    const topic = options.topic || this.getParties()[0].topic;
+    const model = await this._modelFactory.createModel(ModelClass, { ...options, topic });
     const descriptor = new ModelDescriptor(model);
     model.on('update', (_, messages) => {
       const state = descriptor.state;
       this._log('model-update', { messages: messages.length, state });
-      this.emit('model-update', { identityPublicKey: this._identityPublicKey, partyPublicKey, modelId: descriptor.id, messages, state });
+      this.emit('model-update', { identityPublicKey: this._identityPublicKey, topic, modelId: descriptor.id, messages, state });
     });
     this._modelDescriptors.set(descriptor.id, descriptor);
     model[kModelDescriptor] = descriptor;

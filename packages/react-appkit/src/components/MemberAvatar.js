@@ -3,6 +3,7 @@
 //
 
 import React from 'react';
+
 import { useTheme } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar';
 import FaceIcon from '@material-ui/icons/Face';
@@ -27,10 +28,12 @@ const COLORS = [
 const getColor = publicKey => COLORS[parseInt(publicKey.toString('hex').slice(0, 4), 16) % COLORS.length];
 
 export const getAvatarStyle = (theme, publicKey) => {
-  const color = getColor(publicKey);
+  const color = publicKey ? getColor(publicKey) : theme.palette.grey[200];
   return {
     backgroundColor: color,
-    color: theme.palette.getContrastText(color)
+    color: theme.palette.getContrastText(color),
+    width: theme.spacing(4),
+    height: theme.spacing(4)
   };
 };
 
