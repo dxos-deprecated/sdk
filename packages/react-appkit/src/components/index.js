@@ -9,6 +9,7 @@ export MemberTable from './MemberTable';
 export ImportKeyringDialog from './ImportKeyringDialog';
 export InvitationDialog from './InvitationDialog';
 export PartySettingsDialog from './PartySettingsDialog';
+export PartyMemberList from './PartyMemberList';
 export KeyMap from './KeyMap';
 export Layout from './Layout';
 export PartyList from './PartyList';
