@@ -5,7 +5,7 @@
 const debug = require('debug');
 const dequal = require('dequal');
 
-const { Broker } = require('../');
+const { Broker } = require('./broker');
 
 const log = debug('dxos:spawn-testing:example');
 
@@ -84,9 +84,9 @@ async function run (opts = {}) {
   process.exit(0);
 }
 
-module.exports = run;
-
 function compareModelStates (stateA, stateB) {
   if (stateA.length !== stateB.length) return false;
   return stateA.every(a => stateB.some(b => a.id === b.id && dequal(a, b)));
 }
+
+run();

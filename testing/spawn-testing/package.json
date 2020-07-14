@@ -12,8 +12,7 @@
     "build:watch": "npm run build -- --watch",
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
-    "test": "node -r @babel/register src/index.js",
-    "example": "npm run build && DEBUG=\"dxos:spawn-testing*\" node examples/index.js"
+    "test": "npm run build && DEBUG=\"dxos:spawn-testing*\" node dist/es/main.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
