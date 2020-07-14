@@ -3,7 +3,6 @@
 //
 
 import React from 'react';
-import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { AvatarGroup } from '@material-ui/lab';
 import Avatar from '@material-ui/core/Avatar';
@@ -20,14 +19,6 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'row'
-  },
-  avatar: {
-    width: theme.spacing(4),
-    height: theme.spacing(4)
-  },
-  newMemberStyle: {
-    backgroundColor: theme.palette.grey[200],
-    color: theme.palette.getContrastText(theme.palette.grey[200])
   }
 }));
 
@@ -43,14 +34,14 @@ const PartyMemberList = ({ party, onShare }) => {
       <AvatarGroup>
         {party.members.map(member => (
           <Tooltip key={member.publicKey} title={member.displayName || humanize(member.publicKey)} placement='top'>
-            <Avatar className={classes.avatar} style={getAvatarStyle(theme, member.publicKey)}>
+            <Avatar style={getAvatarStyle(theme, member.publicKey)}>
               {member.displayName ? member.displayName.slice(0, 1).toUpperCase() : <FaceIcon />}
             </Avatar>
           </Tooltip>
         ))}
       </AvatarGroup>
       <Tooltip title='Share' placement='top'>
-        <Avatar className={clsx(classes.avatar, classes.newMemberStyle)} onClick={onShare}>
+        <Avatar style={getAvatarStyle(theme)} onClick={onShare}>
           <ShareIcon />
         </Avatar>
       </Tooltip>
