@@ -53,6 +53,10 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2)
   },
+  tableContainer: {
+    maxHeight: 250,
+    paddingRight: 20
+  },
   expand: {
     display: 'flex',
     flex: 1
@@ -206,7 +210,7 @@ const PartySettingsDialog = ({ party, open, onClose }) => {
           onClose={() => setBotDialogVisible(false)}
         />
 
-        <TableContainer>
+        <TableContainer className={classes.tableContainer}>
           <Table className={classes.table} size='small' padding='none' aria-label='contacts'>
             <TableBody>
               {pendingInvitations.map((pending) => (
