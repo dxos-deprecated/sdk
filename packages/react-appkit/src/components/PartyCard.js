@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     width: 300,
-    maxHeight: 360
+    maxHeight: 320
   },
 
   unsubscribed: {
