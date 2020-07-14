@@ -5,7 +5,7 @@
 
 | Module   | Status | Public URL |
 | -------- | ------ | ---------- |
-| DXOS SDK | [![Netlify Status](https://api.netlify.com/api/v1/badges/3caf9dc7-15b9-42e6-b016-3fda6a3e8612/deploy-status)](https://app.netlify.com/sites/dxos-docs-sdk/deploys) | https://dxos-docs-sdk.netlify.app |
+| DXOS SDK | [![Netlify Status](https://api.netlify.com/api/v1/badges/3caf9dc7-15b9-42e6-b016-3fda6a3e8612/deploy-status)](https://app.netlify.com/sites/dxos-docs-sdk/deploys) | https://dxos-docs.netlify.app/sdk |
 
 ## Usage
 
