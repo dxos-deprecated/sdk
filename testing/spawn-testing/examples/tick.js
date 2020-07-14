@@ -12,7 +12,6 @@ const log = debug('dxos:spawn-testing:example');
 async function run (opts = {}) {
   const maxPeers = 2;
   const maxMessagesByPeer = 10;
-  const peers = [];
 
   const broker = new Broker();
 
@@ -33,40 +32,37 @@ async function run (opts = {}) {
       const { publicKey } = await peer.call('createParty');
       log('> party created', publicKey.toString('hex'));
       partyKey = publicKey;
-      peers.push(peer);
       prev = peer;
-      continue;
+    } else {
+      const invitation = await prev.call('createInvitation', { publicKey: partyKey });
+      log('> invitation created');
+  
+      await peer.call('joinParty', { invitation });
+      log(`> peer${i} joined to the party`);
+  
+      prev = peer;
     }
-
-    const invitation = await prev.call('createInvitation', { publicKey: partyKey });
-    log('> invitation created');
-
-    await peer.call('joinParty', { invitation });
-    log(`> peer${i} joined to the party`);
-
-    peers.push(peer);
-    prev = peer;
   }
 
-  await broker.watch(peers[0], 'party-update', partyInfo => partyInfo.members.length === maxPeers);
+  await broker.watch(broker.peers[0], 'party-update', partyInfo => partyInfo.members.length === maxPeers);
   log('> network full connected');
 
   // Create models
   const type = 'example.com/Test';
-  for (const peer of peers) {
+  for (const peer of broker.peers) {
     await peer.call('createModel', { publicKey: partyKey, options: { type } });
   }
   log('> models created');
 
   // Wait for every peer receive all the messages.
-  const waitForSync = Promise.all(peers.map(peer =>
+  const waitForSync = Promise.all(broker.peers.map(peer =>
     broker.watch(peer, 'model-update', ({ state }) => state.objectCount === maxPeers * maxMessagesByPeer)));
 
   log('> sync started');
   console.time('sync');
 
   for (let i = 0; i < maxMessagesByPeer; i++) {
-    for (const peer of peers) {
+    for (const peer of broker.peers) {
       await peer.call('tick');
     }
   }
@@ -74,7 +70,7 @@ async function run (opts = {}) {
 
   await waitForSync;
 
-  const modelObjects = await Promise.all(peers.map(peer => peer.call('getModelObjects')));
+  const modelObjects = await Promise.all(broker.peers.map(peer => peer.call('getModelObjects')));
   const statesEqual = modelObjects.slice(1).every(state => compareModelStates(modelObjects[0], state));
   log('> state compare', { statesEqual });
 
