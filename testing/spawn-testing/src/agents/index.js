@@ -2,4 +2,5 @@
 // Copyright 2020 DXOS.org
 //
 
-export * from './test-agent';
+import TestAgent from './test-agent';
+export { TestAgent };

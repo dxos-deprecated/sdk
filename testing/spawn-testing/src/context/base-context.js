@@ -5,7 +5,6 @@
 import { EventEmitter } from 'events';
 
 import { randomBytes } from '@dxos/crypto';
-import { ObjectModel } from '@dxos/echo-db';
 import { createStorage } from '@dxos/random-access-multi-storage';
 
 const kModelDescriptor = Symbol('modelDescriptor');
@@ -117,12 +116,12 @@ export class BaseContext extends EventEmitter {
     throw new Error('not implemented');
   }
 
-  getParties() {
+  getParties () {
     throw new Error('not implemented');
   }
 
   async createModel (ModelClass, options = {}) {
-    const topic = options.topic || this.getParties()[0].topic
+    const topic = options.topic || this.getParties()[0].topic;
     const model = await this._modelFactory.createModel(ModelClass, { ...options, topic });
     const descriptor = new ModelDescriptor(model);
     model.on('update', (_, messages) => {
