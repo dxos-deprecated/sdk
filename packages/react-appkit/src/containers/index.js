@@ -12,3 +12,5 @@ export DefaultSidebar from './DefaultSidebar';
 export Registration from './Registration';
 export RequireWallet from './RequireWallet';
 export SystemRoutes from './SystemRoutes';
+export DefaultViewSidebar from './DefaultViewSidebar';
+export ViewSettings from './ViewSettings';
