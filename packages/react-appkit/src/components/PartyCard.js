@@ -144,7 +144,7 @@ const PartyCard = ({ party, viewModel, createView }) => {
 
         <CardMedia
           component='img'
-          height={120}
+          height={100}
           image={getThumbnail(party.displayName)}
         />
 
