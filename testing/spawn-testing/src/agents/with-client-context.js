@@ -8,6 +8,10 @@ export function withClientContext(AgentClass) {
       this._agent = new AgentClass(this);
     }
 
+    async initAgent() {
+      await this._agent.init();
+    }
+
     async tick() {
       await this._agent.tick();
     }

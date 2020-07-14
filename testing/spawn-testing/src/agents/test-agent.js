@@ -3,14 +3,19 @@
 //
 
 import { withMinimalContext } from "./with-minimal-context";
+import { ObjectModel } from "@dxos/echo-db";
 
 class TestAgent {
   constructor(ctx) {
     this._ctx = ctx;
   }
 
+  async init() {
+    this._model = await this._ctx.createModel(ObjectModel, { type: 'example.com/Test' })
+  }
+
   tick () {
-    this._ctx.models[0].createItem('example.com/Test', { foo: 1 });
+    this._model.createItem('example.com/Test', { foo: 1 });
   }
 }
 

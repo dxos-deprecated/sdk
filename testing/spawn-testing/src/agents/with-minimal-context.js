@@ -22,6 +22,10 @@ export function withMinimalContext(AgentClass) {
       this._agent = new AgentClass(this);
     }
 
+    async initAgent() {
+      await this._agent.init();
+    }
+
     async tick() {
       await this._agent.tick();
     }
@@ -69,6 +73,10 @@ export class MinimalClient extends BaseContext {
     this._partyPublicKey = publicKey;
     this._ownerFeed = await this._feedStore.openFeed('/owner', { metadata: { topic: this._partyPublicKey.toString('hex') } });
     this._swarm.join(discoveryKey(publicKey));
+  }
+
+  getParties() {
+    return [{ topic: this._partyPublicKey.toString('hex') }];
   }
 
   _createSwarm () {
