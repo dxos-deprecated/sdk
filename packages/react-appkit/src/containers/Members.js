@@ -10,6 +10,7 @@ import AppContainer from './AppContainer';
 import DefaultSidebar from './DefaultSidebar';
 import MemberTable from '../components/MemberTable';
 
+// TODO(burdon): Remove.
 // TODO(telackey): This UI is for test/demo purposes.
 
 /**

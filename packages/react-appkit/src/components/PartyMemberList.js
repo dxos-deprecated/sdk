@@ -27,8 +27,6 @@ const PartyMemberList = ({ party, onShare }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  // TODO(burdon): Make smaller.
-
   return (
     <div className={classes.root}>
       <AvatarGroup>
@@ -40,6 +38,7 @@ const PartyMemberList = ({ party, onShare }) => {
           </Tooltip>
         ))}
       </AvatarGroup>
+
       <Tooltip title='Share' placement='top'>
         <Avatar style={getAvatarStyle(theme)} onClick={onShare}>
           <ShareIcon />
