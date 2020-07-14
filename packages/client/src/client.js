@@ -22,7 +22,7 @@ const log = debug('dxos:client');
 
 const { error: membershipError } = logs('dxos:client:membership');
 
-const MAX_WAIT = 1000;
+const MAX_WAIT = 5000;
 
 /**
  * Data client.
