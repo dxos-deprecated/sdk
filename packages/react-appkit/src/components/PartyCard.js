@@ -41,7 +41,8 @@ const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
     flexDirection: 'column',
-    width: 300
+    width: 300,
+    maxHeight: 360
   },
 
   unsubscribed: {
