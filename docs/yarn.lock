@@ -1005,10 +1005,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
-"@dxos/docs-theme@^1.0.0-beta.7":
-  version "1.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/@dxos/docs-theme/-/docs-theme-1.0.0-beta.7.tgz#f491339353900daf34731854aa5885c260393736"
-  integrity sha512-Qi9FGGzDLVfCwACDyo+P5kh3bXW8SpgeGTujJt5XLU/Tnf6zvOFzbY7cgy/3XUdA5sd9GWaBj8fcslKNvZKgHQ==
+"@dxos/docs-theme@^1.0.0-beta.8":
+  version "1.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@dxos/docs-theme/-/docs-theme-1.0.0-beta.8.tgz#5025b28d7a69f807a6e77717d329b8f5e3df7846"
+  integrity sha512-sNs/s0QIxxGuDhVzGzEfqpNT0i0yN90q2zGQaWc6ZKAm9qnXv9MGQwioD8V+fsMhp6/pW/t27lOPyaV5WSKndw==
   dependencies:
     gatsby-image "^2.4.9"
     react "^16.11.0"
