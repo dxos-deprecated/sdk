@@ -4,33 +4,37 @@
 
 import hash from 'string-hash';
 
-import banner_0 from './images/banner_0.jpg';
-import banner_1 from './images/banner_1.jpg';
-import banner_2 from './images/banner_2.jpg';
-import banner_3 from './images/banner_3.jpg';
-import banner_4 from './images/banner_4.jpg';
-import banner_5 from './images/banner_5.jpg';
-import banner_6 from './images/banner_6.jpg';
-import banner_7 from './images/banner_7.jpg';
-import banner_8 from './images/banner_8.jpg';
-import banner_9 from './images/banner_9.jpg';
+// https://create-react-app.dev/docs/adding-images-fonts-and-files
+
+import banner0 from './images/banner-0.jpg';
+import banner1 from './images/banner-1.jpg';
+import banner2 from './images/banner-2.jpg';
+import banner3 from './images/banner-3.jpg';
+import banner4 from './images/banner-4.jpg';
+import banner5 from './images/banner-5.jpg';
+import banner6 from './images/banner-6.jpg';
+import banner7 from './images/banner-7.jpg';
+import banner8 from './images/banner-8.jpg';
+import banner9 from './images/banner-9.jpg';
 
 // Banner images: 600x300
 // https://www.freepik.com/premium-vector/collection-ten-backgrounds-with-blue-paper-cut_4647794.htm#page=1&query=layers&position=3
 
 const images = [
-  banner_0,
-  banner_1,
-  banner_2,
-  banner_3,
-  banner_4,
-  banner_5,
-  banner_6,
-  banner_7,
-  banner_8,
-  banner_9
+  banner0,
+  banner1,
+  banner2,
+  banner3,
+  banner4,
+  banner5,
+  banner6,
+  banner7,
+  banner8,
+  banner9
 ];
 
+// TODO(burdon): Remove from appkit (app-specific assets).
+// TODO(burdon): Create hook that returns assets injected into context?
 export const getThumbnail = (value) => {
   return images[hash(value) % images.length];
 };

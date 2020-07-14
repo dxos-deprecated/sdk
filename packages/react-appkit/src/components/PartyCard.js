@@ -30,7 +30,7 @@ import { useClient } from '@dxos/react-client';
 import { EditableText } from '@dxos/react-ux';
 
 import { useAppRouter } from '../hooks';
-import { getThumbnail } from './util/images';
+import { getThumbnail } from './util';
 
 import NewViewCreationMenu from './NewViewCreationMenu';
 import PartySettingsMenu from './PartySettingsMenu';
@@ -112,7 +112,6 @@ const PartyCard = ({ party, viewModel, createView }) => {
     await client.partyManager.unsubscribe(party.publicKey);
   };
 
-  // TODO(burdon): Only update name via settings.
   return (
     <>
       <Card className={clsx(classes.card, !party.subscribed && classes.unsubscribed)}>

@@ -15,7 +15,7 @@ import { humanize } from '@dxos/crypto';
 
 import { getAvatarStyle } from './MemberAvatar';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'row'

@@ -9,7 +9,7 @@ import { createKeyPair, keyToString } from '@dxos/crypto';
 import { MemberAvatar } from '../src/components';
 
 export default {
-  title: 'Member Avatar'
+  title: 'Components'
 };
 
 export const withMemberAvatar = () => {
