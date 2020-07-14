@@ -47,12 +47,11 @@ async function run (opts = {}) {
   await broker.watch(broker.peers[0], 'party-update', partyInfo => partyInfo.members.length === maxPeers);
   log('> network full connected');
 
-  // Create models
-  const type = 'example.com/Test';
+  // Init agents
   for (const peer of broker.peers) {
-    await peer.call('createModel', { publicKey: partyKey, options: { type } });
+    await peer.call('initAgent');
   }
-  log('> models created');
+  log('> agents initialized');
 
   // Wait for every peer receive all the messages.
   const waitForSync = Promise.all(broker.peers.map(peer =>

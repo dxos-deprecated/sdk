@@ -45,6 +45,7 @@ import { createRPC } from './create-rpc';
           const model = await agent.createModel(publicKey, { options });
           return getModelDescriptor(model).id;
         },
+        initAgent: () => agent.initAgent(),
         getModelObjects () {
           return agent.getModelObjects();
         },

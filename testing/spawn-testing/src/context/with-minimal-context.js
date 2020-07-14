@@ -12,9 +12,27 @@ import { ModelFactory } from '@dxos/model-factory';
 import { Protocol } from '@dxos/protocol';
 import { DefaultReplicator } from '@dxos/protocol-plugin-replicator';
 
-import { BaseAgent } from './base-agent';
+import { BaseContext as BaseContext } from './base-context';
 
-export class MinimalAgent extends BaseAgent {
+export function withMinimalContext(AgentClass) {
+  return class Context extends MinimalClient {
+    async init(opts) {
+      await super.init(opts);
+
+      this._agent = new AgentClass(this);
+    }
+
+    async initAgent() {
+      await this._agent.init();
+    }
+
+    async tick() {
+      await this._agent.tick();
+    }
+  }
+}
+
+export class MinimalClient extends BaseContext {
   constructor (opts = {}) {
     super(opts);
 
@@ -55,6 +73,10 @@ export class MinimalAgent extends BaseAgent {
     this._partyPublicKey = publicKey;
     this._ownerFeed = await this._feedStore.openFeed('/owner', { metadata: { topic: this._partyPublicKey.toString('hex') } });
     this._swarm.join(discoveryKey(publicKey));
+  }
+
+  getParties() {
+    return [{ topic: this._partyPublicKey.toString('hex') }];
   }
 
   _createSwarm () {
