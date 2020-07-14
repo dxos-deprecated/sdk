@@ -89,4 +89,4 @@ function compareModelStates (stateA, stateB) {
   return stateA.every(a => stateB.some(b => a.id === b.id && dequal(a, b)));
 }
 
-run()
+run();
