@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import { Agent } from './';
+import { MinimalAgent as Agent } from './';
 
 export default class TestAgent extends Agent {
   tick () {
