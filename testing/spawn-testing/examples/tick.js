@@ -78,6 +78,7 @@ async function run (opts = {}) {
   console.timeEnd('sync');
 
   await broker.destroy();
+  process.exit(0);
 }
 
 module.exports = run;
