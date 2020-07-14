@@ -1021,10 +1021,10 @@
     debug "^4.1.1"
     source-map-support "^0.5.12"
 
-"@dxos/browser-runner@^v1.0.0-beta.12":
-  version "1.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/@dxos/browser-runner/-/browser-runner-1.0.0-beta.12.tgz#a2a3f23fe9e20adb764fb50e6f18986f0f5b2988"
-  integrity sha512-6r/tHJuL8prCW0igR8orWrIUVPtqXLaPqdaUMvzy25oVVKxFphqpj+x8vcqJ77vjn9PBfZcoqs1Ejm0tErIc1g==
+"@dxos/browser-runner@^v1.0.0-beta.13":
+  version "1.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@dxos/browser-runner/-/browser-runner-1.0.0-beta.13.tgz#cf76e879114befa28dc9edf00c1b1853b403f3b7"
+  integrity sha512-9m1Ftf+1RsQvf9JIDOZTJouHyT3X4kdqn1/tDSL9NrvOgLFjp/cA/vzyMcPAZTJCBkcF+xIkR/Peu2/jhwy0gQ==
   dependencies:
     "@babel/core" "^7.4.5"
     babel-loader "^8.1.0"

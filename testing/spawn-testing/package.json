@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
-    "@dxos/browser-runner": "^v1.0.0-beta.12",
+    "@dxos/browser-runner": "^v1.0.0-beta.13",
     "@dxos/client": "^1.0.0-beta.147",
     "@dxos/credentials": "^1.0.1-beta.28",
     "@dxos/crypto": "^1.0.0-beta.1",
