@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     width: 300,
-    height: 360,
+    height: 320,
     padding: theme.spacing(5),
     borderRadius: '8px',
     textAlign: 'center'
