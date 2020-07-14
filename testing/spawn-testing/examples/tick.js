@@ -36,10 +36,10 @@ async function run (opts = {}) {
     } else {
       const invitation = await prev.call('createInvitation', { publicKey: partyKey });
       log('> invitation created');
-  
+
       await peer.call('joinParty', { invitation });
       log(`> peer${i} joined to the party`);
-  
+
       prev = peer;
     }
   }
@@ -72,9 +72,9 @@ async function run (opts = {}) {
 
   const modelObjects = await Promise.all(broker.peers.map(peer => peer.call('getModelObjects')));
   const statesEqual = modelObjects.slice(1).every(state => compareModelStates(modelObjects[0], state));
-  if(!statesEqual) {
-    log('> state mismatch')
-    process.exit(-1)
+  if (!statesEqual) {
+    log('> state mismatch');
+    process.exit(-1);
   }
 
   log('> sync successful');
