@@ -15,7 +15,7 @@ import { DefaultReplicator } from '@dxos/protocol-plugin-replicator';
 import { BaseContext } from './base-context';
 
 export function withMinimalContext (AgentClass) {
-  return class Context extends MinimalClient {
+  return class Context extends MinimalContext {
     async init (opts) {
       await super.init(opts);
 
@@ -32,7 +32,7 @@ export function withMinimalContext (AgentClass) {
   };
 }
 
-export class MinimalClient extends BaseContext {
+export class MinimalContext extends BaseContext {
   constructor (opts = {}) {
     super(opts);
 
@@ -76,7 +76,7 @@ export class MinimalClient extends BaseContext {
   }
 
   getParties () {
-    return [{ topic: this._partyPublicKey.toString('hex') }];
+    return [{ publicKey: this._partyPublicKey }];
   }
 
   _createSwarm () {

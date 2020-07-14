@@ -70,6 +70,10 @@ export class ClientContext extends BaseContext {
     partyInfo.on('update', () => this._onPartyUpdate(partyInfo));
   }
 
+  getParties () {
+    return this._client.partyManager.getPartyInfoList();
+  }
+
   _onPartyUpdate (partyInfo) {
     const members = partyInfo.members.map(m => ({
       publicKey: m.publicKey,

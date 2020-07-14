@@ -97,31 +97,32 @@ export class BaseContext extends EventEmitter {
   }
 
   async init () {
-    throw new Error('not implemented');
+    throw new Error('init not implemented');
   }
 
   async createParty () {
-    throw new Error('not implemented');
+    throw new Error('createParty not implemented');
   }
 
   createInvitation () {
-    throw new Error('not implemented');
+    throw new Error('createInvitation not implemented');
   }
 
   async joinParty (invitation) {
-    throw new Error('not implemented');
+    throw new Error('joinParty not implemented');
   }
 
   async tick () {
-    throw new Error('not implemented');
+    throw new Error('tick not implemented');
   }
 
   getParties () {
-    throw new Error('not implemented');
+    throw new Error('getParties not implemented');
   }
 
   async createModel (ModelClass, options = {}) {
-    const topic = options.topic || this.getParties()[0].topic;
+    // TODO(tinchoz49): maybe we can have a setCurrentParty (this.getParties()[0] >> this.getCurrentParty()), so in the future we can test switching from one party to another one.
+    const topic = options.topic || this.getParties()[0].publicKey.toString('hex');
     const model = await this._modelFactory.createModel(ModelClass, { ...options, topic });
     const descriptor = new ModelDescriptor(model);
     model.on('update', (_, messages) => {
