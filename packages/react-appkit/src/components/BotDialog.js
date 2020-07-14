@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -11,6 +11,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+
+import { useRegistryBots } from '../hooks/registry';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -21,11 +26,6 @@ const useStyles = makeStyles((theme) => ({
     }
   }
 }));
-
-// TODO(burdon): Query registry.
-const DEFAULT_SPEC = {
-  botId: 'wrn:bot:wireline.io/store#1.0.0'
-};
 
 /**
  * Dialog to create and invite bot to party.
@@ -40,9 +40,20 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
 
   const [topic, setTopic] = useState('');
   const [disabled, setDisabled] = useState(false);
+  const [bot, setBot] = useState('');
+  const [botVersions, setBotVersions] = useState([]);
+  const [botVersion, setBotVersion] = useState();
 
-  // TODO(burdon): Form editor.
-  const [spec, setSpec] = useState(JSON.stringify(DEFAULT_SPEC));
+  const registryBots = useRegistryBots();
+
+  useEffect(() => {
+    const versions = registryBots
+      .filter(({ name }) => name === bot).map(({ version }) => version)
+      .sort()
+      .reverse();
+    setBotVersions(versions);
+    setBotVersion(versions[0] || '');
+  }, [bot]);
 
   return (
     <Dialog open={open} onClose={onClose} onExit={() => setDisabled(false)} classes={{ paper: classes.paper }}>
@@ -55,17 +66,41 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
           fullWidth
           value={topic}
           onChange={event => setTopic(event.target.value)}
-          style={{ paddinBottom: 16 }}
+          style={{ paddingBottom: 16 }}
         />
 
-        <TextField
-          label='Spec'
+        <InputLabel id='botNameLabel'>Bot</InputLabel>
+        <Select
+          labelId='botNameLabel'
+          id='botName'
+          value={bot}
           fullWidth
-          multiline
-          spellCheck={false}
-          value={spec}
-          onChange={event => setSpec(event.target.value)}
-        />
+          onChange={event => setBot(event.target.value)}
+        >
+          {registryBots
+            .map(({ name }) => name)
+            .filter((value, index, self) => self.indexOf(value) === index)
+            .map(name => (
+              <MenuItem key={name} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+        </Select>
+
+        <InputLabel id='botVersionLabel'>Version</InputLabel>
+        <Select
+          labelId='botVersionLabel'
+          id='botVersion'
+          value={botVersion}
+          fullWidth
+          onChange={event => setBotVersion(event.target.value)}
+        >
+          {botVersions.map(version => (
+            <MenuItem key={version} value={version}>
+              {version}
+            </MenuItem>
+          ))}
+        </Select>
       </DialogContent>
 
       <DialogActions>
@@ -74,16 +109,8 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
           disabled={disabled}
           color='primary'
           onClick={() => {
-            try {
-              onSubmit({
-                topic,
-                spec: JSON.parse(spec)
-              });
-
-              setDisabled(true);
-            } catch (err) {
-              // TODO(burdon): Show JSON parse error.
-            }
+            onSubmit({ topic, bot, botVersion });
+            setDisabled(true);
           }}
         >
           {disabled ? 'Sending...' : 'Invite'}
