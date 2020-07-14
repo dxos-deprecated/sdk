@@ -72,7 +72,10 @@ async function run (opts = {}) {
 
   const modelObjects = await Promise.all(broker.peers.map(peer => peer.call('getModelObjects')));
   const statesEqual = modelObjects.slice(1).every(state => compareModelStates(modelObjects[0], state));
-  log('> state compare', { statesEqual });
+  if(!statesEqual) {
+    log('> state mismatch')
+    process.exit(-1)
+  }
 
   log('> sync successful');
   console.timeEnd('sync');
