@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import { withMinimalContext } from "./with-minimal-context";
+import { withMinimalContext } from "../context/with-minimal-context";
 import { ObjectModel } from "@dxos/echo-db";
 
 class TestAgent {
