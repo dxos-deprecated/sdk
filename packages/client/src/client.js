@@ -57,7 +57,9 @@ export class Client {
     await this._feedStore.open();
     await this._keyring.load();
 
-    // ALL FEEDSTORE DEPENDENTS NEED TO WAIT FOR FEEDSTORE TO BE OPENED ??
+    // PartyManager and ModelFactory expects to have feedstore instance opened.
+    // TODO(elmasse): Refactor ModelFactory.
+
     if (!this._networkManager) {
       this._networkManager = new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
     }
