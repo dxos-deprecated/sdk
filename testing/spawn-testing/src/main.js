@@ -12,7 +12,7 @@ const log = debug('dxos:spawn-testing:example');
 
 async function run (opts = {}) {
   const maxPeers = opts.peers || 2;
-  const maxMessagesByPeer = opts.messages || 10;
+  const maxTicks = opts.ticks || 1;
 
   const broker = new Broker();
 
@@ -54,24 +54,42 @@ async function run (opts = {}) {
   }
   log('> agents initialized');
 
-  // Wait for every peer receive all the messages.
-  const waitForSync = Promise.all(broker.peers.map(peer =>
-    broker.watch(peer, 'model-update', ({ state }) => state.objectCount === maxPeers * maxMessagesByPeer)));
-
   log('> sync started');
   console.time('sync');
 
-  for (let i = 0; i < maxMessagesByPeer; i++) {
+  for (let i = 0; i < maxTicks; i++) {
     for (const peer of broker.peers) {
       await peer.call('tick');
     }
   }
   log('> finished creating items');
 
-  await waitForSync;
+  // waiting for sync
+  await new Promise(resolve => {
+    async function check () {
+      const modelObjects = await Promise.all(broker.peers.map(peer => peer.call('getModelObjects')));
+      const statesEqual = arrayItemsEqual(modelObjects, compareModelStates);
+      if (statesEqual && modelObjects[0].length !== 0) {
+        resolve();
+      }
+    }
+
+    const peerStates = new Map();
+    for (const [key, peer] of broker._peers) {
+      peer.on('model-update', async ({ state }) => {
+        peerStates.set(key, state);
+        const states = Array.from(peerStates.values());
+        if (states.length === broker.peers.length && arrayItemsEqual(states, (a, b) => a.objectCount === b.objectCount)) {
+          check();
+        }
+      });
+    }
+
+    check();
+  });
 
   const modelObjects = await Promise.all(broker.peers.map(peer => peer.call('getModelObjects')));
-  const statesEqual = modelObjects.slice(1).every(state => compareModelStates(modelObjects[0], state));
+  const statesEqual = arrayItemsEqual(modelObjects, compareModelStates);
   if (!statesEqual) {
     log('> state mismatch');
     process.exit(-1);
@@ -86,6 +104,14 @@ async function run (opts = {}) {
 function compareModelStates (stateA, stateB) {
   if (stateA.length !== stateB.length) return false;
   return stateA.every(a => stateB.some(b => a.id === b.id && dequal(a, b)));
+}
+
+/**
+ * @returns true if all items in the array are equal
+ */
+function arrayItemsEqual (arr, cmp) {
+  if (arr.length <= 1) return true;
+  return arr.slice(1).every(x => cmp(arr[0], x));
 }
 
 run(mri(process.argv.slice(2)));
