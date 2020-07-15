@@ -66,27 +66,27 @@ async function run (opts = {}) {
 
   // waiting for sync
   await new Promise(resolve => {
-    async function check() {
+    async function check () {
       const modelObjects = await Promise.all(broker.peers.map(peer => peer.call('getModelObjects')));
       const statesEqual = arrayItemsEqual(modelObjects, compareModelStates);
-      if(statesEqual && modelObjects[0].length !== 0) {
+      if (statesEqual && modelObjects[0].length !== 0) {
         resolve();
       }
     }
 
-    const peerStates = new Map()
-    for(const [key, peer] of broker._peers) {
+    const peerStates = new Map();
+    for (const [key, peer] of broker._peers) {
       peer.on('model-update', async ({ state }) => {
-        peerStates.set(key, state)
+        peerStates.set(key, state);
         const states = Array.from(peerStates.values());
-        if(states.length === broker.peers.length && arrayItemsEqual(states, (a, b) => a.objectCount === b.objectCount)) {
+        if (states.length === broker.peers.length && arrayItemsEqual(states, (a, b) => a.objectCount === b.objectCount)) {
           check();
         }
-      })
+      });
     }
 
     check();
-  })
+  });
 
   const modelObjects = await Promise.all(broker.peers.map(peer => peer.call('getModelObjects')));
   const statesEqual = arrayItemsEqual(modelObjects, compareModelStates);
@@ -109,9 +109,9 @@ function compareModelStates (stateA, stateB) {
 /**
  * @returns true if all items in the array are equal
  */
-function arrayItemsEqual(arr, cmp) {
-  if(arr.length <= 1) return true
-  return arr.slice(1).every(x => cmp(arr[0], x))
-} 
+function arrayItemsEqual (arr, cmp) {
+  if (arr.length <= 1) return true;
+  return arr.slice(1).every(x => cmp(arr[0], x));
+}
 
 run(mri(process.argv.slice(2)));

@@ -15,7 +15,7 @@ class Agent {
   }
 
   tick () {
-    for(let i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i++) {
       this._model.createItem('example.com/Test', { foo: 1 });
     }
   }
