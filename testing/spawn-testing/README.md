@@ -10,7 +10,7 @@ Description...
 ## Usage
 
 ```
-$ yarn test [--browser] [--peers 5] [--ticks 10] [--storage chrome|idb|ram]
+$ yarn test [--browser] [--peers 5] [--ticks 10] [--storage chrome|idb|ram] [--agent agentFile.js]
 ```
 
 ## Contributing
