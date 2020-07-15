@@ -57,7 +57,7 @@ export class Client {
     await this._feedStore.open();
     await this._keyring.load();
 
-    // PartyManager and ModelFactory expects to have feedstore instance opened.
+    // PartyManager and ModelFactory expect to have feedstore instance already open.
     // TODO(elmasse): Refactor ModelFactory.
 
     if (!this._networkManager) {
