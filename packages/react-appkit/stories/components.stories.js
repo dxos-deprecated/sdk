@@ -4,13 +4,12 @@
 
 import React from 'react';
 
-import { Theme } from '../src';
 import { createKeyPair, keyToString } from '@dxos/crypto';
 
-import MemberAvatar from '../src/components/MemberAvatar';
+import { MemberAvatar } from '../src/components';
 
 export default {
-  title: 'Member Avatar'
+  title: 'Components'
 };
 
 export const withMemberAvatar = () => {
@@ -20,9 +19,9 @@ export const withMemberAvatar = () => {
   };
 
   return (
-    <Theme>
+    <div>
       <MemberAvatar member={member} />
-    </Theme>
+    </div>
   );
 };
 
@@ -33,8 +32,8 @@ export const withNoDisplayName = () => {
   };
 
   return (
-    <Theme>
+    <div>
       <MemberAvatar member={member} />
-    </Theme>
+    </div>
   );
 };
