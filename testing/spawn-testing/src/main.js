@@ -12,7 +12,7 @@ const log = debug('dxos:spawn-testing:example');
 
 async function run (opts = {}) {
   const maxPeers = opts.peers || 2;
-  const maxMessagesByPeer = opts.messages || 10;
+  const maxTicks = opts.ticks || 1;
 
   const broker = new Broker();
 
@@ -57,7 +57,7 @@ async function run (opts = {}) {
   log('> sync started');
   console.time('sync');
 
-  for (let i = 0; i < maxMessagesByPeer; i++) {
+  for (let i = 0; i < maxTicks; i++) {
     for (const peer of broker.peers) {
       await peer.call('tick');
     }
