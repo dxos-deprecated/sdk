@@ -18,12 +18,12 @@ import TextField from '@material-ui/core/TextField';
 import { noop } from '@dxos/async';
 import { keyToBuffer } from '@dxos/crypto';
 import { useClient } from '@dxos/react-client';
+import { EditableText } from '@dxos/react-ux';
 
 import AppContainer from './AppContainer';
 import Sidebar from './DefaultViewSidebar';
 
 import { useAppRouter, usePads, useViews } from '../hooks';
-import EditableText from '@dxos/react-ux/src/components/EditableText';
 
 const useStyles = makeStyles(theme => ({
   root: {
