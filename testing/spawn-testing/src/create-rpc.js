@@ -12,16 +12,27 @@ export function createRPC (ipc) {
       cb(null);
     },
     destroy (cb) {
-      if (ipc.killed || !ipc.finally) {
+      if (ipc.killed || !ipc.cancel) {
         return cb();
       }
 
-      ipc.catch((err) => {
-        if (!err.isCanceled) {
-          throw err;
-        }
-      }).finally(cb);
-      ipc.cancel();
+      process.nextTick(() => ipc.cancel());
+
+      if (ipc.finally) {
+        ipc.catch((err) => {
+          if (!err.isCanceled) {
+            throw err;
+          }
+        }).finally(cb);
+      } else {
+        ipc.once('close', cb);
+      }
+    }
+  });
+
+  ipc.once('close', () => {
+    if (!stream.destroyed) {
+      stream.destroy();
     }
   });
 
