@@ -18,10 +18,11 @@ import TextField from '@material-ui/core/TextField';
 import { noop } from '@dxos/async';
 import { keyToBuffer } from '@dxos/crypto';
 import { useClient } from '@dxos/react-client';
-import { AppContainer, usePads, useAppRouter } from '@dxos/react-appkit';
 
-import { useViews } from '../hooks';
+import AppContainer from './AppContainer';
 import Sidebar from './DefaultViewSidebar';
+
+import { useAppRouter, usePads, useViews } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
   root: {

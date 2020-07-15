@@ -1,4 +1,9 @@
+//
+// Copyright 2020 DXOS.org
+//
+
 import React from 'react';
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -22,3 +27,5 @@ export const MemberList = ({ party }) => {
     </List>
   );
 };
+
+export default MemberList;
