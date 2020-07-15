@@ -21,7 +21,7 @@ import { EditableText } from '@dxos/react-ux';
 
 import { MemberList } from './MemberList';
 
-const useTreeItemStyles = makeStyles(theme => ({
+const treeItemBaseStyles = theme => ({
   root: {
     paddingTop: theme.spacing(1),
 
@@ -68,7 +68,26 @@ const useTreeItemStyles = makeStyles(theme => ({
     color: 'inherit',
     overflow: 'hidden'
   }
-}));
+});
+
+const useTreeItemStyles = makeStyles(treeItemBaseStyles);
+
+const treeAddItemBaseStyles = theme => ({
+  ...treeItemBaseStyles(theme),
+  root: {
+    ...treeItemBaseStyles(theme).root,
+
+    '&$selected > $content': {
+      backgroundColor: 'transparent'
+    },
+
+    '&$selected > $content $label:hover, &$selected:focus > $content $label': {
+      backgroundColor: 'transparent'
+    }
+  }
+});
+
+const useTreeAddItemStyles = makeStyles(treeAddItemBaseStyles);
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -135,7 +154,7 @@ const EditableLabel = ({ icon: Icon, className, classes, label, onUpdate }) => (
 );
 
 export const PartyTreeAddItemButton = ({ onClick, children }) => {
-  const treeItemClasses = useTreeItemStyles();
+  const treeAddItemClasses = useTreeAddItemStyles();
   const classes = useStyles();
 
   const handleClick = useCallback(event => {
@@ -145,7 +164,7 @@ export const PartyTreeAddItemButton = ({ onClick, children }) => {
 
   return (
     <TreeItem
-      classes={treeItemClasses}
+      classes={treeAddItemClasses}
       nodeId='__ADD__'
       selected={false}
       onClick={handleClick}
