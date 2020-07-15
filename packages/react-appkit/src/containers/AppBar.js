@@ -237,10 +237,6 @@ const AppBar = ({ topic, children, onToggleNav }) => {
 
   const buttons = [];
 
-  if (topic) {
-    buttons.push(action(ACTION_USER_INVITATION));
-  }
-
   //
   // Menu items
   //
@@ -250,7 +246,6 @@ const AppBar = ({ topic, children, onToggleNav }) => {
   ];
 
   if (topic) {
-    menuItems.push(action(ACTION_BOT_INVITATION));
     menuItems.push(action(ACTION_EXPORT_KEYRING));
     menuItems.push(action(ACTION_IMPORT_KEYRING));
   }
