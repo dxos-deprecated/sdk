@@ -4,6 +4,7 @@
 
 const debug = require('debug');
 const dequal = require('dequal');
+const mri = require('mri');
 
 const { Broker } = require('./broker');
 
@@ -87,4 +88,4 @@ function compareModelStates (stateA, stateB) {
   return stateA.every(a => stateB.some(b => a.id === b.id && dequal(a, b)));
 }
 
-run();
+run(mri(process.argv.slice(2)));
