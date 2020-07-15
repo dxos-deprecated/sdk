@@ -7,7 +7,7 @@
   "author": "DXOS.org",
   "main": "dist/es/index.js",
   "scripts": {
-    "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \\\"**/*.test.js\\\" --source-maps inline && cp -r src/components/util/images ./dist/es/util/",
+    "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \\\"**/*.test.js\\\" --source-maps inline && cp -r src/components/util/images ./dist/es/components/util/",
     "build:watch": "yarn run build --watch",
     "clean": "rm -rf dist",
     "lint": "semistandard",
