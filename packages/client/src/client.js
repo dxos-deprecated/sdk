@@ -2,102 +2,107 @@
 // Copyright 2020 DXOS.org
 //
 
-import assert from 'assert';
 import debug from 'debug';
 import defaultsDeep from 'lodash.defaultsdeep';
 import bufferJson from 'buffer-json-encoding';
 
-import { waitForEvent } from '@dxos/async';
-import { keyToString, keyToBuffer } from '@dxos/crypto';
+import { Keyring } from '@dxos/credentials';
 import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { PartyManager, waitForCondition } from '@dxos/party-manager';
 import { ModelFactory } from '@dxos/model-factory';
-import { logs } from '@dxos/debug';
 
 import { defaultClientConfig } from './config';
 
-const log = debug('dxos:client');
+import { waitForEvent } from '@dxos/async';
+import { keyToString, keyToBuffer } from '@dxos/crypto';
+import { logs } from '@dxos/debug';
 
 const { error: membershipError } = logs('dxos:client:membership');
-
 const MAX_WAIT = 5000;
+
+const log = debug('dxos:client');
 
 /**
  * Data client.
  */
-class Client {
+export class Client {
   /**
-   * @param {FeedStore} feedStore
-   * @param {NetworkManager} networkManager
-   * @param {PartyManager} partyManager
-   * @param {Keyring} keyring
    * @param {Object} config
+   * @param {RandomAccessAbstract} config.storage
+   * @param {Object} config.swarm
+   * @param {Keyring} config.keyring
+   * @param {FeedStore} config.feedStore. Optional. If provided, config.storage is ignored.
+   * @param {NetworkManager} config.networkManager. Optional. If provided, config.swarm is ignored.
+   * @param {PartyManager} config.partyManager. Optional.
    */
-  // TODO(burdon): Create builder pattern (for factory) rather than complex constructors.
-  constructor (feedStore, networkManager, partyManager, keyring, config) {
-    assert(feedStore);
-    assert(config);
-
-    this._feedStore = feedStore;
-    this._partyManager = partyManager;
-    this._networkManager = networkManager;
-    this._keyring = keyring;
-    this._config = config;
-
-    this._partyWritters = {};
-    this._modelFactory = new ModelFactory(feedStore, {
-      onAppend: async (message, { topic }) => {
-        return this._appendMessage(message, topic);
+  constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager }) {
+    this._keyring = keyring || new Keyring();
+    this._feedStore = feedStore || new FeedStore(storage, {
+      feedOptions: {
+        valueEncoding: 'buffer-json'
       },
-      // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
-      onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
+      codecs: {
+        'buffer-json': bufferJson
+      }
     });
+    this._swarmConfig = swarm;
+    this._networkManager = networkManager;
+    this._partyManager = partyManager;
+    this._partyWriters = {};
+  }
 
-    // TODO(burdon): consider using async’s addListener
-    feedStore.on('feed', this.onFeedUpdate);
-    this.onFeedUpdate(feedStore);
+  async initialize () {
+    await this._feedStore.open();
+    await this._keyring.load();
+
+    // PartyManager and ModelFactory expect to have feedstore instance already open.
+    // TODO(elmasse): Refactor ModelFactory.
+
+    if (!this._networkManager) {
+      this._networkManager = new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
+    }
+
+    if (!this._partyManager) {
+      this._partyManager = new PartyManager(this._feedStore, this._keyring, this._networkManager);
+    }
+
+    if (!this._modelFactory) {
+      this._modelFactory = new ModelFactory(this._feedStore, {
+        onAppend: async (message, { topic }) => {
+          return this._appendMessage(message, topic);
+        },
+        // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
+        onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
+      });
+    }
+
+    await this._partyManager.initialize();
+    await this._waitForPartiesToBeOpen();
   }
 
   async destroy () {
     await this._partyManager.destroy();
     await this._networkManager.close();
-    this._feedStore.removeListener('feed', this.onFeedUpdate);
   }
 
-  // TODO(burdon): Remove?
-  onFeedUpdate = () => {
-    const descriptors = this._feedStore.getDescriptors();
-
-    log('Feeds', JSON.stringify(
-      descriptors.map(({ path, key, metadata: { topic } }) => ({
-        path,
-        topic,
-        key: keyToString(key)
-      })), undefined, 2
-    ));
-
-    metrics.set('feed-store.descriptors', descriptors.length);
-  };
-
-  get config () {
-    return this._config;
-  }
-
+  // TODO(burdon): Remove.
   get keyring () {
     return this._keyring;
   }
 
+  // keep this for devtools ???
   get feedStore () {
     return this._feedStore;
   }
 
+  // TODO(burdon): Remove.
   get modelFactory () {
     return this._modelFactory;
   }
 
-  // TODO(dboreham): What about get swarmFactory?
+  // TODO(burdon): Remove.
   get networkManager () {
     return this._networkManager;
   }
@@ -118,7 +123,24 @@ class Client {
     await this._keyring.deleteAllKeyRecords();
   }
 
-  // TODO(telackey): Does this belong here, in PartyManager, or up to the user?
+  // ----- MOVE THESE TO PARTYMANAGER
+
+  async _appendMessage (message, topic) {
+    let append = this._partyWriters[topic];
+    if (!append) {
+      const feed = await this._partyManager.getWritableFeed(keyToBuffer(topic));
+      append = (message) => new Promise((resolve, reject) => {
+        feed.append(message, (err, seq) => {
+          if (err) return reject(err);
+          resolve(seq);
+        });
+      });
+      this._partyWriters[topic] = append;
+    }
+
+    return append(message);
+  }
+
   async _waitForPartiesToBeOpen () {
     const partyWaiters = [];
     for (const { publicKey } of this._partyManager.getPartyInfoList()) {
@@ -128,23 +150,6 @@ class Client {
       }
     }
     await Promise.all(partyWaiters);
-  }
-
-  async _appendMessage (message, topic) {
-    let append = this._partyWritters[topic];
-    if (append) {
-      return append(message);
-    }
-
-    const feed = await this._partyManager.getWritableFeed(keyToBuffer(topic));
-    append = (message) => new Promise((resolve, reject) => {
-      feed.append(message, (err, seq) => {
-        if (err) return reject(err);
-        resolve(seq);
-      });
-    });
-    this._partyWritters[topic] = append;
-    return append(message);
   }
 
   async _getOwnershipInformation (message, topic) {
@@ -195,43 +200,40 @@ class Client {
       return undefined;
     }
   }
+
+  // ---- END MOVE THESE TO PM
 }
 
 /**
  * Client factory.
+ * @deprecated
  * @param {RandomAccessAbstract} feedStorage
  * @param {Keyring} keyring
  * @param {Object} config
- * @param {Array} plugins
  * @return {Promise<Client>}
  */
-// TODO(dboreham) Plugins param not honored (and wasn't before):
-export const createClient = async (feedStorage, keyring, config = {}, plugins) => {
+export const createClient = async (feedStorage, keyring, config = {}) => {
   config = defaultsDeep({}, config, defaultClientConfig);
 
   log('Creating client...', JSON.stringify(config, undefined, 2));
 
-  const feedStore = await FeedStore.create(feedStorage, {
-    feedOptions: {
-      // TODO(burdon): Use codec.
-      // TODO(dboreham): This buffer-json codec is required for party-manager to function.
-      valueEncoding: 'buffer-json'
-    },
-    codecs: {
-      'buffer-json': bufferJson
-    }
+  // const feedStore = new FeedStore(feedStorage, {
+  //   feedOptions: {
+  //     valueEncoding: 'buffer-json'
+  //   },
+  //   codecs: {
+  //     'buffer-json': bufferJson
+  //   }
+  // });
+
+  const client = new Client({
+    storage: feedStorage,
+    swarm: config.swarm,
+    // feedStore,
+    keyring // remove this later but it is required by cli, bots, and tests.
   });
 
-  // TODO(dboreham): NetworkManager and SwarmProvider should be not owned by Client.
-  const swarmProvider = new SwarmProvider(config.swarm, metrics);
-  // TODO(dboreham): plugins parameter not yet implemented in NetworkManager.
-  const networkManager = new NetworkManager(feedStore, swarmProvider, plugins);
-
-  const partyManager = new PartyManager(feedStore, keyring, networkManager);
-  await partyManager.initialize();
-
-  const client = new Client(feedStore, networkManager, partyManager, keyring, config);
-  await client._waitForPartiesToBeOpen();
+  await client.initialize();
 
   return client;
 };

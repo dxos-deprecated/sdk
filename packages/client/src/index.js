@@ -16,4 +16,4 @@ if (typeof window !== 'undefined') {
   };
 }
 
-export { createClient } from './client';
+export * from './client';
