@@ -30,7 +30,7 @@ import { useClient } from '@dxos/react-client';
 import { EditableText } from '@dxos/react-ux';
 
 import { useAppRouter } from '../hooks';
-import { getThumbnail } from './util';
+import { useAssets } from './util';
 
 import NewViewCreationMenu from './NewViewCreationMenu';
 import PartySettingsMenu from './PartySettingsMenu';
@@ -82,6 +82,7 @@ const useStyles = makeStyles(theme => ({
 
 const PartyCard = ({ party, viewModel, createView }) => {
   const classes = useStyles();
+  const assets = useAssets();
   const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
   const [partySettingsMenuOpen, setPartySettingsMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
@@ -143,7 +144,7 @@ const PartyCard = ({ party, viewModel, createView }) => {
         <CardMedia
           component='img'
           height={100}
-          image={getThumbnail(topic)}
+          image={assets.getThumbnail(topic)}
         />
 
         <div className={classes.listContainer}>
