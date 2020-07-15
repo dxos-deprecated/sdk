@@ -11,9 +11,13 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { useParty } from '@dxos/react-client';
 
-import NewViewCreationMenu from '../components/NewViewCreationMenu';
-import { MemberList } from '../components/MemberList';
-import { PartyTreeAddItemButton, PartyTreeItem } from '../components/PartyTree';
+import {
+  MemberList,
+  NewViewCreationMenu,
+  PartyTreeAddItemButton,
+  PartyTreeItem
+} from '../components';
+
 import { usePads, useAppRouter, useViews } from '../hooks';
 
 const useStyles = makeStyles(theme => ({

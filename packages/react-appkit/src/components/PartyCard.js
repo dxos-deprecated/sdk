@@ -29,11 +29,12 @@ import { keyToString } from '@dxos/crypto';
 import { useClient } from '@dxos/react-client';
 import { EditableText } from '@dxos/react-ux';
 
-import { getThumbnail } from '../util/images';
+import { useAppRouter } from '../hooks';
+import { getThumbnail } from './util';
+
 import NewViewCreationMenu from './NewViewCreationMenu';
 import PartySettingsMenu from './PartySettingsMenu';
 import PadIcon from './PadIcon';
-import { useAppRouter } from '../hooks';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartyMemberList from './PartyMemberList';
 
@@ -69,7 +70,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   listContainer: {
-    height: 176, // 5 * 36
+    height: 180, // 5 * 36
     marginBottom: theme.spacing(1),
     overflowY: 'scroll'
   },
@@ -79,7 +80,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// TODO(burdon): Move to react-appkit.
 const PartyCard = ({ party, viewModel, createView }) => {
   const classes = useStyles();
   const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
@@ -89,7 +89,6 @@ const PartyCard = ({ party, viewModel, createView }) => {
   const createViewAnchor = useRef();
   const settingsMenuAnchor = useRef();
 
-  // TODO(burdon): This should be a dumb component (not container), so must pass in handlers.
   const topic = keyToString(party.publicKey);
   const client = useClient();
   const router = useAppRouter();
@@ -113,7 +112,6 @@ const PartyCard = ({ party, viewModel, createView }) => {
     await client.partyManager.unsubscribe(party.publicKey);
   };
 
-  // TODO(burdon): Only update name via settings.
   return (
     <>
       <Card className={clsx(classes.card, !party.subscribed && classes.unsubscribed)}>
@@ -145,7 +143,7 @@ const PartyCard = ({ party, viewModel, createView }) => {
         <CardMedia
           component='img'
           height={100}
-          image={getThumbnail(party.displayName)}
+          image={getThumbnail(topic)}
         />
 
         <div className={classes.listContainer}>

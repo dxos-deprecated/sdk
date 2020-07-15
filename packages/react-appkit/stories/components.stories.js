@@ -3,19 +3,37 @@
 //
 
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 
-import Dialog from '@material-ui/core/Dialog';
+import { createKeyPair, keyToString } from '@dxos/crypto';
 
-import { FullScreen } from '@dxos/react-ux';
+import { MemberAvatar } from '../src/components';
 
-import RegistrationDialog from '../src/components/RegistrationDialog';
+export default {
+  title: 'Components'
+};
 
-storiesOf('components', module)
-  .add('RegistrationPanel', () => (
-    <FullScreen>
-      <Dialog open>
-        <RegistrationDialog open onFinish={() => {}} />
-      </Dialog>
-    </FullScreen>
-  ));
+export const withMemberAvatar = () => {
+  const member = {
+    publicKey: keyToString(createKeyPair().publicKey),
+    displayName: 'Test name'
+  };
+
+  return (
+    <div>
+      <MemberAvatar member={member} />
+    </div>
+  );
+};
+
+export const withNoDisplayName = () => {
+  const member = {
+    publicKey: keyToString(createKeyPair().publicKey),
+    displayName: undefined
+  };
+
+  return (
+    <div>
+      <MemberAvatar member={member} />
+    </div>
+  );
+};

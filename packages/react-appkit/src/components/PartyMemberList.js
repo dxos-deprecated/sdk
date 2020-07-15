@@ -15,7 +15,7 @@ import { humanize } from '@dxos/crypto';
 
 import { getAvatarStyle } from './MemberAvatar';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'row'
@@ -26,8 +26,6 @@ const useStyles = makeStyles(theme => ({
 const PartyMemberList = ({ party, onShare }) => {
   const classes = useStyles();
   const theme = useTheme();
-
-  // TODO(burdon): Make smaller.
 
   return (
     <div className={classes.root}>
@@ -40,6 +38,7 @@ const PartyMemberList = ({ party, onShare }) => {
           </Tooltip>
         ))}
       </AvatarGroup>
+
       <Tooltip title='Share' placement='top'>
         <Avatar style={getAvatarStyle(theme)} onClick={onShare}>
           <ShareIcon />
