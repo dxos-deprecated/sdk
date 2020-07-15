@@ -23,6 +23,7 @@ import AppContainer from './AppContainer';
 import Sidebar from './DefaultViewSidebar';
 
 import { useAppRouter, usePads, useViews } from '../hooks';
+import EditableText from '@dxos/react-ux/src/components/EditableText';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -91,25 +92,25 @@ const ViewSettings = () => {
       <Card className={classes.root}>
         <CardHeader title='View Settings' />
         <CardContent className={classes.contentRoot}>
-          {/* TODO(rzadp): Use EditableText after https://github.com/dxos/teamwork/issues/180 */}
           {item && (
-            <TextField
-              className={classes.settingItem}
+            <EditableText
+              autoFocus
               fullWidth
               label='Name'
               variant='outlined'
               value={item.displayName}
-              onChange={e => model.renameView(viewId, e.target.value)}
+              className={classes.settingItem}
+              onUpdate={value => model.renameView(viewId, value)}
             />
           )}
           {pad && (
             <TextField
-              className={classes.settingItem}
               fullWidth
-              label='Type'
               disabled
+              label='Type'
               variant='outlined'
               value={pad.displayName}
+              className={classes.settingItem}
             />
           )}
         </CardContent>
