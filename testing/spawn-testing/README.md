@@ -10,7 +10,7 @@ Description...
 ## Usage
 
 ```
-$ yarn example <exampleName> [...args]
+$ yarn test [--browser] [--peers 5] [--ticks 10] [--storage chrome|idb|ram]
 ```
 
 ## Contributing
