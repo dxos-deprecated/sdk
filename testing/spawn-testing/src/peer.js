@@ -6,8 +6,7 @@ import mri from 'mri';
 import hrtime from 'browser-process-hrtime';
 import prettyHrtime from 'pretty-hrtime';
 
-import { getModelDescriptor } from './agents';
-import TestAgent from './agents/test-agent';
+import AgentClass from './agent';
 import { createRPC } from './create-rpc';
 
 (async () => {
@@ -25,9 +24,9 @@ import { createRPC } from './create-rpc';
       errors.push(err);
     });
 
-    const AgentClass = options.agent ? require(options.agent) : TestAgent;
+    const TestAgentClass = options.agent ? require(options.agent) : AgentClass;
 
-    const agent = new AgentClass();
+    const agent = new TestAgentClass();
 
     const startTime = hrtime();
 
@@ -41,14 +40,8 @@ import { createRPC } from './create-rpc';
         createParty: () => agent.createParty(),
         createInvitation: ({ publicKey }) => agent.createInvitation(publicKey),
         joinParty: ({ invitation }) => agent.joinParty(invitation),
-        createModel: async ({ publicKey, options }) => {
-          const model = await agent.createModel(publicKey, { options });
-          return getModelDescriptor(model).id;
-        },
         initAgent: () => agent.initAgent(),
-        getModelObjects () {
-          return agent.getModelObjects();
-        },
+        getModelObjects: () => agent.getModelObjects(),
         tick: () => agent.tick(),
         getState: () => {
           const state = agent.state;

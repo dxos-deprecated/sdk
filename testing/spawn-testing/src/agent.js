@@ -2,10 +2,10 @@
 // Copyright 2020 DXOS.org
 //
 
-import { withMinimalContext } from '../context/with-minimal-context';
+import { withClientContext } from './context';
 import { ObjectModel } from '@dxos/echo-db';
 
-class TestAgent {
+class Agent {
   constructor (ctx) {
     this._ctx = ctx;
   }
@@ -19,4 +19,4 @@ class TestAgent {
   }
 }
 
-export default withMinimalContext(TestAgent);
+export default withClientContext(Agent);
