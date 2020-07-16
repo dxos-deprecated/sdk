@@ -1,6 +1,6 @@
 {
   "name": "@dxos/botkit",
-  "version": "1.0.0-beta.173",
+  "version": "1.0.0-beta.174",
   "description": "Botkit",
   "keywords": [],
   "license": "GPL-3.0",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@dxos/async": "^1.0.0-beta.2",
-    "@dxos/client": "^1.0.0-beta.173",
+    "@dxos/client": "^1.0.0-beta.174",
     "@dxos/codec-protobuf": "^1.1.0-beta.7",
     "@dxos/config": "^1.0.0-beta.73",
     "@dxos/credentials": "^1.0.1-beta.4",
