@@ -24,5 +24,6 @@ export RegistrationDialog from './RegistrationDialog';
 export Sidebar from './Sidebar';
 export StatusBar from './StatusBar';
 export Theme, { createTheme, defaultThemeProperties } from './Theme';
+export ViewSettings from './ViewSettings';
 
 export * from './util';
