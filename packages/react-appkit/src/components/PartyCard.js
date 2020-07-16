@@ -16,7 +16,6 @@ import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -25,14 +24,15 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Clear';
 import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
+import BuildIcon from '@material-ui/icons/Build';
 
 import { keyToString } from '@dxos/crypto';
 
 import { useAssets } from './util';
 
 import NewViewCreationMenu from './NewViewCreationMenu';
-import PartySettingsMenu from './PartySettingsMenu';
 import PadIcon from './PadIcon';
+import PartySharingDialog from './PartySharingDialog';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartyMemberList from './PartyMemberList';
 
@@ -96,11 +96,10 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
   const classes = useStyles();
   const assets = useAssets();
   const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
-  const [partySettingsMenuOpen, setPartySettingsMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const [deletedItemsVisible, setDeletedItemsVisible] = useState(false);
   const createViewAnchor = useRef();
-  const settingsMenuAnchor = useRef();
 
   const topic = keyToString(party.publicKey);
 
@@ -143,11 +142,11 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
           action={party.subscribed && (
             <IconButton
               size='small'
-              aria-label='party menu'
-              ref={settingsMenuAnchor}
-              onClick={() => setPartySettingsMenuOpen(true)}
+              edge='end'
+              aria-label='settings'
+              onClick={() => setSettingsDialogOpen(true)}
             >
-              <MoreVertIcon />
+              <BuildIcon />
             </IconButton>
           )}
         />
@@ -238,22 +237,22 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
         pads={pads}
       />
 
-      <PartySettingsMenu
-        anchorEl={settingsMenuAnchor.current}
-        open={partySettingsMenuOpen}
-        deletedItemsVisible={deletedItemsVisible}
-        onClose={() => setPartySettingsMenuOpen(false)}
-        onVisibilityToggle={() => setDeletedItemsVisible(prev => !prev)}
-        onUnsubscribe={handleUnsubscribe}
-      />
-
       {/* TODO(burdon): Move to Home (i.e., single instance. */}
-      <PartySettingsDialog
+      <PartySharingDialog
         open={shareDialogOpen}
         onClose={() => setShareDialogOpen(false)}
         party={party}
         client={client}
         router={router}
+      />
+      <PartySettingsDialog
+        open={settingsDialogOpen}
+        onClose={() => setSettingsDialogOpen(false)}
+        party={party}
+        client={client}
+        deletedItemsVisible={deletedItemsVisible}
+        onVisibilityToggle={() => setDeletedItemsVisible(prev => !prev)}
+        onUnsubscribe={handleUnsubscribe}
       />
     </>
   );

@@ -62,7 +62,6 @@ const ViewSettings = ({ router, viewModel, topic, viewId, pads }) => {
       <CardContent className={classes.contentRoot}>
         {item && (
           <EditableText
-            autoFocus
             fullWidth
             label='Name'
             variant='outlined'
