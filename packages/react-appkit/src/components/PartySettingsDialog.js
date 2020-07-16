@@ -37,11 +37,9 @@ import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
 import { humanize, keyToBuffer, verify, SIGNATURE_LENGTH, keyToString } from '@dxos/crypto';
 import { InviteDetails, InviteType } from '@dxos/party-manager';
-import { useClient } from '@dxos/react-client';
 
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 import BotDialog from './BotDialog';
-import { useAppRouter } from '../hooks/router';
 import { useAsync } from '../hooks/async';
 
 const useStyles = makeStyles(theme => ({
@@ -92,10 +90,8 @@ const TableCell = withStyles(theme => ({
   }
 }))(MuiTableCell);
 
-const PartySettingsDialog = ({ party, open, onClose }) => {
+const PartySettingsDialog = ({ party, open, onClose, client, router }) => {
   const classes = useStyles();
-  const client = useClient();
-  const router = useAppRouter();
   const topic = keyToString(party.publicKey);
   const [pendingInvitations, setPendingInvitations] = useState([]);
   const [contacts, contactsError] = useAsync(async () => client.partyManager.getContacts(), []);

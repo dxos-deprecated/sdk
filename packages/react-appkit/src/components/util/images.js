@@ -18,9 +18,10 @@ import banner8 from './images/banner-8.jpg';
 import banner9 from './images/banner-9.jpg';
 
 // Banner images: 600x300
+// TODO(burdon): Remove from appkit (app-specific assets).
 // https://www.freepik.com/premium-vector/collection-ten-backgrounds-with-blue-paper-cut_4647794.htm#page=1&query=layers&position=3
 
-const images = [
+const thumbnails = [
   banner0,
   banner1,
   banner2,
@@ -33,8 +34,22 @@ const images = [
   banner9
 ];
 
-// TODO(burdon): Remove from appkit (app-specific assets).
-// TODO(burdon): Create hook that returns assets injected into context?
-export const getThumbnail = (value) => {
-  return images[hash(value) % images.length];
+class MediaAssets {
+  _thumbnails;
+
+  constructor (props) {
+    const { thumbnails = [] } = props;
+    this._thumbnails = thumbnails;
+  }
+
+  getThumbnail (value) {
+    return this._thumbnails[hash(value) % this._thumbnails.length];
+  }
+}
+
+// TODO(burdon): Inject into provider.
+const assets = new MediaAssets({ thumbnails });
+
+export const useAssets = () => {
+  return assets;
 };

@@ -67,6 +67,7 @@ const EditableText = ({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
+        fullWidth
         InputProps={{
           inputProps: {
             spellCheck: false
