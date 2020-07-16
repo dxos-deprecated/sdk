@@ -94,6 +94,7 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
   const classes = useStyles();
   const topic = keyToString(party.publicKey);
   const [pendingInvitations, setPendingInvitations] = useState([]);
+  const [contactsInvitations, setContactsInvitations] = useState([]);
   const [contacts, contactsError] = useAsync(async () => client.partyManager.getContacts(), []);
   const newContacts = contacts?.filter(c => !party.members.some(m => m.publicKey.toString('hex') === c.publicKey.toString('hex')));
   const [botDialogVisible, setBotDialogVisible] = useState(false);
@@ -159,6 +160,15 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
     copy(inviteUrl);
     handleCopy(inviteUrl);
     setPendingInvitations(old => [...old, { invitation }]);
+  };
+
+  const handleNewContactInvitation = async (contact) => {
+    const invitation = await client.partyManager.inviteToParty(party.publicKey,
+      new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: contact.publicKey }));
+    const inviteUrl = router.createInvitationUrl(invitation);
+    copy(inviteUrl);
+    handleCopy(inviteUrl);
+    setContactsInvitations(old => [...old, { invitation, contact }]);
   };
 
   const handleRecreateLink = async (pending) => {
@@ -253,20 +263,21 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
                             <LinkIcon />
                           </IconButton>
                         </CopyToClipboard>
-                        <Snackbar
-                          open={copiedSnackBarOpen}
-                          onClose={() => setCopiedSnackBarOpen(false)}
-                          autoHideDuration={3000}
-                        >
-                          <Alert onClose={() => setCopiedSnackBarOpen(false)} severity='success' icon={<FileCopyIcon fontSize='inherit' />}>
-                            Invitation link copied
-                          </Alert>
-                        </Snackbar>
                       </>)}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
+
+            <Snackbar
+              open={copiedSnackBarOpen}
+              onClose={() => setCopiedSnackBarOpen(false)}
+              autoHideDuration={3000}
+            >
+              <Alert onClose={() => setCopiedSnackBarOpen(false)} severity='success' icon={<FileCopyIcon fontSize='inherit' />}>
+                Invitation link copied
+              </Alert>
+            </Snackbar>
 
             <TableBody>
               {party.members.map((member) => (
@@ -302,16 +313,29 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
                   <TableCell />
                   <TableCell />
                   <TableCell classes={{ root: classes.colActions }}>
-                    <IconButton size='small'>
-                      <InviteIcon
-                        onClick={async () => {
-                          const invitation = await client.partyManager.inviteToParty(party.publicKey,
-                            new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: contact.publicKey }));
-                          // TODO(telackey): Some sort of real UI goes here.
-                          console.log(router.createInvitationUrl(invitation));
-                        }}
-                      />
-                    </IconButton>
+                    {contactsInvitations.find(p => p.contact === contact) === undefined ? (
+                      <IconButton size='small'>
+                        <InviteIcon
+                          onClick={async () => handleNewContactInvitation(contact)}
+                        />
+                      </IconButton>
+                    ) : (
+                      <CopyToClipboard
+                        text={router.createInvitationUrl(contactsInvitations.find(p => p.contact === contact).invitation)}
+                        onCopy={handleCopy}
+                      >
+                        <IconButton
+                          size='small'
+                          color='inherit'
+                          aria-label='copy to clipboard'
+                          title='Copy to clipboard'
+                          edge='start'
+                        >
+                          <LinkIcon />
+                        </IconButton>
+                      </CopyToClipboard>
+                    )}
+
                   </TableCell>
                 </TableRow>
               ))}
