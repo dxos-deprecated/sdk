@@ -19,6 +19,7 @@ export PartyList from './PartyList';
 // TODO(burdon): Break out into separate classes.
 export PartyMemberList from './PartyMemberList';
 export PartySettingsDialog from './PartySettingsDialog';
+export PartySharingDialog from './PartySharingDialog';
 export PartyTree, { PartyTreeAddItemButton, PartyTreeItem } from './PartyTree';
 export RegistrationDialog from './RegistrationDialog';
 export Sidebar from './Sidebar';
