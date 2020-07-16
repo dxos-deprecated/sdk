@@ -2,10 +2,10 @@
 // Copyright 2020 DXOS.org
 //
 
-import { withClientContext } from './context';
+import { withClientContext } from '../context';
 import { ObjectModel } from '@dxos/echo-db';
 
-class Agent {
+class BulkCreateAgent {
   constructor (ctx) {
     this._ctx = ctx;
   }
@@ -21,4 +21,4 @@ class Agent {
   }
 }
 
-export default withClientContext(Agent);
+export default withClientContext(BulkCreateAgent);
