@@ -24,24 +24,24 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Clear';
 import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
-import BuildIcon from '@material-ui/icons/Build';
+import SettingsIcon from '@material-ui/icons/MoreVert';
 
 import { keyToString } from '@dxos/crypto';
 
 import { useAssets } from './util';
 
 import NewViewCreationMenu from './NewViewCreationMenu';
-import PadIcon from './PadIcon';
 import PartySharingDialog from './PartySharingDialog';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartyMemberList from './PartyMemberList';
+
+import PadIcon from './PadIcon';
 
 const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
     flexDirection: 'column',
     width: 300,
-    maxHeight: 320
   },
 
   unsubscribed: {
@@ -67,38 +67,28 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(2)
   },
 
-  listContainer: {
-    height: 180, // 5 * 36
+  listContainer: (({ rows }) => ({
+    height: rows * 36,
     marginBottom: theme.spacing(1),
     overflowY: 'scroll'
-  },
-  list: {
-    // paddingTop: theme.spacing(2),
-    // paddingBottom: theme.spacing(2)
-  },
-  titleRoot: ({ variant }) => {
-    return {
-      ...theme.typography[variant],
-      letterSpacing: 0,
-      color: 'inherit'
-    };
-  },
+  })),
 
-  titleReadonly: {
+  title: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap'
   }
-
 }));
 
+// TODO(burdon): Extract client, router and dialogs and inject actions.
 const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
-  const classes = useStyles();
+  const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const [deletedItemsVisible, setDeletedItemsVisible] = useState(false);
+  // TODO(burdon): Where to store this information?
+  const [showDeleted, setShowDeleted] = useState(false);
   const createViewAnchor = useRef();
 
   const topic = keyToString(party.publicKey);
@@ -125,6 +115,12 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
   return (
     <>
       <Card className={clsx(classes.card, !party.subscribed && classes.unsubscribed)}>
+        <CardMedia
+          component='img'
+          height={100}
+          image={assets.getThumbnail(topic)}
+        />
+
         <CardHeader
           classes={{
             root: classes.headerRoot,
@@ -133,8 +129,9 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
           }}
           title={
             <Typography
-              classes={{ root: clsx(classes.titleRoot, classes.titleReadonly) }}
-              variant='body1'
+              classes={{ root: classes.title }}
+              component="h2"
+              variant='h5'
             >
               {party.displayName}
             </Typography>
@@ -146,19 +143,13 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
               aria-label='settings'
               onClick={() => setSettingsDialogOpen(true)}
             >
-              <BuildIcon />
+              <SettingsIcon />
             </IconButton>
           )}
         />
 
-        <CardMedia
-          component='img'
-          height={100}
-          image={assets.getThumbnail(topic)}
-        />
-
         <div className={classes.listContainer}>
-          <List className={classes.list} dense disablePadding>
+          <List dense disablePadding>
             {viewModel.getAllViews().map(item => (
               <ListItem
                 key={item.viewId}
@@ -182,7 +173,7 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
               </ListItem>
             ))}
 
-            {party.subscribed && deletedItemsVisible && viewModel.getAllDeletedViews().map(item => (
+            {party.subscribed && showDeleted && viewModel.getAllDeletedViews().map(item => (
               <ListItem key={item.viewId} disabled>
                 <ListItemIcon>
                   <PadIcon type={item.type} />
@@ -204,7 +195,6 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
           {party.subscribed && (
             <>
               <PartyMemberList party={party} onShare={() => setShareDialogOpen(true)} />
-
               <IconButton
                 ref={createViewAnchor}
                 size='small'
@@ -229,6 +219,7 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
         </CardActions>
       </Card>
 
+      {/* TODO(burdon): Move outside: don't create this FOR EACH party. */}
       <NewViewCreationMenu
         anchorEl={createViewAnchor.current}
         open={newViewCreationMenuOpen}
@@ -237,7 +228,7 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
         pads={pads}
       />
 
-      {/* TODO(burdon): Move to Home (i.e., single instance. */}
+      {/* TODO(burdon): Move outside: don't create this FOR EACH party. */}
       <PartySharingDialog
         open={shareDialogOpen}
         onClose={() => setShareDialogOpen(false)}
@@ -245,14 +236,18 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
         client={client}
         router={router}
       />
+
       <PartySettingsDialog
-        open={settingsDialogOpen}
-        onClose={() => setSettingsDialogOpen(false)}
         party={party}
         client={client}
-        deletedItemsVisible={deletedItemsVisible}
-        onVisibilityToggle={() => setDeletedItemsVisible(prev => !prev)}
-        onUnsubscribe={handleUnsubscribe}
+        open={settingsDialogOpen}
+        properties={{
+          showDeleted
+        }}
+        onClose={({ showDeleted }) => {
+          setShowDeleted(showDeleted);
+          setSettingsDialogOpen(false);
+        }}
       />
     </>
   );

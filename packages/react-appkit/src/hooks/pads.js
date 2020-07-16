@@ -10,10 +10,11 @@ import { createId } from '@dxos/crypto';
 
 import { AppKitContext } from './context';
 
+// TODO(burdon): Extract data generators.
 const chance = new Chance();
 
 export const usePads = () => {
-  const { pads } = useContext(AppKitContext);
+  const { pads = [] } = useContext(AppKitContext);
   return [pads];
 };
 
@@ -29,9 +30,7 @@ export const useItems = ({ topic, types }) => {
       const title = `item-${chance.word()}`;
 
       const itemData = { __type_url: type, ...(meta || { id, title }) };
-
       await model.appendMessage(itemData);
-
       return itemData;
     };
 
