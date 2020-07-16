@@ -73,7 +73,7 @@ const DefaultViewSidebar = () => {
         ))}
 
         <PartyTreeAddItemButton ref={anchor} topic={topic} onClick={() => setNewViewCreationMenuOpen(true)}>Item</PartyTreeAddItemButton>
-        <NewViewCreationMenu anchorEl={anchor.current} open={newViewCreationMenuOpen} onSelect={handleCreate} onClose={() => setNewViewCreationMenuOpen(false)} />
+        <NewViewCreationMenu anchorEl={anchor.current} open={newViewCreationMenuOpen} onSelect={handleCreate} onClose={() => setNewViewCreationMenuOpen(false)} pads={pads} />
       </TreeView>
       <Divider />
       <MemberList party={party} />
