@@ -9,10 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 
-import { usePads } from '../hooks';
-
-const NewViewCreationMenu = ({ anchorEl, onSelect, open, onClose }) => {
-  const [pads] = usePads();
+const NewViewCreationMenu = ({ anchorEl, onSelect, open, onClose, pads }) => {
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={onClose}>
       {pads.map(pad => (

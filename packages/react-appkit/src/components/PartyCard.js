@@ -18,6 +18,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Typography from '@material-ui/core/Typography';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
@@ -26,10 +27,7 @@ import DeleteIcon from '@material-ui/icons/Clear';
 import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 
 import { keyToString } from '@dxos/crypto';
-import { useClient } from '@dxos/react-client';
-import { EditableText } from '@dxos/react-ux';
 
-import { useAppRouter } from '../hooks';
 import { useAssets } from './util';
 
 import NewViewCreationMenu from './NewViewCreationMenu';
@@ -77,10 +75,24 @@ const useStyles = makeStyles(theme => ({
   list: {
     // paddingTop: theme.spacing(2),
     // paddingBottom: theme.spacing(2)
+  },
+  titleRoot: ({ variant }) => {
+    return {
+      ...theme.typography[variant],
+      letterSpacing: 0,
+      color: 'inherit'
+    };
+  },
+
+  titleReadonly: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
   }
+
 }));
 
-const PartyCard = ({ party, viewModel, createView }) => {
+const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
   const classes = useStyles();
   const assets = useAssets();
   const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
@@ -91,8 +103,6 @@ const PartyCard = ({ party, viewModel, createView }) => {
   const settingsMenuAnchor = useRef();
 
   const topic = keyToString(party.publicKey);
-  const client = useClient();
-  const router = useAppRouter();
 
   const handleSelect = (viewId) => {
     router.push({ topic, item: viewId });
@@ -123,11 +133,12 @@ const PartyCard = ({ party, viewModel, createView }) => {
             action: classes.headerAction
           }}
           title={
-            <EditableText
-              disabled={!party.subscribed}
-              value={party.displayName}
-              onUpdate={(displayName) => client.partyManager.setPartyProperty(party.publicKey, { displayName })}
-            />
+            <Typography
+              classes={{ root: clsx(classes.titleRoot, classes.titleReadonly) }}
+              variant='body1'
+            >
+              {party.displayName}
+            </Typography>
           }
           action={party.subscribed && (
             <IconButton
@@ -224,6 +235,7 @@ const PartyCard = ({ party, viewModel, createView }) => {
         open={newViewCreationMenuOpen}
         onSelect={handleCreate}
         onClose={() => setNewViewCreationMenuOpen(false)}
+        pads={pads}
       />
 
       <PartySettingsMenu
@@ -236,7 +248,13 @@ const PartyCard = ({ party, viewModel, createView }) => {
       />
 
       {/* TODO(burdon): Move to Home (i.e., single instance. */}
-      <PartySettingsDialog open={shareDialogOpen} onClose={() => setShareDialogOpen(false)} party={party} />
+      <PartySettingsDialog
+        open={shareDialogOpen}
+        onClose={() => setShareDialogOpen(false)}
+        party={party}
+        client={client}
+        router={router}
+      />
     </>
   );
 };
