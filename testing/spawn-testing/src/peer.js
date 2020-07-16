@@ -2,17 +2,14 @@
 // Copyright 2020 DXOS.org
 //
 
-import mri from 'mri';
 import hrtime from 'browser-process-hrtime';
 import prettyHrtime from 'pretty-hrtime';
 
-import AgentClass from './agent';
+import AgentClass from './agents';
 import { createRPC } from './create-rpc';
 
 (async () => {
   try {
-    const options = mri(process.argv.slice(2));
-
     const rpc = createRPC(typeof window !== 'undefined' && window.process ? window.process : process);
 
     const errors = [];
@@ -24,9 +21,7 @@ import { createRPC } from './create-rpc';
       errors.push(err);
     });
 
-    const TestAgentClass = options.agent ? require(options.agent) : AgentClass;
-
-    const agent = new TestAgentClass();
+    const agent = new AgentClass();
 
     const startTime = hrtime();
 
