@@ -71,7 +71,7 @@ export class Broker {
     const start = Date.now();
     const scriptPath = path.resolve(path.join(__dirname, 'peer.js'));
     const child = browser
-      ? await runInBrowser({ src: scriptPath, alias: agent && [`./agent:${agent}`], timeout: 0, log: peerLog, puppeteerOptions, processExit: false })
+      ? await runInBrowser({ src: scriptPath, alias: agent && [`./agents:${agent}`], timeout: 0, log: peerLog, puppeteerOptions, processExit: false })
       : fork(scriptPath, agent && ['--agent', agent]);
 
     const rpc = createRPC(child);

@@ -4,12 +4,12 @@
 
 import debug from 'debug';
 import fs from 'fs-extra';
-// TODO(egorgripasov): Replace with leveldown.
 import jsondown from 'jsondown';
 import ram from 'random-access-memory';
 import path from 'path';
+import EventEmitter from 'events';
 
-import { randomBytes, keyToBuffer } from '@dxos/crypto';
+import { randomBytes, keyToBuffer, keyToString } from '@dxos/crypto';
 import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
 import { createClient } from '@dxos/client';
 
@@ -26,13 +26,20 @@ export const BOT_STORAGE = '/data';
 /**
  * Base class for bots.
  */
-export class Bot {
+export class Bot extends EventEmitter {
+  /**
+   * @type {Set}
+   */
+  _parties = new Set();
+
   /**
    * @constructor
    * @param {Object} config
    * @param {Object} options
    */
   constructor (config, options = {}) {
+    super();
+
     const { uid, persistent = true, restarted = false, cwd, name } = config.get('bot');
 
     this._uid = uid;
@@ -79,7 +86,29 @@ export class Bot {
       log(`Identity initialized: ${this._client.partyManager.identityManager.publicKey}`);
     }
 
+    // Parties joined during current session.
+    this._client.partyManager.on('party', topic => {
+      const partyKey = keyToString(topic);
+      if (!this._parties.has(partyKey)) {
+        this._parties.add(partyKey);
+        this.emit('party', partyKey);
+      }
+    });
+
     this._ipcClient.confirmConnection();
+
+    const parties = this._client.partyManager._parties;
+
+    // Parties restored after restart.
+    if (parties.size > 1) {
+      await Promise.all([...parties.keys()].map(async topic => {
+        if (!this._parties.has(topic)) {
+          this._parties.add(topic);
+          await this._client.partyManager.openParty(keyToBuffer(topic));
+          this.emit('party', topic);
+        }
+      }));
+    }
   }
 
   /**
@@ -91,7 +120,7 @@ export class Bot {
     switch (command.__type_url) {
       case COMMAND_INVITE: {
         const { topic, invitation } = command;
-        await this.joinParty(topic, invitation);
+        await this._joinParty(topic, invitation);
         break;
       }
 
@@ -103,7 +132,7 @@ export class Bot {
     return result;
   }
 
-  async joinParty (topic, invitation) {
+  async _joinParty (topic, invitation) {
     if (invitation) {
       const secretProvider = async () => {
         log('secretProvider begin.');
