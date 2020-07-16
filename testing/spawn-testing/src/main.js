@@ -21,7 +21,7 @@ async function run (opts = {}) {
   });
   await environment.addPeers({
     agent: './src/agents/reading-agent.js',
-    browser: true,
+    browser: true
   });
 
   log('> network full connected');
@@ -29,7 +29,7 @@ async function run (opts = {}) {
   log('> sync started');
   console.time('sync');
 
-  await environment.writeMetrics('./metrics.log')
+  await environment.writeMetrics('./metrics.log');
 
   await environment.runTicks({ count: maxTicks, delay: 1000 });
   log('> finished creating items');

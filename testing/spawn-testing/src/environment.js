@@ -1,33 +1,33 @@
 import debug from 'debug';
-import { Broker } from "./broker";
+import { Broker } from './broker';
 import dequal from 'dequal';
 import { EventEmitter } from 'events';
 import { open, write } from 'fs';
-import { promisify } from 'util'
+import { promisify } from 'util';
 
 const log = debug('dxos:spawn-testing:environment');
 
 export class Environment extends EventEmitter {
-  constructor() {
+  constructor () {
     super();
     this._broker = new Broker();
     this._tickCount = 0;
   }
 
-  async start() {
+  async start () {
     await this._broker.createSignal();
   }
 
-  async addPeers({ count = 1, ...opts}) {
+  async addPeers ({ count = 1, ...opts }) {
     for (let i = 0; i < count; i++) {
       await this._addAndInvitePeer(opts);
     }
   }
 
-  async _addAndInvitePeer(opts) {
+  async _addAndInvitePeer (opts) {
     const prevPeer = this._broker.peers[this._broker.peers.length - 1];
     const peer = await this._broker.createPeer(opts);
-    if(!prevPeer) {
+    if (!prevPeer) {
       const { publicKey } = await peer.call('createParty');
       log('> party created', publicKey.toString('hex'));
       this._partyKey = publicKey;
@@ -36,35 +36,35 @@ export class Environment extends EventEmitter {
       log('> invitation created');
 
       await peer.call('joinParty', { invitation });
-      log(`> peer joined to the party`);
+      log('> peer joined to the party');
     }
     await peer.call('initAgent');
   }
 
-  async runTicks({ count = 1, delay = 10 } = {}) {
-    for(let i = 0; i < count; i++) {
+  async runTicks ({ count = 1, delay = 10 } = {}) {
+    for (let i = 0; i < count; i++) {
       for (const peer of this._broker.peers) {
         await peer.call('tick');
       }
       this._tickCount++;
-      this.emit('tick', { time: new Date(), number: this._tickCount })
+      this.emit('tick', { time: new Date(), number: this._tickCount });
       await sleep(delay);
     }
   }
 
-  async comparePeerStates() {
+  async comparePeerStates () {
     const modelObjects = await Promise.all(this._broker.peers.map(peer => peer.call('getModelObjects')));
     return modelObjects[0].length !== 0 && arrayItemsEqual(modelObjects, compareModelStates);
   }
 
-  waitForSync() {
+  waitForSync () {
     return new Promise(resolve => {
       const check = async () => {
         if (await this.comparePeerStates()) {
           resolve();
         }
-      }
-  
+      };
+
       const peerStates = new Map();
       for (const [key, peer] of this._broker._peers) {
         peer.on('model-update', async ({ state }) => {
@@ -75,26 +75,26 @@ export class Environment extends EventEmitter {
           }
         });
       }
-  
+
       check();
     });
   }
 
-  async writeMetrics(fileName) {
-    const file = await promisify(open)(fileName, 'w')
-    function writeEvent(event) {
-      promisify(write)(file, JSON.stringify(event) + '\n')
+  async writeMetrics (fileName) {
+    const file = await promisify(open)(fileName, 'w');
+    function writeEvent (event) {
+      promisify(write)(file, JSON.stringify(event) + '\n');
     }
 
-    this.on('tick', data => writeEvent({ event: 'tick', ...data }))
-    for(const [key, peer] of this._broker._peers) {
+    this.on('tick', data => writeEvent({ event: 'tick', ...data }));
+    for (const [key, peer] of this._broker._peers) {
       peer.on('model-update', async ({ state }) => {
-        writeEvent({ event: 'model-update', time: new Date(), peer: key, state })
-      })
+        writeEvent({ event: 'model-update', time: new Date(), peer: key, state });
+      });
     }
   }
 
-  async destroy() {
+  async destroy () {
     await this._broker.destroy();
   }
 }
