@@ -1,20 +1,25 @@
 import debug from 'debug';
 import { Broker } from "./broker";
 import dequal from 'dequal';
+import { EventEmitter } from 'events';
+import { open, write } from 'fs';
+import { promisify } from 'util'
 
 const log = debug('dxos:spawn-testing:environment');
 
-export class Environment {
+export class Environment extends EventEmitter {
   constructor() {
+    super();
     this._broker = new Broker();
+    this._tickCount = 0;
   }
 
   async start() {
     await this._broker.createSignal();
   }
 
-  async addPeers({ count, ...opts}) {
-    for (let i = 0; i < (count || 1); i++) {
+  async addPeers({ count = 1, ...opts}) {
+    for (let i = 0; i < count; i++) {
       await this._addAndInvitePeer(opts);
     }
   }
@@ -41,6 +46,8 @@ export class Environment {
       for (const peer of this._broker.peers) {
         await peer.call('tick');
       }
+      this._tickCount++;
+      this.emit('tick', { time: new Date(), number: this._tickCount })
       await sleep(delay);
     }
   }
@@ -71,6 +78,20 @@ export class Environment {
   
       check();
     });
+  }
+
+  async writeMetrics(fileName) {
+    const file = await promisify(open)(fileName, 'w')
+    function writeEvent(event) {
+      promisify(write)(file, JSON.stringify(event) + '\n')
+    }
+
+    this.on('tick', data => writeEvent({ event: 'tick', ...data }))
+    for(const [key, peer] of this._broker._peers) {
+      peer.on('model-update', async ({ state }) => {
+        writeEvent({ event: 'model-update', time: new Date(), peer: key, state })
+      })
+    }
   }
 
   async destroy() {

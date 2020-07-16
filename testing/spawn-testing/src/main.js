@@ -10,7 +10,7 @@ const { Environment } = require('./environment');
 const log = debug('dxos:spawn-testing:example');
 
 async function run (opts = {}) {
-  const maxPeers = opts.peers || 2;
+  const maxPeers = opts.peers || 1;
   const maxTicks = opts.ticks || 1;
 
   const environment = new Environment();
@@ -19,16 +19,21 @@ async function run (opts = {}) {
     ...opts,
     count: maxPeers
   });
+  await environment.addPeers({
+    agent: './src/agents/reading-agent.js',
+    browser: true,
+  });
 
   log('> network full connected');
 
   log('> sync started');
   console.time('sync');
 
-  environment.runTicks({ count: maxTicks });
+  await environment.writeMetrics('./metrics.log')
+
+  await environment.runTicks({ count: maxTicks, delay: 1000 });
   log('> finished creating items');
 
-  // waiting for sync
   await environment.waitForSync();
 
   if (!await environment.comparePeerStates()) {
