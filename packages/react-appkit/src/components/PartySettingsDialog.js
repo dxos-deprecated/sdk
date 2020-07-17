@@ -49,7 +49,7 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties }) => {
   };
 
   return (
-    <Dialog classes={{ paper: classes.root }} open={open} onClose={onClose}>
+    <Dialog classes={{ paper: classes.root }} open={open} onClose={handleClose}>
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
           <SettingsIcon />
