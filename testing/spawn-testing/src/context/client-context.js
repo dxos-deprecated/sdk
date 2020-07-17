@@ -15,8 +15,8 @@ export function withClientContext (AgentClass) {
       await this._agent.init();
     }
 
-    async tick () {
-      await this._agent.tick();
+    async tick (opts) {
+      await this._agent.tick(opts);
     }
   };
 }

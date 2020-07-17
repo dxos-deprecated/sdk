@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
     flexDirection: 'column',
-    width: 300,
+    width: 300
   },
 
   unsubscribed: {
@@ -67,11 +67,11 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(2)
   },
 
-  listContainer: (({ rows }) => ({
+  listContainer: ({ rows }) => ({
     height: rows * 36,
     marginBottom: theme.spacing(1),
     overflowY: 'scroll'
-  })),
+  }),
 
   title: {
     overflow: 'hidden',
@@ -130,7 +130,7 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
           title={
             <Typography
               classes={{ root: classes.title }}
-              component="h2"
+              component='h2'
               variant='h5'
             >
               {party.displayName}
@@ -237,18 +237,27 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
         router={router}
       />
 
-      <PartySettingsDialog
-        party={party}
-        client={client}
-        open={settingsDialogOpen}
-        properties={{
-          showDeleted
-        }}
-        onClose={({ showDeleted }) => {
-          setShowDeleted(showDeleted);
-          setSettingsDialogOpen(false);
-        }}
-      />
+      {party.subscribed && (
+        <PartySettingsDialog
+          party={party}
+          client={client}
+          open={settingsDialogOpen}
+          properties={{
+            showDeleted,
+            subscribed: party.subscribed
+          }}
+          onClose={({ showDeleted, subscribed }) => {
+            setShowDeleted(showDeleted);
+            if (subscribed && !party.subscribed) {
+              handleSubscribe();
+            }
+            if (!subscribed && party.subscribed) {
+              handleUnsubscribe();
+            }
+            setSettingsDialogOpen(false);
+          }}
+        />
+      )}
     </>
   );
 };

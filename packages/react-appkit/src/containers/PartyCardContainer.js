@@ -17,12 +17,13 @@ const PartyCardContainer = ({ party }) => {
   const [pads] = usePads();
   const topic = keyToString(party.publicKey);
   const { model, createView } = useViews(topic);
+
   return (
     <PartyCard
+      client={client}
       party={party}
       viewModel={model}
       createView={createView}
-      client={client}
       router={router}
       pads={pads}
     />

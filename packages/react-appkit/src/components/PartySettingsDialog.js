@@ -17,13 +17,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import PartyIcon from '@material-ui/icons/Settings';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { EditableText } from '@dxos/react-ux';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minWidth: '400px',
+    minWidth: '400px'
   },
   title: {
     marginLeft: theme.spacing(2)
@@ -49,10 +49,10 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties }) => {
   };
 
   return (
-    <Dialog classes={{ paper: classes.root }} open={open} onClose={onClose}>
+    <Dialog classes={{ paper: classes.root }} open={open} onClose={handleClose}>
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
-          <PartyIcon />
+          <SettingsIcon />
           <Typography variant='h5' className={classes.title}>Settings</Typography>
         </Toolbar>
       </DialogTitle>
@@ -78,17 +78,17 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties }) => {
                   onChange={() => setSubscribed(!subscribed)}
                 />
               }
-              label="Active"
+              label='Active'
             />
             <FormControlLabel
               control={
                 <Checkbox
                   checked={showDeleted}
                   value={showDeleted}
-                  onChange={() => setShowDeleted(!showDeleted) }
+                  onChange={() => setShowDeleted(!showDeleted)}
                 />
               }
-              label="Show deleted items"
+              label='Show deleted items'
             />
           </FormGroup>
         </FormControl>

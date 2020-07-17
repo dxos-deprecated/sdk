@@ -14,4 +14,3 @@ export PartyCardContainer from './PartyCardContainer';
 export Registration from './Registration';
 export RequireWallet from './RequireWallet';
 export SystemRoutes from './SystemRoutes';
-export ViewSettingsContainer from './ViewSettingsContainer';
