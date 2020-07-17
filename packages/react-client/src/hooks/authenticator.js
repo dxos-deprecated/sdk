@@ -25,11 +25,12 @@ export const useAuthenticator = (invitation) => {
     // An invitation where we can use our Identity key for auth.
     if (InviteType.OFFLINE_KEY === invitation.type) {
       // Connect to inviting peer.
-      client.partyManager.joinParty(invitation, () =>
-        codec.encode(createAuthMessage(client.keyring,
+      client.partyManager.joinParty(invitation, (info) =>
+        codec.encode(createAuthMessage(client.keyring, info.id.value,
           invitation.swarmKey,
           client.partyManager.identityManager.keyRecord,
-          client.partyManager.identityManager.deviceManager.keyChain))
+          client.partyManager.identityManager.deviceManager.keyChain,
+          null, info.authNonce.value))
       )
         .then(party => {
           setState({ topic: keyToString(party.publicKey) });
