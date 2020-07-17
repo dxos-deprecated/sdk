@@ -14,6 +14,7 @@ export default {
   title: 'Parties'
 };
 
+// TODO(burdon): Reuse PartyCard.
 export const withNewPartyCard = () => {
   return (
     <Box m={2}>
@@ -22,6 +23,7 @@ export const withNewPartyCard = () => {
   );
 };
 
+// TODO(burdon): Replace mocks with fakes (i.e., in-memory components).
 export const withPartyCard = () => {
   const mockParty = {
     subscribed: true,
@@ -44,34 +46,33 @@ export const withPartyCard = () => {
   };
 
   const mockViewModel = {
-    getAllViews: () => [],
+    getAllViews: () => [...new Array(5)].map((_, i) => ({
+      viewId: `item-${i}`, type: 'test', displayName: `Item ${i}`
+    })),
     getAllDeletedViews: () => [],
     deleteView: () => {},
     restoreView: () => {}
   };
 
+  const parties = [
+    mockParty,
+    { ...mockParty, displayName: 'A very very very long name' }
+  ]
+
   return (
     <>
-      <Box m={2}>
-        <PartyCard
-          party={mockParty}
-          viewModel={mockViewModel}
-          router={mockRouter}
-          client={mockClient}
-          pads={[]}
-          createView={() => {}}
-        />
-      </Box>
-      <Box m={2}>
-        <PartyCard
-          party={{ ...mockParty, displayName: 'A super very long party name that does not fit' }}
-          viewModel={mockViewModel}
-          router={mockRouter}
-          client={mockClient}
-          pads={[]}
-          createView={() => {}}
-        />
-      </Box>
+      {parties.map((party, i) => (
+        <Box key={i} m={2}>
+          <PartyCard
+            party={party}
+            viewModel={mockViewModel}
+            router={mockRouter}
+            client={mockClient}
+            pads={[]}
+            createView={() => {}}
+          />
+        </Box>
+      ))}
     </>
   );
 };

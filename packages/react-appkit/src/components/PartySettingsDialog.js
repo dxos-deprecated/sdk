@@ -2,97 +2,100 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
 
-import BuildIcon from '@material-ui/icons/Build';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import UnsubscribeIcon from '@material-ui/icons/Unsubscribe';
+import PartyIcon from '@material-ui/icons/Settings';
 
 import { EditableText } from '@dxos/react-ux';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    minWidth: '400px',
+  },
   title: {
     marginLeft: theme.spacing(2)
   },
-  root: {},
-  content: {
-    minWidth: '500px',
-    padding: '50px'
-  },
-  divider: {
-    marginTop: '20px',
-    marginBottom: '20px'
+  form: {
+    marginTop: theme.spacing(3)
   }
 }));
 
-const PartySettingsDialog = ({ party, open, onClose, client, deletedItemsVisible, onVisibilityToggle, onUnsubscribe }) => {
+// TODO(burdon): Separate storybook.
+const PartySettingsDialog = ({ party, client, open, onClose, properties }) => {
   const classes = useStyles();
+  const [subscribed, setSubscribed] = useState(properties.subscribed);
+  const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
+
+  const handleClose = () => {
+    onClose({ subscribed, showDeleted });
+  };
+
+  // TODO(burdon): Extract client (pass in callback).
+  const handleSetTitle = (displayName) => {
+    client.partyManager.setPartyProperty(party.publicKey, { displayName });
+  };
 
   return (
-    <Dialog open={open} onClose={onClose} className={classes.root}>
+    <Dialog classes={{ paper: classes.root }} open={open} onClose={onClose}>
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
-          <Avatar>
-            <BuildIcon />
-          </Avatar>
-
-          <Typography variant='h5' className={classes.title}>Party Settings</Typography>
+          <PartyIcon />
+          <Typography variant='h5' className={classes.title}>Settings</Typography>
         </Toolbar>
       </DialogTitle>
 
-      <DialogContent className={classes.content}>
+      <DialogContent>
         {party && (
           <EditableText
-            label='Party Name'
+            label='Name'
             disabled={!party.subscribed}
             value={party.displayName}
-            onUpdate={(displayName) => client.partyManager.setPartyProperty(party.publicKey, { displayName })}
+            onUpdate={handleSetTitle}
           />
         )}
 
-        <div className={classes.divider} />
-
-        <MenuList>
-          <MenuItem
-            button onClick={onVisibilityToggle}
-          >
-            <ListItemIcon>
-              {deletedItemsVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
-            </ListItemIcon>
-            <ListItemText primary={deletedItemsVisible ? 'Hide deleted' : 'Show deleted'} />
-          </MenuItem>
-
-          <MenuItem
-            button onClick={() => {
-              onUnsubscribe();
-              onClose();
-            }}
-          >
-            <ListItemIcon>
-              <UnsubscribeIcon />
-            </ListItemIcon>
-            <ListItemText primary='Unsubscribe' />
-          </MenuItem>
-        </MenuList>
+        {/* TODO(burdon): Implement state and handlers. */}
+        <FormControl className={classes.form}>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={subscribed}
+                  value={subscribed}
+                  onChange={() => setSubscribed(!subscribed)}
+                />
+              }
+              label="Active"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={showDeleted}
+                  value={showDeleted}
+                  onChange={() => setShowDeleted(!showDeleted) }
+                />
+              }
+              label="Show deleted items"
+            />
+          </FormGroup>
+        </FormControl>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} color='primary'>
+        <Button onClick={handleClose} color='primary'>
           Done
         </Button>
       </DialogActions>
