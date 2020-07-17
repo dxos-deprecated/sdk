@@ -52,7 +52,7 @@ const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, pads, closingDis
   const pad = item ? pads.find(pad => pad.type === item.type) : undefined;
 
   const handleClose = () => {
-    if (!closingDisabled) return;
+    if (closingDisabled) return;
     onClose();
   };
 
