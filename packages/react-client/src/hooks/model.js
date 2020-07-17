@@ -44,7 +44,7 @@ export const useModel = ({
     };
 
     const createAsyncModel = async () => {
-      model = await client.modelFactory.createModel(modelType, options);
+      model = await client.createSubscription({ modelType, options });
 
       if (!disableUpdateHandler) {
         model.on('update', onUpdate);
@@ -67,7 +67,8 @@ export const useModel = ({
         if (!disableUpdateHandler) {
           model.off('update', onUpdate);
         }
-        client.modelFactory.destroyModel(model);
+
+        model.destroy();
 
         log('Destroyed', model.id);
         model = null;
