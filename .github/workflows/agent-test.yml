@@ -16,11 +16,12 @@ jobs:
         run: |
           yarn
           yarn build
-      - name: Run in node
+      - name: Sync test in node
         run: |
           cd testing/spawn-testing
-          yarn test
-      - name: Run in chrome
+          DEBUG=dxos:spawn-testing:* node -r @babel/register src/tests/sync.js
+      - name: Sync test in chrome
         run: |
           cd testing/spawn-testing
-          yarn test --browser
+          DEBUG=dxos:spawn-testing:* node -r @babel/register src/tests/sync.js --browser
+
