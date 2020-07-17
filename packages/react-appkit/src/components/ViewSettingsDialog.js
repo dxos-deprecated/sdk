@@ -15,7 +15,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 
-import BuildIcon from '@material-ui/icons/Build';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { EditableText } from '@dxos/react-ux';
 
@@ -56,7 +56,7 @@ const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, pads }) => {
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
           <Avatar>
-            <BuildIcon />
+            <SettingsIcon />
           </Avatar>
 
           <Typography variant='h5' className={classes.title}>View Settings</Typography>
