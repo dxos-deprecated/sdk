@@ -17,7 +17,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import PartyIcon from '@material-ui/icons/Settings';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { EditableText } from '@dxos/react-ux';
 
@@ -52,7 +52,7 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties }) => {
     <Dialog classes={{ paper: classes.root }} open={open} onClose={onClose}>
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
-          <PartyIcon />
+          <SettingsIcon />
           <Typography variant='h5' className={classes.title}>Settings</Typography>
         </Toolbar>
       </DialogTitle>
