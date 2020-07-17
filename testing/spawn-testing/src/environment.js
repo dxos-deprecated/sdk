@@ -2,7 +2,7 @@ import debug from 'debug';
 import { Broker } from './broker';
 import dequal from 'dequal';
 import { EventEmitter } from 'events';
-import { open, write } from 'fs';
+import { open, write, close } from 'fs';
 import { promisify } from 'util';
 
 const log = debug('dxos:spawn-testing:environment');
@@ -41,10 +41,10 @@ export class Environment extends EventEmitter {
     await peer.call('initAgent');
   }
 
-  async runTicks ({ count = 1, delay = 10 } = {}) {
+  async runTicks ({ count = 1, delay = 10, opts = {} } = {}) {
     for (let i = 0; i < count; i++) {
       for (const peer of this._broker.peers) {
-        await peer.call('tick');
+        await peer.call('tick', opts);
       }
       this._tickCount++;
       this.emit('tick', { time: new Date(), number: this._tickCount });
@@ -81,20 +81,25 @@ export class Environment extends EventEmitter {
   }
 
   async writeMetrics (fileName) {
-    const file = await promisify(open)(fileName, 'w');
-    function writeEvent (event) {
-      promisify(write)(file, JSON.stringify(event) + '\n');
+    if (this._metricsFile !== undefined) {
+      throw new Error('Already writing metrics');
     }
+    this._metricsFile = await promisify(open)(fileName, 'w');
 
-    this.on('tick', data => writeEvent({ event: 'tick', ...data }));
+    this.on('tick', data => this.logEvent({ event: 'tick', ...data }));
     for (const [key, peer] of this._broker._peers) {
       peer.on('model-update', async ({ state }) => {
-        writeEvent({ event: 'model-update', time: new Date(), peer: key, state });
+        this.logEvent({ event: 'model-update', time: new Date(), peer: key, state });
       });
     }
   }
 
+  async logEvent (event) {
+    promisify(write)(this._metricsFile, JSON.stringify(event) + '\n');
+  }
+
   async destroy () {
+    await promisify(close)(this._metricsFile);
     await this._broker.destroy();
   }
 }
