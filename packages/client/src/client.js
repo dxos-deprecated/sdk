@@ -2,7 +2,6 @@
 // Copyright 2020 DXOS.org
 //
 
-import debug from 'debug';
 import defaultsDeep from 'lodash.defaultsdeep';
 import bufferJson from 'buffer-json-encoding';
 
@@ -21,8 +20,6 @@ import { logs } from '@dxos/debug';
 
 const { error: membershipError } = logs('dxos:client:membership');
 const MAX_WAIT = 5000;
-
-const log = debug('dxos:client');
 
 /**
  * Data client.
@@ -87,7 +84,6 @@ export class Client {
     await this._networkManager.close();
   }
 
-  // TODO(burdon): Remove.
   get keyring () {
     return this._keyring;
   }
@@ -95,6 +91,16 @@ export class Client {
   // keep this for devtools ???
   get feedStore () {
     return this._feedStore;
+  }
+
+  /**
+   * @param {Object} config
+   * @param {} config.modelType
+   * @param {} config.options
+   * @return {model}
+   */
+  async createSubscription ({ modelType, options }) {
+    return this._modelFactory.createModel(modelType, options);
   }
 
   // TODO(burdon): Remove.
@@ -215,21 +221,11 @@ export class Client {
 export const createClient = async (feedStorage, keyring, config = {}) => {
   config = defaultsDeep({}, config, defaultClientConfig);
 
-  log('Creating client...', JSON.stringify(config, undefined, 2));
-
-  // const feedStore = new FeedStore(feedStorage, {
-  //   feedOptions: {
-  //     valueEncoding: 'buffer-json'
-  //   },
-  //   codecs: {
-  //     'buffer-json': bufferJson
-  //   }
-  // });
+  console.warn('createClient is being deprecated. Please use new Client() instead.');
 
   const client = new Client({
     storage: feedStorage,
     swarm: config.swarm,
-    // feedStore,
     keyring // remove this later but it is required by cli, bots, and tests.
   });
 
