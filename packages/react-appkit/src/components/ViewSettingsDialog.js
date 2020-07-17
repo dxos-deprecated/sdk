@@ -45,14 +45,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, pads }) => {
+const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, pads, closingDisabled, children }) => {
   const classes = useStyles();
   const item = viewModel.getById(viewId);
 
   const pad = item ? pads.find(pad => pad.type === item.type) : undefined;
 
+  const handleClose = () => {
+    if (!closingDisabled) return;
+    onClose();
+  };
+
   return (
-    <Dialog open={open} maxWidth='md' onClose={onClose}>
+    <Dialog open={open} maxWidth='md' onClose={handleClose}>
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
           <Avatar>
@@ -84,10 +89,11 @@ const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, pads }) => {
             className={classes.settingItem}
           />
         )}
+        <div>{children}</div>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} color='primary'>
+        <Button onClick={handleClose} color='primary' disabled={closingDisabled}>
           Done
         </Button>
       </DialogActions>
