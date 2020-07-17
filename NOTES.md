@@ -135,7 +135,6 @@ const client = new Client({
 - Lifecycle
   - `async initialize()`
   - `async destroy()`
-  - `async reset()`
 - Party/Topic
   - getParties: PartyInfo[] (partyManager.getPartyInfoList)
   - getParty(partyKey): PartyInfo (partyManager.getPartyInfo)
