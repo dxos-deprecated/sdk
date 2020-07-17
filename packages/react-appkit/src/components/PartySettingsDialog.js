@@ -23,7 +23,7 @@ import { EditableText } from '@dxos/react-ux';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minWidth: '400px',
+    minWidth: '400px'
   },
   title: {
     marginLeft: theme.spacing(2)
@@ -78,17 +78,17 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties }) => {
                   onChange={() => setSubscribed(!subscribed)}
                 />
               }
-              label="Active"
+              label='Active'
             />
             <FormControlLabel
               control={
                 <Checkbox
                   checked={showDeleted}
                   value={showDeleted}
-                  onChange={() => setShowDeleted(!showDeleted) }
+                  onChange={() => setShowDeleted(!showDeleted)}
                 />
               }
-              label="Show deleted items"
+              label='Show deleted items'
             />
           </FormGroup>
         </FormControl>

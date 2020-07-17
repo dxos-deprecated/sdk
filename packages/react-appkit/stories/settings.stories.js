@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 
 import { createKeyPair, keyToString } from '@dxos/crypto';
 
-import { ViewSettings } from '../src/components';
+import { ViewSettings, ViewSettingsDialog } from '../src/components';
 
 export default {
   title: 'Settings'
@@ -43,6 +43,30 @@ export const withViewSettings = () => {
           router={mockRouter}
           viewModel={mockViewModel}
           topic={topic}
+          pads={[{ type: 'PAD_TYPE', displayName: 'A mock type' }]}
+          viewId='some-id'
+        />
+      </Box>
+    </>
+  );
+};
+
+export const withViewSettingsDialog = () => {
+  const mockViewModel = {
+    getAllViews: () => [],
+    getAllDeletedViews: () => [],
+    deleteView: () => {},
+    restoreView: () => {},
+    getById: () => ({ displayName: 'Some view', type: 'PAD_TYPE' })
+  };
+
+  return (
+    <>
+      <Box m={2}>
+        <ViewSettingsDialog
+          open
+          onClose={() => {}}
+          viewModel={mockViewModel}
           pads={[{ type: 'PAD_TYPE', displayName: 'A mock type' }]}
           viewId='some-id'
         />

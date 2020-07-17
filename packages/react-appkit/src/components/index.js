@@ -26,5 +26,6 @@ export Sidebar from './Sidebar';
 export StatusBar from './StatusBar';
 export Theme, { createTheme, defaultThemeProperties } from './Theme';
 export ViewSettings from './ViewSettings';
+export ViewSettingsDialog from './ViewSettingsDialog';
 
 export * from './util';
