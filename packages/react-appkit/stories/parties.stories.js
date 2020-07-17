@@ -57,7 +57,7 @@ export const withPartyCard = () => {
   const parties = [
     mockParty,
     { ...mockParty, displayName: 'A very very very long name' }
-  ]
+  ];
 
   return (
     <>
