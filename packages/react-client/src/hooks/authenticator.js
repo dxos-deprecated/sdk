@@ -27,7 +27,6 @@ export const useAuthenticator = (invitation) => {
       // Connect to inviting peer.
       client.partyManager.joinParty(invitation, (info) =>
         codec.encode(createAuthMessage(client.keyring, info.id.value,
-          invitation.swarmKey,
           client.partyManager.identityManager.keyRecord,
           client.partyManager.identityManager.deviceManager.keyChain,
           null, info.authNonce.value))
