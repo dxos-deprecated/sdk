@@ -11,8 +11,7 @@
     "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \"**/*.test.js\" --source-maps inline",
     "build:watch": "npm run build -- --watch",
     "lint": "semistandard",
-    "prepublishOnly": "npm run build && npm run test",
-    "test": "npm run build && DEBUG=\"dxos:spawn-testing*\" node dist/es/main.js"
+    "prepublishOnly": "npm run build && npm run test"
   },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
