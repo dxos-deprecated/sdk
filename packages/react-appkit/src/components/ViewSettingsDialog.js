@@ -89,7 +89,7 @@ const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, pads, closingDis
             className={classes.settingItem}
           />
         )}
-        <div>{children}</div>
+        <div className={classes.settingItem}>{children}</div>
       </DialogContent>
 
       <DialogActions>
