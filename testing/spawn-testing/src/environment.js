@@ -81,7 +81,7 @@ export class Environment extends EventEmitter {
   }
 
   async writeMetrics (fileName) {
-    if(this._metricsFile !== undefined) {
+    if (this._metricsFile !== undefined) {
       throw new Error('Already writing metrics');
     }
     this._metricsFile = await promisify(open)(fileName, 'w');
@@ -94,7 +94,7 @@ export class Environment extends EventEmitter {
     }
   }
 
-  async logEvent(event) {
+  async logEvent (event) {
     promisify(write)(this._metricsFile, JSON.stringify(event) + '\n');
   }
 

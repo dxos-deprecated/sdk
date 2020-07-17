@@ -11,7 +11,6 @@ const { Environment } = require('../environment');
 const log = debug('dxos:spawn-testing:example');
 
 async function run ({ readers = 1, ticks = 60, delay = 1000, ...opts } = {}) {
-
   const environment = new Environment();
   await environment.start();
   await environment.addPeers(opts);
@@ -19,7 +18,7 @@ async function run ({ readers = 1, ticks = 60, delay = 1000, ...opts } = {}) {
   await environment.addPeers({
     ...opts,
     count: readers,
-    agent: './src/agents/reading-agent.js',
+    agent: './src/agents/reading-agent.js'
   });
 
   log('> network full connected');

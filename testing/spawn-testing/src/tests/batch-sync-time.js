@@ -11,7 +11,6 @@ const { Environment } = require('../environment');
 const log = debug('dxos:spawn-testing:example');
 
 async function run ({ readers = 1, ...opts } = {}) {
-
   const environment = new Environment();
   await environment.start();
   await environment.addPeers(opts);
@@ -19,22 +18,22 @@ async function run ({ readers = 1, ...opts } = {}) {
   await environment.addPeers({
     ...opts,
     count: readers,
-    agent: './src/agents/reading-agent.js',
+    agent: './src/agents/reading-agent.js'
   });
   log('> network full connected');
 
   log('> sync started');
   await environment.writeMetrics(`./metrics-${basename(__filename)}.log`);
 
-  for(let batchSizeBase = 1; batchSizeBase < 10_000; batchSizeBase *= 10) {
-    for(let batchSizeMultiplier = 1; batchSizeMultiplier < 10; batchSizeMultiplier++) {
+  for (let batchSizeBase = 1; batchSizeBase < 10_000; batchSizeBase *= 10) {
+    for (let batchSizeMultiplier = 1; batchSizeMultiplier < 10; batchSizeMultiplier++) {
       const batchSize = batchSizeBase * batchSizeMultiplier;
 
       const start = Date.now();
       await environment.runTicks({ count: 1, opts: { batchSize } });
       await environment.waitForSync();
       const delta = Date.now() - start;
-      log(`Sync batchSize=${batchSize} time=${delta}ms`)
+      log(`Sync batchSize=${batchSize} time=${delta}ms`);
       await environment.logEvent({ event: 'batch-sync', batchSize, delta });
     }
   }
