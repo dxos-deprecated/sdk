@@ -237,25 +237,27 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
         router={router}
       />
 
-      <PartySettingsDialog
-        party={party}
-        client={client}
-        open={settingsDialogOpen}
-        properties={{
-          showDeleted,
-          subscribed: party.subscribed
-        }}
-        onClose={({ showDeleted, subscribed }) => {
-          setShowDeleted(showDeleted);
-          if (subscribed && !party.subscribed) {
-            handleSubscribe();
-          }
-          if (!subscribed && party.subscribed) {
-            handleUnsubscribe();
-          }
-          setSettingsDialogOpen(false);
-        }}
-      />
+      {party.subscribed && (
+        <PartySettingsDialog
+          party={party}
+          client={client}
+          open={settingsDialogOpen}
+          properties={{
+            showDeleted,
+            subscribed: party.subscribed
+          }}
+          onClose={({ showDeleted, subscribed }) => {
+            setShowDeleted(showDeleted);
+            if (subscribed && !party.subscribed) {
+              handleSubscribe();
+            }
+            if (!subscribed && party.subscribed) {
+              handleUnsubscribe();
+            }
+            setSettingsDialogOpen(false);
+          }}
+        />
+      )}
     </>
   );
 };
