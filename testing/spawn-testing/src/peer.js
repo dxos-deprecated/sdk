@@ -37,7 +37,7 @@ import { createRPC } from './create-rpc';
         joinParty: ({ invitation }) => agent.joinParty(invitation),
         initAgent: () => agent.initAgent(),
         getModelObjects: () => agent.getModelObjects(),
-        tick: () => agent.tick(),
+        tick: (opts) => agent.tick(opts),
         getState: () => {
           const state = agent.state;
 

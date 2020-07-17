@@ -4,8 +4,9 @@
 
 const debug = require('debug');
 const mri = require('mri');
+const { basename } = require('path');
 
-const { Environment } = require('./environment');
+const { Environment } = require('../environment');
 
 const log = debug('dxos:spawn-testing:example');
 
@@ -25,7 +26,7 @@ async function run (opts = {}) {
   log('> sync started');
   console.time('sync');
 
-  await environment.writeMetrics('./metrics.log');
+  await environment.writeMetrics(`./metrics-${basename(__filename)}.log`);
 
   await environment.runTicks({ count: maxTicks, delay: 1000 });
   log('> finished creating items');
