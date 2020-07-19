@@ -29,8 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// TODO(burdon): Remove closingDisabled? (not used anywhere)?
-// TODO(burdon): Remove viewModel (onUpdateName).
+// TODO(burdon): Remove viewModel (pass in item and callbacks).
 const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, closingDisabled, children }) => {
   const classes = useStyles();
 

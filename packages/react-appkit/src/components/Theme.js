@@ -14,6 +14,10 @@ import secondary from '@material-ui/core/colors/blueGrey';
 // https://material-ui.com/customization/theming
 export const defaultThemeProperties = {
   props: {
+    MuiAppBar: {
+      elevation: 0
+    },
+
     MuiButtonBase: {
       disableRipple: true
     }
@@ -41,8 +45,8 @@ export const createTheme = (base) => createMuiTheme(
 );
 
 // TODO(burdon): Rename ThemeProvider or Remove.
-const Theme = ({ children }) => (
-  <MuiThemeProvider theme={createTheme()}>
+const Theme = ({ children, base }) => (
+  <MuiThemeProvider theme={createTheme(base)}>
     <CssBaseline />
     {children}
   </MuiThemeProvider>
