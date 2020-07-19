@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { storiesOf } from '@storybook/react';
 import StoryRouter from 'storybook-react-router';
+import { storiesOf } from '@storybook/react';
 
 import { ErrorHandler } from '@dxos/debug';
 import { ClientContextProvider, useClient } from '@dxos/react-client';
@@ -22,10 +22,13 @@ const Test = () => {
   // TODO(burdon): useClient returns null initially.
   const client = useClient();
   console.log(client);
+  if (!client) {
+    return null;
+  }
 
   return (
     <div>
-      <pre>{client && client.config}</pre>
+      <pre>{client.config}</pre>
     </div>
   );
 };
