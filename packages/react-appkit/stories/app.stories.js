@@ -15,12 +15,10 @@ import { ClientContextProvider, useClient } from '@dxos/react-client';
 
 import { AppKitContextProvider } from '../src';
 
-// TODO(burdon): Goal to test context provider (currently doesn't work).
-// TODO(burdon): Dummy client (in-memory).
 const config = {
   client: {
     keyStorage: {
-      type: 'memory'
+      type: 'ram'
     },
 
     feedStorage: {
