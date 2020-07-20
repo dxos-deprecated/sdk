@@ -92,8 +92,7 @@ const AppBar = ({ topic, children, onToggleNav }) => {
     const { botId, ...rest } = spec;
     const botFactoryClient = new BotFactoryClient(client.networkManager, botFactoryTopic);
 
-    const secretProvider = () => {
-    };
+    const secretProvider = () => {};
 
     // Provided by inviter node.
     const secretValidator = async (invitation, secret) => {
@@ -369,8 +368,8 @@ const AppBar = ({ topic, children, onToggleNav }) => {
             <MoreIcon />
           </IconButton>
         )}
-
       </Toolbar>
+
       {/* Menu */}
       <Menu
         open={!!menuTarget}
