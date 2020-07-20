@@ -69,10 +69,9 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
           onChange={event => setBotFactoryTopic(event.target.value)}
         >
           {registryBotFactories
-            .map(({ topic }) => topic)
-            .map(topic => (
+            .map(({ topic, name }) => (
               <MenuItem key={topic} value={topic}>
-                {topic}
+                {name}
               </MenuItem>
             ))}
         </Select>
