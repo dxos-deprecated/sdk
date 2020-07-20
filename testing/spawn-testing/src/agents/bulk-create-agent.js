@@ -14,8 +14,8 @@ class BulkCreateAgent {
     this._model = await this._ctx.createModel(ObjectModel, { type: 'example.com/Test' });
   }
 
-  tick () {
-    for (let i = 0; i < 100; i++) {
+  tick ({ batchSize = 100 }) {
+    for (let i = 0; i < batchSize; i++) {
       this._model.createItem('example.com/Test', { foo: 1 });
     }
   }
