@@ -10,12 +10,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { useRegistryBots } from '../hooks/registry';
+import { useRegistryBots, useRegistryBotFactories } from '../hooks/registry';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,13 +37,14 @@ const useStyles = makeStyles((theme) => ({
 const BotDialog = ({ open, onSubmit, onClose }) => {
   const classes = useStyles();
 
-  const [topic, setTopic] = useState('');
   const [disabled, setDisabled] = useState(false);
   const [bot, setBot] = useState('');
+  const [botFactoryTopic, setBotFactoryTopic] = useState('');
   const [botVersions, setBotVersions] = useState([]);
   const [botVersion, setBotVersion] = useState();
 
   const registryBots = useRegistryBots();
+  const registryBotFactories = useRegistryBotFactories();
 
   useEffect(() => {
     const versions = registryBots
@@ -60,14 +60,22 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
       <DialogTitle>Invite Bot</DialogTitle>
 
       <DialogContent>
-        <TextField
-          label='Topic'
-          autoFocus
+        <InputLabel id='botFactoryLabel'>Bot Factory</InputLabel>
+        <Select
+          labelId='botFactoryLabel'
+          id='botFactory'
+          value={botFactoryTopic}
           fullWidth
-          value={topic}
-          onChange={event => setTopic(event.target.value)}
-          style={{ paddingBottom: 16 }}
-        />
+          onChange={event => setBotFactoryTopic(event.target.value)}
+        >
+          {registryBotFactories
+            .map(({ topic }) => topic)
+            .map(topic => (
+              <MenuItem key={topic} value={topic}>
+                {topic}
+              </MenuItem>
+            ))}
+        </Select>
 
         <InputLabel id='botNameLabel'>Bot</InputLabel>
         <Select
@@ -109,7 +117,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
           disabled={disabled}
           color='primary'
           onClick={() => {
-            onSubmit({ topic, bot, botVersion });
+            onSubmit({ topic: botFactoryTopic, bot, botVersion });
             setDisabled(true);
           }}
         >
