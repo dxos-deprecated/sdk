@@ -9,16 +9,13 @@ import Box from '@material-ui/core/Box';
 import { ViewSettingsDialog } from '../src/components';
 
 export default {
-  title: 'Settings'
+  title: 'Dialogs'
 };
 
 export const withViewSettingsDialog = () => {
+  // TODO(burdon): Should not require this.
   const mockViewModel = {
-    getAllViews: () => [],
-    getAllDeletedViews: () => [],
-    deleteView: () => {},
-    restoreView: () => {},
-    getById: () => ({ displayName: 'Some view', type: 'PAD_TYPE' })
+    getById: () => ({ displayName: 'Test Item' })
   };
 
   return (
@@ -26,10 +23,9 @@ export const withViewSettingsDialog = () => {
       <Box m={2}>
         <ViewSettingsDialog
           open
-          onClose={() => {}}
+          viewId='test-id'
           viewModel={mockViewModel}
-          pads={[{ type: 'PAD_TYPE', displayName: 'A mock type' }]}
-          viewId='some-id'
+          onClose={() => {}}
         />
       </Box>
     </>
