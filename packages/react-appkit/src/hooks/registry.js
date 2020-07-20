@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { Registry } from '@wirelineio/registry-client';
 
 const WRN_TYPE_BOT = 'wrn:bot';
+const WRN_TYPE_BOT_FACTORY = 'wrn:bot-factory';
 
 // TODO(egorgripasov): Factor out, same code is in examples/dxos-apps.
 export const useRegistry = () => {
@@ -35,4 +36,24 @@ export const useRegistryBots = () => {
   }, [registry]);
 
   return registryBots;
+};
+
+export const useRegistryBotFactories = () => {
+  const registry = useRegistry();
+
+  const [factories, setFactories] = useState([]);
+
+  useEffect(() => {
+    const queryRegistry = async () => {
+      const factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY });
+      setFactories(factoriesResult.map(({ attributes: { topic, name } }) => ({
+        topic,
+        name
+      })));
+    };
+
+    queryRegistry();
+  }, [registry]);
+
+  return factories;
 };
