@@ -28,7 +28,7 @@ async function run ({ readers = 1, ...opts } = {}) {
   for (let batchSizeBase = 1; batchSizeBase < 10_000; batchSizeBase *= 10) {
     for (let batchSizeMultiplier = 1; batchSizeMultiplier < 10; batchSizeMultiplier++) {
       const batchSize = batchSizeBase * batchSizeMultiplier;
-      
+
       const anchor = await environment.waitForSync();
       const start = Date.now();
       await environment.runTicks({ count: 1, opts: { batchSize } });
