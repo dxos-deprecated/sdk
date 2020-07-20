@@ -25,7 +25,7 @@ async function run ({ readers = 1, ...opts } = {}) {
   log('> sync started');
   await environment.writeMetrics(`./metrics-${basename(__filename)}.log`);
 
-  for (let batchSizeBase = 1; batchSizeBase < 10_000; batchSizeBase *= 10) {
+  for (let batchSizeBase = 1; batchSizeBase < 1_000; batchSizeBase *= 10) {
     for (let batchSizeMultiplier = 1; batchSizeMultiplier < 10; batchSizeMultiplier++) {
       const batchSize = batchSizeBase * batchSizeMultiplier;
 
