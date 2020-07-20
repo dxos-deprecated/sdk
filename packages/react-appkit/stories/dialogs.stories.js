@@ -5,8 +5,9 @@
 import React from 'react';
 
 import Box from '@material-ui/core/Box';
+import Icon from '@material-ui/icons/Settings';
 
-import { ViewSettingsDialog } from '../src/components';
+import { ViewSettingsDialog, ItemSettings } from '../src/components';
 
 export default {
   title: 'Dialogs'
@@ -27,6 +28,42 @@ export const withViewSettingsDialog = () => {
           viewModel={mockViewModel}
           onClose={() => {}}
         />
+      </Box>
+    </>
+  );
+};
+
+export const withItemSettingsDialog = () => {
+  return (
+    <>
+      <Box m={2}>
+        <ItemSettings
+          open
+          onClose={() => {}}
+          onCancel={() => {}}
+          item={{displayName: 'an item'}}
+          closingDisabled={true}
+          icon={<Icon/>}
+        />
+      </Box>
+    </>
+  );
+};
+
+export const withPadSpecificItemSettingsDialog = () => {
+  return (
+    <>
+      <Box m={2}>
+        <ItemSettings
+          open
+          onClose={() => {}}
+          onCancel={() => {}}
+          item={{displayName: 'an item'}}
+          closingDisabled={true}
+          icon={<Icon/>}
+        >
+          <p>Pad Specific content</p>
+        </ItemSettings>
       </Box>
     </>
   );

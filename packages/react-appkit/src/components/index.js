@@ -7,6 +7,7 @@ export BotDialog from './BotDialog';
 export ExportKeyringDialog from './ExportKeyringDialog';
 export ImportKeyringDialog from './ImportKeyringDialog';
 export InvitationDialog from './InvitationDialog';
+export ItemSettings from './ItemSettings';
 export KeyMap from './KeyMap';
 export Layout from './Layout';
 export MemberAvatar from './MemberAvatar';
