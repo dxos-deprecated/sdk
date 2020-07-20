@@ -1032,6 +1032,48 @@
     webpack-inject-plugin "^1.5.4"
     yargs "^15.3.1"
 
+"@dxos/client@^1.0.0-beta.186":
+  version "1.0.0-beta.186"
+  resolved "https://registry.yarnpkg.com/@dxos/client/-/client-1.0.0-beta.186.tgz#5bada06ad167ef11f574ceb3d07ee53cf4a2cb86"
+  integrity sha512-V7gefK+lvr+x1gW7x1BhhCS3OhD2AcikKJjlD3xpt+dVnnfcqT5wQnY4jfy7rXJBfQik2SZxssoBtw75YKMZ4A==
+  dependencies:
+    "@babel/runtime" "^7.9.6"
+    "@dxos/async" "^1.0.0-beta.1"
+    "@dxos/credentials" "^1.0.1-beta.4"
+    "@dxos/crypto" "^1.0.0-beta.1"
+    "@dxos/debug" "^1.0.0-beta.73"
+    "@dxos/feed-store" "^1.2.0-beta.1"
+    "@dxos/metrics" "^1.0.0-beta.6"
+    "@dxos/model-factory" "^1.0.0-beta.17"
+    "@dxos/network-manager" "^1.0.0-beta.93"
+    "@dxos/party-manager" "^1.0.1-beta.20"
+    "@dxos/protocol" "^1.1.0-alpha.4"
+    "@dxos/protocol-plugin-replicator" "^1.1.0-alpha.4"
+    "@geut/discovery-swarm-webrtc" "^3.0.0-beta.3"
+    assert "^2.0.0"
+    buffer-json-encoding "^1.0.2"
+    canonicalize "^1.0.1"
+    debug "^4.1.1"
+    del "^5.1.0"
+    end-of-stream "^1.4.4"
+    hypertrie "^3.8.0"
+    level-mem "^5.0.1"
+    lodash.debounce "^4.0.8"
+    lodash.defaults "^4.2.0"
+    lodash.defaultsdeep "^4.6.1"
+    lodash.get "^4.4.2"
+    lodash.pickby "^4.6.0"
+    lodash.set "^4.3.2"
+    lodash.unset "^4.5.2"
+    multi-read-stream "^2.0.0"
+    p-limit "^2.3.0"
+    pify "^4.0.1"
+    pump "^3.0.0"
+    pumpify "^2.0.1"
+    queue-microtask "^1.1.3"
+    through2 "^3.0.1"
+    wrtc "^0.4.3"
+
 "@dxos/codec-protobuf@^1.1.0-beta.0", "@dxos/codec-protobuf@^1.1.0-beta.10", "@dxos/codec-protobuf@^1.1.0-beta.2", "@dxos/codec-protobuf@^1.1.0-beta.7", "@dxos/codec-protobuf@^1.1.0-beta.9":
   version "1.1.0-beta.10"
   resolved "https://registry.yarnpkg.com/@dxos/codec-protobuf/-/codec-protobuf-1.1.0-beta.10.tgz#f217e871a4e4a8c4665ae02ac1a9dfba1b264c44"
@@ -1234,15 +1276,16 @@
     lodash.set "^4.3.2"
     lodash.unset "^4.5.2"
 
-"@dxos/model-factory@^1.0.0-beta.17":
-  version "1.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-1.0.0-beta.18.tgz#171ec6ebc2e24cca8765e24b64e7585f922081a7"
-  integrity sha512-YXhXUvJNzW7F4LwoIAkEq1S7u+WJm97QbXE1piZdPeH+dDK/yobzn0E4P9JiVBgbzK1WczwFE9Eb6+/S8GL0Hw==
+"@dxos/model-factory@^1.0.0-beta.17", "@dxos/model-factory@^1.0.0-beta.21", "@dxos/model-factory@^1.0.0-beta.25", "@dxos/model-factory@^1.0.0-beta.26":
+  version "1.0.0-beta.26"
+  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-1.0.0-beta.26.tgz#6f3cd65678ec22ada8d8f8e4d121674190a6632e"
+  integrity sha512-q6ku2pC+YDfOUm1PG71Itq+uV1NYGA1SHWmhW/r9v8GnN1nzzoknDWb98kKEgpYbn6ZQpRv3rWAObPDrHluxdw==
   dependencies:
-    "@dxos/crypto" "^0.0.1"
+    "@dxos/crypto" "^1.0.0-beta.1"
     "@dxos/debug" "^1.0.0-beta.20"
     "@dxos/feed-level-indexer" "^1.1.0-alpha.9"
     "@dxos/metrics" "^1.0.0-beta.8"
+    "@dxos/protocol-network-generator" "^1.1.0-beta.2"
     charwise "^3.0.1"
     debug "^4.1.1"
     end-of-stream "^1.4.4"
@@ -1252,29 +1295,20 @@
     multi-read-stream "^2.0.0"
     p-limit "^3.0.1"
     pump "^3.0.0"
+    signal-promise "^1.0.3"
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
-"@dxos/model-factory@^1.0.0-beta.21", "@dxos/model-factory@^1.0.0-beta.25":
-  version "1.0.0-beta.25"
-  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-1.0.0-beta.25.tgz#1f9d655a42d9c3f78c995931b7b9c4bd1d7f499f"
-  integrity sha512-Kap7OM0FaQnM7va0OFz3VtZMvQZzZJ4fLeIgQlMoN0VG0r02IvcYYnBQSe7GBmudniyu89ObIKBj+JHQQxUgdQ==
+"@dxos/network-generator@^1.0.0-beta.1":
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@dxos/network-generator/-/network-generator-1.0.0-beta.2.tgz#9c0debfb9be41e40047feaba4c3583b33d73e69c"
+  integrity sha512-6DgH8P2vxeAn1tpfslFcO0COYayvCl167sy/UKXwxKob4Na7SNiCNNIJIzn+FfBb9JO1U48RMcZRTeJ1xl/z5Q==
   dependencies:
-    "@dxos/crypto" "^0.0.1"
-    "@dxos/debug" "^1.0.0-beta.20"
-    "@dxos/feed-level-indexer" "^1.1.0-alpha.9"
-    "@dxos/metrics" "^1.0.0-beta.8"
-    charwise "^3.0.1"
     debug "^4.1.1"
     end-of-stream "^1.4.4"
-    level-mem "^5.0.1"
-    lodash.debounce "^4.0.8"
-    monotonic-timestamp "^0.0.9"
-    multi-read-stream "^2.0.0"
-    p-limit "^3.0.1"
-    pump "^3.0.0"
+    ngraph.generators "^18.0.1"
+    ngraph.graph "^19.0.3"
     source-map-support "^0.5.12"
-    through2 "^3.0.1"
 
 "@dxos/network-manager@^1.0.0-beta.93", "@dxos/network-manager@^1.0.0-beta.94", "@dxos/network-manager@^1.0.0-beta.97":
   version "1.0.0-beta.101"
@@ -1310,6 +1344,17 @@
     deep-diff "^1.0.2"
     json-stable-stringify "^1.0.1"
     mississippi "^4.0.0"
+
+"@dxos/protocol-network-generator@^1.1.0-beta.2":
+  version "1.1.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol-network-generator/-/protocol-network-generator-1.1.0-beta.12.tgz#a21192b6030e4c3e7d36d71972ecbe9f0474c20e"
+  integrity sha512-qoipZb4qKkLFf8xFlpB0agXCeodrx4ushIZUTnYXeLTLeQY21BAxDmR04Qk/PZ/4pFp8QrnOOsUFLUVqxzq00g==
+  dependencies:
+    "@dxos/network-generator" "^1.0.0-beta.1"
+    debug "^4.1.1"
+    p-event "^4.2.0"
+    pump "^3.0.0"
+    source-map-support "^0.5.12"
 
 "@dxos/protocol-plugin-bot@^1.1.0-beta.12":
   version "1.1.0-beta.12"
@@ -5358,9 +5403,9 @@ can-use-dom@^0.1.0:
   integrity sha1-IsxKNKCrxDlQ9CxkEQJKP2NmtFo=
 
 caniuse-lite@^1.0.30000989, caniuse-lite@^1.0.30001093, caniuse-lite@^1.0.30001097:
-  version "1.0.30001102"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001102.tgz#3275e7a8d09548f955f665e532df88de0b63741a"
-  integrity sha512-fOjqRmHjRXv1H1YD6QVLb96iKqnu17TjcLSaX64TwhGYed0P1E1CCWZ9OujbbK4Z/7zax7zAzvQidzdtjx8RcA==
+  version "1.0.30001104"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001104.tgz#4e3d5b3b1dd3c3529f10cb7f519c62ba3e579f5d"
+  integrity sha512-pkpCg7dmI/a7WcqM2yfdOiT4Xx5tzyoHAXWsX5/HxZ3TemwDZs0QXdqbE0UPLPVy/7BeK7693YfzfRYfu1YVpg==
 
 canonical-json@^0.0.4:
   version "0.0.4"
@@ -6571,9 +6616,9 @@ del@^5.0.0, del@^5.1.0:
     slash "^3.0.0"
 
 delay@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/delay/-/delay-4.3.0.tgz#efeebfb8f545579cb396b3a722443ec96d14c50e"
-  integrity sha512-Lwaf3zVFDMBop1yDuFZ19F9WyGcZcGacsbdlZtWjQmM50tOcMntm1njF/Nb/Vjij3KaSvCF+sEYGKrrjObu2NA==
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/delay/-/delay-4.4.0.tgz#71abc745f3ce043fe7f450491236541edec4ad0c"
+  integrity sha512-txgOrJu3OdtOfTiEOT2e76dJVfG/1dz2NZ4F0Pyt4UGZJryssMRp5vdM5wQoLwSOBNdrJv3F9PAhp/heqd7vrA==
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -6935,9 +6980,9 @@ ejs@^2.7.4:
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
 electron-to-chromium@^1.3.247, electron-to-chromium@^1.3.488:
-  version "1.3.499"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.499.tgz#06949f19877dafa42915e57dfeb4c1cfb86a8649"
-  integrity sha512-y7FwtQm/8xuLMnYQfBQDYzCpNn+VkSnf4c3Km5TWMNXg7JA5RQBuxmcLaKdDVcIK0K5xGIa7TlxpRt4BdNxNoA==
+  version "1.3.501"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.501.tgz#faa17a2cb0105ee30d5e1ca87eae7d8e85dd3175"
+  integrity sha512-tyzuKaV2POw2mtqBBzQGNBojMZzH0MRu8bT8T/50x+hWeucyG/9pkgAATy+PcM2ySNM9+8eG2VllY9c6j4i+bg==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -11907,10 +11952,35 @@ next-tick@^1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.1.0.tgz#1836ee30ad56d67ef281b22bd199f709449b35eb"
   integrity sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==
 
+ngraph.events@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ngraph.events/-/ngraph.events-0.0.3.tgz#38f55316f3d207ad631ff94f6622ca8f2c0e87d0"
+  integrity sha1-OPVTFvPSB61jH/lPZiLKjywOh9A=
+
 ngraph.events@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ngraph.events/-/ngraph.events-1.0.0.tgz#260b638f1d8b1394a10ce1dda9e5d9d9c85001b1"
   integrity sha512-Z7wyywdw8IKjOW0bDiOG4FUqX5fwqW7SDMO1huemDXho7Qy1b02RoBkPS43KLIZU2wrW2orju99k8wIr+xXvVA==
+
+ngraph.events@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/ngraph.events/-/ngraph.events-1.2.1.tgz#6e40425ef9dec1e074bbef6da56c8d79b9188fd8"
+  integrity sha512-D4C+nXH/RFxioGXQdHu8ELDtC6EaCiNsZtih0IvyGN81OZSUby4jXoJ5+RNWasfsd0FnKxxpAROyUMzw64QNsw==
+
+ngraph.generators@^18.0.1:
+  version "18.0.1"
+  resolved "https://registry.yarnpkg.com/ngraph.generators/-/ngraph.generators-18.0.1.tgz#b92be07457832f427da504414b2bb059c39cc27b"
+  integrity sha512-RWV1k6nt/ZyufFfkHpeamTC9f/V4SHZFyuRxhfaA7l5CUrpy7Cm+ERBZMv2Ij273wzvTy4DNHLTGY2ZgBdCvDw==
+  dependencies:
+    ngraph.graph "18.0.0"
+    ngraph.random "0.1.0"
+
+ngraph.graph@18.0.0:
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/ngraph.graph/-/ngraph.graph-18.0.0.tgz#f999131b1ea16bab110c0ba792bcf4925349c564"
+  integrity sha512-HH39PulrZrFIcO6Qw4Ts3aYqPauAV/6p2lbbtPiFZoUDAASLtfnfg4wtXohy0ZE9Ik51wUgWaZ+FfyKk/SRlzQ==
+  dependencies:
+    ngraph.events "0.0.3"
 
 ngraph.graph@^18.0.1:
   version "18.0.3"
@@ -11918,6 +11988,18 @@ ngraph.graph@^18.0.1:
   integrity sha512-IjGOWvYSUi1Oj3V1JrhhLGPY/rqvbvhUOa5tgOzIQo/LxO4wcBOSjZGZWeTTBUNLPt6R5hpkWKrUBaqPxgY4Ew==
   dependencies:
     ngraph.events "1.0.0"
+
+ngraph.graph@^19.0.3:
+  version "19.1.0"
+  resolved "https://registry.yarnpkg.com/ngraph.graph/-/ngraph.graph-19.1.0.tgz#88910ed53f6b4bc374f1b67296f4f81aab814e24"
+  integrity sha512-9cws84qfPkrYa7BaBtT+KgZfLXrd6pNL9Gl5Do+MBO/0Hm6rOM7qK78MZaO1uEoIK6p2pgUs6lu29zn/6tP59w==
+  dependencies:
+    ngraph.events "^1.2.1"
+
+ngraph.random@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/ngraph.random/-/ngraph.random-0.1.0.tgz#1b6e9573529e080677da6ffa098790d76a0948a9"
+  integrity sha1-G26Vc1KeCAZ32m/6CYeQ12oJSKk=
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -11954,9 +12036,9 @@ node-fetch@^2.3.0, node-fetch@^2.5.0, node-fetch@^2.6.0:
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
 
 node-gyp-build@^4.1.0, node-gyp-build@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.2.2.tgz#3f44b65adaafd42fb6c3d81afd630e45c847eb66"
-  integrity sha512-Lqh7mrByWCM8Cf9UPqpeoVBBo5Ugx+RKu885GAzmLBVYjeywScxHXPGLa4JfYNZmcNGwzR0Glu5/9GaQZMFqyA==
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.2.3.tgz#ce6277f853835f718829efb47db20f3e4d9c4739"
+  integrity sha512-MN6ZpzmfNCRM+3t57PTJHgHyw/h4OWnZ6mR8P5j/uZtqQr46RRuDE/P+g3n0YR/AiYXeWixZZzaip77gdICfRg==
 
 node-gyp-build@~4.1.0:
   version "4.1.1"
@@ -12378,9 +12460,9 @@ open@^6.3.0:
     is-wsl "^1.1.0"
 
 open@^7.0.0:
-  version "7.0.4"
-  resolved "https://registry.yarnpkg.com/open/-/open-7.0.4.tgz#c28a9d315e5c98340bf979fdcb2e58664aa10d83"
-  integrity sha512-brSA+/yq+b08Hsr4c8fsEW2CRzk1BmfN3SAK/5VCHQ9bdoZJ4qa/+AfR0xHjlbbZUyPkUHs1b8x1RqdyZdkVqQ==
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/open/-/open-7.1.0.tgz#68865f7d3cb238520fa1225a63cf28bcf8368a1c"
+  integrity sha512-lLPI5KgOwEYCDKXf4np7y1PBEkj7HYIyP2DY8mVDRnx0VIIu6bNrRB0R66TuO7Mack6EnTNLm4uvcl1UoklTpA==
   dependencies:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
@@ -12558,9 +12640,9 @@ p-queue@^4.0.0:
     eventemitter3 "^3.1.0"
 
 p-queue@^6.3.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-6.5.0.tgz#40d6bafdd3bb0c8eaa03e0649ba6fa3ce7249947"
-  integrity sha512-FLaTTD9Am6TeDfNuN0d+INeyVJoICoBS+OVP5K1S84v4w51LN3nRkCT+WC7xLBepV2s+N4LibM7Ys7xcSc0+1A==
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-6.6.0.tgz#263f2b73add4cefca81d8d6b2696ee74b326de2f"
+  integrity sha512-zPHXPNy9jZsiym0PpJjvnHQysx1fSd/QdaNVwiDRLU2KFChD6h9CkCB6b8i3U8lBwJyA+mHgNZCzcy77glUssQ==
   dependencies:
     eventemitter3 "^4.0.4"
     p-timeout "^3.1.0"
@@ -12974,9 +13056,9 @@ popper.js@^1.14.4, popper.js@^1.14.7:
   integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
 
 portfinder@^1.0.25:
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.26.tgz#475658d56ca30bed72ac7f1378ed350bd1b64e70"
-  integrity sha512-Xi7mKxJHHMI3rIUrnm/jjUgwhbYMkp/XKEcZX3aG4BrumLpq3nmoQMX+ClYnDZnZ/New7IatC1no5RX0zo1vXQ==
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.27.tgz#a41333c116b5e5f3d380f9745ac2f35084c4c758"
+  integrity sha512-bJ3U3MThKnyJ9Dx1Idtm5pQmxXqw08+XOHhi/Lie8OF1OlhVaBFhsntAIhkZYjfDcCzszSr0w1yCbccThhzgxQ==
   dependencies:
     async "^2.6.2"
     debug "^3.1.1"
@@ -13698,9 +13780,9 @@ react-fast-compare@^3.0.1:
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
 react-focus-lock@^2.1.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.4.0.tgz#11235eff41f47567288d7ef574e5b006527739d5"
-  integrity sha512-mue/boxdfNhfxnQcZtEBvqwZ5XQxk0uRoAMwLGl8j6XolFV3UIlt6iGFBGqRdJsvVHhtyKC5i8fkLnBidxCTbA==
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.4.1.tgz#e842cc93da736b5c5d331799012544295cbcee4f"
+  integrity sha512-c5ZP56KSpj9EAxzScTqQO7bQQNPltf/W1ZEBDqNDOV1XOIwvAyHX0O7db9ekiAtxyKgnqZjQlLppVg94fUeL9w==
   dependencies:
     "@babel/runtime" "^7.0.0"
     focus-lock "^0.7.0"
@@ -16827,9 +16909,9 @@ write@1.0.3:
     mkdirp "^0.5.1"
 
 wrtc@^0.4.3, wrtc@^0.4.5:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/wrtc/-/wrtc-0.4.5.tgz#6839540904bf38f13e6e3fb27ee1448e8458bbb6"
-  integrity sha512-AEqbxwz8LX9bRrSI8UTn6bFiGj8/28nguYJ0RTk1905HZwM8Rx16D1oX0FfJHWmYHEg5XhODGcVa33d9ORHFyw==
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/wrtc/-/wrtc-0.4.6.tgz#909ace2cffd34e11633d4e1c20527510a12e7b5b"
+  integrity sha512-4uD+oFoY2yuo3AV9fum3cXUXR6v8YQHZlqBrKkCRGjW1BvKrVHtLNH4UaNLBLiJu9DL89WqUWmbzsQ9RxMzANw==
   dependencies:
     node-pre-gyp "^0.13.0"
   optionalDependencies:
