@@ -28,10 +28,11 @@ async function run ({ readers = 1, ...opts } = {}) {
   for (let batchSizeBase = 1; batchSizeBase < 10_000; batchSizeBase *= 10) {
     for (let batchSizeMultiplier = 1; batchSizeMultiplier < 10; batchSizeMultiplier++) {
       const batchSize = batchSizeBase * batchSizeMultiplier;
-
+      
+      const anchor = await environment.waitForSync();
       const start = Date.now();
       await environment.runTicks({ count: 1, opts: { batchSize } });
-      await environment.waitForSync();
+      await environment.waitForSync(anchor);
       const delta = Date.now() - start;
       log(`Sync batchSize=${batchSize} time=${delta}ms`);
       await environment.logEvent({ event: 'batch-sync', batchSize, delta });
@@ -45,7 +46,6 @@ async function run ({ readers = 1, ...opts } = {}) {
   }
 
   log('> sync successful');
-  console.timeEnd('sync');
 
   await environment.destroy();
 }

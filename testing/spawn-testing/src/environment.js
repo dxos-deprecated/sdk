@@ -61,14 +61,21 @@ export class Environment extends EventEmitter {
     const states = await Promise.all(this._broker.peers.map(peer => peer.call('getState')));
     const modelStates = states.map(state => Object.values(state.agent.models)[0])
     const totalAppended = modelStates.reduce((acc, state) => acc + state.appended, 0)
-    return modelStates.every(state => state.updated + totalAppended)
+    if(!modelStates.every(state => state.updated === totalAppended)) {
+      return false 
+    }
+    return { totalAppended }
   }
 
-  waitForSync () {
+  waitForSync (anchor = undefined) {
     return new Promise(resolve => {
       const check = async () => {
-        if (await this.areModelsReplicated()) {
-          resolve();
+        const currentState = await this.areModelsReplicated()
+        if (currentState) {
+          if(anchor && currentState.totalAppended <= anchor) {
+            return
+          }
+          resolve(currentState);
         }
       };
 
@@ -78,7 +85,7 @@ export class Environment extends EventEmitter {
           peerStates.set(key, state);
           const states = Array.from(peerStates.values());
           const totalAppended = states.reduce((acc, state) => acc + state.appended, 0)
-          if (states.length === this._broker.peers.length && states.every(state => state.updated + totalAppended)) {
+          if (states.length === this._broker.peers.length && states.every(state => state.updated === totalAppended)) {
             check();
           }
         });
