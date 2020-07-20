@@ -45,9 +45,10 @@ export const useRegistryBotFactories = () => {
 
   useEffect(() => {
     const queryRegistry = async () => {
-      const factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY, version: '*' });
-      setFactories(factoriesResult.map(({ attributes: { topic } }) => ({
-        topic
+      const factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY });
+      setFactories(factoriesResult.map(({ attributes: { topic, name } }) => ({
+        topic,
+        name
       })));
     };
 
