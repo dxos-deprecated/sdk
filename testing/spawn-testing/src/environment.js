@@ -58,8 +58,8 @@ export class Environment extends EventEmitter {
   }
 
   /**
-   * 
-   * @param {{ totalAppended: number }} anchor 
+   *
+   * @param {{ totalAppended: number }} anchor
    * @returns {Promise<{ totalAppended: number }>}
    */
   waitForSync (anchor = undefined) {
@@ -68,26 +68,26 @@ export class Environment extends EventEmitter {
         const states = Array.from(peerStates.values());
         const totalAppended = states.reduce((acc, state) => acc + state.appended, 0);
         if (states.length === this._broker.peers.length && states.every(state => state.updated === totalAppended)) {
-          if(anchor && totalAppended <= anchor.totalAppended) {
-            return
+          if (anchor && totalAppended <= anchor.totalAppended) {
+            return;
           }
           resolve({ totalAppended });
         }
-      }
+      };
 
       const peerStates = new Map();
       await Promise.all(Array.from(this._broker._peers.entries()).map(async ([key, peer]) => {
         peer.on('model-update', async ({ state }) => {
           peerStates.set(key, state);
-          check()
+          check();
         });
 
-        const state = await peer.call('getState')
-        if(!peerStates.has(key)) {
-          peerStates.set(key, Object.values(state.agent.models)[0])
+        const state = await peer.call('getState');
+        if (!peerStates.has(key)) {
+          peerStates.set(key, Object.values(state.agent.models)[0]);
         }
-      }))
-      check()
+      }));
+      check();
     });
   }
 

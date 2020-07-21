@@ -6,7 +6,7 @@ import React from 'react';
 
 import Box from '@material-ui/core/Box';
 
-import { ViewSettingsDialog } from '../src/components';
+import { ViewSettingsDialog, BotDialog } from '../src/components';
 
 export default {
   title: 'Dialogs'
@@ -31,3 +31,12 @@ export const withViewSettingsDialog = () => {
     </>
   );
 };
+
+export const withBotDialog = () => (
+  <Box m={2}>
+    <BotDialog
+      open
+      onClose={() => {}}
+    />
+  </Box>
+);
