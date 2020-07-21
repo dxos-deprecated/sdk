@@ -14,7 +14,7 @@ import { useParty } from '@dxos/react-client';
 import {
   MemberList,
   NewViewCreationMenu,
-  PartyTreeAddItemButton,
+  // PartyTreeAddItemButton,
   PartyTreeItem
 } from '../components';
 
@@ -72,7 +72,7 @@ const DefaultViewSidebar = () => {
           />
         ))}
 
-        <PartyTreeAddItemButton ref={anchor} topic={topic} onClick={() => setNewViewCreationMenuOpen(true)}>Item</PartyTreeAddItemButton>
+        {/* <PartyTreeAddItemButton ref={anchor} topic={topic} onClick={() => setNewViewCreationMenuOpen(true)}>Item</PartyTreeAddItemButton> */}
         <NewViewCreationMenu anchorEl={anchor.current} open={newViewCreationMenuOpen} onSelect={handleCreate} onClose={() => setNewViewCreationMenuOpen(false)} pads={pads} />
       </TreeView>
       <Divider />

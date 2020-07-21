@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
 /**
  * Main application container.
  */
-const AppContainer = ({ appBarContent, sidebarContent, children }) => {
+const AppContainer = ({ appBarContent, sidebarContent, children, onSettingsOpened, onHomeNavigation, onPartyHomeNavigation }) => {
   const classes = useStyles();
   const config = useConfig();
   const { topic } = useParams(); // TODO(burdon): Remove and make component?
@@ -119,6 +119,9 @@ const AppContainer = ({ appBarContent, sidebarContent, children }) => {
               topic={topic}
               elevation={0}
               onToggleNav={sidebarContent ? () => setLayout({ showSidebar: !showSidebar }) : undefined}
+              onSettingsOpened={onSettingsOpened}
+              onHomeNavigation={onHomeNavigation}
+              onPartyHomeNavigation={onPartyHomeNavigation}
             >
               {appBarContent}
             </AppBar>

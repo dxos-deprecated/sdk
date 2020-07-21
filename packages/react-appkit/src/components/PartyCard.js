@@ -3,7 +3,6 @@
 //
 
 import clsx from 'clsx';
-import assert from 'assert';
 
 import React, { useState, useRef } from 'react';
 
@@ -41,7 +40,13 @@ const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
     flexDirection: 'column',
-    width: 300
+    width: 300,
+    minHeight: 320
+  },
+
+  newCard: {
+    padding: theme.spacing(5),
+    textAlign: 'center'
   },
 
   unsubscribed: {
@@ -77,11 +82,29 @@ const useStyles = makeStyles(theme => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap'
+  },
+
+  addButton: {
+    width: theme.spacing(8),
+    height: theme.spacing(8),
+    marginTop: theme.spacing(10),
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    padding: theme.spacing(4)
+  },
+  addIcon: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    color: theme.palette.grey[300]
+  },
+  addSubtitle: {
+    color: theme.palette.grey[300],
+    marginTop: theme.spacing(3)
   }
 }));
 
 // TODO(burdon): Extract client, router and dialogs and inject actions.
-const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
+const PartyCard = ({ onNewParty, party, viewModel, createView, client, router, pads, onNewItemRequested }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
@@ -91,17 +114,15 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
   const [showDeleted, setShowDeleted] = useState(false);
   const createViewAnchor = useRef();
 
-  const topic = keyToString(party.publicKey);
+  const topic = party ? keyToString(party.publicKey) : '';
+
+  const handleNewViewSelected = (type) => {
+    setNewViewCreationMenuOpen(false);
+    onNewItemRequested({ type });
+  };
 
   const handleSelect = (viewId) => {
     router.push({ topic, item: viewId });
-  };
-
-  const handleCreate = (type) => {
-    assert(type);
-    setNewViewCreationMenuOpen(false);
-    const viewId = createView(type);
-    handleSelect(viewId);
   };
 
   const handleSubscribe = async () => {
@@ -111,6 +132,19 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
   const handleUnsubscribe = async () => {
     await client.partyManager.unsubscribe(party.publicKey);
   };
+
+  if (onNewParty) {
+    return (
+      <>
+        <Card className={clsx(classes.card, classes.newCard)}>
+          <IconButton className={classes.addButton} onClick={onNewParty}>
+            <AddIcon className={classes.addIcon} />
+          </IconButton>
+          <Typography className={classes.addSubtitle} variant='h5'>New Party</Typography>
+        </Card>
+      </>
+    );
+  }
 
   return (
     <>
@@ -223,7 +257,7 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
       <NewViewCreationMenu
         anchorEl={createViewAnchor.current}
         open={newViewCreationMenuOpen}
-        onSelect={handleCreate}
+        onSelect={handleNewViewSelected}
         onClose={() => setNewViewCreationMenuOpen(false)}
         pads={pads}
       />
