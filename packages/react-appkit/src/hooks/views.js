@@ -22,9 +22,9 @@ export const useViews = (topic) => {
 
   return {
     model: model ?? new ViewModel(),
-    createView: (type, title) => {
+    createView: (type, title, metadata = {}) => {
       assert(model);
-      return model.createView(type, title || `item-${chance.word()}`);
+      return model.createView(type, title || `item-${chance.word()}`, metadata);
     }
   };
 };

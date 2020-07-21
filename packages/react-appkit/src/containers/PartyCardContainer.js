@@ -22,9 +22,9 @@ const PartyCardContainer = ({ party }) => {
   const [newViewType, setNewViewType] = useState(undefined);
   const [viewSettingsOpen, setViewSettingsOpen] = useState(false);
 
-  const handleSavedSettings = ({ name }) => {
+  const handleSavedSettings = ({ name }, metadata = {}) => {
     assert(newViewType);
-    const viewId = createView(newViewType, name);
+    const viewId = createView(newViewType, name, metadata);
     handleCanceledSettings();
     router.push({ topic, item: viewId });
   };
@@ -39,6 +39,9 @@ const PartyCardContainer = ({ party }) => {
     setViewSettingsOpen(true);
   };
 
+  const pad = newViewType ? pads.find(pad => pad.type === newViewType) : undefined;
+  const Settings = (pad && pad.settings) ? pad.settings : DefaultSettingsDialog;
+
   return (
     <>
       <PartyCard
@@ -50,7 +53,7 @@ const PartyCardContainer = ({ party }) => {
         pads={pads}
         onNewItemRequested={handleNewItemRequested}
       />
-      <DefaultSettingsDialog
+      <Settings
         open={viewSettingsOpen}
         onClose={handleSavedSettings}
         onCancel={handleCanceledSettings}
