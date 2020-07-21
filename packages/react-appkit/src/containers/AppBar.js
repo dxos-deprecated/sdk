@@ -40,6 +40,7 @@ const ACTION_EXPORT_KEYRING = 4;
 const ACTION_IMPORT_KEYRING = 5;
 const ACTION_RESET_STORAGE = 6;
 const ACTION_OPEN_SETTINGS = 7;
+const ACTION_OPEN_PARTY_HOME = 8;
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -59,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * App header.
  */
-const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigation }) => {
+const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigation, onPartyHomeNavigation }) => {
   const classes = useStyles();
   const client = useClient();
   const config = useConfig();
@@ -234,6 +235,13 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
       handler: async () => {
         onSettingsOpened && onSettingsOpened();
       }
+    },
+
+    [ACTION_OPEN_PARTY_HOME]: {
+      label: 'Party Homepage',
+      handler: async () => {
+        onPartyHomeNavigation && onPartyHomeNavigation();
+      }
     }
   };
 
@@ -260,6 +268,10 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
 
   if (onSettingsOpened) {
     menuItems.push(action(ACTION_OPEN_SETTINGS));
+  }
+
+  if (onPartyHomeNavigation) {
+    menuItems.push(action(ACTION_OPEN_PARTY_HOME));
   }
 
   menuItems.push(action(ACTION_RESET_STORAGE));
@@ -332,16 +344,6 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
   return (
     <MuiAppBar position='static'>
       <Toolbar variant='dense'>
-        {onHomeNavigation && (
-          <IconButton
-            edge='start'
-            color='inherit'
-            aria-label='home'
-            onClick={onHomeNavigation}
-          >
-            <HomeIcon />
-          </IconButton>
-        )}
         {onToggleNav && (
           <IconButton
             edge='start'
@@ -352,7 +354,16 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
             <MenuIcon />
           </IconButton>
         )}
-
+        {onHomeNavigation && (
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='home'
+            onClick={onHomeNavigation}
+          >
+            <HomeIcon />
+          </IconButton>
+        )}
         <Grid container wrap='nowrap' alignItems='center'>
           <Typography variant='h6' className={classes.title}>{config.app.name}</Typography>
 

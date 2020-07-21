@@ -65,6 +65,9 @@ const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, children
       </DialogContent>
 
       <DialogActions>
+        <Button onClick={onCancel} color='primary'>
+          Cancel
+        </Button>
         <Button onClick={handleClose} color='primary' disabled={closingDisabled}>
           Done
         </Button>
