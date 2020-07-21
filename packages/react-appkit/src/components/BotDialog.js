@@ -15,14 +15,15 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { useRegistryBots, useRegistryBotFactories } from '../hooks/registry';
+import FormControl from '@material-ui/core/FormControl';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    minWidth: 500,
-
-    '& .MuiTextField-root': {
-      marginBottom: theme.spacing(2)
-    }
+    minWidth: 500
+  },
+  formControl: {
+    width: '100%',
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -60,54 +61,60 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
       <DialogTitle>Invite Bot</DialogTitle>
 
       <DialogContent>
-        <InputLabel id='botFactoryLabel'>Bot Factory</InputLabel>
-        <Select
-          labelId='botFactoryLabel'
-          id='botFactory'
-          value={botFactoryTopic}
-          fullWidth
-          onChange={event => setBotFactoryTopic(event.target.value)}
-        >
-          {registryBotFactories
-            .map(({ topic, name }) => (
-              <MenuItem key={topic} value={topic}>
-                {name}
+        <FormControl className={classes.formControl}>
+          <InputLabel id='botFactoryLabel'>Bot Factory</InputLabel>
+          <Select
+            labelId='botFactoryLabel'
+            id='botFactory'
+            value={botFactoryTopic}
+            fullWidth
+            onChange={event => setBotFactoryTopic(event.target.value)}
+          >
+            {registryBotFactories
+              .map(({ topic, name }) => (
+                <MenuItem key={topic} value={topic}>
+                  {name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+
+        <FormControl className={classes.formControl}>
+          <InputLabel id='botNameLabel'>Bot</InputLabel>
+          <Select
+            labelId='botNameLabel'
+            id='botName'
+            value={bot}
+            fullWidth
+            onChange={event => setBot(event.target.value)}
+          >
+            {registryBots
+              .map(({ name }) => name)
+              .filter((value, index, self) => self.indexOf(value) === index)
+              .map(name => (
+                <MenuItem key={name} value={name}>
+                  {name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+
+        <FormControl className={classes.formControl}>
+          <InputLabel id='botVersionLabel'>Version</InputLabel>
+          <Select
+            labelId='botVersionLabel'
+            id='botVersion'
+            value={botVersion}
+            fullWidth
+            onChange={event => setBotVersion(event.target.value)}
+          >
+            {botVersions.map(version => (
+              <MenuItem key={version} value={version}>
+                {version}
               </MenuItem>
             ))}
-        </Select>
-
-        <InputLabel id='botNameLabel'>Bot</InputLabel>
-        <Select
-          labelId='botNameLabel'
-          id='botName'
-          value={bot}
-          fullWidth
-          onChange={event => setBot(event.target.value)}
-        >
-          {registryBots
-            .map(({ name }) => name)
-            .filter((value, index, self) => self.indexOf(value) === index)
-            .map(name => (
-              <MenuItem key={name} value={name}>
-                {name}
-              </MenuItem>
-            ))}
-        </Select>
-
-        <InputLabel id='botVersionLabel'>Version</InputLabel>
-        <Select
-          labelId='botVersionLabel'
-          id='botVersion'
-          value={botVersion}
-          fullWidth
-          onChange={event => setBotVersion(event.target.value)}
-        >
-          {botVersions.map(version => (
-            <MenuItem key={version} value={version}>
-              {version}
-            </MenuItem>
-          ))}
-        </Select>
+          </Select>
+        </FormControl>
       </DialogContent>
 
       <DialogActions>

@@ -15,7 +15,6 @@ async function run ({ ...opts } = {}) {
   await environment.start();
   await environment.addPeers(opts);
 
-  
   log('> network full connected');
 
   log('> sync started');
