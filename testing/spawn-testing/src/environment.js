@@ -67,7 +67,6 @@ export class Environment extends EventEmitter {
       const check = () => {
         const states = Array.from(peerStates.values());
         const totalAppended = states.reduce((acc, state) => acc + state.appended, 0);
-        console.log({ totalAppended, states: Object.fromEntries(peerStates.entries()) })
         if (states.length === this._broker.peers.length && states.every(state => state.updated === totalAppended)) {
           if(anchor && totalAppended <= anchor.totalAppended) {
             return
