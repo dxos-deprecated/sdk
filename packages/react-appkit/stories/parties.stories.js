@@ -8,17 +8,16 @@ import Box from '@material-ui/core/Box';
 
 import { createKeyPair } from '@dxos/crypto';
 
-import { NewPartyCard, PartyCard } from '../src/components';
+import { PartyCard } from '../src/components';
 
 export default {
   title: 'Parties'
 };
 
-// TODO(burdon): Reuse PartyCard.
 export const withNewPartyCard = () => {
   return (
     <Box m={2}>
-      <NewPartyCard onNewParty={() => {}} />
+      <PartyCard onNewParty={() => {}} />
     </Box>
   );
 };

@@ -15,6 +15,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
+import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import ShareIcon from '@material-ui/icons/Share';
@@ -38,6 +39,8 @@ const ACTION_BOT_INVITATION = 3;
 const ACTION_EXPORT_KEYRING = 4;
 const ACTION_IMPORT_KEYRING = 5;
 const ACTION_RESET_STORAGE = 6;
+const ACTION_OPEN_SETTINGS = 7;
+const ACTION_OPEN_PARTY_HOME = 8;
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -57,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * App header.
  */
-const AppBar = ({ topic, children, onToggleNav }) => {
+const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigation, onPartyHomeNavigation }) => {
   const classes = useStyles();
   const client = useClient();
   const config = useConfig();
@@ -225,6 +228,20 @@ const AppBar = ({ topic, children, onToggleNav }) => {
         await client.reset();
         handleAction(Action.RELOAD);
       }
+    },
+
+    [ACTION_OPEN_SETTINGS]: {
+      label: 'Settings',
+      handler: async () => {
+        onSettingsOpened && onSettingsOpened();
+      }
+    },
+
+    [ACTION_OPEN_PARTY_HOME]: {
+      label: 'Party Homepage',
+      handler: async () => {
+        onPartyHomeNavigation && onPartyHomeNavigation();
+      }
     }
   };
 
@@ -247,6 +264,14 @@ const AppBar = ({ topic, children, onToggleNav }) => {
   if (topic) {
     menuItems.push(action(ACTION_EXPORT_KEYRING));
     menuItems.push(action(ACTION_IMPORT_KEYRING));
+  }
+
+  if (onSettingsOpened) {
+    menuItems.push(action(ACTION_OPEN_SETTINGS));
+  }
+
+  if (onPartyHomeNavigation) {
+    menuItems.push(action(ACTION_OPEN_PARTY_HOME));
   }
 
   menuItems.push(action(ACTION_RESET_STORAGE));
@@ -329,7 +354,16 @@ const AppBar = ({ topic, children, onToggleNav }) => {
             <MenuIcon />
           </IconButton>
         )}
-
+        {onHomeNavigation && (
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='home'
+            onClick={onHomeNavigation}
+          >
+            <HomeIcon />
+          </IconButton>
+        )}
         <Grid container wrap='nowrap' alignItems='center'>
           <Typography variant='h6' className={classes.title}>{config.app.name}</Typography>
 
