@@ -17,11 +17,11 @@
   },
   "dependencies": {
     "@dxos/botkit-client": "^1.0.0-beta.195",
-    "@dxos/credentials": "^1.0.1-beta.4",
+    "@dxos/credentials": "^1.0.1-beta.29",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/metrics": "^1.0.0-beta.6",
-    "@dxos/party-manager": "^1.0.1-beta.20",
+    "@dxos/party-manager": "^1.0.1-beta.29",
     "@dxos/react-client": "^1.0.0-beta.195",
     "@dxos/react-json-tree": "^0.11.3",
     "@dxos/react-router": "^1.0.0-beta.195",
