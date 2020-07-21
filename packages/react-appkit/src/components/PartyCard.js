@@ -3,7 +3,6 @@
 //
 
 import clsx from 'clsx';
-import assert from 'assert';
 
 import React, { useState, useRef } from 'react';
 
@@ -81,7 +80,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // TODO(burdon): Extract client, router and dialogs and inject actions.
-const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
+const PartyCard = ({ party, viewModel, createView, client, router, pads, onNewItemRequested }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
@@ -93,15 +92,13 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
 
   const topic = keyToString(party.publicKey);
 
-  const handleSelect = (viewId) => {
-    router.push({ topic, item: viewId });
+  const handleNewViewSelected = (type) => {
+    setNewViewCreationMenuOpen(false);
+    onNewItemRequested({ type });
   };
 
-  const handleCreate = (type) => {
-    assert(type);
-    setNewViewCreationMenuOpen(false);
-    const viewId = createView(type);
-    handleSelect(viewId);
+  const handleSelect = (viewId) => {
+    router.push({ topic, item: viewId });
   };
 
   const handleSubscribe = async () => {
@@ -223,7 +220,7 @@ const PartyCard = ({ party, viewModel, createView, client, router, pads }) => {
       <NewViewCreationMenu
         anchorEl={createViewAnchor.current}
         open={newViewCreationMenuOpen}
-        onSelect={handleCreate}
+        onSelect={handleNewViewSelected}
         onClose={() => setNewViewCreationMenuOpen(false)}
         pads={pads}
       />

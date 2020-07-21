@@ -8,10 +8,10 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import ItemSettings from '../components/ItemSettings';
 
-const DefaultSettingsDialog = ({ open, onClose, onCancel, item, viewId, viewModel }) => {
+const DefaultSettingsDialog = ({ open, onClose, onCancel, item, viewModel }) => {
   const handleClose = ({ name }) => {
     if (item) {
-      viewModel.renameView(viewId, name);
+      viewModel.renameView(item.viewId, name);
     }
     onClose({ name });
   };

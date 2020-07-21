@@ -41,9 +41,9 @@ export const withItemSettingsDialog = () => {
           open
           onClose={() => {}}
           onCancel={() => {}}
-          item={{displayName: 'an item'}}
-          closingDisabled={true}
-          icon={<Icon/>}
+          item={{ displayName: 'an item' }}
+          closingDisabled
+          icon={<Icon />}
         />
       </Box>
     </>
@@ -58,9 +58,9 @@ export const withPadSpecificItemSettingsDialog = () => {
           open
           onClose={() => {}}
           onCancel={() => {}}
-          item={{displayName: 'an item'}}
-          closingDisabled={true}
-          icon={<Icon/>}
+          item={{ displayName: 'an item' }}
+          closingDisabled
+          icon={<Icon />}
         >
           <p>Pad Specific content</p>
         </ItemSettings>
