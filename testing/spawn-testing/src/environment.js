@@ -57,41 +57,37 @@ export class Environment extends EventEmitter {
     return modelObjects[0].length !== 0 && arrayItemsEqual(modelObjects, compareModelStates);
   }
 
-  async areModelsReplicated () {
-    const states = await Promise.all(this._broker.peers.map(peer => peer.call('getState')));
-    const modelStates = states.map(state => Object.values(state.agent.models)[0]);
-    const totalAppended = modelStates.reduce((acc, state) => acc + state.appended, 0);
-    if (!modelStates.every(state => state.updated === totalAppended)) {
-      return false;
-    }
-    return { totalAppended };
-  }
-
+  /**
+   * 
+   * @param {{ totalAppended: number }} anchor 
+   * @returns {Promise<{ totalAppended: number }>}
+   */
   waitForSync (anchor = undefined) {
-    return new Promise(resolve => {
-      const check = async () => {
-        const currentState = await this.areModelsReplicated();
-        if (currentState) {
-          if (anchor && currentState.totalAppended <= anchor) {
-            return;
+    return new Promise(async resolve => {
+      const check = () => {
+        const states = Array.from(peerStates.values());
+        const totalAppended = states.reduce((acc, state) => acc + state.appended, 0);
+        if (states.length === this._broker.peers.length && states.every(state => state.updated === totalAppended)) {
+          if(anchor && totalAppended <= anchor.totalAppended) {
+            return
           }
-          resolve(currentState);
+          resolve({ totalAppended });
         }
-      };
-
-      const peerStates = new Map();
-      for (const [key, peer] of this._broker._peers) {
-        peer.on('model-update', async ({ state }) => {
-          peerStates.set(key, state);
-          const states = Array.from(peerStates.values());
-          const totalAppended = states.reduce((acc, state) => acc + state.appended, 0);
-          if (states.length === this._broker.peers.length && states.every(state => state.updated === totalAppended)) {
-            check();
-          }
-        });
       }
 
-      check();
+      const peerStates = new Map();
+      await Promise.all(Array.from(this._broker._peers.entries()).map(async ([key, peer]) => {
+        peer.on('model-update', async ({ state }) => {
+          peerStates.set(key, state);
+          check()
+        });
+
+        const state = await peer.call('getState')
+        if(!peerStates.has(key)) {
+          peerStates.set(key, Object.values(state.agent.models)[0])
+        }
+      }))
+      check()
     });
   }
 
