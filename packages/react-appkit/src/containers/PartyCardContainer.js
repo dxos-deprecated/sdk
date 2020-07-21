@@ -62,6 +62,7 @@ const PartyCardContainer = ({ party }) => {
         onCancel={handleCanceledSettings}
         item={undefined} // no item!
         viewModel={model}
+        Icon={pad && pad.icon}
       />
     </>
   );
