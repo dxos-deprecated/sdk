@@ -22,10 +22,11 @@ const PartyCardContainer = ({ party }) => {
   const [newViewType, setNewViewType] = useState(undefined);
   const [viewSettingsOpen, setViewSettingsOpen] = useState(false);
 
-  const handleSavedSettings = ({ name }, metadata = {}) => {
+  const handleSavedSettings = ({ name }, metadata = {}, callback) => {
     assert(newViewType);
     const viewId = createView(newViewType, name, metadata);
     handleCanceledSettings();
+    callback && callback(viewId);
     router.push({ topic, item: viewId });
   };
 
@@ -54,6 +55,8 @@ const PartyCardContainer = ({ party }) => {
         onNewItemRequested={handleNewItemRequested}
       />
       <Settings
+        party={party}
+        topic={topic}
         open={viewSettingsOpen}
         onClose={handleSavedSettings}
         onCancel={handleCanceledSettings}
