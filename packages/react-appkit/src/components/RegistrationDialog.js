@@ -3,6 +3,7 @@
 //
 
 import React, { useRef, useState } from 'react';
+import MobileDetect from 'mobile-detect';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -10,6 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -66,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const STAGE_PENDING = -1;
 const STAGE_START = 0;
 const STAGE_RESTORE = 1;
 const STAGE_ENTER_USERNAME = 2;
@@ -74,6 +77,9 @@ const STAGE_CHECK_SEED_PHRASE = 4;
 
 // TODO(burdon): Factor out.
 const ordinal = n => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
+
+// TODO(burdon): Factor out.
+const mobile = new MobileDetect(window.navigator.userAgent).mobile();
 
 /**
  * Registration and recovery dialog.
@@ -110,9 +116,16 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
       }
 
       case STAGE_CHECK_SEED_PHRASE: {
-        const testWords = seedPhraseRef.current.value.trim().toLowerCase().split(/\W+/);
-        if (ev.shiftKey || debug ||
-          (testWords.length === 2 && testWords[0] === words[selected[0]] && testWords[1] === words[selected[1]])) {
+        const testWords = seedPhraseRef.current.value.trim().toLowerCase().split(/\s+/);
+
+        const match = (testWords.length === 2 &&
+          testWords[0] === words[selected[0]] && testWords[1] === words[selected[1]]);
+
+        const skipMatch = (debug || ev.shiftKey || !!mobile);
+
+        // TODO(burdon): Decide policy.
+        if (match || skipMatch) {
+          setStage(STAGE_PENDING);
           await onFinish(username, seedPhrase);
         } else {
           setStage(STAGE_SHOW_SEED_PHRASE);
@@ -122,12 +135,14 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
 
       case STAGE_RESTORE: {
         const restoreSeedPhrase = seedPhraseRef.current.value.trim().toLowerCase();
-        // sanity check it looks like a seed phrase
+
+        // Sanity check that it looks like a seed phrase.
         if (restoreSeedPhrase.split(/\s+/g).length !== 12) {
           // TODO(burdon): Report invalid input to user.
-          console.log('Bad seed phrase');
+          console.log('Invalid seed phrase: ', restoreSeedPhrase);
         } else {
-          // TODO(dboreham): do more checks on input (not all strings containing 12 words are valid seed phrases)
+          // TODO(dboreham): Do more checks on input (not all strings containing 12 words are valid seed phrases).
+          setStage(STAGE_PENDING);
           await onFinish(username, restoreSeedPhrase);
         }
         break;
@@ -272,6 +287,17 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
               <Button color='primary' onClick={() => setStage(STAGE_ENTER_USERNAME)}>Back</Button>
               <Button variant='contained' color='primary' onClick={handleNext}>Finish</Button>
             </DialogActions>
+          </>
+        );
+      }
+
+      case STAGE_PENDING: {
+        return (
+          <>
+            <DialogTitle>Initializing...</DialogTitle>
+            <DialogContent>
+              <LinearProgress />
+            </DialogContent>
           </>
         );
       }
