@@ -1094,42 +1094,6 @@
     stream-to-array "^2.3.0"
     uuid "^3.3.2"
 
-"@dxos/credentials@^1.0.1-beta.4":
-  version "1.0.1-beta.4"
-  resolved "https://registry.yarnpkg.com/@dxos/credentials/-/credentials-1.0.1-beta.4.tgz#799aabccb20381f92ae023d5684f3dd9c4f0a43a"
-  integrity sha512-CeNxS8bZ+sJUakX3ZPK30oF09XzHedieirQ6U/Nay/+pBdS6/UsDermXc29F+4HzYcqcAr5ReDNyAFwLmvolYw==
-  dependencies:
-    "@dxos/codec-protobuf" "^1.1.0-beta.9"
-    "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/feed-store" "^1.2.0-beta.10"
-    "@dxos/protocol" "^1.1.0-alpha.4"
-    bip39 "^3.0.2"
-    buffer-json-encoding "^1.0.2"
-    crypto-js "^3.1.9-1"
-    debug "^4.1.1"
-    encoding-down "^6.3.0"
-    end-of-stream "^1.4.1"
-    hypercore-crypto "^1.0.0"
-    hypercore-protocol "^6.11.1"
-    hypertrie "^3.8.0"
-    json-stable-stringify "^1.0.1"
-    leveldown "^5.4.1"
-    levelup "^4.3.2"
-    lodash.defaultsdeep "^4.6.1"
-    lodash.get "^4.4.2"
-    lodash.isobject "^3.0.2"
-    lodash.isplainobject "^4.0.6"
-    lodash.mapvalues "^4.6.0"
-    lodash.matches "^4.6.0"
-    memdown "^5.1.0"
-    moment "^2.24.0"
-    ngraph.graph "^18.0.1"
-    pump "^3.0.0"
-    queue-microtask "^1.1.2"
-    source-map-support "^0.5.12"
-    stream-to-array "^2.3.0"
-    uuid "^3.3.2"
-
 "@dxos/crypto@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-0.0.1.tgz#96ecb7efad8b99a8bc29b7a4522e3890df827296"
@@ -1198,7 +1162,7 @@
     through2 "^3.0.1"
     varint "^5.0.0"
 
-"@dxos/feed-store@^1.2.0-beta.1", "@dxos/feed-store@^1.2.0-beta.10", "@dxos/feed-store@^1.2.0-beta.23", "@dxos/feed-store@^1.2.0-beta.25":
+"@dxos/feed-store@^1.2.0-beta.1", "@dxos/feed-store@^1.2.0-beta.23", "@dxos/feed-store@^1.2.0-beta.25":
   version "1.2.0-beta.25"
   resolved "https://registry.yarnpkg.com/@dxos/feed-store/-/feed-store-1.2.0-beta.25.tgz#c62ebea075c9347b526f04e6516c0d79d1a3fe5e"
   integrity sha512-hJ2E3wNN2Vkdv5wlmCY3GwJfQZq7y2IGymiKz8qx/pWq9+iHU2KuqT38JAMJsdeao4wcpy1wcayoyQf/fSYjNw==
@@ -1283,7 +1247,7 @@
     debug "^4.1.1"
     wrtc "^0.4.3"
 
-"@dxos/party-manager@^1.0.1-beta.20", "@dxos/party-manager@^1.0.1-beta.21":
+"@dxos/party-manager@^1.0.1-beta.29":
   version "1.0.1-beta.29"
   resolved "https://registry.yarnpkg.com/@dxos/party-manager/-/party-manager-1.0.1-beta.29.tgz#0d361a019cdb685a8d77ece7d871e160f83c0f8e"
   integrity sha512-vl0z1JOxxj+dqT2BljrDN/u1fVhQG87tQKEgzahKZIhV8YFpgNY9TO1kZkXQOTJ12mbvnyXkeSbKUE+pAlFy1A==
