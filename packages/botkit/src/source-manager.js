@@ -21,6 +21,8 @@ export const LOCAL_BOT_MAIN_FILE = 'src/main.js';
 // Binary file inside downloaded bot package to run.
 export const BOT_MAIN_FILE = 'main.bin';
 
+const DOWNLOAD_TIMEOUT = 40000;
+
 /**
  * Get platform info.
  */
@@ -83,11 +85,22 @@ export class SourceManager {
     assert(baseDirectory);
     assert(ipfsCID);
 
+    let ipfsEndpoint = this._config.get('services.ipfs.gateway');
+    assert(ipfsEndpoint, 'Invalid IPFS Gateway.');
+
+    if (!ipfsEndpoint.endsWith('/')) {
+      ipfsEndpoint = `${ipfsEndpoint}/`;
+    }
     // eslint-disable-next-line node/no-deprecated-api
-    const botPackageUrl = url.resolve(this._config.get('services.ipfs.gateway'), ipfsCID);
+    const botPackageUrl = url.resolve(ipfsEndpoint, ipfsCID);
     log(`Downloading bot package: ${botPackageUrl}`);
     await fs.ensureDir(baseDirectory);
-    await download(botPackageUrl, baseDirectory, { extract: true });
-    log(`Bot package downloaded: ${baseDirectory}`);
+    try {
+      await download(botPackageUrl, baseDirectory, { extract: true, timeout: DOWNLOAD_TIMEOUT });
+      log(`Bot package downloaded: ${baseDirectory}`);
+    } catch (err) {
+      await fs.remove(baseDirectory);
+      throw err;
+    }
   }
 }
