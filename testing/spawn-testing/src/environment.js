@@ -63,7 +63,7 @@ export class Environment extends EventEmitter {
    * @returns {Promise<{ totalAppended: number }>}
    */
   waitForSync (anchor = undefined) {
-    return new Promise(async resolve => {
+    return new Promise(resolve => {
       const check = () => {
         const states = Array.from(peerStates.values());
         const totalAppended = states.reduce((acc, state) => acc + state.appended, 0);
@@ -76,7 +76,7 @@ export class Environment extends EventEmitter {
       };
 
       const peerStates = new Map();
-      await Promise.all(Array.from(this._broker._peers.entries()).map(async ([key, peer]) => {
+      Promise.all(Array.from(this._broker._peers.entries()).map(async ([key, peer]) => {
         peer.on('model-update', async ({ state }) => {
           peerStates.set(key, state);
           check();
@@ -86,8 +86,7 @@ export class Environment extends EventEmitter {
         if (!peerStates.has(key)) {
           peerStates.set(key, Object.values(state.agent.models)[0]);
         }
-      }));
-      check();
+      })).then(check);
     });
   }
 
