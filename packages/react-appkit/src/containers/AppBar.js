@@ -412,7 +412,7 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
         disableAutoFocusItem
         PaperProps={{
           style: {
-            maxHeight: 48 * 4.5,
+            maxHeight: 48 * 5.5,
             width: 200
           }
         }}
