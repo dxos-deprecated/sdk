@@ -3,7 +3,7 @@
 //
 
 import clsx from 'clsx';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, forwardRef } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { blue, green } from '@material-ui/core/colors';
@@ -153,7 +153,7 @@ const EditableLabel = ({ icon: Icon, className, classes, label, onUpdate }) => (
   </div>
 );
 
-export const PartyTreeAddItemButton = ({ onClick, children }) => {
+export const PartyTreeAddItemButton = forwardRef(({ onClick, children }, ref) => {
   const treeAddItemClasses = useTreeAddItemStyles();
   const classes = useStyles();
 
@@ -164,6 +164,7 @@ export const PartyTreeAddItemButton = ({ onClick, children }) => {
 
   return (
     <TreeItem
+      ref={ref}
       classes={treeAddItemClasses}
       nodeId='__ADD__'
       selected={false}
@@ -175,7 +176,7 @@ export const PartyTreeAddItemButton = ({ onClick, children }) => {
       )}
     />
   );
-};
+});
 
 export const PartyTreeItem = ({ id, label, icon = ItemIcon, isSelected, onSelect, onUpdate }) => {
   const treeItemClasses = useTreeItemStyles();
