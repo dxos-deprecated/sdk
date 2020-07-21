@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import Icon from '@material-ui/icons/Settings';
 
 import { ViewSettingsDialog, ItemSettings } from '../src/components';
+import { ViewSettingsDialog, BotDialog } from '../src/components';
 
 export default {
   title: 'Dialogs'
@@ -68,3 +69,12 @@ export const withPadSpecificItemSettingsDialog = () => {
     </>
   );
 };
+
+export const withBotDialog = () => (
+  <Box m={2}>
+    <BotDialog
+      open
+      onClose={() => {}}
+    />
+  </Box>
+);
