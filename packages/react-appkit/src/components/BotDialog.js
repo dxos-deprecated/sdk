@@ -50,8 +50,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
   useEffect(() => {
     const versions = registryBots
       .filter(({ name }) => name === bot).map(({ version }) => version)
-      .sort()
-      .reverse();
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
     setBotVersions(versions);
     setBotVersion(versions[0] || '');
   }, [bot]);
