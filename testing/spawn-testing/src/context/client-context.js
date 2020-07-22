@@ -1,7 +1,11 @@
-import { BaseContext } from './base-context';
+import leveljs from 'level-js';
+import memdown from 'memdown';
+
 import { createClient } from '@dxos/client';
-import { Keyring, KeyType } from '@dxos/credentials';
+import { Keyring, KeyType, KeyStore } from '@dxos/credentials';
 import { InviteDetails, InviteType } from '@dxos/party-manager';
+
+import { BaseContext } from './base-context';
 
 export function withClientContext (AgentClass) {
   return class Context extends ClientContext {
@@ -38,7 +42,8 @@ export class ClientContext extends BaseContext {
   }
 
   async init (opts = {}) {
-    const keyring = new Keyring();
+    const keyStorage = opts.storage === 'ram' ? memdown() : leveljs(`${Math.random().toString(16)}/keystore`);
+    const keyring = new Keyring(new KeyStore(keyStorage));
     await keyring.createKeyRecord({ type: KeyType.IDENTITY });
     this._client = await createClient(this._createStorage(opts.storage), keyring);
     await this._client.partyManager.identityManager.initializeForNewIdentity();
