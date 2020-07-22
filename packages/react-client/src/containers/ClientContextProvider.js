@@ -18,9 +18,12 @@ import { ClientContext } from '../hooks/context';
 const { error } = logs('react-client:Provider');
 
 /**
+ * @deprecated
  * Feed provider container.
  */
 const ClientContextProvider = ({ config, children }) => {
+  console.warn('ClientContextProvider is being deprecated. Use ClientProvider.');
+
   const { client: clientConfig } = config;
 
   const [client, setClient] = useState(null);
