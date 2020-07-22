@@ -8,7 +8,7 @@
   "main": "dist/es/index.js",
   "scripts": {
     "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \"**/*.test.js\" --source-maps inline",
-    "build:watch": "yarn run build --watch",
+    "build:watch": "npm run clean && babel ./src --out-dir ./dist/es --ignore \"**/*.test.js\" --source-maps inline --watch",
     "clean": "rm -rf dist",
     "lint": "semistandard",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
