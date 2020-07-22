@@ -5,6 +5,10 @@
 import React from 'react';
 import ErrorBoundary from '../src/components/ErrorBoundary';
 
+const FaultyComponent = () => {
+  throw new Error('Something went wrong');
+};
+
 export const WithErrorBoundary = () => {
   const handleError = (...args) => console.error(...args);
 
@@ -14,7 +18,7 @@ export const WithErrorBoundary = () => {
       onRestart={() => {}}
       onReset={() => {}}
     >
-      <p>There is no error</p>
+      <FaultyComponent />
     </ErrorBoundary>
   );
 };
