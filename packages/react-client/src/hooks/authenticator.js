@@ -20,29 +20,22 @@ export const useAuthenticator = (invitation) => {
   const [secretProvider, secretResolver] = trigger();
 
   useEffect(() => {
-    client.joinParty(invitation, secretProvider)
-      .then(party => {
+    async function runEffect () {
+      if (invitation.identityKey) {
+        // An invitation for this device to join an existing Identity.
+        // Join the Identity
+        await client.admitDevice(invitation, secretProvider);
+        setState({ identity: keyToString(invitation.identityKey) });
+      } else {
+        const party = await client.joinParty(invitation, secretProvider);
         setState({ topic: keyToString(party.publicKey) });
-      })
-
-      // TODO(burdon): Doesn't support retry. Provide hint (e.g., should retry/cancel).
-      .catch(err => {
-        setState({ error: String(err) });
-      });
-
-    if (invitation.identityKey) {
-      // An invitation for this device to join an existing Identity.
-      // Join the Identity
-      client.admitDevice(invitation, secretProvider)
-        .then(() => {
-          setState({ identity: keyToString(invitation.identityKey) });
-        })
-
-        // TODO(burdon): Doesn't support retry. Provide hint (e.g., should retry/cancel).
-        .catch(err => {
-          setState({ error: String(err) });
-        });
+      }
     }
+
+    runEffect().catch(err => {
+      // TODO(burdon): Doesn't support retry. Provide hint (e.g., should retry/cancel).
+      setState({ error: String(err) });
+    });
   }, []);
 
   return [state, secretResolver];
