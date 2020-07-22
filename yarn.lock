@@ -1126,7 +1126,7 @@
   dependencies:
     debug "^4.1.1"
 
-"@dxos/echo-db@^1.0.0-beta.21", "@dxos/echo-db@^1.0.0-beta.25":
+"@dxos/echo-db@^1.0.0-beta.21":
   version "1.0.0-beta.25"
   resolved "https://registry.yarnpkg.com/@dxos/echo-db/-/echo-db-1.0.0-beta.25.tgz#dc3223aa48b5d25d0fdbd83fcb135c0008450b32"
   integrity sha512-4gTC9l81ZvV+2J/5nLHJKxwmf9jb545fXr7F7Yo5UDxyfqkvsPK3oiDgQFoONkF5ETK/e9A2KYI8bbzgkJLyJw==
@@ -1134,6 +1134,25 @@
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
     "@dxos/crypto" "^0.0.1"
     "@dxos/model-factory" "^1.0.0-beta.25"
+    "@types/debug" "^4.1.1"
+    "@types/end-of-stream" "^1.4.0"
+    "@types/node" "^14.0.9"
+    "@types/stream-buffers" "^3.0.2"
+    "@types/through2" "^2.0.36"
+    debug "^4.1.1"
+    js-data-structs "^1.1.2"
+    protobufjs "^6.9.0"
+    source-map-support "^0.5.12"
+
+"@dxos/echo-db@^1.0.0-beta.27":
+  version "1.0.0-beta.27"
+  resolved "https://registry.yarnpkg.com/@dxos/echo-db/-/echo-db-1.0.0-beta.27.tgz#9ebfc5308897e41294dc708e6ec531c8a690bbdc"
+  integrity sha512-0VRU+kxukwsmnsnrUeVrZfmjZXCTKGrYtcsBuAFa70nVBwJawBjbZdNHkHyRjfEuFG93GGexWSXls0KRXjtM3g==
+  dependencies:
+    "@dxos/codec-protobuf" "^1.1.0-beta.0"
+    "@dxos/crypto" "^0.0.1"
+    "@dxos/feed-store" "^1.2.0-beta.23"
+    "@dxos/model-factory" "^1.0.0-beta.27"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/node" "^14.0.9"
@@ -1198,10 +1217,33 @@
     lodash.set "^4.3.2"
     lodash.unset "^4.5.2"
 
-"@dxos/model-factory@^1.0.0-beta.17", "@dxos/model-factory@^1.0.0-beta.21", "@dxos/model-factory@^1.0.0-beta.25", "@dxos/model-factory@^1.0.0-beta.26":
+"@dxos/model-factory@^1.0.0-beta.21", "@dxos/model-factory@^1.0.0-beta.25":
   version "1.0.0-beta.26"
   resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-1.0.0-beta.26.tgz#6f3cd65678ec22ada8d8f8e4d121674190a6632e"
   integrity sha512-q6ku2pC+YDfOUm1PG71Itq+uV1NYGA1SHWmhW/r9v8GnN1nzzoknDWb98kKEgpYbn6ZQpRv3rWAObPDrHluxdw==
+  dependencies:
+    "@dxos/crypto" "^1.0.0-beta.1"
+    "@dxos/debug" "^1.0.0-beta.20"
+    "@dxos/feed-level-indexer" "^1.1.0-alpha.9"
+    "@dxos/metrics" "^1.0.0-beta.8"
+    "@dxos/protocol-network-generator" "^1.1.0-beta.2"
+    charwise "^3.0.1"
+    debug "^4.1.1"
+    end-of-stream "^1.4.4"
+    level-mem "^5.0.1"
+    lodash.debounce "^4.0.8"
+    monotonic-timestamp "^0.0.9"
+    multi-read-stream "^2.0.0"
+    p-limit "^3.0.1"
+    pump "^3.0.0"
+    signal-promise "^1.0.3"
+    source-map-support "^0.5.12"
+    through2 "^3.0.1"
+
+"@dxos/model-factory@^1.0.0-beta.27":
+  version "1.0.0-beta.27"
+  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-1.0.0-beta.27.tgz#eb370a83445ac066f2cb4b2cc9cb17fbfaec4e3e"
+  integrity sha512-vG9sKj9/XT/dAq6fuuTy/R9pXAFw1f//l3fYCPktdWOqNd1u7xLvkNSxU84dcKS0uPdHWtGzG4f852IkDuFv+Q==
   dependencies:
     "@dxos/crypto" "^1.0.0-beta.1"
     "@dxos/debug" "^1.0.0-beta.20"
@@ -1360,13 +1402,13 @@
     prop-types "^15.5.8"
     react-base16-styling "^0.5.1"
 
-"@dxos/view-model@^1.0.0-beta.25":
-  version "1.0.0-beta.25"
-  resolved "https://registry.yarnpkg.com/@dxos/view-model/-/view-model-1.0.0-beta.25.tgz#0750127325733232b65b39ff3a4303fb45eeec00"
-  integrity sha512-WeRZwQ96NfWCI0Y+U44xVLTfYIY0cICiNTyfsbOikdR++azPWUK8tg2NTDS+2gKls+R7pStqGcvCZCWW3d2XZg==
+"@dxos/view-model@^1.0.0-beta.27":
+  version "1.0.0-beta.27"
+  resolved "https://registry.yarnpkg.com/@dxos/view-model/-/view-model-1.0.0-beta.27.tgz#7f1081a5a2a85501c8ce2dc53e0d3dc7bc3bb1ab"
+  integrity sha512-La7gNIoWaQDKQJcw1eMps5AfIE32lWovMOvgVOi2RdGfa//FJX+wK7joEBB9xRJtuSEdE1Yq42CiMeMn258+2Q==
   dependencies:
     "@dxos/crypto" "^0.0.1"
-    "@dxos/model-factory" "^1.0.0-beta.25"
+    "@dxos/model-factory" "^1.0.0-beta.27"
 
 "@emotion/cache@^10.0.27", "@emotion/cache@^10.0.9":
   version "10.0.29"
@@ -10579,6 +10621,11 @@ leveldown@^5.4.1:
     abstract-leveldown "~6.2.1"
     napi-macros "~2.0.0"
     node-gyp-build "~4.1.0"
+
+leveljs@^0.0.0-a1:
+  version "0.0.0-a1"
+  resolved "https://registry.yarnpkg.com/leveljs/-/leveljs-0.0.0-a1.tgz#b9bb715fb57ef4d461d91b3554dcac904ec9e689"
+  integrity sha1-ubtxX7V+9NRh2Rs1VNyskE7J5ok=
 
 levelup@^4.3.1, levelup@^4.3.2:
   version "4.4.0"
