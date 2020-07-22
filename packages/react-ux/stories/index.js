@@ -15,6 +15,7 @@ import {
 import LayoutStory from './LayoutStory';
 import LeftLayoutStory from './LeftLayoutStory';
 import RightLayoutStory from './RightLayoutStory';
+import { WithErrorBoundary } from './ErrorsStory';
 
 storiesOf('UX', module)
 
@@ -40,4 +41,5 @@ storiesOf('UX', module)
   .add('Secret', () => <Passcode value='123' />)
   .add('Layout', () => <LayoutStory />)
   .add('LeftLayout', () => <LeftLayoutStory />)
-  .add('RightLayout', () => <RightLayoutStory />);
+  .add('RightLayout', () => <RightLayoutStory />)
+  .add('Error Boundary', () => <WithErrorBoundary />);
