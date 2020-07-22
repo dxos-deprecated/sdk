@@ -32,7 +32,7 @@ class ModelDescriptor {
   }
 
   get objects () {
-    return Array.from(this.model._model._objectById.values());
+    return Array.from(this.model._store._objectById.values());
   }
 
   get state () {
