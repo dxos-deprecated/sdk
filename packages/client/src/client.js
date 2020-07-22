@@ -6,14 +6,14 @@ import defaultsDeep from 'lodash.defaultsdeep';
 import bufferJson from 'buffer-json-encoding';
 
 import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
-import { Keyring } from '@dxos/credentials';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
+import { Keyring, createAuthMessage, codec } from '@dxos/credentials';
 import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
-import { ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { PartyManager } from '@dxos/party-manager';
+import { PartyManager, waitForCondition, InviteType } from '@dxos/party-manager';
+import { ModelFactory } from '@dxos/model-factory';
 
 import { defaultClientConfig } from './config';
 
@@ -52,6 +52,10 @@ export class Client {
   }
 
   async initialize () {
+    if (this._initialized) {
+      return;
+    }
+
     await this._feedStore.open();
     await this._keyring.load();
 
@@ -78,6 +82,7 @@ export class Client {
 
     await this._partyManager.initialize();
     await this._waitForPartiesToBeOpen();
+    this._initialized = true;
   }
 
   async destroy () {
@@ -85,13 +90,55 @@ export class Client {
     await this._networkManager.close();
   }
 
-  get keyring () {
-    return this._keyring;
+  async reset () {
+    await this._feedStore.close();
+    if (this._feedStore.storage.destroy) {
+      await this._feedStore.storage.destroy();
+    }
+
+    // Warning: This Client object is in an inconsistent state after clearing the KeyRing, do not continue to use.
+    await this._keyring.deleteAllKeyRecords();
   }
 
-  // keep this for devtools ???
-  get feedStore () {
-    return this._feedStore;
+  /**
+   * @param {*} invitation
+   * @param {*} secretProvider
+   */
+  async joinParty (invitation, secretProvider) {
+    // An invitation where we can use our Identity key for auth.
+    if (InviteType.OFFLINE_KEY === invitation.type) {
+      // Connect to inviting peer.
+      return this._partyManager.joinParty(invitation, (info) =>
+        codec.encode(createAuthMessage(this._keyring, info.id.value,
+          this._partyManager.identityManager.keyRecord,
+          this._partyManager.identityManager.deviceManager.keyChain,
+          null, info.authNonce.value))
+      );
+    } else if (!invitation.identityKey) {
+      // An invitation for this Identity to join a Party.
+      // Connect to inviting peer.
+      return this._partyManager.joinParty(invitation, secretProvider);
+    }
+  }
+
+  /**
+   * @param {*} invitation
+   * @param {*} secretProvider
+   */
+  async admitDevice (invitation, secretProvider) {
+    if (invitation.identityKey) {
+      // An invitation for this device to join an existing Identity.
+      // Join the Identity
+      return this._partyManager.identityManager.deviceManager.admitDevice(invitation, secretProvider);
+    }
+  }
+
+  getParties () {
+    return this._partyManager.getPartyInfoList();
+  }
+
+  getParty (partyKey) {
+    return this._partyManager.getPartyInfo(partyKey);
   }
 
   /**
@@ -102,6 +149,15 @@ export class Client {
    */
   async createSubscription ({ modelType, options }) {
     return this._modelFactory.createModel(modelType, options);
+  }
+
+  get keyring () {
+    return this._keyring;
+  }
+
+  // keep this for devtools ???
+  get feedStore () {
+    return this._feedStore;
   }
 
   // TODO(burdon): Remove.
@@ -117,17 +173,6 @@ export class Client {
   // TODO(burdon): Remove.
   get partyManager () {
     return this._partyManager;
-  }
-
-  // TODO(burdon): Consistent pattern for delete (e.g., db and objects). Shut down all objects.
-  async reset () {
-    await this._feedStore.close();
-    if (this._feedStore.storage.destroy) {
-      await this._feedStore.storage.destroy();
-    }
-
-    // Warning: This Client object is in an inconsistent state after clearing the KeyRing, do not continue to use.
-    await this._keyring.deleteAllKeyRecords();
   }
 
   // ----- MOVE THESE TO PARTYMANAGER
