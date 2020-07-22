@@ -22,7 +22,7 @@ import { transportProtocolProvider } from '@dxos/network-manager';
 
 const { log } = logs('botkit-client');
 
-const CONNECT_TIMEOUT = 10000;
+const CONNECT_TIMEOUT = 30000;
 
 /**
  * BotFactory Client.
