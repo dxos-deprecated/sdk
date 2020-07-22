@@ -81,6 +81,7 @@ const EditableText = ({
     <TextField
       {...rest}
       value={text || ''}
+      disabled={disabled}
       onClick={disabled ? null : () => setEditable(true)}
       fullWidth
       InputProps={{
