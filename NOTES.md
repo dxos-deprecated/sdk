@@ -137,9 +137,12 @@ const client = new Client({
   - `async destroy()`
   - `async reset()`
 - Party/Topic
-  - getParties: PartyInfo[] (partyManager.getPartyInfoList)
-  - getParty(partyKey): PartyInfo (partyManager.getPartyInfo)
+  - getParties*: PartyInfo[] (partyManager.getPartyInfoList)
+  - getParty(partyKey)*: PartyInfo (partyManager.getPartyInfo)
+    - DO we need a getPartyInfo? in partyManager both exists getParty -> Party and getPartyInfo. Seems confusing to have useParty -> PartyInfo and useParties -> PartyInfo[].
+  - In useParty/useParties hooks impl relies on partyManager 'update' event to trigger updates. What do we do here?????
   - joinParty(invitationDescriptor, secretProvider): Party (partyManager.joinParty)
+  - admitDevice(invitationDescriptor, secretProvider)
 - Profile
   - getProfile: Profile ??
     - Profile ? (partyManager.identityManager)
