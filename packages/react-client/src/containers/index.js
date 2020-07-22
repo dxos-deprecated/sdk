@@ -3,3 +3,4 @@
 //
 
 export ClientContextProvider from './ClientContextProvider';
+export ClientProvider from './ClientProvider';
