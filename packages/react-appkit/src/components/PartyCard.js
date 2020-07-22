@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     width: 300,
-    minHeight: 320
+    minHeight: 326
   },
 
   newCard: {
