@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
+import InputBase from '@material-ui/core/InputBase';
 
 /**
  * Editable text field.
@@ -12,6 +13,7 @@ const EditableText = ({
   value,
   onUpdate,
   disabled = false,
+  bareInput = false,
   ...rest
 }) => {
   const [editable, setEditable] = useState(false);
@@ -67,6 +69,23 @@ const EditableText = ({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
+        fullWidth
+        InputProps={{
+          inputProps: {
+            spellCheck: false
+          }
+        }}
+      />
+    );
+  }
+
+  if (bareInput) {
+    return (
+      <InputBase
+        {...rest}
+        value={text || ''}
+        disabled={disabled}
+        onClick={disabled ? null : () => setEditable(true)}
         fullWidth
         InputProps={{
           inputProps: {
