@@ -146,7 +146,7 @@ export class Client {
    * @param {} config.options
    * @return {model}
    */
-  async createSubscription ({ modelType, options }) {
+  async createSubscription ({ modelType, options } = {}) {
     return this._modelFactory.createModel(modelType, options);
   }
 
