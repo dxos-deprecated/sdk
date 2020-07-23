@@ -2,8 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
-import { waitForCondition, waitForEvent } from '@dxos/async';
-import { keyToBuffer } from '@dxos/crypto';
+import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
+import { keyToBuffer, keyToString } from '@dxos/crypto';
+import { logs } from '@dxos/debug';
+
+const { error } = logs('dxos:client:membership');
 
 const MAX_WAIT = 5000;
 
@@ -11,6 +14,7 @@ const MAX_WAIT = 5000;
 export class PartyManagerWrapper {
   // TODO(burdon): Document.
   _partyWriters = {};
+  _feedOwnershipCache = new Map();
 
   set (partyManager) {
     this._partyManager = partyManager;
@@ -76,22 +80,27 @@ export class PartyManagerWrapper {
   }
 
   async _getOwnershipInformation (message, topic) {
-    if (!topic) {
-      return message;
-    }
+    if (!topic) return message;
 
-    // TODO(burdon): Hack to get ownership information.
     // If the feed is being replicated, we must have established the ownership info for it, but there is race
     // between that and all the event propagation for updating the PartyInfo, PartyMemberInfo, etc. That only
     // needs done once per-feed, but it must be done before we can gather the owner info here. We set a max wait
     // because not responding in a timely fashion would be evidence of an error.
 
+    let owner;
     const { key: feedKey } = message;
     const partyKey = keyToBuffer(topic);
 
-    try {
-      const owner = await waitForCondition(() => {
-        const partyInfo = this._partyManager().getPartyInfo(partyKey);
+    // Check if there is a already a Promise for this information.
+    let ownerPromise = this._feedOwnershipCache.get(keyToString(feedKey));
+
+    // If not, create one which will resolve when the ownership information of this feed is known.
+    if (!ownerPromise) {
+      // If the feed is being replicated, we must have established the ownership info for it, but there is race
+      // between that and all the event propagation for updating the PartyInfo, PartyMemberInfo, etc. That only
+      // needs done once per-feed, but it must be done before we can gather the owner info here.
+      ownerPromise = waitForCondition(() => {
+        const partyInfo = this._partyManager.getPartyInfo(partyKey);
         if (partyInfo) {
           for (const member of partyInfo.members) {
             for (const memberFeed of member.feeds) {
@@ -101,26 +110,39 @@ export class PartyManagerWrapper {
             }
           }
         }
+
         return undefined;
-      }, MAX_WAIT);
+      });
 
-      if (!owner) {
-        throw new Error(`Invalid message: ${JSON.stringify(message)}`);
-      }
+      this._feedOwnershipCache.set(keyToString(feedKey), ownerPromise);
+    }
 
-      // TODO(telackey): Change Model API to receive message with envelope.
-      message.data.__meta = {
-        credentials: {
-          party: partyKey,
-          feed: message.key,
-          member: owner
-        }
-      };
-
-      return message;
+    try {
+      // We set a max wait because, while we may have to wait for a moment for event propagation to update,
+      // all the state, not responding in a timely fashion would indicate a problem.
+      owner = await promiseTimeout(ownerPromise, MAX_WAIT);
     } catch (err) {
-      // TODO(burdon): Do not ignore.
+      error(`Timed out waiting for owner of feed ${keyToString(feedKey)}`, err);
+      owner = undefined;
+    }
+
+    if (!owner) {
+      // TODO(burdon): Throw exception.
+      // Lack of ownership info is a fatal error for this message.
+      error(`No owner of feed ${keyToString(feedKey)} on ${topic}, rejecting message:`, JSON.stringify(message.data));
       return undefined;
     }
+
+    // TODO(telackey): This should not modify the data, instead we should deliver a (data, metadata) tuple.
+    // However, that means adjusting all the current uses of Model, so will take appropriate planning.
+    message.data.__meta = {
+      credentials: {
+        party: partyKey,
+        feed: message.key,
+        member: owner
+      }
+    };
+
+    return message;
   }
 }

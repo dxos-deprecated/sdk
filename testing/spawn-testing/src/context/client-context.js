@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import leveljs from 'level-js';
 import memdown from 'memdown';
 
@@ -42,7 +43,7 @@ export class ClientContext extends BaseContext {
   }
 
   async init (opts = {}) {
-    const keyStorage = opts.storage === 'ram' ? memdown() : leveljs(`${Math.random().toString(16)}/keystore`);
+    const keyStorage = opts.storage === 'ram' || typeof browser === 'undefined' ? memdown() : leveljs(`${crypto.randomBytes(32).toString('hex')}/keystore`);
     const keyring = new Keyring(new KeyStore(keyStorage));
     await keyring.createKeyRecord({ type: KeyType.IDENTITY });
     this._client = await createClient(this._createStorage(opts.storage), keyring);
