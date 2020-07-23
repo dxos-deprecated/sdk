@@ -9,9 +9,9 @@ import bufferJson from 'buffer-json-encoding';
 import { Keyring } from '@dxos/credentials';
 import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
+import { ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { PartyManager } from '@dxos/party-manager';
-import { ModelFactory } from '@dxos/model-factory';
 
 import { defaultClientConfig } from './config';
 import { PartyManagerWrapper } from './party-manager-wrapper';
@@ -51,16 +51,18 @@ export class Client {
 
   async initialize () {
     await this._feedStore.open();
+    // TODO(burdon): Normalized "open" or "initialize".
     await this._keyring.load();
 
-    // TODO(elmasse): Refactor ModelFactory.
     // PartyManager and ModelFactory expect to have feedstore instance already open.
+    // TODO(elmasse): Refactor ModelFactory.
 
+    // TODO(burdon): Require this to be passed in.
     if (!this._networkManager) {
       this._networkManager = new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
     }
 
-    // TODO(burdon): Do not re-create if passed in?
+    // TODO(burdon): Require this to be passed in.
     if (!this._partyManagerWrapper.partyManager) {
       this._partyManagerWrapper.set(new PartyManager(this._feedStore, this._keyring, this._networkManager));
     }

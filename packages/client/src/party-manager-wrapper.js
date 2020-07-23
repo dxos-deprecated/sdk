@@ -7,6 +7,7 @@ import { keyToBuffer } from '@dxos/crypto';
 
 const MAX_WAIT = 5000;
 
+// TODO(burdon): Refactor into PartyManager (with tests).
 export class PartyManagerWrapper {
   // TODO(burdon): Document.
   _partyWriters = {};
