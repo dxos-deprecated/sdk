@@ -57,6 +57,7 @@ export class MinimalContext extends BaseContext {
     });
     this._feedStore.on('feed', this._onFeed.bind(this));
     this._createSwarm();
+    await super.init();
   }
 
   async createParty () {
@@ -91,6 +92,7 @@ export class MinimalContext extends BaseContext {
         const p = new Protocol({
           discoveryToPublicKey: (dk) => dk.equals(discoveryKey(this._partyPublicKey)) ? this._partyPublicKey : null,
           streamOptions: {
+            timeout: 50 * 1000,
             live: true
           }
         })
@@ -100,6 +102,10 @@ export class MinimalContext extends BaseContext {
           ])
           .init(channel);
 
+        p.on('error', (err) => {
+          this._log('protocol-error', { err });
+        });
+
         return p.stream;
       },
       simplePeer: {
@@ -108,7 +114,10 @@ export class MinimalContext extends BaseContext {
     });
 
     this._swarm.on('error', (err) => {
-      this._log('swarm-error', { err: err.message });
+      this._log('swarm-error', { err });
+    });
+    this._swarm.on('connection-error', (err) => {
+      this._log('connection-error', { err });
     });
     this._swarm.on('connection-closed', () => {
       this._log('swarm-connection-closed');
