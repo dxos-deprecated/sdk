@@ -32,7 +32,7 @@
     "debug": "^4.1.1",
     "dequal": "^1.0.0",
     "execa": "^4.0.2",
-    "leveljs": "^0.0.0-a1",
+    "level-js": "^5.0.2",
     "memdown": "^5.1.0",
     "mri": "^1.1.5",
     "nanomessage-rpc": "^1.2.1",
