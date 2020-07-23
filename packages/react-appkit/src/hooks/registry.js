@@ -5,21 +5,27 @@
 import { useState, useEffect } from 'react';
 
 import { Registry } from '@wirelineio/registry-client';
+import { useConfig } from '@dxos/react-client';
 
+// TODO(burdon): Factor out constants to client.
 const WRN_TYPE_BOT = 'wrn:bot';
 const WRN_TYPE_BOT_FACTORY = 'wrn:bot-factory';
 
+// TODO(burdon): Move hook to data-client.
 // TODO(egorgripasov): Factor out, same code is in examples/dxos-apps.
 export const useRegistry = () => {
-  const { server, chainId } = { server: 'https://node1.dxos.network/wns/api', chainId: 'wireline' }; // TODO(rzadp,egorgripasov) read from config
-  const [registry] = useState(() => new Registry(server, chainId));
+  // TODO(burdon): Get from config.
+  const config = useConfig();
+  console.log(':::', config);
+  const { server, chainId } = { server: 'https://node1.dxos.network/wns/api', chainId: 'wireline' };
 
+  // TODO(burdon): Must not create these objects in a hook -- get from context.
+  const [registry] = useState(() => new Registry(server, chainId));
   return registry;
 };
 
 export const useRegistryBots = () => {
   const registry = useRegistry();
-
   const [registryBots, setRegistryBots] = useState([]);
 
   useEffect(() => {
@@ -40,7 +46,6 @@ export const useRegistryBots = () => {
 
 export const useRegistryBotFactories = () => {
   const registry = useRegistry();
-
   const [factories, setFactories] = useState([]);
 
   useEffect(() => {

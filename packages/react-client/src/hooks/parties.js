@@ -17,7 +17,7 @@ import { useClient } from './client';
  */
 export const useParty = () => {
   const client = useClient();
-  const { topic } = useParams();
+  const { topic } = useParams(); // TODO(burdon): Get from context?
 
   const partyKey = topic ? keyToBuffer(topic) : undefined;
   const [, forceUpdate] = useState({});
