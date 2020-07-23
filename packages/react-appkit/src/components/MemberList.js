@@ -4,14 +4,23 @@
 
 import React from 'react';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListSubheader from '@material-ui/core/ListSubheader';
+import { List, ListItem, ListSubheader, makeStyles } from '@material-ui/core';
 
 import { humanize } from '@dxos/crypto';
 
+import { MemberAvatar } from '.';
+
+const useStyles = makeStyles(() => ({
+  member: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingRight: 30
+  }
+}));
+
 export const MemberList = ({ party }) => {
   const sorter = (a, b) => (a.displayName < b.displayName ? -1 : a.displayName > b.displayName ? 1 : a.isMe ? -1 : 1);
+  const classes = useStyles();
 
   return (
     <List
@@ -22,7 +31,10 @@ export const MemberList = ({ party }) => {
       )}
     >
       {party.members.sort(sorter).map((member) => (
-        <ListItem key={member.publicKey}>{member.displayName || humanize(member.publicKey)}</ListItem>
+        <ListItem key={member.publicKey} className={classes.member}>
+          {member.displayName || humanize(member.publicKey)}
+          <MemberAvatar member={member} />
+        </ListItem>
       ))}
     </List>
   );
