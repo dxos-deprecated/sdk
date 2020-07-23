@@ -10,17 +10,11 @@ import { Keyring } from '@dxos/credentials';
 import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { PartyManager, waitForCondition } from '@dxos/party-manager';
+import { PartyManager } from '@dxos/party-manager';
 import { ModelFactory } from '@dxos/model-factory';
 
 import { defaultClientConfig } from './config';
-
-import { waitForEvent } from '@dxos/async';
-import { keyToString, keyToBuffer } from '@dxos/crypto';
-import { logs } from '@dxos/debug';
-
-const { error: membershipError } = logs('dxos:client:membership');
-const MAX_WAIT = 5000;
+import { PartyManagerWrapper } from './party-manager-wrapper';
 
 const log = debug('dxos:client');
 
@@ -47,43 +41,40 @@ export class Client {
         'buffer-json': bufferJson
       }
     });
+
     this._swarmConfig = swarm;
     this._networkManager = networkManager;
-    this._partyManager = partyManager;
-    this._partyWriters = {};
+
+    // TODO(burdon): Remove once PartyManager is refactored.
+    this._partyManagerWrapper = new PartyManagerWrapper().set(partyManager);
   }
 
   async initialize () {
     await this._feedStore.open();
     await this._keyring.load();
 
-    // PartyManager and ModelFactory expect to have feedstore instance already open.
     // TODO(elmasse): Refactor ModelFactory.
+    // PartyManager and ModelFactory expect to have feedstore instance already open.
 
     if (!this._networkManager) {
       this._networkManager = new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
     }
 
-    if (!this._partyManager) {
-      this._partyManager = new PartyManager(this._feedStore, this._keyring, this._networkManager);
+    // TODO(burdon): Do not re-create if passed in?
+    if (!this._partyManagerWrapper.partyManager) {
+      this._partyManagerWrapper.set(new PartyManager(this._feedStore, this._keyring, this._networkManager));
     }
 
+    // TODO(burdon): This is always null.
     if (!this._modelFactory) {
-      this._modelFactory = new ModelFactory(this._feedStore, {
-        onAppend: async (message, { topic }) => {
-          return this._appendMessage(message, topic);
-        },
-        // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
-        onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
-      });
+      this._modelFactory = new ModelFactory(this._feedStore, this._partyManagerWrapper.modelFactoryOptions);
     }
 
-    await this._partyManager.initialize();
-    await this._waitForPartiesToBeOpen();
+    await this._partyManagerWrapper.initialize();
   }
 
   async destroy () {
-    await this._partyManager.destroy();
+    await this._partyManagerWrapper.destroy();
     await this._networkManager.close();
   }
 
@@ -92,7 +83,7 @@ export class Client {
     return this._keyring;
   }
 
-  // keep this for devtools ???
+  // TODO(elmasse): Keep this for devtools?
   get feedStore () {
     return this._feedStore;
   }
@@ -109,7 +100,7 @@ export class Client {
 
   // TODO(burdon): Remove.
   get partyManager () {
-    return this._partyManager;
+    return this._partyManagerWrapper.partyManager;
   }
 
   // TODO(burdon): Consistent pattern for delete (e.g., db and objects). Shut down all objects.
@@ -122,86 +113,6 @@ export class Client {
     // Warning: This Client object is in an inconsistent state after clearing the KeyRing, do not continue to use.
     await this._keyring.deleteAllKeyRecords();
   }
-
-  // ----- MOVE THESE TO PARTYMANAGER
-
-  async _appendMessage (message, topic) {
-    let append = this._partyWriters[topic];
-    if (!append) {
-      const feed = await this._partyManager.getWritableFeed(keyToBuffer(topic));
-      append = (message) => new Promise((resolve, reject) => {
-        feed.append(message, (err, seq) => {
-          if (err) return reject(err);
-          resolve(seq);
-        });
-      });
-      this._partyWriters[topic] = append;
-    }
-
-    return append(message);
-  }
-
-  async _waitForPartiesToBeOpen () {
-    const partyWaiters = [];
-    for (const { publicKey } of this._partyManager.getPartyInfoList()) {
-      if (!this._partyManager.hasParty(publicKey)) {
-        partyWaiters.push(waitForEvent(this._partyManager, 'party',
-          partyKey => partyKey.equals(publicKey)));
-      }
-    }
-    await Promise.all(partyWaiters);
-  }
-
-  async _getOwnershipInformation (message, topic) {
-    if (!topic) return message;
-
-    // obtaining the ownership information. We can add a map/index for faster lookups as needed.
-    // If the feed is being replicated, we must have established the ownership info for it, but there is race
-    // between that and all the event propagation for updating the PartyInfo, PartyMemberInfo, etc. That only
-    // needs done once per-feed, but it must be done before we can gather the owner info here. We set a max wait
-    // because not responding in a timely fashion would be evidence of an error.
-
-    const { key: feedKey } = message;
-    const partyKey = keyToBuffer(topic);
-
-    try {
-      const owner = await waitForCondition(() => {
-        const partyInfo = this._partyManager.getPartyInfo(partyKey);
-        if (partyInfo) {
-          for (const member of partyInfo.members) {
-            for (const memberFeed of member.feeds) {
-              if (memberFeed.equals(feedKey)) {
-                return member.publicKey;
-              }
-            }
-          }
-        }
-        return undefined;
-      }, MAX_WAIT);
-
-      if (!owner) {
-        membershipError(`No owner of feed ${keyToString(message.key)} on ${topic}, rejecting message:`,
-          JSON.stringify(message.data));
-        return undefined;
-      }
-
-      // TODO(telackey): This should not modify the data, instead we should deliver a (data, metadata) tuple.
-      // However, that means adjusting all the current uses of Model, so will take appropriate planning.
-      message.data.__meta = {
-        credentials: {
-          party: partyKey,
-          feed: message.key,
-          member: owner
-        }
-      };
-
-      return message;
-    } catch (err) {
-      return undefined;
-    }
-  }
-
-  // ---- END MOVE THESE TO PM
 }
 
 /**
