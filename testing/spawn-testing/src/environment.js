@@ -51,7 +51,7 @@ export class Environment extends EventEmitter {
       }
       this._tickCount++;
       this.emit('tick', { time: new Date(), number: this._tickCount });
-      await this.logEvent({ event: 'system-stats', ...this._systemStatsProbe.getStats() });
+      await this.logEvent({ event: 'system-stats', time: new Date(), ...this._systemStatsProbe.getStats() });
       await sleep(delay);
     }
   }
