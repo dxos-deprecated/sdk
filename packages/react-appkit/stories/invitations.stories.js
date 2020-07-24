@@ -9,11 +9,11 @@ import StoryRouter from 'storybook-react-router';
 import Box from '@material-ui/core/Box';
 
 import { createId } from '@dxos/crypto';
-import { ClientContextProvider, useClient, useParty } from '@dxos/react-client';
+import { useClient, useParty } from '@dxos/react-client';
 
 import { BotDialog, PartySettingsDialog } from '../src/components';
 
-import { config } from './config';
+import { WithClientWithNoWallet } from './decorators';
 
 // TODO(burdon): Create party.
 const topic = createId();
@@ -23,7 +23,8 @@ export default {
   decorators: [
     new StoryRouter(null, {
       initialEntries: [`/${topic}`]
-    })
+    }),
+    WithClientWithNoWallet
   ]
 };
 
@@ -43,15 +44,15 @@ export const withBotDialog = () => {
 const FakePartySettingsDialog = () => {
   const client = useClient();
   const party = useParty();
-  console.log(party);
 
   // TODO(burdon): Cannot work until able to set party before initialization (see app.stories.js).
   return null;
+  // eslint-disable-next-line
   return (
     <PartySettingsDialog
       client={client}
       party={party}
-      open={true}
+      open
       onClose={() => {}}
     />
   );
@@ -59,12 +60,10 @@ const FakePartySettingsDialog = () => {
 
 export const withPartySettingsDialog = () => {
   return (
-    <ClientContextProvider config={config}>
-      <Box m={2}>
-        <Switch>
-          <Route path='/:topic' component={FakePartySettingsDialog} />
-        </Switch>
-      </Box>
-    </ClientContextProvider>
+    <Box m={2}>
+      <Switch>
+        <Route path='/:topic' component={FakePartySettingsDialog} />
+      </Switch>
+    </Box>
   );
 };
