@@ -130,36 +130,40 @@ const client = new Client({
 })
 ```
 
+### Client API
+
+- Lifecycle
+  - `async initialize()`
+  - `async destroy()`
+  - `async reset()`
+- Party/Topic
+  - getParties*: PartyInfo[] (partyManager.getPartyInfoList)
+  - getParty(partyKey)*: PartyInfo (partyManager.getPartyInfo)
+    - DO we need a getPartyInfo? in partyManager both exists getParty -> Party and getPartyInfo. Seems confusing to have useParty -> PartyInfo and useParties -> PartyInfo[].
+  - In useParty/useParties hooks impl relies on partyManager 'update' event to trigger updates. What do we do here?????
+  - joinParty(invitationDescriptor, secretProvider): Party (partyManager.joinParty)
+  - admitDevice(invitationDescriptor, secretProvider)
+- Profile
+  - getProfile: Profile ??
+    - Profile ? (partyManager.identityManager)
+      - keyRecord
+- Device
+  - getDevice: Device ??
+    - Device ? (partyManager.identityManager.deviceManager)
+      - keyChain
+      - admitDevice
+- Keyring?
+  - get keyring
+- Contacts?
+  - async getContacts(): Contacts[] (partyManager.getContacts)
+- Model/Subscriptions
+  - `async createSubscription({ modelType, options }): Model/Subscription?` (modelFactory.createModel)
+  (By doing this we remove also the modelFactory.destroyModel in favor of model.destroy())
+
 
 ### Implementation Details
 
-
 ```
-class Client {
-  constructor({ network , feedStore, keyRing }) {
-    this.partyManager = ...
-    this.modelFactory = new ModelFactory({ feedStore });
-  }
-  async initialize() {
-    await this.keyRing.load()
-    await this.partyManager.initialize()
-    await this.modelFactory.initiailize()
-    //...
-  }  
-  async destroy() {
-    //...
-    await this.modelFactory.destroy()
-  }
-}
-
-```
-
-```
-await client.initialize()
-//...
-
-awit client.destroy()
-
 //
 // Test/Bot API
 // Don't allow client.foo.bar.zoo()
@@ -177,8 +181,6 @@ const invitation = party.invite(contacts.find(name = 'alex'));
 const result = await client.createSubscription({ party });          // Guided by Apollo subscriptions.
 
 ```
-
-
 
 ## Review of SDK packages
 

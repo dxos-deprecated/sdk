@@ -2,26 +2,23 @@
 // Copyright 2020 DXOS.org
 //
 
-import debug from 'debug';
 import defaultsDeep from 'lodash.defaultsdeep';
 import bufferJson from 'buffer-json-encoding';
 
 import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
-import { Keyring } from '@dxos/credentials';
+import { Keyring, createAuthMessage, codec } from '@dxos/credentials';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
 import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
 import { ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { PartyManager } from '@dxos/party-manager';
+import { PartyManager, InviteType } from '@dxos/party-manager';
 
 import { defaultClientConfig } from './config';
 
 const { error: membershipError } = logs('dxos:client:membership');
 const MAX_WAIT = 5000;
-
-const log = debug('dxos:client');
 
 /**
  * Data client.
@@ -54,7 +51,14 @@ export class Client {
     this._feedOwnershipCache = new Map();
   }
 
+  /**
+   * Initializes internal resources.
+   */
   async initialize () {
+    if (this._initialized) {
+      return;
+    }
+
     await this._feedStore.open();
     await this._keyring.load();
 
@@ -81,14 +85,85 @@ export class Client {
 
     await this._partyManager.initialize();
     await this._waitForPartiesToBeOpen();
+    this._initialized = true;
   }
 
+  /**
+   * Cleanup, release resources.
+   */
   async destroy () {
     await this._partyManager.destroy();
     await this._networkManager.close();
   }
 
-  // TODO(burdon): Remove.
+  /**
+   * Resets and destroys client storage.
+   * Warning: Inconsistent state after reset, do not continue to use this client instance.
+   */
+  async reset () {
+    await this._feedStore.close();
+    if (this._feedStore.storage.destroy) {
+      await this._feedStore.storage.destroy();
+    }
+
+    await this._keyring.deleteAllKeyRecords();
+  }
+
+  /**
+   * Join a Party by redeeming an Invitation.
+   * @param {InvitationDescriptor} invitation
+   * @param {SecretProvider} secretProvider
+   * @returns {Promise<Party>} The now open Party.
+   */
+  async joinParty (invitation, secretProvider) {
+    // An invitation where we can use our Identity key for auth.
+    if (InviteType.OFFLINE_KEY === invitation.type) {
+      // Connect to inviting peer.
+      return this._partyManager.joinParty(invitation, (info) =>
+        codec.encode(createAuthMessage(this._keyring, info.id.value,
+          this._partyManager.identityManager.keyRecord,
+          this._partyManager.identityManager.deviceManager.keyChain,
+          null, info.authNonce.value))
+      );
+    } else if (!invitation.identityKey) {
+      // An invitation for this Identity to join a Party.
+      // Connect to inviting peer.
+      return this._partyManager.joinParty(invitation, secretProvider);
+    }
+  }
+
+  /**
+   * Redeems an invitation for this Device to be admitted to an Identity.
+   * @param {InvitationDescriptor} invitation
+   * @param {SecretProvider} secretProvider
+   * @returns {Promise<DeviceInfo>}
+   */
+  async admitDevice (invitation, secretProvider) {
+    if (invitation.identityKey) {
+      // An invitation for this device to join an existing Identity.
+      // Join the Identity
+      return this._partyManager.identityManager.deviceManager.admitDevice(invitation, secretProvider);
+    }
+  }
+
+  getParties () {
+    return this._partyManager.getPartyInfoList();
+  }
+
+  getParty (partyKey) {
+    return this._partyManager.getPartyInfo(partyKey);
+  }
+
+  /**
+   * @param {Object} config
+   * @param {} config.modelType
+   * @param {} config.options
+   * @return {model}
+   */
+  async createSubscription ({ modelType, options } = {}) {
+    return this._modelFactory.createModel(modelType, options);
+  }
+
   get keyring () {
     return this._keyring;
   }
@@ -111,17 +186,6 @@ export class Client {
   // TODO(burdon): Remove.
   get partyManager () {
     return this._partyManager;
-  }
-
-  // TODO(burdon): Consistent pattern for delete (e.g., db and objects). Shut down all objects.
-  async reset () {
-    await this._feedStore.close();
-    if (this._feedStore.storage.destroy) {
-      await this._feedStore.storage.destroy();
-    }
-
-    // Warning: This Client object is in an inconsistent state after clearing the KeyRing, do not continue to use.
-    await this._keyring.deleteAllKeyRecords();
   }
 
   // ----- MOVE THESE TO PARTYMANAGER
@@ -232,21 +296,11 @@ export class Client {
 export const createClient = async (feedStorage, keyring, config = {}) => {
   config = defaultsDeep({}, config, defaultClientConfig);
 
-  log('Creating client...', JSON.stringify(config, undefined, 2));
-
-  // const feedStore = new FeedStore(feedStorage, {
-  //   feedOptions: {
-  //     valueEncoding: 'buffer-json'
-  //   },
-  //   codecs: {
-  //     'buffer-json': bufferJson
-  //   }
-  // });
+  console.warn('createClient is being deprecated. Please use new Client() instead.');
 
   const client = new Client({
     storage: feedStorage,
     swarm: config.swarm,
-    // feedStore,
     keyring // remove this later but it is required by cli, bots, and tests.
   });
 
