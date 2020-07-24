@@ -51,6 +51,9 @@ export class Client {
     this._feedOwnershipCache = new Map();
   }
 
+  /**
+   * Initializes internal resources.
+   */
   async initialize () {
     if (this._initialized) {
       return;
@@ -85,24 +88,32 @@ export class Client {
     this._initialized = true;
   }
 
+  /**
+   * Cleanup, release resources.
+   */
   async destroy () {
     await this._partyManager.destroy();
     await this._networkManager.close();
   }
 
+  /**
+   * Resets and destroys client storage.
+   * Warning: Inconsistent state after reset, do not continue to use this client instance.
+   */
   async reset () {
     await this._feedStore.close();
     if (this._feedStore.storage.destroy) {
       await this._feedStore.storage.destroy();
     }
 
-    // Warning: This Client object is in an inconsistent state after clearing the KeyRing, do not continue to use.
     await this._keyring.deleteAllKeyRecords();
   }
 
   /**
-   * @param {*} invitation
-   * @param {*} secretProvider
+   * Join a Party by redeeming an Invitation.
+   * @param {InvitationDescriptor} invitation
+   * @param {SecretProvider} secretProvider
+   * @returns {Promise<Party>} The now open Party.
    */
   async joinParty (invitation, secretProvider) {
     // An invitation where we can use our Identity key for auth.
@@ -122,8 +133,10 @@ export class Client {
   }
 
   /**
-   * @param {*} invitation
-   * @param {*} secretProvider
+   * Redeems an invitation for this Device to be admitted to an Identity.
+   * @param {InvitationDescriptor} invitation
+   * @param {SecretProvider} secretProvider
+   * @returns {Promise<DeviceInfo>}
    */
   async admitDevice (invitation, secretProvider) {
     if (invitation.identityKey) {
