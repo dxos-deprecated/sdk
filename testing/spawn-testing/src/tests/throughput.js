@@ -10,7 +10,7 @@ const { Environment } = require('../environment');
 
 const log = debug('dxos:spawn-testing:example');
 
-async function run ({ readers = 1, ticks = 60, delay = 1000, ...opts } = {}) {
+async function run ({ readers = 1, messages = 12_000, throughput = 200, ...opts } = {}) {
   const environment = new Environment();
   await environment.start();
   await environment.addPeers(opts);
@@ -26,9 +26,16 @@ async function run ({ readers = 1, ticks = 60, delay = 1000, ...opts } = {}) {
   log('> sync started');
   console.time('sync');
 
-  await environment.writeMetrics(`./metrics-${basename(__filename)}.log`);
+  await environment.writeMetrics(`./metrics-${basename(__filename)}-${throughput}mps.log`);
 
-  await environment.runTicks({ count: ticks, delay });
+  const batchSize = 100;
+  const ticks = Math.ceil(messages / batchSize);
+  const timePerTick =  1000 / throughput * batchSize;
+  const startTime = Date.now();
+  for(let i = 0; i < ticks; i++) {
+    const nextTickTime = startTime + (i + 1) * timePerTick;
+    await environment.runTicks({ count: 1, delay: Math.max(0, nextTickTime - Date.now()) });
+  }
   log('> finished creating items');
 
   await environment.waitForSync();
