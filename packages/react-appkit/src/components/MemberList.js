@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { List, ListItem, ListSubheader, makeStyles } from '@material-ui/core';
+import { List, ListItem, makeStyles } from '@material-ui/core';
 
 import { humanize } from '@dxos/crypto';
 
@@ -23,13 +23,7 @@ export const MemberList = ({ party }) => {
   const classes = useStyles();
 
   return (
-    <List
-      subheader={(
-        <ListSubheader>
-          Party members
-        </ListSubheader>
-      )}
-    >
+    <List>
       {party.members.sort(sorter).map((member) => (
         <ListItem key={member.publicKey} className={classes.member}>
           {member.displayName || humanize(member.publicKey)}
