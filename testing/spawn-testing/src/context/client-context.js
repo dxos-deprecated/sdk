@@ -51,6 +51,7 @@ export class ClientContext extends BaseContext {
     this._identityPublicKey = this._client.partyManager.identityManager.deviceManager.publicKey;
     this._feedStore = this._client.feedStore;
     this._modelFactory = this._client.modelFactory;
+    await super.init();
   }
 
   async createParty () {

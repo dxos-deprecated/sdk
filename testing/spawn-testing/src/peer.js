@@ -44,6 +44,7 @@ import { createRPC } from './create-rpc';
           const liveTime = hrtime(startTime);
 
           return {
+            clientId: agent.identityPublicKey.toString('hex').slice(0, 6),
             liveTimeFormat: `~${prettyHrtime(liveTime)} (${liveTime[0]} s + ${liveTime[1]} ns)`,
             liveTime,
             agent: state,

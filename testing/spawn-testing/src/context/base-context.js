@@ -64,6 +64,7 @@ export class BaseContext extends EventEmitter {
     this._feedStore = null;
     this._modelFactory = null;
     this._modelDescriptors = new Map();
+    this._feedsState = {};
     this._errors = [];
   }
 
@@ -88,6 +89,7 @@ export class BaseContext extends EventEmitter {
 
     return {
       total: totalState,
+      feeds: this._feedsState,
       models: stateByModel
     };
   }
@@ -97,7 +99,18 @@ export class BaseContext extends EventEmitter {
   }
 
   async init () {
-    throw new Error('init not implemented');
+    this._feedStore.createBatchStream({ live: true }).on('data', messages => {
+      const key = messages[0].key;
+      const keyStr = key.toString('hex');
+      if (!this._feedsState[keyStr]) {
+        this._feedsState[keyStr] = {
+          processed: 0
+        };
+      }
+
+      this._feedsState[keyStr].length = this._feedStore.getDescriptors().find(d => d.key.equals(key)).feed.length;
+      this._feedsState[keyStr].processed += messages.length;
+    });
   }
 
   async createParty () {
