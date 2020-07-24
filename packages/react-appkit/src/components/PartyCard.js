@@ -103,8 +103,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+// TODO(burdon): Rename onCreateParty
 // TODO(burdon): Extract client, router and dialogs and inject actions.
-const PartyCard = ({ onNewParty, party, viewModel, createView, client, router, pads, onNewItemRequested }) => {
+const PartyCard = ({ party, client, router, pads, viewModel, onNewParty, onNewItemRequested }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
@@ -135,14 +136,12 @@ const PartyCard = ({ onNewParty, party, viewModel, createView, client, router, p
 
   if (onNewParty) {
     return (
-      <>
-        <Card className={clsx(classes.card, classes.newCard)}>
-          <IconButton className={classes.addButton} onClick={onNewParty}>
-            <AddIcon className={classes.addIcon} />
-          </IconButton>
-          <Typography className={classes.addSubtitle} variant='h5'>New Party</Typography>
-        </Card>
-      </>
+      <Card className={clsx(classes.card, classes.newCard)}>
+        <IconButton className={classes.addButton} onClick={onNewParty}>
+          <AddIcon className={classes.addIcon} />
+        </IconButton>
+        <Typography className={classes.addSubtitle} variant='h5'>New Party</Typography>
+      </Card>
     );
   }
 
@@ -266,8 +265,8 @@ const PartyCard = ({ onNewParty, party, viewModel, createView, client, router, p
       <PartySharingDialog
         open={shareDialogOpen}
         onClose={() => setShareDialogOpen(false)}
-        party={party}
         client={client}
+        party={party}
         router={router}
       />
 
