@@ -28,12 +28,12 @@ async function run ({ readers = 1, messages = 1_000, repeatRuns = 3, ...opts } =
 
   await environment.writeMetrics(`./metrics-${basename(__filename)}.log`);
 
-  async function measureCatchUpTime(throughput) {
+  async function measureCatchUpTime (throughput) {
     const batchSize = 100;
     const ticks = Math.ceil(messages / batchSize);
-    const timePerTick =  1000 / throughput * batchSize;
+    const timePerTick = 1000 / throughput * batchSize;
     const startTime = Date.now();
-    for(let i = 0; i < ticks; i++) {
+    for (let i = 0; i < ticks; i++) {
       const nextTickTime = startTime + (i + 1) * timePerTick;
       await environment.runTicks({ count: 1, delay: Math.max(0, nextTickTime - Date.now()) });
     }
@@ -44,12 +44,12 @@ async function run ({ readers = 1, messages = 1_000, repeatRuns = 3, ...opts } =
   }
 
   for (let throughput = 400; throughput < 2000; throughput += 100) {
-      console.log(`Starting tests with ${throughput} msg/sec`);
-      for(let run = 0; run < repeatRuns; run++) {
-        const catchUpTime = await measureCatchUpTime(throughput);
-        console.log(`${throughput}msg/sec - ${Math.round(catchUpTime / 1000)}s catch-up`);
-        environment.logEvent({ throughput, catchUpTime });
-      }
+    console.log(`Starting tests with ${throughput} msg/sec`);
+    for (let run = 0; run < repeatRuns; run++) {
+      const catchUpTime = await measureCatchUpTime(throughput);
+      console.log(`${throughput}msg/sec - ${Math.round(catchUpTime / 1000)}s catch-up`);
+      environment.logEvent({ throughput, catchUpTime });
+    }
   }
 
   if (!await environment.comparePeerStates()) {

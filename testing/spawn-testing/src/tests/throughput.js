@@ -30,9 +30,9 @@ async function run ({ readers = 1, messages = 12_000, throughput = 200, ...opts 
 
   const batchSize = 100;
   const ticks = Math.ceil(messages / batchSize);
-  const timePerTick =  1000 / throughput * batchSize;
+  const timePerTick = 1000 / throughput * batchSize;
   const startTime = Date.now();
-  for(let i = 0; i < ticks; i++) {
+  for (let i = 0; i < ticks; i++) {
     const nextTickTime = startTime + (i + 1) * timePerTick;
     await environment.runTicks({ count: 1, delay: Math.max(0, nextTickTime - Date.now()) });
   }
