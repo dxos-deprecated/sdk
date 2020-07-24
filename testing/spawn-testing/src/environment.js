@@ -4,6 +4,7 @@ import dequal from 'dequal';
 import { EventEmitter } from 'events';
 import { open, write, close } from 'fs';
 import { promisify } from 'util';
+import { SystemStatsProbe } from './system-stats-probe';
 
 const log = debug('dxos:spawn-testing:environment');
 
@@ -12,6 +13,8 @@ export class Environment extends EventEmitter {
     super();
     this._broker = new Broker();
     this._tickCount = 0;
+
+    this._systemStatsProbe = new SystemStatsProbe();
   }
 
   async start () {
@@ -48,6 +51,7 @@ export class Environment extends EventEmitter {
       }
       this._tickCount++;
       this.emit('tick', { time: new Date(), number: this._tickCount });
+      await this.logEvent({ event: 'system-stats', ...this._systemStatsProbe.getStats() })
       await sleep(delay);
     }
   }
