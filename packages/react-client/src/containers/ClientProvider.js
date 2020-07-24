@@ -15,6 +15,7 @@ const { error } = logs('react-client:ClientProvider');
  * Client provider container.
  */
 const ClientProvider = ({ client, config = {}, children }) => {
+  const [clientReady, setClientReady] = useState(false);
   const [initError, setInitError] = useState(false);
 
   useEffect(() => {
@@ -29,6 +30,8 @@ const ClientProvider = ({ client, config = {}, children }) => {
           if (config.devtools) {
             window.__DXOS__ = { client, metrics };
           }
+
+          setClientReady(true);
         } catch (err) {
           error(err);
           setInitError(err);
@@ -42,9 +45,13 @@ const ClientProvider = ({ client, config = {}, children }) => {
   }, []);
 
   return (
-    <ClientContext.Provider value={{ config, client, reset: () => client.reset(), initError }}>
-      {children}
-    </ClientContext.Provider>
+    <>
+      {(clientReady || initError) && (
+        <ClientContext.Provider value={{ config, client, reset: () => client.reset(), initError }}>
+          {children}
+        </ClientContext.Provider>
+      )}
+    </>
   );
 };
 
