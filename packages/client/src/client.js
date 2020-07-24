@@ -6,14 +6,14 @@ import defaultsDeep from 'lodash.defaultsdeep';
 import bufferJson from 'buffer-json-encoding';
 
 import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
+import { Keyring, createAuthMessage, codec } from '@dxos/credentials';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
-import { Keyring, createAuthMessage, codec } from '@dxos/credentials';
 import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
-import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { PartyManager, waitForCondition, InviteType } from '@dxos/party-manager';
 import { ModelFactory } from '@dxos/model-factory';
+import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
+import { PartyManager, InviteType } from '@dxos/party-manager';
 
 import { defaultClientConfig } from './config';
 
