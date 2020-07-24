@@ -13,7 +13,7 @@ import { useClient, useParty } from '@dxos/react-client';
 
 import { BotDialog, PartySettingsDialog } from '../src/components';
 
-import { WithClientWithNoWallet } from './decorators';
+import { WithClient } from './decorators';
 
 // TODO(burdon): Create party.
 const topic = createId();
@@ -24,7 +24,7 @@ export default {
     new StoryRouter(null, {
       initialEntries: [`/${topic}`]
     }),
-    WithClientWithNoWallet
+    WithClient
   ]
 };
 

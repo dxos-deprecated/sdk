@@ -16,16 +16,16 @@ const config = {
   }
 };
 
-export function WithClientWithNoWallet (story) {
+export const WithClient = (story) => {
   const client = new Client({ storage });
   return (
     <ClientProvider client={client} config={config}>
       {story()}
     </ClientProvider>
   );
-}
+};
 
-export function WithClientWithWallet (story) {
+export const WithClientWithWallet = (story) => {
   const [client, setClient] = useState(false);
 
   useEffect(() => {
@@ -48,4 +48,4 @@ export function WithClientWithWallet (story) {
       )}
     </>
   );
-}
+};
