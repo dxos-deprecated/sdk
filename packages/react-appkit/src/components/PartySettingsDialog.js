@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // TODO(burdon): Separate storybook.
-const PartySettingsDialog = ({ party, client, open, onClose, properties }) => {
+const PartySettingsDialog = ({ party, client, open, onClose, properties = {} }) => {
   const classes = useStyles();
   const [subscribed, setSubscribed] = useState(properties.subscribed);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);

@@ -11,14 +11,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 import { useRegistryBots, useRegistryBotFactories } from '../hooks/registry';
 import FormControl from '@material-ui/core/FormControl';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    // TODO(burdon): Standardize.
     minWidth: 500
   },
   formControl: {
@@ -37,27 +38,28 @@ const useStyles = makeStyles((theme) => ({
  */
 const BotDialog = ({ open, onSubmit, onClose }) => {
   const classes = useStyles();
-
-  const [disabled, setDisabled] = useState(false);
+  const [pending, setPending] = useState(false);
   const [bot, setBot] = useState('');
   const [botFactoryTopic, setBotFactoryTopic] = useState('');
   const [botVersions, setBotVersions] = useState([]);
   const [botVersion, setBotVersion] = useState();
 
-  const registryBots = useRegistryBots();
+  // TODO(burdon): Could have same topic?
   const registryBotFactories = useRegistryBotFactories();
+  const registryBots = useRegistryBots();
 
   useEffect(() => {
     const versions = registryBots
       .filter(({ name }) => name === bot).map(({ version }) => version)
       .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
       .reverse();
+
     setBotVersions(versions);
     setBotVersion(versions[0] || '');
   }, [bot]);
 
   return (
-    <Dialog open={open} onClose={onClose} onExit={() => setDisabled(false)} classes={{ paper: classes.paper }}>
+    <Dialog open={open} onClose={onClose} onExit={() => setPending(false)} classes={{ paper: classes.paper }}>
       <DialogTitle>Invite Bot</DialogTitle>
 
       <DialogContent>
@@ -105,6 +107,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             labelId='botVersionLabel'
             id='botVersion'
             value={botVersion}
+            disabled={botVersions.length === 0}
             fullWidth
             onChange={event => setBotVersion(event.target.value)}
           >
@@ -120,14 +123,14 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button
-          disabled={disabled}
+          disabled={pending}
           color='primary'
           onClick={() => {
             onSubmit({ topic: botFactoryTopic, bot, botVersion });
-            setDisabled(true);
+            setPending(true);
           }}
         >
-          {disabled ? 'Sending...' : 'Invite'}
+          Invite
         </Button>
       </DialogActions>
     </Dialog>

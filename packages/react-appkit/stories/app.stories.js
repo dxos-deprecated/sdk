@@ -15,21 +15,7 @@ import { ClientContextProvider, useClient } from '@dxos/react-client';
 
 import { AppKitContextProvider } from '../src';
 
-const config = {
-  client: {
-    keyStorage: {
-      type: 'ram'
-    },
-
-    feedStorage: {
-      root: './echo/feeds',
-      type: 'ram'
-    }
-  },
-  debug: {
-    mode: 'development'
-  }
-};
+import { config } from './config';
 
 const initialState = {};
 
@@ -53,7 +39,7 @@ const Test = () => {
 
 storiesOf('Appkit', module)
 
-  // TODO(burdon): Not working?
+  // TODO(burdon): Create party before initializing ClientContextProvider.
   .addDecorator(StoryRouter())
 
   .add('Context provider', () => (

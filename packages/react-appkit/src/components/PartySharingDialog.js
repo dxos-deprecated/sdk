@@ -117,6 +117,7 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
         onFinish: () => setPendingInvitations(arr => arr.filter(x => x.invitation !== invitation))
       }
     );
+
     return invitation;
   };
 
@@ -184,10 +185,7 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
     <Dialog open={open} maxWidth='md' onClose={onClose}>
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
-          <Avatar>
-            <PeopleIcon />
-          </Avatar>
-
+          <PeopleIcon />
           <Typography variant='h5' className={classes.title}>Share with People and Bots</Typography>
         </Toolbar>
       </DialogTitle>
