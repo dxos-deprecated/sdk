@@ -52,6 +52,10 @@ export class Environment extends EventEmitter {
     }
   }
 
+  getState () {
+    return Promise.all(this._broker.peers.map(peer => peer.call('getState')));
+  }
+
   async comparePeerStates () {
     const modelObjects = await Promise.all(this._broker.peers.map(peer => peer.call('getModelObjects')));
     return modelObjects[0].length !== 0 && arrayItemsEqual(modelObjects, compareModelStates);
