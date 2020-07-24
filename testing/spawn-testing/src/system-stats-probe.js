@@ -1,12 +1,12 @@
-import os from 'os'
+import os from 'os';
 
 export class SystemStatsProbe {
-  constructor() {
+  constructor () {
     this._cpus = os.cpus();
   }
 
-  getStats() {
-    const cpus = os.cpus()
+  getStats () {
+    const cpus = os.cpus();
 
     const cpusDelta = cpus.map((cpu, i) => {
       const deltaTimes = diffCpuTimes(cpu.times, this._cpus[i].times);
@@ -19,8 +19,8 @@ export class SystemStatsProbe {
     return {
       cpus: cpusDelta,
       totalmem: os.totalmem(),
-      freemem: os.freemem(),
-    }
+      freemem: os.freemem()
+    };
   }
 }
 
@@ -29,5 +29,5 @@ const diffCpuTimes = (curr, prev) => ({
   nice: curr.nice - prev.nice,
   sys: curr.sys - prev.sys,
   idle: curr.idle - prev.idle,
-  irq: curr.irq - prev.irq,
-})
+  irq: curr.irq - prev.irq
+});
