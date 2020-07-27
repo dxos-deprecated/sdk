@@ -44,8 +44,14 @@ export class Client {
       }
     });
     this._swarmConfig = swarm;
-    this._networkManager = networkManager;
-    this._partyManager = partyManager;
+    this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
+    this._partyManager = partyManager || new PartyManager(this._feedStore, this._keyring, this._networkManager);
+    this._modelFactory = new ModelFactory(this._feedStore, {
+      onAppend: async (message, { topic }) => this._appendMessage(message, topic),
+      // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
+      onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
+    });
+
     this._partyWriters = {};
     /** @type Map<string, Promise<PublicKey>> */
     this._feedOwnershipCache = new Map();
@@ -61,27 +67,6 @@ export class Client {
 
     await this._feedStore.open();
     await this._keyring.load();
-
-    // PartyManager and ModelFactory expect to have feedstore instance already open.
-    // TODO(elmasse): Refactor ModelFactory.
-
-    if (!this._networkManager) {
-      this._networkManager = new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
-    }
-
-    if (!this._partyManager) {
-      this._partyManager = new PartyManager(this._feedStore, this._keyring, this._networkManager);
-    }
-
-    if (!this._modelFactory) {
-      this._modelFactory = new ModelFactory(this._feedStore, {
-        onAppend: async (message, { topic }) => {
-          return this._appendMessage(message, topic);
-        },
-        // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
-        onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
-      });
-    }
 
     await this._partyManager.initialize();
     await this._waitForPartiesToBeOpen();
