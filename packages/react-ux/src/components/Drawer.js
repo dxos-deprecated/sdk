@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => {
     content: {
       display: 'flex',
       flexDirection: 'column',
-      flex: 1
+      flex: 1,
+      width: '100%'
     }
   };
 });
