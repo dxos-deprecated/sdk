@@ -30,7 +30,7 @@ import { createRPC } from './create-rpc';
       .actions({
         ping: () => 'pong',
         init: async (opts) => {
-          console.log(opts)
+          console.log(opts);
           const AgentClass = opts.agent && !opts.browser ? require(join(process.cwd(), opts.agent)) : DefaultAgentClass;
           agent = new AgentClass();
           await agent.init(opts);
@@ -38,7 +38,7 @@ import { createRPC } from './create-rpc';
           agent.on('party-update', (partyInfo) => {
             rpc.emit('party-update', partyInfo);
           });
-      
+
           agent.on('model-update', data => {
             rpc.emit('model-update', data);
           });
@@ -66,7 +66,6 @@ import { createRPC } from './create-rpc';
         }
       })
       .open();
-
 
     rpc.emit('agent-ready');
   } catch (err) {
