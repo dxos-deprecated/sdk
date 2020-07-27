@@ -4,8 +4,9 @@
 
 import hrtime from 'browser-process-hrtime';
 import prettyHrtime from 'pretty-hrtime';
+import { join } from 'path';
 
-import AgentClass from './agents';
+import DefaultAgentClass from './agents';
 import { createRPC } from './create-rpc';
 
 (async () => {
@@ -21,7 +22,7 @@ import { createRPC } from './create-rpc';
       errors.push(err);
     });
 
-    const agent = new AgentClass();
+    let agent;
 
     const startTime = hrtime();
 
@@ -29,7 +30,19 @@ import { createRPC } from './create-rpc';
       .actions({
         ping: () => 'pong',
         init: async (opts) => {
+          console.log(opts)
+          const AgentClass = opts.agent && !opts.browser ? require(join(process.cwd(), opts.agent)) : DefaultAgentClass;
+          agent = new AgentClass();
           await agent.init(opts);
+
+          agent.on('party-update', (partyInfo) => {
+            rpc.emit('party-update', partyInfo);
+          });
+      
+          agent.on('model-update', data => {
+            rpc.emit('model-update', data);
+          });
+
           return { publicKey: agent.identityPublicKey };
         },
         createParty: () => agent.createParty(),
@@ -54,13 +67,6 @@ import { createRPC } from './create-rpc';
       })
       .open();
 
-    agent.on('party-update', (partyInfo) => {
-      rpc.emit('party-update', partyInfo);
-    });
-
-    agent.on('model-update', data => {
-      rpc.emit('model-update', data);
-    });
 
     rpc.emit('agent-ready');
   } catch (err) {
