@@ -19,9 +19,7 @@ const config = {
 export const WithClient = (story) => {
   const client = new Client({ storage });
   return (
-    <ClientProvider client={client} config={config}>
-      {story()}
-    </ClientProvider>
+    <RenderProvider story={story} client={client} config={config} />
   );
 };
 
@@ -35,17 +33,23 @@ export const WithClientWithWallet = (story) => {
       const client = new Client({ storage, keyring });
       await client.initialize();
       await client.partyManager.identityManager.initializeForNewIdentity();
-      return client;
+      setClient(client);
     }
-    runEffect().then(setClient);
+    runEffect();
   }, []);
   return (
     <>
       {client && (
-        <ClientProvider client={client} config={config}>
-          {story()}
-        </ClientProvider>
+        <RenderProvider story={story} client={client} config={config} />
       )}
     </>
   );
 };
+
+function RenderProvider ({ story, ...props }) {
+  return (
+    <ClientProvider {...props}>
+      <div className='WithClientDecorator'>{story()}</div>
+    </ClientProvider>
+  );
+}

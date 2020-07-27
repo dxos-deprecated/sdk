@@ -4,30 +4,29 @@
 
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { withKnobs } from '@storybook/addon-knobs';
 import StoryRouter from 'storybook-react-router';
 
 import Box from '@material-ui/core/Box';
 
 import { keyToString } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
-import { useClient } from '@dxos/react-client';
+import { useClient, useParties, useParty } from '@dxos/react-client';
 
-import { WithClientWithWallet } from './decorators';
+import { WithClientWithWallet, WithPartyKnobs } from './decorators';
 
 import { AppKitContextProvider } from '../src';
 
 export default {
-  title: 'App',
-  decorators: [StoryRouter(), WithClientWithWallet]
+  title: 'AppKit',
+  decorators: [WithPartyKnobs, WithClientWithWallet, StoryRouter(), withKnobs]
 };
 
 const initialState = {};
 
 const Test = () => {
   const client = useClient();
-
-  // TODO(burdon): ReferenceError: Cannot access before initialization.
-  // const parties = useParties();
+  const parties = useParties();
 
   const keys = client.keyring.keys;
 
@@ -37,6 +36,23 @@ const Test = () => {
       {keys.map(key => (
         <div key={key.publicKey}>{keyToString(key.publicKey)}</div>
       ))}
+      <h1>Parties</h1>
+      {parties.map(party => {
+        const publicKey = keyToString(party.publicKey);
+        return (<div key={publicKey}>{publicKey}</div>);
+      })}
+    </Box>
+  );
+};
+
+const TestWithParty = () => {
+  const party = useParty();
+
+  return (
+    <Box m={2}>
+      <h1>Party</h1>
+      <div>Public Key: {keyToString(party.publicKey)}</div>
+      <div>DisplayName: {party.displayName}</div>
     </Box>
   );
 };
@@ -44,7 +60,8 @@ const Test = () => {
 export const withAppKitProvider = () => (
   <AppKitContextProvider initialState={initialState} errorHandler={new ErrorHandler()}>
     <Switch>
-      <Route path='/' component={Test} />
+      <Route path='/:topic' exact component={TestWithParty} />
+      <Route path='/' exact component={Test} />
     </Switch>
   </AppKitContextProvider>
 );
