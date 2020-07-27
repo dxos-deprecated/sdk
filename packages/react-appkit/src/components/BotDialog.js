@@ -5,14 +5,9 @@
 import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, TextField, IconButton } from '@material-ui/core';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
+import ListIcon from '@material-ui/icons/List';
 
 import { useRegistryBots, useRegistryBotFactories } from '../hooks/registry';
 import FormControl from '@material-ui/core/FormControl';
@@ -24,6 +19,12 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     width: '100%',
+    marginBottom: theme.spacing(2)
+  },
+  manualBotFactoryContainer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
     marginBottom: theme.spacing(2)
   }
 }));
@@ -43,6 +44,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
   const [botFactoryTopic, setBotFactoryTopic] = useState('');
   const [botVersions, setBotVersions] = useState([]);
   const [botVersion, setBotVersion] = useState();
+  const [isBotFactoryManually, setBotFactoryManually] = React.useState(false);
 
   // TODO(burdon): Could have same topic?
   const registryBotFactories = useRegistryBotFactories();
@@ -58,29 +60,62 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
     setBotVersion(versions[0] || '');
   }, [bot]);
 
+  const BotFactoryField = () => {
+    if (isBotFactoryManually) {
+      return (
+        <div className={classes.manualBotFactoryContainer}>
+          <TextField
+            id='botFactory-basic'
+            label='Bot Factory'
+            value={botFactoryTopic}
+            onChange={event => setBotFactoryTopic(event.target.value)}
+            fullWidth
+          />
+          <IconButton
+            onClick={() => {
+              setBotFactoryTopic('');
+              setBotFactoryManually(false);
+            }} color='primary'
+          >
+            <ListIcon />
+          </IconButton>
+        </div>
+      );
+    }
+    return (
+      <FormControl className={classes.formControl}>
+        <InputLabel id='botFactoryLabel'>Bot Factory</InputLabel>
+        <Select
+          labelId='botFactoryLabel'
+          id='botFactory'
+          value={botFactoryTopic}
+          fullWidth
+          onChange={event => setBotFactoryTopic(event.target.value)}
+        >
+          {registryBotFactories
+            .map(({ topic, name }) => (
+              <MenuItem key={topic} value={topic}>
+                {name}
+              </MenuItem>
+            ))}
+          <MenuItem onClick={() => {
+            setBotFactoryTopic('');
+            setBotFactoryManually(true);
+          }}
+          >
+            Provide manually&nbsp;<BorderColorIcon fontSize='small' />
+          </MenuItem>
+        </Select>
+      </FormControl>
+    );
+  };
+
   return (
     <Dialog open={open} onClose={onClose} onExit={() => setPending(false)} classes={{ paper: classes.paper }}>
       <DialogTitle>Invite Bot</DialogTitle>
 
       <DialogContent>
-        <FormControl className={classes.formControl}>
-          <InputLabel id='botFactoryLabel'>Bot Factory</InputLabel>
-          <Select
-            labelId='botFactoryLabel'
-            id='botFactory'
-            value={botFactoryTopic}
-            fullWidth
-            onChange={event => setBotFactoryTopic(event.target.value)}
-          >
-            {registryBotFactories
-              .map(({ topic, name }) => (
-                <MenuItem key={topic} value={topic}>
-                  {name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-
+        <BotFactoryField />
         <FormControl className={classes.formControl}>
           <InputLabel id='botNameLabel'>Bot</InputLabel>
           <Select
