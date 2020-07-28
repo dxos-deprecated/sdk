@@ -23,7 +23,7 @@ export const WithClient = (story) => {
   );
 };
 
-export const WithClientWithWallet = (story) => {
+export const WithClientAndIdentity = (story) => {
   const [client, setClient] = useState(false);
 
   useEffect(() => {

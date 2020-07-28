@@ -38,5 +38,6 @@ function RenderPartyKnobs ({ story }) {
     <div className='withPartyKnobs'>
       {story()}
       <Redirect to={`/${partyKey || ''}`} />
-    </div>);
+    </div>
+  );
 }

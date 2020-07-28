@@ -13,13 +13,13 @@ import { keyToString } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParties, useParty } from '@dxos/react-client';
 
-import { WithClientWithWallet, WithPartyKnobs } from './decorators';
+import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 
 import { AppKitContextProvider } from '../src';
 
 export default {
   title: 'AppKit',
-  decorators: [WithPartyKnobs, WithClientWithWallet, StoryRouter(), withKnobs]
+  decorators: [WithPartyKnobs, WithClientAndIdentity, StoryRouter(), withKnobs]
 };
 
 const initialState = {};
