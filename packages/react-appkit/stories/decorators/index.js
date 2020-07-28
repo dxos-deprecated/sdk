@@ -3,3 +3,4 @@
 //
 
 export * from './WithClientProvider';
+export * from './WithPartyKnobs';

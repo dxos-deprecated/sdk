@@ -18,17 +18,17 @@ import { useClient } from './client';
 export const useParty = () => {
   const client = useClient();
   const { topic } = useParams(); // TODO(burdon): Get from context?
-
   const partyKey = topic ? keyToBuffer(topic) : undefined;
-  const [, forceUpdate] = useState({});
   const [partyInfo, setPartyInfo] = useState(partyKey ? client.partyManager.getPartyInfo(partyKey) : undefined);
 
   useEffect(() => {
-    if (!partyKey) return;
+    setPartyInfo(partyKey ? client.partyManager.getPartyInfo(partyKey) : undefined);
+  }, [topic]);
+
+  useEffect(() => {
     const listener = (eventPartyKey) => {
       if (eventPartyKey.equals(partyKey)) {
         setPartyInfo(client.partyManager.getPartyInfo(partyKey));
-        forceUpdate({});
       }
     };
 
@@ -37,7 +37,7 @@ export const useParty = () => {
     return () => {
       client.partyManager.removeListener('update', listener);
     };
-  }, [partyKey]);
+  }, []);
 
   return partyInfo;
 };
