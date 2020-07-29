@@ -77,7 +77,7 @@ export class Broker {
     const rpc = createRPC(child);
     await rpc.open();
     await rpc.once('agent-ready');
-    const { publicKey } = await rpc.call('init', { storage });
+    const { publicKey } = await rpc.call('init', { storage, agent, browser });
     this._peers.set(publicKey.toString('hex'), rpc);
     peerLog(`Peer started in ${Date.now() - start} ms`);
     return rpc;
