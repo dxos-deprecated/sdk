@@ -46,11 +46,6 @@ export class Client {
     this._swarmConfig = swarm;
     this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
     this._partyManager = partyManager || new PartyManager(this._feedStore, this._keyring, this._networkManager);
-    this._modelFactory = new ModelFactory(this._feedStore, {
-      onAppend: async (message, { topic }) => this._appendMessage(message, topic),
-      // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
-      onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
-    });
 
     this._partyWriters = {};
     /** @type Map<string, Promise<PublicKey>> */
@@ -70,6 +65,13 @@ export class Client {
 
     await this._partyManager.initialize();
     await this._waitForPartiesToBeOpen();
+
+    this._modelFactory = new ModelFactory(this._feedStore, {
+      onAppend: async (message, { topic }) => this._appendMessage(message, topic),
+      // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
+      onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
+    });
+
     this._initialized = true;
   }
 
