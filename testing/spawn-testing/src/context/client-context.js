@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import leveljs from 'level-js';
 import memdown from 'memdown';
 
-import { createClient } from '@dxos/client';
+import { Client } from '@dxos/client';
 import { Keyring, KeyType, KeyStore } from '@dxos/credentials';
 import { InviteDetails, InviteType } from '@dxos/party-manager';
 
@@ -46,7 +46,8 @@ export class ClientContext extends BaseContext {
     const keyStorage = opts.storage === 'ram' || typeof browser === 'undefined' ? memdown() : leveljs(`${crypto.randomBytes(32).toString('hex')}/keystore`);
     const keyring = new Keyring(new KeyStore(keyStorage));
     await keyring.createKeyRecord({ type: KeyType.IDENTITY });
-    this._client = await createClient(this._createStorage(opts.storage), keyring);
+    this._client = new Client({ storage: this._createStorage(opts.storage), keyring, swarm: { signal: 'ws://localhost:4000' } });
+    await this._client.initialize();
     await this._client.partyManager.identityManager.initializeForNewIdentity();
     this._identityPublicKey = this._client.partyManager.identityManager.deviceManager.publicKey;
     this._feedStore = this._client.feedStore;
