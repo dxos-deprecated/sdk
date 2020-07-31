@@ -4,9 +4,11 @@
 
 import defaultsDeep from 'lodash.defaultsdeep';
 import bufferJson from 'buffer-json-encoding';
+import memdown from 'memdown';
 
 import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
-import { Keyring, createAuthMessage, codec } from '@dxos/credentials';
+import { createStorage } from '@dxos/random-access-multi-storage';
+import { Keyring, KeyStore, createAuthMessage, codec } from '@dxos/credentials';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
 import { FeedStore } from '@dxos/feed-store';
@@ -26,7 +28,7 @@ const MAX_WAIT = 5000;
 export class Client {
   /**
    * @param {Object} config
-   * @param {RandomAccessAbstract} config.storage
+   * @param {String|RandomAccessAbstract} config.storage Storage name or Random access storage instance.
    * @param {Object} config.swarm
    * @param {Keyring} config.keyring
    * @param {FeedStore} config.feedStore. Optional. If provided, config.storage is ignored.
@@ -34,15 +36,18 @@ export class Client {
    * @param {PartyManager} config.partyManager. Optional.
    */
   constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager }) {
-    this._keyring = keyring || new Keyring();
-    this._feedStore = feedStore || new FeedStore(storage, {
-      feedOptions: {
-        valueEncoding: 'buffer-json'
-      },
-      codecs: {
-        'buffer-json': bufferJson
+    this._keyring = keyring || new Keyring(new KeyStore(memdown()));
+    this._feedStore = feedStore || new FeedStore(
+      typeof storage === 'string' ? createStorage(storage) : storage,
+      {
+        feedOptions: {
+          valueEncoding: 'buffer-json'
+        },
+        codecs: {
+          'buffer-json': bufferJson
+        }
       }
-    });
+    );
     this._swarmConfig = swarm;
     this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
     this._partyManager = partyManager || new PartyManager(this._feedStore, this._keyring, this._networkManager);
