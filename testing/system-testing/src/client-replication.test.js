@@ -12,7 +12,7 @@
 import ram from 'random-access-memory';
 import waitForExpect from 'wait-for-expect';
 
-import { createClient } from '@dxos/client';
+import { Client } from '@dxos/client';
 import { Keyring, KeyType } from '@dxos/credentials';
 import { createId, createKeyPair, keyToString, randomBytes, sign, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { DefaultModel } from '@dxos/model-factory';
@@ -63,9 +63,12 @@ test('Create 2-Node credential Party with Greeting and Replication (signature in
   const keyringB = new Keyring();
   await keyringB.createKeyRecord({ type: KeyType.IDENTITY });
 
-  const clientA = await createClient(ram, keyringA);
+  const clientA = new Client({ sorage: ram, keyring: keyringA });
+  await clientA.initialize();
   await clientA.partyManager.identityManager.initializeForNewIdentity();
-  const clientB = await createClient(ram, keyringB);
+
+  const clientB = new Client({ sorage: ram, keyring: keyringB });
+  await clientB.initialize();
   await clientB.partyManager.identityManager.initializeForNewIdentity();
   const clients = [clientA, clientB];
 
@@ -112,12 +115,18 @@ test('Create 3-Node credential Party with Greeting and Replication (secret invit
   const keyringC = new Keyring();
   await keyringC.createKeyRecord({ type: KeyType.IDENTITY });
 
-  const clientA = await createClient(ram, keyringA);
+  const clientA = new Client({ sorage: ram, keyring: keyringA });
+  await clientA.initialize();
   await clientA.partyManager.identityManager.initializeForNewIdentity();
-  const clientB = await createClient(ram, keyringB);
+
+  const clientB = new Client({ sorage: ram, keyring: keyringB });
+  await clientB.initialize();
   await clientB.partyManager.identityManager.initializeForNewIdentity();
-  const clientC = await createClient(ram, keyringC);
+
+  const clientC = new Client({ sorage: ram, keyring: keyringC });
+  await clientC.initialize();
   await clientC.partyManager.identityManager.initializeForNewIdentity();
+
   const clients = [clientA, clientB, clientC];
 
   // Create the Party.
