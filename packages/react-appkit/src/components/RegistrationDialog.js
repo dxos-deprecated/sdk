@@ -6,11 +6,15 @@ import React, { useRef, useState } from 'react';
 import MobileDetect from 'mobile-detect';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -20,6 +24,20 @@ import CreateIcon from '@material-ui/icons/AddCircleOutline';
 import RestoreIcon from '@material-ui/icons/Restore';
 
 import { generateSeedPhrase } from '@dxos/credentials';
+import { withStyles } from '@material-ui/core';
+
+const STAGE_PENDING = -1;
+const STAGE_START = 0;
+const STAGE_RESTORE = 1;
+const STAGE_ENTER_USERNAME = 2;
+const STAGE_SHOW_SEED_PHRASE = 3;
+const STAGE_CHECK_SEED_PHRASE = 4;
+
+// TODO(burdon): Factor out.
+const ordinal = n => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
+
+// TODO(burdon): Factor out.
+const mobile = new MobileDetect(window.navigator.userAgent).mobile();
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,32 +72,38 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(4)
   },
 
+  seedPhraseActions: {
+    justifyContent: 'space-between'
+  },
+
   seedPhrase: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3)
   },
-  seedWord: {
-    display: 'inline-block',
-    backgroundColor: '#f5f5f5',
-    width: 90,
-    margin: theme.spacing(1),
-    padding: theme.spacing(1),
-    textAlign: 'center'
+  seedChip: {
+    width: 128,
+    justifyContent: 'inherit',
+    margin: theme.spacing(0.5)
+  },
+  seedLabel: {
+    paddingLeft: theme.spacing(1)
+  },
+  seedNumber: {
+    margin: 0,
+    fontSize: 11,
+    height: 24,
+    width: 24,
+    marginLeft: 5,
+    backgroundColor: theme.palette.primary.dark,
+    color: 'white'
   }
 }));
 
-const STAGE_PENDING = -1;
-const STAGE_START = 0;
-const STAGE_RESTORE = 1;
-const STAGE_ENTER_USERNAME = 2;
-const STAGE_SHOW_SEED_PHRASE = 3;
-const STAGE_CHECK_SEED_PHRASE = 4;
-
-// TODO(burdon): Factor out.
-const ordinal = n => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
-
-// TODO(burdon): Factor out.
-const mobile = new MobileDetect(window.navigator.userAgent).mobile();
+const DialogActions = withStyles(theme => ({
+  root: {
+    padding: theme.spacing(2)
+  }
+}))(MuiDialogActions);
 
 /**
  * Registration and recovery dialog.
@@ -99,6 +123,14 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
 
   const usernameRef = useRef();
   const seedPhraseRef = useRef();
+
+  const handleDownloadSeedPhrase = (seedPhrase) => {
+    const file = new Blob([seedPhrase], { type: 'text/plain' });
+    const element = document.createElement('a');
+    element.href = URL.createObjectURL(file);
+    element.download = 'dxos-recovery-seedphrase.txt';
+    element.click();
+  };
 
   const handleNext = async (ev) => {
     switch (stage) {
@@ -159,22 +191,22 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
     }
   };
 
-  const SeedPhraseTextField = ({ value }) => {
+  const SeedPhrasePanel = ({ value }) => {
     const words = value.split(' ');
-    const rows = [words.slice(0, 6), words.slice(6, 12)];
 
     return (
-      <div className={classes.seedPhrase}>
-        {rows.map((row, i) => (
-          <div key={i}>
-            {row.map((word, i) => (
-              <Paper key={i} className={classes.seedWord}>
-                <Typography key={i}>{word}</Typography>
-              </Paper>
-            ))}
-          </div>
+      <Grid container className={classes.seedPhrase} spacing={0}>
+        {words.map((word, i) => (
+          <Grid item key={i} xs={3}>
+            <Chip
+              key={i}
+              icon={<Avatar className={classes.seedNumber}>{i + 1}</Avatar>}
+              classes={{ root: classes.seedChip, label: classes.seedLabel }}
+              label={word}
+            />
+          </Grid>
         ))}
-      </div>
+      </Grid>
     );
   };
 
@@ -220,7 +252,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
           <>
             <DialogTitle>Restoring your Wallet</DialogTitle>
             <DialogContent>
-              <Typography gutterBottom>Enter the seed phrase.</Typography>
+              <DialogContentText>Enter the seed phrase.</DialogContentText>
               <TextField autoFocus fullWidth spellCheck={false} inputRef={seedPhraseRef} onKeyDown={handleKeyDown} />
             </DialogContent>
             <DialogActions>
@@ -236,7 +268,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
           <>
             <DialogTitle>Create your Identity</DialogTitle>
             <DialogContent>
-              <Typography gutterBottom>Enter a username.</Typography>
+              <DialogContentText>Enter a username.</DialogContentText>
               <TextField autoFocus fullWidth spellCheck={false} inputRef={usernameRef} onKeyDown={handleKeyDown} />
             </DialogContent>
             <DialogActions>
@@ -252,22 +284,24 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
           <>
             <DialogTitle>Seed Phrase</DialogTitle>
             <DialogContent>
-              <Typography gutterBottom>
-                Your seed phrase consists of the twelve words below.
-              </Typography>
-              <SeedPhraseTextField value={seedPhrase} />
-              <Typography gutterBottom>
+              <DialogContentText>
+                Your recovery seed phrase consists of the twelve words below.
+                <br />
                 You will need to enter the seed phrase if you ever need to recover your wallet.
-                <br />
-                Please write it down and keep it safe.
-                <br />
-                <br />
-                It is <b>IMPORTANT</b> that you never share your seed phrase with anyone.
-              </Typography>
+              </DialogContentText>
+              <SeedPhrasePanel value={seedPhrase} />
+              <DialogContentText>
+                <b>NEVER</b> share your recovery seed phrase with anyone.
+              </DialogContentText>
             </DialogContent>
-            <DialogActions>
-              <Button color='primary' onClick={() => setStage(STAGE_ENTER_USERNAME)}>Back</Button>
-              <Button variant='contained' color='primary' onClick={handleNext}>Next</Button>
+            <DialogActions className={classes.seedPhraseActions}>
+              <div>
+                <Button onClick={() => handleDownloadSeedPhrase(seedPhrase)}>Download</Button>
+              </div>
+              <div>
+                <Button color='primary' onClick={() => setStage(STAGE_ENTER_USERNAME)}>Back</Button>
+                <Button variant='contained' color='primary' onClick={handleNext}>Next</Button>
+              </div>
             </DialogActions>
           </>
         );
@@ -278,9 +312,12 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
           <>
             <DialogTitle>Verify The Seed Phrase</DialogTitle>
             <DialogContent>
-              <Typography gutterBottom>
+              <DialogContentText>
+                You will need to enter the seed phrase if you ever need to recover your wallet.
+              </DialogContentText>
+              <DialogContentText>
                 {`Enter the ${ordinal(selected[0] + 1)} and ${ordinal(selected[1] + 1)} words.`}
-              </Typography>
+              </DialogContentText>
               <TextField autoFocus fullWidth spellCheck={false} inputRef={seedPhraseRef} onKeyDown={handleKeyDown} />
             </DialogContent>
             <DialogActions>
@@ -305,7 +342,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
   };
 
   return (
-    <Dialog open={open} maxWidth='md' classes={{ paper: classes.paper }}>
+    <Dialog open={open} maxWidth='sm' classes={{ paper: classes.paper }}>
       {getStage(stage)}
     </Dialog>
   );

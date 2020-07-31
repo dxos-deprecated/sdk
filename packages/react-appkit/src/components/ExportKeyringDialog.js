@@ -32,14 +32,14 @@ const ExportKeyringDialog = ({ open, topic, encrypter, onClose }) => {
   const [error, setError] = useState();
 
   let passphrase = '';
-
   const handleChange = (event) => {
     passphrase = event.target.value.trim();
   };
 
   const handleExport = async () => {
-    if (passphrase.length < 8) {
-      setError('Passphrase must have than 8 characters.');
+    const minLength = 8;
+    if (passphrase.length < minLength) {
+      setError(`The passphrase must have more than ${minLength} characters.`);
       return;
     }
 
