@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   active: {
-    color: theme.palette.primary[800]
+    color: theme.palette.primary.dark
   },
 
   meta: {

@@ -333,7 +333,6 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
                         </IconButton>
                       </CopyToClipboard>
                     )}
-
                   </TableCell>
                 </TableRow>
               ))}
