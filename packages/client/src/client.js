@@ -28,7 +28,7 @@ const MAX_WAIT = 5000;
 export class Client {
   /**
    * @param {Object} config
-   * @param {String|RandomAccessAbstract} config.storage Storage name or Random access storage instance.
+   * @param {RandomAccessAbstract} config.storage a random access storage instance.
    * @param {Object} config.swarm
    * @param {Keyring} config.keyring
    * @param {FeedStore} config.feedStore. Optional. If provided, config.storage is ignored.
@@ -38,7 +38,7 @@ export class Client {
   constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager }) {
     this._keyring = keyring || new Keyring(new KeyStore(memdown()));
     this._feedStore = feedStore || new FeedStore(
-      typeof storage === 'string' ? createStorage(storage) : storage,
+      storage || createStorage('dxos-storage-db', 'ram'),
       {
         feedOptions: {
           valueEncoding: 'buffer-json'
