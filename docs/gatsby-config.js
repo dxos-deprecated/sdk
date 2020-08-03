@@ -17,7 +17,8 @@ module.exports = {
         githubRepo: 'dxos/sdk',
         sidebarCategories: {
           null: [
-            'index'
+            'index',
+            'getting-started'
           ],
           Botkit: [
             'botkit/index'
