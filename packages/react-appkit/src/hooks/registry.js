@@ -11,16 +11,16 @@ import { useConfig } from '@dxos/react-client';
 const WRN_TYPE_BOT = 'wrn:bot';
 const WRN_TYPE_BOT_FACTORY = 'wrn:bot-factory';
 
-// TODO(burdon): Move hook to data-client.
+// TODO(burdon): Move hook to react-client.
 export const useRegistry = () => {
   // TODO(burdon): Get from config.
   // const { services: { wns: { server, chainId } } } = useConfig();
   // https://github.com/wirelineio/incubator/pull/856/files#diff-b97cbda4bd74ecf935c38c2f3c103b2aR14
   const config = useConfig();
   console.log(config);
-  const { server, chainId } = { server: 'https://node1.dxos.network/wns/api', chainId: 'wireline' };
+  const { server, chainId } = { server: 'https://demo.dxos.network/wns/api', chainId: 'wireline' };
 
-  // TODO(burdon): Must not create these objects in a hook -- get from context (so able to mock).
+  // TODO(burdon): Get from client.
   const [registry] = useState(() => new Registry(server, chainId));
   return registry;
 };
