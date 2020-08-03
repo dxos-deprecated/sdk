@@ -5,15 +5,19 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import StoryRouter from 'storybook-react-router';
+import { withKnobs } from '@storybook/addon-knobs';
 
 import Box from '@material-ui/core/Box';
 
 import { createId } from '@dxos/crypto';
+import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParty } from '@dxos/react-client';
 
 import { BotDialog, PartySettingsDialog } from '../src/components';
 
-import { WithClient } from './decorators';
+import { WithClient, WithPartyKnobs, WithClientAndIdentity } from './decorators';
+
+import { AppKitContextProvider } from '../src';
 
 // TODO(burdon): Create party.
 const topic = createId();
@@ -21,10 +25,13 @@ const topic = createId();
 export default {
   title: 'Invitations',
   decorators: [
+    WithPartyKnobs,
+    WithClientAndIdentity,
     new StoryRouter(null, {
       initialEntries: [`/${topic}`]
     }),
-    WithClient
+    WithClient,
+    withKnobs
   ]
 };
 
@@ -41,29 +48,31 @@ export const withBotDialog = () => {
 };
 
 // TODO(burdon): Consistency with dialogs as either components or containers (with hooks).
-const FakePartySettingsDialog = () => {
+const PartyComponent = () => {
   const client = useClient();
   const party = useParty();
 
-  // TODO(burdon): Cannot work until able to set party before initialization (see app.stories.js).
-  return null;
-  // eslint-disable-next-line
   return (
-    <PartySettingsDialog
-      client={client}
-      party={party}
-      open
-      onClose={() => {}}
-    />
+    <Box m={2}>
+      <PartySettingsDialog
+        client={client}
+        party={party}
+        open
+        onClose={() => {}}
+      />
+    </Box>
   );
 };
 
+const HomeComponent = () => (<p>Select a party using knobs</p>);
+
 export const withPartySettingsDialog = () => {
   return (
-    <Box m={2}>
+    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()}>
       <Switch>
-        <Route path='/:topic' component={FakePartySettingsDialog} />
+        <Route path='/:topic' component={PartyComponent} />
+        <Route path='/' exact component={HomeComponent} />
       </Switch>
-    </Box>
+    </AppKitContextProvider>
   );
 };
