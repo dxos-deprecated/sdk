@@ -27,7 +27,7 @@ jobs:
           DEBUG=dxos:spawn-testing:* node -r @babel/register src/tests/sync.js --browser
   throughput-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -44,7 +44,7 @@ jobs:
           DEBUG=dxos:spawn-testing:* node -r @babel/register src/tests/max-throughput.js --browser
   throughput-browser-ram:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -61,7 +61,7 @@ jobs:
           DEBUG=dxos:spawn-testing:* node -r @babel/register src/tests/max-throughput.js --browser --storage ram
   throughput-node:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
