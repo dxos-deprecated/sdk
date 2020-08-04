@@ -12,9 +12,9 @@
   "private": true,
   "scripts": {
     "clean": "rimraf .cache && rimraf public",
-    "dev": "gatsby develop --port 8003",
+    "dev": "yarn clean && gatsby develop --port 8003",
     "postinstall": "cp -f ./src/gatsby-theme-apollo-docs/components/social-card.js ./node_modules/gatsby-theme-apollo-docs/src/components/social-card.js",
-    "build": "gatsby build --prefix-paths && mkdir -p sdk && mv public/* sdk && mv sdk public/",
+    "build": "yarn clean && gatsby build --prefix-paths && mkdir -p sdk && mv public/* sdk && mv sdk public/",
     "test": "jest --rootDir ./content --passWithNoTests"
   },
   "dependencies": {
