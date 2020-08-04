@@ -54,7 +54,7 @@ async function run ({ testTime = 240, maxLagTime = 2_000, ...opts } = {}) {
     log(`${Math.round(timeElapsed / 1_000)}s: ${Math.round(throughput * 1_000)} msg/sec, ${processed} processed, ${queued} queued, ${Math.round(lagTime)}ms lag time`);
   }
   const { processed } = await getState();
-  const throughput = processed / Date.now();
+  const throughput = processed / (Date.now() - startTime);
   console.log(`Final throughput = ${Math.round(throughput * 1_000)} msg/sec`);
 
   await environment.waitForSync();
