@@ -59,21 +59,20 @@ jobs:
         run: |
           cd testing/spawn-testing
           DEBUG=dxos:spawn-testing:* node -r @babel/register src/tests/max-throughput.js --browser --storage ram
-  throughput-node:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-      - name: Install dependencies & build
-        run: |
-          yarn
-          yarn build
-      - name: Throughput measurement in node with fs storage
-        run: |
-          cd testing/spawn-testing
-          DEBUG=dxos:spawn-testing:* node -r @babel/register src/tests/max-throughput.js
+  # throughput-node:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 15
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 12
+  #         registry-url: https://registry.npmjs.org/
+  #     - name: Install dependencies & build
+  #       run: |
+  #         yarn
+  #         yarn build
+  #     - name: Throughput measurement in node with fs storage
+  #       run: |
+  #         cd testing/spawn-testing
+  #         DEBUG=dxos:spawn-testing:* node -r @babel/register src/tests/max-throughput.js
