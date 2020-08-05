@@ -101,13 +101,15 @@ export class Client {
   }
 
   /**
+   * Create Profile. Add Identity key if public and secret key are provided. Then initializes profile with given username.
+   * If not public and secret key are provided it relies on keyring to contain an identity key.
    *
    * @param {Object} options
-   * @param {Buffer} publicKey
-   * @param {Buffer} secretKey
-   * @param {String} username
+   * @param {Buffer} options.publicKey
+   * @param {Buffer} options.secretKey
+   * @param {String} options.username
    */
-  async createProfile ({ publicKey, secretKey, username }) {
+  async createProfile ({ publicKey, secretKey, username } = {}) {
     if (publicKey && secretKey) {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
     }
