@@ -16,7 +16,7 @@ export const useProfile = () => {
   const getProfileData = useCallback(() => {
     const { identityManager: idm } = client.partyManager;
 
-    if (!idm) return {};
+    if (!idm || !idm.publicKey) return;
 
     const publicKey = keyToString(idm.publicKey);
 
