@@ -4,7 +4,7 @@ import {
   useRegistryBotFactories
 } from '@dxos/react-client';
 
-console.warn(`${['useRegistry', 'useRegistryBots', 'useRegistryBotFactories'].join(' ')} from 'react-appkit was moved to 'react-client'. `);
+console.warn('useRegistry, useRegistryBots, useRegistryBotFactories from react-appkit were moved into react-client.');
 
 export {
   useRegistry,
