@@ -8,3 +8,4 @@ export * from './config';
 export * from './model';
 export * from './parties';
 export * from './profile';
+export * from './registry';
