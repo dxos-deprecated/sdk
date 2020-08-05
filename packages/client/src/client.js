@@ -8,7 +8,7 @@ import memdown from 'memdown';
 
 import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
 import { createStorage } from '@dxos/random-access-multi-storage';
-import { Keyring, KeyStore, createAuthMessage, codec } from '@dxos/credentials';
+import { Keyring, KeyStore, createAuthMessage, codec, KeyType } from '@dxos/credentials';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
 import { FeedStore } from '@dxos/feed-store';
@@ -75,6 +75,7 @@ export class Client {
 
     await this._partyManager.initialize();
     await this._waitForPartiesToBeOpen();
+
     this._initialized = true;
   }
 
@@ -97,6 +98,59 @@ export class Client {
     }
 
     await this._keyring.deleteAllKeyRecords();
+  }
+
+  /**
+   *
+   * @param {Object} options
+   * @param {Buffer} publicKey
+   * @param {Buffer} secretKey
+   * @param {String} username
+   */
+  async createProfile ({ publicKey, secretKey, username }) {
+    if (publicKey && secretKey) {
+      await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
+    }
+
+    if (!this._partyManager.identityManager.publicKey) {
+      throw new Error('Cannot create profile. Either no keyPair (public and secret key) was provided or cannot read Identity from keyring.');
+    }
+
+    await this._partyManager.identityManager.initializeForNewIdentity({
+      identityDisplayName: username || keyToString(this._partyManager.identityManager.publicKey),
+      deviceDisplayName: keyToString(this._partyManager.identityManager.deviceManager.publicKey)
+    });
+  }
+
+  /**
+   * @returns {ProfileInfo} User profile info.
+   */
+  getProfile () {
+    const { identityManager: idm } = this.partyManager;
+
+    if (!idm || !idm.publicKey) return;
+
+    const publicKey = keyToString(idm.publicKey);
+
+    return {
+      username: idm.displayName || publicKey,
+      publicKey
+    };
+  }
+
+  /**
+   * @returns true if the profile exists.
+   */
+  hasProfile () {
+    return !!this.getProfile();
+  }
+
+  /**
+   * Create a new party.
+   * @return {Promise<Party>} The new Party.
+   */
+  async createParty () {
+    return this._partyManager.createParty();
   }
 
   /**
