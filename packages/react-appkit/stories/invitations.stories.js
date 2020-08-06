@@ -35,7 +35,7 @@ export default {
   ]
 };
 
-export const BotDialogComponent = () => {
+const BotDialogComponent = () => {
   return (
     <Box m={2}>
       <BotDialog
