@@ -14,6 +14,7 @@ import { useClient, useParties, useParty } from '@dxos/react-client';
 
 import { WithClientAndIdentity, WithPartyKnobs } from '../decorators';
 import { AppKitContextProvider } from '../../src';
+import { pads } from './';
 
 export const withPartyDecorators = [WithPartyKnobs, WithClientAndIdentity, StoryRouter(), withKnobs];
 
@@ -25,11 +26,12 @@ const DefaultNoPartyComponent = () => {
 
   return (
     <Box m={2}>
-      <h1>Keys</h1>
+      <p>Create and select a party using the knobs.</p>
+      <h2>Keys</h2>
       {keys.map(key => (
         <div key={key.publicKey}>{keyToString(key.publicKey)}</div>
       ))}
-      <h1>Parties</h1>
+      <h2>Parties</h2>
       {parties.map(party => {
         const publicKey = keyToString(party.publicKey);
         return (<div key={publicKey}>{publicKey}</div>);
@@ -57,7 +59,7 @@ const DefaultPartyComponent = () => {
  * @param {Component} partyComponent - component to render if there is a party selected
  */
 export const WithParty = ({ noPartyComponent, partyComponent }) => (
-  <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()}>
+  <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
     <Switch>
       <Route path='/:topic' exact component={partyComponent ?? DefaultPartyComponent} />
       <Route path='/' exact component={noPartyComponent ?? DefaultNoPartyComponent} />
