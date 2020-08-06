@@ -11,7 +11,7 @@ import Box from '@material-ui/core/Box';
 
 import { createId } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
-import { useClient, useParty, ClientContextProvider } from '@dxos/react-client';
+import { useClient, useParty } from '@dxos/react-client';
 
 import { BotDialog, PartySettingsDialog } from '../src/components';
 
@@ -35,7 +35,10 @@ export default {
   ]
 };
 
-export const BotDialogComponent = () => {
+const BotDialogComponent = () => {
+  const client = useClient();
+  if (!client) return <p>Waiting for client...</p>;
+
   return (
     <Box m={2}>
       <BotDialog
@@ -49,13 +52,12 @@ export const BotDialogComponent = () => {
 // TODO(burdon): Fix useRegistry to use Registry object created in context.
 export const withBotDialog = () => {
   return (
-    <ClientContextProvider config={{ services: { wns: { server: 'http://example.com', chainId: 'example' } } }}>
-      <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()}>
-        <Switch>
-          <Route path='/' component={BotDialogComponent} />
-        </Switch>
-      </AppKitContextProvider>
-    </ClientContextProvider>
+    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()}>
+      <Switch>
+        <Route path='/:topic' component={BotDialogComponent} />
+        <Route path='/' exact component={HomeComponent} />
+      </Switch>
+    </AppKitContextProvider>
   );
 };
 
