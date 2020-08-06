@@ -26,7 +26,8 @@ export const WithClientAndIdentity = (story) => {
     async function runEffect () {
       const keyring = new Keyring();
       await keyring.createKeyRecord({ type: KeyType.IDENTITY });
-      const client = new Client({ storage, keyring });
+      const registry = {};
+      const client = new Client({ storage, keyring, registry });
       await client.initialize();
       await client.partyManager.identityManager.initializeForNewIdentity();
       setClient(client);
