@@ -31,11 +31,12 @@ export class Client {
    * @param {RandomAccessAbstract} config.storage a random access storage instance.
    * @param {Object} config.swarm
    * @param {Keyring} config.keyring
-   * @param {FeedStore} config.feedStore. Optional. If provided, config.storage is ignored.
-   * @param {NetworkManager} config.networkManager. Optional. If provided, config.swarm is ignored.
-   * @param {PartyManager} config.partyManager. Optional.
+   * @param {FeedStore} config.feedStore Optional. If provided, config.storage is ignored.
+   * @param {NetworkManager} config.networkManager Optional. If provided, config.swarm is ignored.
+   * @param {PartyManager} config.partyManager Optional.
+   * @param {Registry} config.registry Optional.
    */
-  constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager }) {
+  constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }) {
     this._keyring = keyring || new Keyring(new KeyStore(memdown()));
     this._feedStore = feedStore || new FeedStore(
       storage || createStorage('dxos-storage-db', 'ram'),
@@ -56,6 +57,7 @@ export class Client {
       // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
       onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
     });
+    this.registry = registry;
 
     this._partyWriters = {};
     /** @type Map<string, Promise<PublicKey>> */
