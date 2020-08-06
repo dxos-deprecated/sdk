@@ -8,13 +8,9 @@ import { Client } from '@dxos/client';
 import { ClientProvider } from '@dxos/react-client';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { Keyring, KeyType } from '@dxos/credentials';
+import { config } from '../common';
 
 const storage = createStorage('./db/stories', 'ram');
-const config = {
-  debug: {
-    mode: 'development'
-  }
-};
 
 export const WithClient = (story) => {
   const client = new Client({ storage });

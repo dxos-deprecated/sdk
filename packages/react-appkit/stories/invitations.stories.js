@@ -3,36 +3,17 @@
 //
 
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import StoryRouter from 'storybook-react-router';
-import { withKnobs } from '@storybook/addon-knobs';
 
 import Box from '@material-ui/core/Box';
 
-import { createId } from '@dxos/crypto';
-import { ErrorHandler } from '@dxos/debug';
-import { useClient, useParty, ClientContextProvider } from '@dxos/react-client';
+import { useClient, useParty } from '@dxos/react-client';
 
 import { BotDialog, PartySettingsDialog } from '../src/components';
-
-import { WithClient, WithPartyKnobs, WithClientAndIdentity } from './decorators';
-
-import { AppKitContextProvider } from '../src';
-
-// TODO(burdon): Create party.
-const topic = createId();
+import { WithParty, withPartyDecorators } from './common';
 
 export default {
   title: 'Invitations',
-  decorators: [
-    WithPartyKnobs,
-    WithClientAndIdentity,
-    new StoryRouter(null, {
-      initialEntries: [`/${topic}`]
-    }),
-    WithClient,
-    withKnobs
-  ]
+  decorators: withPartyDecorators
 };
 
 const BotDialogComponent = () => {
@@ -49,18 +30,12 @@ const BotDialogComponent = () => {
 // TODO(burdon): Fix useRegistry to use Registry object created in context.
 export const withBotDialog = () => {
   return (
-    <ClientContextProvider config={{ services: { wns: { server: 'http://example.com', chainId: 'example' } } }}>
-      <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()}>
-        <Switch>
-          <Route path='/' component={BotDialogComponent} />
-        </Switch>
-      </AppKitContextProvider>
-    </ClientContextProvider>
+    <WithParty partyComponent={BotDialogComponent} />
   );
 };
 
 // TODO(burdon): Consistency with dialogs as either components or containers (with hooks).
-const PartyComponent = () => {
+const PartySettingsComponent = () => {
   const client = useClient();
   const party = useParty();
 
@@ -76,15 +51,8 @@ const PartyComponent = () => {
   );
 };
 
-const HomeComponent = () => (<p>Select a party using knobs</p>);
-
 export const withPartySettingsDialog = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()}>
-      <Switch>
-        <Route path='/:topic' component={PartyComponent} />
-        <Route path='/' exact component={HomeComponent} />
-      </Switch>
-    </AppKitContextProvider>
+    <WithParty partyComponent={PartySettingsComponent} />
   );
 };
