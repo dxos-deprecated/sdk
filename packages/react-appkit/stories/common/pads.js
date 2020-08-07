@@ -1,3 +1,7 @@
+//
+// Copyright 2020 DXOS.org
+//
+
 import AddIcon from '@material-ui/icons/Add';
 
 export const pads = [

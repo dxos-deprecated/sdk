@@ -69,6 +69,7 @@ export const withStatusBar = () => {
       Icon: ConnectedIcon
     }
   ];
+
   return (
     <Box m={2}>
       <StatusBar

@@ -3,15 +3,20 @@
 //
 
 import React from 'react';
-
+import { Route, Switch } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
+import StoryRouter from 'storybook-react-router';
+import { withKnobs } from '@storybook/addon-knobs';
 
-import { BotDialog } from '../src/components';
-import { WithParty, withPartyDecorators } from './common';
+import { ErrorHandler } from '@dxos/debug';
+
+import { AppKitContextProvider, BotDialog } from '../src';
+import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
+import { pads, NoPartyComponent } from './common';
 
 export default {
   title: 'Invitations',
-  decorators: withPartyDecorators
+  decorators: [WithPartyKnobs, WithClientAndIdentity, StoryRouter(), withKnobs]
 };
 
 const BotDialogComponent = () => {
@@ -28,6 +33,11 @@ const BotDialogComponent = () => {
 // TODO(burdon): Fix useRegistry to use Registry object created in context.
 export const withBotDialog = () => {
   return (
-    <WithParty partyComponent={BotDialogComponent} />
+    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
+      <Switch>
+        <Route path='/:topic' exact component={BotDialogComponent} />
+        <Route path='/' exact component={NoPartyComponent} />
+      </Switch>
+    </AppKitContextProvider>
   );
 };

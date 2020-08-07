@@ -1,3 +1,7 @@
+//
+// Copyright 2020 DXOS.org
+//
+
 export * from './config';
 export * from './pads';
-export * from './WithParty';
+export * from './NoPartyComponent';
