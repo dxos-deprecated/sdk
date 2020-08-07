@@ -8,13 +8,9 @@ import { Client } from '@dxos/client';
 import { ClientProvider } from '@dxos/react-client';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { Keyring, KeyType } from '@dxos/credentials';
+import { config } from '../common';
 
 const storage = createStorage('./db/stories', 'ram');
-const config = {
-  debug: {
-    mode: 'development'
-  }
-};
 
 export const WithClient = (story) => {
   const client = new Client({ storage });
@@ -30,7 +26,9 @@ export const WithClientAndIdentity = (story) => {
     async function runEffect () {
       const keyring = new Keyring();
       await keyring.createKeyRecord({ type: KeyType.IDENTITY });
-      const client = new Client({ storage, keyring });
+      const registry = {};
+      // TODO(rzadp,rburdon): Replace with actual client SDK for creating a profile
+      const client = new Client({ storage, keyring, registry });
       await client.initialize();
       await client.partyManager.identityManager.initializeForNewIdentity();
       setClient(client);
