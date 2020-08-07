@@ -12,7 +12,7 @@
     "build:watch": "yarn run build --watch",
     "clean": "rm -rf dist",
     "dist": "babel ./src --out-dir ./dist --ignore \"**/*.test.js\"",
-    "lint": "semistandard",
+    "lint": "eslint 'src/**/*.{js,jsx}'",
     "prepublishOnly": "npm run build && npm run test",
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },

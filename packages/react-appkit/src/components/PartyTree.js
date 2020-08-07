@@ -153,7 +153,7 @@ const EditableLabel = ({ icon: Icon, className, classes, label, onUpdate }) => (
   </div>
 );
 
-export const PartyTreeAddItemButton = forwardRef(({ onClick, children }, ref) => {
+export const PartyTreeAddItemButton = forwardRef(function PartyTreeAddItemButtonRender ({ onClick, children }, ref) {
   const treeAddItemClasses = useTreeAddItemStyles();
   const classes = useStyles();
 

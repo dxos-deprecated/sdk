@@ -10,7 +10,7 @@
     "build": "npm run clean && mkdir -p ./dist/es/components/util/ && cp -r src/components/util/images ./dist/es/components/util/ && babel ./src --out-dir ./dist/es --ignore \\\"**/*.test.js\\\" --source-maps inline",
     "build:watch": "npm run clean && mkdir -p ./dist/es/components/util/ && cp -r src/components/util/images ./dist/es/components/util/ && babel ./src --out-dir ./dist/es --ignore \\\"**/*.test.js\\\" --source-maps inline --watch",
     "clean": "rm -rf dist",
-    "lint": "semistandard",
+    "lint": "eslint 'src/**/*.{js,jsx}'",
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
     "test": "jest --rootDir ./src --verbose --passWithNoTests"

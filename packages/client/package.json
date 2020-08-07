@@ -8,7 +8,7 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \"**/*.test.js\" --source-maps inline",
     "build:watch": "npm run build -- --watch",
-    "lint": "semistandard",
+    "lint": "eslint 'src/**/*.{js,jsx}'",
     "prepublishOnly": "npm run build && npm run test",
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },

@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "extends": [
+    "semistandard",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "eslint-plugin-local-rules",
+    "jest"
+  ],
+  "rules": {
+    "local-rules/header": ["error"],
+    "react/prop-types": "off"
+  },
+  "env": {
+    "jest/globals": true,
+    "node": true,
+    "browser": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
