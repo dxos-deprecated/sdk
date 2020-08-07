@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DefaultViewSidebar = () => {
+const DefaultViewList = () => {
   const router = useAppRouter();
   const party = useParty();
   const classes = useStyles();
@@ -81,4 +81,4 @@ const DefaultViewSidebar = () => {
   );
 };
 
-export default DefaultViewSidebar;
+export default DefaultViewList;

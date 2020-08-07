@@ -15,5 +15,11 @@ export const config = {
   },
   debug: {
     mode: 'development'
+  },
+  services: {
+    wns: {
+      server: 'http://example.com',
+      chainId: 'example'
+    }
   }
 };
