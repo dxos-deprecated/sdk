@@ -10,11 +10,10 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import ProfileIcon from '@material-ui/icons/AccountCircle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-
+import ProfileIcon from '@material-ui/icons/AccountCircle';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -30,7 +29,6 @@ import BotDialog from '../components/BotDialog';
 import ExportKeyringDialog from '../components/ExportKeyringDialog';
 import ImportKeyringDialog from '../components/ImportKeyringDialog';
 import InvitationDialog from '../components/InvitationDialog';
-
 import { Action, useActionHandler, useAppRouter } from '../hooks';
 
 const ACTION_USER_INVITATION = 1;

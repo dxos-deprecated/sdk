@@ -5,9 +5,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useClient, useConfig } from '@dxos/react-client';
 import { keyPairFromSeedPhrase, KeyType } from '@dxos/credentials';
 import { keyToString } from '@dxos/crypto';
+import { useClient, useConfig } from '@dxos/react-client';
 import { useQuery, createUrl } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';
 

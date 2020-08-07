@@ -4,15 +4,14 @@
 
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import red from '@material-ui/core/colors/red';
-import green from '@material-ui/core/colors/green';
 import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
-
+import green from '@material-ui/core/colors/green';
+import red from '@material-ui/core/colors/red';
+import { makeStyles } from '@material-ui/core/styles';
 import YesIcon from '@material-ui/icons/CheckCircleOutline';
 import NoIcon from '@material-ui/icons/RadioButtonUnchecked';
 

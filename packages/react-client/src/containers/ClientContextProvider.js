@@ -7,9 +7,9 @@ import memdown from 'memdown';
 import pify from 'pify';
 import React, { useEffect, useState } from 'react';
 
-import { logs } from '@dxos/debug';
-import { Keyring, KeyStore } from '@dxos/credentials';
 import { createClient } from '@dxos/client';
+import { Keyring, KeyStore } from '@dxos/credentials';
+import { logs } from '@dxos/debug';
 import metrics from '@dxos/metrics';
 import { createStorage } from '@dxos/random-access-multi-storage';
 

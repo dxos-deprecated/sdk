@@ -2,11 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
+import { makeStyles } from '@material-ui/core/styles';
 
 const DRAWER_WIDTH = 300;
 

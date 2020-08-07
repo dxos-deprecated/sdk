@@ -2,12 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
-import defaultsDeep from 'lodash.defaultsdeep';
 import bufferJson from 'buffer-json-encoding';
+import defaultsDeep from 'lodash.defaultsdeep';
 import memdown from 'memdown';
 
 import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
-import { createStorage } from '@dxos/random-access-multi-storage';
 import { Keyring, KeyStore, createAuthMessage, codec, KeyType } from '@dxos/credentials';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
@@ -16,6 +15,7 @@ import metrics from '@dxos/metrics';
 import { ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { PartyManager, InviteType } from '@dxos/party-manager';
+import { createStorage } from '@dxos/random-access-multi-storage';
 
 import { defaultClientConfig } from './config';
 

@@ -6,8 +6,9 @@ import assert from 'assert';
 import { keyPair } from 'hypercore-crypto';
 
 import { promiseTimeout } from '@dxos/async';
+import { keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
-
+import { transportProtocolProvider } from '@dxos/network-manager';
 import {
   BotPlugin,
   createSpawnCommand,
@@ -16,9 +17,6 @@ import {
   createBotManagementCommand,
   createResetCommand
 } from '@dxos/protocol-plugin-bot';
-
-import { keyToBuffer } from '@dxos/crypto';
-import { transportProtocolProvider } from '@dxos/network-manager';
 
 const { log } = logs('botkit-client');
 

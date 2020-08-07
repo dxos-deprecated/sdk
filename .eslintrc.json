@@ -11,7 +11,30 @@
   ],
   "rules": {
     "local-rules/header": ["error"],
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "import/order": ["error", {
+      "pathGroups": [
+        {
+          "pattern": "@material-ui/**",
+          "group": "external",
+          "position": "after"
+        },
+        {
+          "pattern": "@{dxos,wirelineio}/**",
+          "group": "internal",
+          "position": "before"
+        }
+      ],
+      "pathGroupsExcludedImportTypes": ["@{dxos,wirelineio}/**", "@material-ui/**"],
+      "newlines-between": "always",
+      "groups": [
+        ["builtin", "external"],
+        "internal"
+      ],
+      "alphabetize": {
+        "order": "asc"
+      }
+    }]
   },
   "env": {
     "jest/globals": true,

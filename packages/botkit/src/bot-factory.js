@@ -3,12 +3,14 @@
 //
 
 import assert from 'assert';
-import ram from 'random-access-memory';
 import crypto from 'hypercore-crypto';
+import ram from 'random-access-memory';
 
 import { waitForCondition } from '@dxos/async';
+import { createClient } from '@dxos/client';
+import { Keyring } from '@dxos/credentials';
 import { keyToBuffer, keyToString, discoveryKey } from '@dxos/crypto';
-
+import { transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SPAWN,
   COMMAND_STATUS,
@@ -21,19 +23,13 @@ import {
   createCommandResponse
 } from '@dxos/protocol-plugin-bot';
 
-import { Keyring } from '@dxos/credentials';
-import { createClient } from '@dxos/client';
-import { transportProtocolProvider } from '@dxos/network-manager';
-
 // TODO(egorgripasov): Proper version from corresponding .yml file.
 import { version } from '../package'; // eslint-disable-line import/extensions
-import { getClientConfig } from './config';
-import { getPlatformInfo } from './source-manager';
 import { BotManager } from './bot-manager';
-
+import { getClientConfig } from './config';
 import { COMMAND_SIGN, startIPCServer, createSignResponse, createInvitationMessage } from './ipc';
-
 import { log } from './log';
+import { getPlatformInfo } from './source-manager';
 
 const BOT_SPAWN_TIMEOUT = 50000;
 const BOT_SPAWN_CHECK_INTERVAL = 50;

@@ -2,11 +2,10 @@
 // Copyright 2020 DXOS.org
 //
 
+import copy from 'copy-to-clipboard';
 import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import copy from 'copy-to-clipboard';
 
-import { useTheme } from '@material-ui/styles';
 import { makeStyles, withStyles } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -15,6 +14,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import MuiTableCell from '@material-ui/core/TableCell';
@@ -22,25 +22,24 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-
+import InviteIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Clear';
 import FaceIcon from '@material-ui/icons/Face';
-import LinkIcon from '@material-ui/icons/Link';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import InviteIcon from '@material-ui/icons/Add';
-import PeopleIcon from '@material-ui/icons/People';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import LinkIcon from '@material-ui/icons/Link';
+import PeopleIcon from '@material-ui/icons/People';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import Alert from '@material-ui/lab/Alert';
+import { useTheme } from '@material-ui/styles';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
 import { humanize, keyToBuffer, verify, SIGNATURE_LENGTH, keyToString } from '@dxos/crypto';
 import { InviteDetails, InviteType } from '@dxos/party-manager';
 
-import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
-import BotDialog from './BotDialog';
 import { useAsync } from '../hooks/async';
+import BotDialog from './BotDialog';
+import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 
 const useStyles = makeStyles(theme => ({
   title: {

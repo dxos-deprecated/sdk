@@ -3,11 +3,11 @@
 //
 
 import assert from 'assert';
+import download from 'download';
 import fs from 'fs-extra';
+import deepGet from 'lodash.get';
 import os from 'os';
 import path from 'path';
-import download from 'download';
-import deepGet from 'lodash.get';
 import url from 'url';
 
 import { log } from './log';

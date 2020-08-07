@@ -2,11 +2,10 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
 import assert from 'assert';
+import React, { useState } from 'react';
 
 import { keyToString } from '@dxos/crypto';
-
 import { useClient } from '@dxos/react-client';
 
 import PartyCard from '../components/PartyCard';

@@ -2,17 +2,16 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useEffect, useReducer } from 'react';
 import defaultsDeep from 'lodash.defaultsdeep';
+import React, { useEffect, useReducer } from 'react';
 
 import { useReset, useConfig } from '@dxos/react-client';
 import { ErrorBoundary } from '@dxos/react-ux';
 
+import { AppKitContext, DefaultRouter } from '../hooks';
 import errorsReducer, { SET_ERRORS } from '../hooks/errors';
 import filterReducer, { SET_FILTER } from '../hooks/filter';
 import layoutReducer, { SET_LAYOUT } from '../hooks/layout';
-
-import { AppKitContext, DefaultRouter } from '../hooks';
 
 const defaultState = {
   [SET_LAYOUT]: {

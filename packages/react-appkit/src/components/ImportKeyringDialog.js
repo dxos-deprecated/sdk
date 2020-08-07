@@ -4,16 +4,16 @@
 
 import React, { useState, useRef } from 'react';
 
-import { useConfig } from '@dxos/react-client';
-import { reload } from '@dxos/react-router';
-
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { useConfig } from '@dxos/react-client';
+import { reload } from '@dxos/react-router';
 
 const useStyles = makeStyles(() => ({
   paper: {

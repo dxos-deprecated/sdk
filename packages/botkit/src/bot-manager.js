@@ -2,23 +2,23 @@
 // Copyright 2020 DXOS.org
 //
 
-import debug from 'debug';
 import assert from 'assert';
+import { Chance } from 'chance';
+import { spawn } from 'child_process';
+import debug from 'debug';
 import fs, { ensureFileSync } from 'fs-extra';
+import yaml from 'js-yaml';
+import moment from 'moment';
 import watch from 'node-watch';
 import path from 'path';
-import { spawn } from 'child_process';
-import moment from 'moment';
 import kill from 'tree-kill';
-import yaml from 'js-yaml';
-import { Chance } from 'chance';
 
 import { keyToString, createKeyPair } from '@dxos/crypto';
 import { Registry } from '@wirelineio/registry-client';
 
+import { BOT_CONFIG_FILENAME } from './config';
 import { log, logBot } from './log';
 import { SourceManager } from './source-manager';
-import { BOT_CONFIG_FILENAME } from './config';
 
 const chance = new Chance();
 

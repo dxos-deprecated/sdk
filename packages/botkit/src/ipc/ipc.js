@@ -4,8 +4,8 @@
 
 import ipc from 'node-ipc';
 
-import { IPCServer } from './ipc-server';
 import { IPCClient } from './ipc-client';
+import { IPCServer } from './ipc-server';
 
 const setupIPC = (id, port) => {
   Object.assign(ipc.config, { id, networkPort: port, silent: true, rawBuffer: true, encoding: 'hex' });

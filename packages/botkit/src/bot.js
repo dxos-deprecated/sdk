@@ -3,16 +3,15 @@
 //
 
 import debug from 'debug';
+import EventEmitter from 'events';
 import fs from 'fs-extra';
 import jsondown from 'jsondown';
-import ram from 'random-access-memory';
 import path from 'path';
-import EventEmitter from 'events';
+import ram from 'random-access-memory';
 
-import { randomBytes, keyToBuffer, keyToString } from '@dxos/crypto';
-import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
 import { createClient } from '@dxos/client';
-
+import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
+import { randomBytes, keyToBuffer, keyToString } from '@dxos/crypto';
 import { InvitationDescriptor } from '@dxos/party-manager';
 import { createStorage, STORAGE_NODE } from '@dxos/random-access-multi-storage';
 

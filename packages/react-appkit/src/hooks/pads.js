@@ -2,11 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
-import { useContext, useEffect, useState, useCallback } from 'react';
 import { Chance } from 'chance';
+import { useContext, useEffect, useState, useCallback } from 'react';
 
-import { useModel } from '@dxos/react-client';
 import { createId } from '@dxos/crypto';
+import { useModel } from '@dxos/react-client';
 
 import { AppKitContext } from './context';
 

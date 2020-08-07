@@ -2,8 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
-import { Chance } from 'chance';
 import assert from 'assert';
+import { Chance } from 'chance';
 
 import { useModel } from '@dxos/react-client';
 import { ViewModel } from '@dxos/view-model';

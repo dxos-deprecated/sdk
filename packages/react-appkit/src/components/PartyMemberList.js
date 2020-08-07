@@ -3,13 +3,13 @@
 //
 
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/styles';
-import { AvatarGroup } from '@material-ui/lab';
+
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
-
 import FaceIcon from '@material-ui/icons/Face';
 import ShareIcon from '@material-ui/icons/GroupAdd';
+import { AvatarGroup } from '@material-ui/lab';
+import { makeStyles, useTheme } from '@material-ui/styles';
 
 import { humanize } from '@dxos/crypto';
 

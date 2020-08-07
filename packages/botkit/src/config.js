@@ -5,8 +5,8 @@
 import yaml from 'js-yaml';
 import defaultsDeep from 'lodash.defaultsdeep';
 
-import { createId, createKeyPair, keyToString } from '@dxos/crypto';
 import { Config, mapFromKeyValues } from '@dxos/config';
+import { createId, createKeyPair, keyToString } from '@dxos/crypto';
 
 import defaults from '../defaults.yml';
 import envmap from '../env-map.yml';
