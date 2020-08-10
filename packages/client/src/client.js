@@ -15,7 +15,7 @@ import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
 import { ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { PartyManager, InviteType } from '@dxos/party-manager';
+import { PartyManager, InviteType, InviteDetails, InvitationDescriptor } from '@dxos/party-manager';
 
 import { defaultClientConfig } from './config';
 
@@ -158,6 +158,24 @@ export class Client {
   }
 
   /**
+   *
+   * @param {Buffer} publicKey Party publicKey
+   * @param {SecretProvider} secretProvider
+   * @param {Object} options
+   * @param {Object} options.onFinish
+   */
+  async inviteToParty (publicKey, secretProvider, options = {}) {
+    return this._partyManager.inviteToParty(
+      publicKey,
+      new InviteDetails(InviteType.INTERACTIVE, {
+        secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
+        secretProvider
+      }),
+      options
+    );
+  }
+
+  /**
    * Join a Party by redeeming an Invitation.
    * @param {InvitationDescriptor} invitation
    * @param {SecretProvider} secretProvider
@@ -192,6 +210,23 @@ export class Client {
       // Join the Identity
       return this._partyManager.identityManager.deviceManager.admitDevice(invitation, secretProvider);
     }
+  }
+
+  /**
+   * Given an Invitation, return encoded JSON string invitation.
+   * @param {InvitationDescriptor} invitation
+   * @return {String}
+   */
+  encodeInvitation (invitation) {
+    return btoa(JSON.stringify(invitation.toQueryParameters()));
+  }
+
+  /**
+   * Given a encoded JSON string invitation, return an Invitation.
+   * @param {String} code an encoded JSON string invitation.
+   */
+  decodeInvitation (invitationCode) {
+    return InvitationDescriptor.fromQueryParameters(JSON.parse(atob(invitationCode)));
   }
 
   getParties () {
