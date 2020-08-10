@@ -3,7 +3,7 @@
   "version": "1.0.0-beta.249",
   "description": "Application framework components",
   "keywords": [],
-  "license": "GPL-3.0",
+  "license": "AGPLv3",
   "author": "DXOS.org",
   "main": "dist/es/index.js",
   "scripts": {
