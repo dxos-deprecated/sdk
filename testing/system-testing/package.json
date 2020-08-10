@@ -1,33 +1,23 @@
 {
-  "name": "@dxos/botkit-client",
+  "name": "@dxos/system-testing",
   "version": "1.0.0-beta.249",
-  "description": "Botkit client",
-  "keywords": [],
-  "license": "AGPLv3",
+  "license": "GPL-3.0",
   "author": "DXOS.org",
-  "main": "dist/index.js",
+  "private": true,
   "scripts": {
-    "build": "npm run clean && npm run dist",
-    "build:watch": "yarn run build --watch",
-    "clean": "rm -rf dist",
-    "dist": "babel ./src --out-dir ./dist --ignore \"**/*.test.js\"",
     "lint": "semistandard",
-    "prepublishOnly": "npm run build && npm run test",
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
   "dependencies": {
-    "@dxos/async": "^1.0.0-beta.1",
+    "@babel/runtime": "^7.9.6",
     "@dxos/client": "^1.0.0-beta.249",
+    "@dxos/credentials": "^1.0.1-beta.29",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
-    "@dxos/network-manager": "^1.0.0-beta.94",
-    "@dxos/protocol-plugin-bot": "^1.1.0-beta.12",
+    "@dxos/metrics": "^1.0.0-beta.6",
+    "@dxos/model-factory": "^1.0.0-beta.27",
     "assert": "^2.0.0",
-    "debug": "^4.1.1",
-    "hypercore-crypto": "^1.0.0"
+    "debug": "^4.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -36,11 +26,22 @@
     "@babel/plugin-proposal-export-default-from": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
-    "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "^1.0.0",
     "jest": "^25.1.0",
-    "semistandard": "14.2.0"
+    "random-access-memory": "^3.1.1",
+    "semistandard": "14.2.0",
+    "wait-for-expect": "^3.0.2"
+  },
+  "browserslist": [
+    "> 5%"
+  ],
+  "jest": {
+    "moduleNameMapper": {
+      "@geut/discovery-swarm-webrtc": "@wirelineio/discovery-swarm-memory"
+    },
+    "testEnvironment": "node"
   },
   "semistandard": {
     "parser": "babel-eslint",
@@ -52,8 +53,5 @@
     "ignore": [
       "dist"
     ]
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
