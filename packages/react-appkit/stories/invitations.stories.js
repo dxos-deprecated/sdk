@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
@@ -20,11 +20,13 @@ export default {
 };
 
 const BotDialogComponent = () => {
+  const [open, setOpen] = useState(true);
   return (
     <Box m={2}>
       <BotDialog
-        open
-        onClose={() => {}}
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={() => setOpen(false)}
       />
     </Box>
   );
