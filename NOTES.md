@@ -143,10 +143,15 @@ const client = new Client({
   - In useParty/useParties hooks impl relies on partyManager 'update' event to trigger updates. What do we do here?????
   - joinParty(invitationDescriptor, secretProvider): Party (partyManager.joinParty)
   - admitDevice(invitationDescriptor, secretProvider)
-- Profile
-  - getProfile: Profile ??
-    - Profile ? (partyManager.identityManager)
-      - keyRecord
+  - async inviteToParty (publicKey, secretProvider, options = {}): InvitationDescriptor?
+  - async createParty(): Party?
+- Profile √
+  - getProfile(): Profile
+    - Profile:
+      - username: identityMananger.displayName 
+      - publicKey: identityMananger.publicKey
+  - async createProfile ({ publicKey, secretKey, username })
+  - hasProfile()
 - Device
   - getDevice: Device ??
     - Device ? (partyManager.identityManager.deviceManager)
@@ -154,7 +159,7 @@ const client = new Client({
       - admitDevice
 - Keyring?
   - get keyring
-- Contacts?
+- Contacts √
   - async getContacts(): Contacts[] (partyManager.getContacts)
 - Model/Subscriptions
   - `async createSubscription({ modelType, options }): Model/Subscription?` (modelFactory.createModel)
