@@ -5,3 +5,4 @@
 export * from './config';
 export * from './pads';
 export * from './NoPartyComponent';
+export * from './registry-data';

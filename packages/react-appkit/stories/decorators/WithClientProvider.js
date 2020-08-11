@@ -9,25 +9,9 @@ import { ClientProvider } from '@dxos/react-client';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { Keyring, KeyType } from '@dxos/credentials';
 import { createSchema, Registry, DEFAULT_CHAIN_ID } from '@wirelineio/registry-client';
-import { config } from '../common';
+import { config, registryData } from '../common';
 
 const storage = createStorage('./db/stories', 'ram');
-
-const data = [
-  {
-    type: 'wrn:bot',
-    name: 'dxos.network/chess',
-    version: '1.0.0',
-    displayName: 'ChessBot'
-  },
-  {
-    type: 'wrn:bot-factory',
-    name: 'dxos.network/demo',
-    version: '1.0.0',
-    displayName: 'ChessBot',
-    topic: '41f4493e5a134f49111d7b681d623ad4a38f4c42fcb67901e7a447ee703a545f'
-  }
-];
 
 export const WithClient = (story) => {
   const client = new Client({ storage });
@@ -43,7 +27,7 @@ export const WithClientAndIdentity = (story) => {
     async function runEffect () {
       const keyring = new Keyring();
       await keyring.createKeyRecord({ type: KeyType.IDENTITY });
-      const schema = await createSchema(data);
+      const schema = await createSchema(registryData);
       const registry = new Registry(undefined, DEFAULT_CHAIN_ID, { schema });
       // TODO(rzadp,rburdon): Replace with actual client SDK for creating a profile
       const client = new Client({ storage, keyring, registry });
