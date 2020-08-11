@@ -238,6 +238,14 @@ export class Client {
   }
 
   /**
+   * Returns an Array of all known Contacts across all Parties.
+   * @returns {Contact[]}
+   */
+  async getContacts () {
+    return this._partyManager.getContacts();
+  }
+
+  /**
    * @param {Object} config
    * @param {} config.modelType
    * @param {} config.options
