@@ -35,6 +35,10 @@ export const getPlatformInfo = () => {
   return { platform, arch };
 };
 
+export const removeSourceFiles = async () => {
+  await fs.remove(BOT_PACKAGE_DOWNLOAD_DIR);
+};
+
 export class SourceManager {
   constructor (config) {
     this._config = config;

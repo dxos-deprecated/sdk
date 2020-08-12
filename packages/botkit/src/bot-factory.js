@@ -15,6 +15,7 @@ import {
   COMMAND_INVITE,
   COMMAND_MANAGE,
   COMMAND_RESET,
+  COMMAND_STOP,
   BotPlugin,
   createStatusResponse,
   createSpawnResponse,
@@ -28,7 +29,7 @@ import { transportProtocolProvider } from '@dxos/network-manager';
 // TODO(egorgripasov): Proper version from corresponding .yml file.
 import { version } from '../package'; // eslint-disable-line import/extensions
 import { getClientConfig } from './config';
-import { getPlatformInfo } from './source-manager';
+import { getPlatformInfo, removeSourceFiles } from './source-manager';
 import { BotManager } from './bot-manager';
 
 import { COMMAND_SIGN, startIPCServer, createSignResponse, createInvitationMessage } from './ipc';
@@ -131,8 +132,19 @@ export class BotFactory {
       }
 
       case COMMAND_RESET: {
-        runCommand = async () => this._botManager.killAllBots();
+        const { source } = message;
+        runCommand = async () => {
+          await this._botManager.killAllBots();
+          if (source) {
+            await removeSourceFiles();
+          }
+        };
         break;
+      }
+
+      case COMMAND_STOP: {
+        const { errorCode = 0 } = message;
+        process.exit(Number(errorCode));
       }
 
       case COMMAND_STATUS: {
