@@ -13,9 +13,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
+import FormControl from '@material-ui/core/FormControl';
 
 import { useRegistryBots, useRegistryBotFactories } from '../hooks/registry';
-import FormControl from '@material-ui/core/FormControl';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     width: '100%',
     marginBottom: theme.spacing(2)
+  },
+  errorMessage: {
+    color: red[300]
   }
 }));
 
@@ -43,10 +49,23 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
   const [botFactoryTopic, setBotFactoryTopic] = useState('');
   const [botVersions, setBotVersions] = useState([]);
   const [botVersion, setBotVersion] = useState();
+  const [error, setError] = useState();
 
   // TODO(burdon): Could have same topic?
   const registryBotFactories = useRegistryBotFactories();
   const registryBots = useRegistryBots();
+
+  const handleSubmit = () => {
+    setPending(true);
+    try {
+      onSubmit({ topic: botFactoryTopic, bot, botVersion });
+    } catch (e) {
+      console.error(e);
+      setError(e);
+    } finally {
+      setPending(false);
+    }
+  };
 
   useEffect(() => {
     const versions = registryBots
@@ -70,6 +89,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             id='botFactory'
             value={botFactoryTopic}
             fullWidth
+            disabled={pending}
             onChange={event => setBotFactoryTopic(event.target.value)}
           >
             {registryBotFactories
@@ -88,6 +108,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             id='botName'
             value={bot}
             fullWidth
+            disabled={pending}
             onChange={event => setBot(event.target.value)}
           >
             {registryBots
@@ -107,7 +128,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             labelId='botVersionLabel'
             id='botVersion'
             value={botVersion}
-            disabled={botVersions.length === 0}
+            disabled={botVersions.length === 0 || pending}
             fullWidth
             onChange={event => setBotVersion(event.target.value)}
           >
@@ -118,21 +139,26 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             ))}
           </Select>
         </FormControl>
+        {pending && (<LinearProgress />)}
       </DialogContent>
 
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button
-          disabled={pending}
+          disabled={pending || !botFactoryTopic || !botVersion}
           color='primary'
-          onClick={() => {
-            onSubmit({ topic: botFactoryTopic, bot, botVersion });
-            setPending(true);
-          }}
+          onClick={handleSubmit}
         >
           Invite
         </Button>
       </DialogActions>
+      {error && (
+        <DialogActions>
+          <Typography variant='body1' className={classes.errorMessage}>
+            Deploying failed. Please try again later.
+          </Typography>
+        </DialogActions>
+      )}
     </Dialog>
   );
 };

@@ -14,6 +14,8 @@ import { AppKitContextProvider, BotDialog } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads, NoPartyComponent } from './common';
 
+const errorHandler = new ErrorHandler();
+
 export default {
   title: 'Invitations',
   decorators: [WithPartyKnobs, WithClientAndIdentity, StoryRouter(), withKnobs]
@@ -21,13 +23,23 @@ export default {
 
 const BotDialogComponent = () => {
   const [open, setOpen] = useState(true);
+  const [deployed, setDeployed] = useState(false);
+
+  const handleSubmit = ({ bot }) => {
+    if (bot.includes('will-hang')) return;
+    if (bot.includes('will-fail')) throw new Error('Failed deploy');
+    setDeployed(true);
+    setOpen(false);
+  };
+
   return (
     <Box m={2}>
       <BotDialog
         open={open}
         onClose={() => setOpen(false)}
-        onSubmit={() => setOpen(false)}
+        onSubmit={handleSubmit}
       />
+      {deployed && (<p>Successfully deployed!</p>)}
     </Box>
   );
 };
@@ -35,7 +47,7 @@ const BotDialogComponent = () => {
 // TODO(burdon): Fix useRegistry to use Registry object created in context.
 export const withBotDialog = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
+    <AppKitContextProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={BotDialogComponent} />
         <Route path='/' exact component={NoPartyComponent} />
