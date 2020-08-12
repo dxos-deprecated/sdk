@@ -22,6 +22,12 @@ WIRE_IPFS_GATEWAY:
 WIRE_IPC_PORT: 
   path: bot.ipc.port
   type: number
+WIRE_IPC_PORT_FROM:
+  path: bot.ipc.portFrom
+  type: number
+WIRE_IPC_PORT_TO:
+  path: bot.ipc.portTo
+  type: number
 WIRE_BOT_UID:
   path: bot.uid
 WIRE_BOT_NAME:
