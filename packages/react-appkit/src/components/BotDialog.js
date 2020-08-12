@@ -55,10 +55,11 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
   const registryBotFactories = useRegistryBotFactories();
   const registryBots = useRegistryBots();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setError(undefined);
     setPending(true);
     try {
-      onSubmit({ topic: botFactoryTopic, bot, botVersion });
+      await onSubmit({ topic: botFactoryTopic, bot, botVersion });
     } catch (e) {
       console.error(e);
       setError(e);

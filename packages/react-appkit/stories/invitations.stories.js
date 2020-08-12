@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
 import { withKnobs } from '@storybook/addon-knobs';
 
+import { sleep } from '@dxos/async';
 import { ErrorHandler } from '@dxos/debug';
 
 import { AppKitContextProvider, BotDialog } from '../src';
@@ -25,8 +26,9 @@ const BotDialogComponent = () => {
   const [open, setOpen] = useState(true);
   const [deployed, setDeployed] = useState(false);
 
-  const handleSubmit = ({ bot }) => {
-    if (bot.includes('will-hang')) return;
+  const handleSubmit = async ({ bot }) => {
+    await sleep(1000);
+    if (bot.includes('will-hang')) return new Promise(() => {});
     if (bot.includes('will-fail')) throw new Error('Failed deploy');
     setDeployed(true);
     setOpen(false);
