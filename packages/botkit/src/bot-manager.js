@@ -42,9 +42,10 @@ export class BotManager {
    */
   _bots = new Map();
 
-  constructor (config, { ipcServerId }) {
+  constructor (config, { ipcServerId, ipcServerPort }) {
     this._config = config;
     this._ipcServerId = ipcServerId;
+    this._ipcServerPort = ipcServerPort;
 
     this._localDev = this._config.get('bot.localDev');
     this._botsFile = path.join(process.cwd(), BOTS_DUMP_FILE);
@@ -211,6 +212,7 @@ export class BotManager {
 
     const wireEnv = {
       WIRE_BOT_IPC_SERVER: this._ipcServerId,
+      WIRE_IPC_PORT: this._ipcServerPort,
       WIRE_BOT_UID: botUID,
       WIRE_BOT_NAME: name,
       WIRE_BOT_CWD: childDir,

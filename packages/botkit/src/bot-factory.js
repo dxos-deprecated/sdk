@@ -73,7 +73,7 @@ export class BotFactory {
   async start () {
     this._ipcServer = await startIPCServer(this._config, this._botMessageHandler.bind(this));
     this._client = await createClient(ram, new Keyring(), getClientConfig(this._config), [this._plugin]);
-    this._botManager = new BotManager(this._config, { ipcServerId: this._ipcServer.id });
+    this._botManager = new BotManager(this._config, { ipcServerId: this._ipcServer.id, ipcServerPort: this._ipcServer.port });
 
     await this._botManager.start();
 
@@ -85,7 +85,8 @@ export class BotFactory {
         started: true,
         topic: keyToString(this._topic),
         peerId: keyToString(this._peerKey),
-        localDev: this._localDev
+        localDev: this._localDev,
+        ipcPort: this._ipcServer.port
       }
     ));
   }

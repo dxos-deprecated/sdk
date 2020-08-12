@@ -19,16 +19,19 @@ export class IPCServer {
    * @constructor
    * @param {Object} ipc
    * @param {String} id
+   * @param {Number} port
    * @param {Function} messageHandler
    */
-  constructor (ipc, id, messageHandler) {
+  constructor (ipc, id, port, messageHandler) {
     assert(ipc);
     assert(id);
     assert(messageHandler);
+    assert(port);
 
     this._ipc = ipc;
     this._id = id;
     this._messageHandler = messageHandler;
+    this._port = port;
 
     this._ipc.server.on('data', async (data, socket) => {
       const { message } = codec.decode(data);
@@ -60,6 +63,10 @@ export class IPCServer {
    */
   get id () {
     return this._id;
+  }
+
+  get port () {
+    return this._port;
   }
 
   clientConnected (id) {
