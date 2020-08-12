@@ -210,7 +210,7 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
 
         <BotDialog
           open={botDialogVisible}
-          onSubmit={({ topic: bfTopic, bot, botVersion, spec }) => handleBotInvite(bfTopic, bot, botVersion, spec)}
+          onSubmit={async ({ topic: bfTopic, bot, botVersion, spec }) => handleBotInvite(bfTopic, bot, botVersion, spec)}
           onClose={() => setBotDialogVisible(false)}
         />
 
