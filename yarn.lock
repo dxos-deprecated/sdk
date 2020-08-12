@@ -1582,15 +1582,15 @@
     pump "^3.0.0"
     source-map-support "^0.5.12"
 
-"@dxos/protocol-plugin-bot@^1.1.0-beta.12":
-  version "1.1.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.13.tgz#48b9ff881e9db0cf4b55a93b4c7ba3066cd5b015"
-  integrity sha512-Cxk0s+/3myLdYk9pRyPGnZsJb2pk0XtbcdjiFOM3JPijwfIG7qGEvxk/neTylJFUQQRpx5tiPqNfexIvl2u9uQ==
+"@dxos/protocol-plugin-bot@^1.1.0-beta.14":
+  version "1.1.0-beta.14"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.14.tgz#20784cd3ec27f16e73a6a6997ec044272d93977f"
+  integrity sha512-2fzLq4N1vzgtaIT4Nswg5bbGhwMlDuWahrOBcFE9va6M9WmHWsaz/B4nWJPjqZGEx9afR0l/Pfj7nO2dShORpg==
   dependencies:
     "@dxos/broadcast" "^1.0.0-beta.6"
     "@dxos/codec-protobuf" "^1.1.0-beta.7"
     "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/protocol" "^1.1.0-beta.13"
+    "@dxos/protocol" "^1.1.0-beta.14"
     debug "^4.1.1"
     source-map-support "^0.5.12"
 
@@ -1629,6 +1629,24 @@
     humanhash "^1.0.4"
     hypercore-protocol "^6.11.1"
     nanoerror "^1.1.0"
+    nanomessage "^5.4.0"
+    nanoresource-promise "^2.0.0"
+    signal-promise "^1.0.3"
+    source-map-support "^0.5.12"
+
+"@dxos/protocol@^1.1.0-beta.14":
+  version "1.1.0-beta.14"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol/-/protocol-1.1.0-beta.14.tgz#04a50cdb8df4490fa263770e9754232e3b842fc1"
+  integrity sha512-by6QfBSUMusx8xmG102lP8flGD75QLZ4JLwr8hsIxqwfSucgkHgYVHMiHNXg6tlW7i6cTkaTb/yEbhF9FqMMwQ==
+  dependencies:
+    "@dxos/codec-protobuf" "^1.1.0-beta.9"
+    assert "^2.0.0"
+    buffer-json-encoding "^1.0.2"
+    debug "^4.1.1"
+    end-of-stream "^1.4.1"
+    humanhash "^1.0.4"
+    hypercore-protocol "^6.11.1"
+    nanoerror "^1.2.1"
     nanomessage "^5.4.0"
     nanoresource-promise "^2.0.0"
     signal-promise "^1.0.3"
@@ -12926,6 +12944,13 @@ nanoerror@^1.0.0, nanoerror@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/nanoerror/-/nanoerror-1.1.0.tgz#c358b1f249ff033e0d734013520d7e0a920b1f1e"
   integrity sha512-pMuD3WQ75amZzRorXRLZOqc4dpIei1+2oD9rAR5wy0t6/mRWtV5SFpitkiN7+ZV8jIe54C41cgia5n34QaYI6A==
+  dependencies:
+    quick-format-unescaped "^3.0.3"
+
+nanoerror@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/nanoerror/-/nanoerror-1.2.1.tgz#4a4d98e21f5f0b2222e85aff1be170ef825aa23f"
+  integrity sha512-pCXtdyUZUqkyJjrfKxSMCzdblgVbXOXPdFC+Th80IuQzuoaSwLmMu8rJID92VStrv7sMyqMj86PJMoj//bKcsg==
   dependencies:
     quick-format-unescaped "^3.0.3"
 
