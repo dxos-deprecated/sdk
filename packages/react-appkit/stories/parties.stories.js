@@ -44,13 +44,13 @@ export const withPartyCard = () => {
     }
   };
 
-  const mockViewModel = {
-    getAllViews: () => [...new Array(5)].map((_, i) => ({
-      viewId: `item-${i}`, type: 'test', displayName: `Item ${i}`
+  const mockItemModel = {
+    getAllItems: () => [...new Array(5)].map((_, i) => ({
+      itemId: `item-${i}`, type: 'test', displayName: `Item ${i}`
     })),
-    getAllDeletedViews: () => [],
-    deleteView: () => {},
-    restoreView: () => {}
+    getAllDeletedItems: () => [],
+    deleteItem: () => {},
+    restoreItem: () => {}
   };
 
   const parties = [
@@ -64,11 +64,11 @@ export const withPartyCard = () => {
         <Box key={i} m={2}>
           <PartyCard
             party={party}
-            viewModel={mockViewModel}
+            itemModel={mockItemModel}
             router={mockRouter}
             client={mockClient}
             pads={[]}
-            createView={() => {}}
+            createItem={() => {}}
           />
         </Box>
       ))}

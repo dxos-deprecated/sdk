@@ -12,7 +12,7 @@ import { keyToString } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParty } from '@dxos/react-client';
 
-import { AppKitContextProvider, useViews, DefaultViewList, PartySettingsDialog } from '../src';
+import { AppKitContextProvider, useItems, DefaultItemList, PartySettingsDialog } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads, NoPartyComponent } from './common';
 
@@ -54,18 +54,18 @@ const SidebarComponent = () => {
   const party = useParty();
 
   const topic = party ? keyToString(party.publicKey) : '';
-  const { createView } = useViews(topic);
+  const { createItem } = useItems(topic);
 
   if (!party) return null;
 
-  const handleCreateView = () => {
-    createView(pads[0].type);
+  const handleCreateItem = () => {
+    createItem(pads[0].type);
   };
 
   return (
     <Box m={2}>
-      <DefaultViewList />
-      <button onClick={handleCreateView}>Add item</button>
+      <DefaultItemList />
+      <button onClick={handleCreateItem}>Add item</button>
     </Box>
   );
 };

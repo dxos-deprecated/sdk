@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 
-const NewViewCreationMenu = ({ anchorEl, onSelect, open, onClose, pads }) => {
+const NewItemCreationMenu = ({ anchorEl, onSelect, open, onClose, pads }) => {
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={onClose}>
       {pads.map(pad => (
@@ -24,4 +24,4 @@ const NewViewCreationMenu = ({ anchorEl, onSelect, open, onClose, pads }) => {
   );
 };
 
-export default NewViewCreationMenu;
+export default NewItemCreationMenu;

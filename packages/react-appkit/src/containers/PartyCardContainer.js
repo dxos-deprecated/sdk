@@ -10,7 +10,7 @@ import { keyToString } from '@dxos/crypto';
 import { useClient } from '@dxos/react-client';
 
 import PartyCard from '../components/PartyCard';
-import { useAppRouter, usePads, useViews } from '../hooks';
+import { useAppRouter, usePads, useItems } from '../hooks';
 import DefaultSettingsDialog from './DefaultSettingsDialog';
 
 const PartyCardContainer = ({ party }) => {
@@ -18,29 +18,29 @@ const PartyCardContainer = ({ party }) => {
   const router = useAppRouter();
   const [pads] = usePads();
   const topic = keyToString(party.publicKey);
-  const { model, createView } = useViews(topic);
-  const [newViewType, setNewViewType] = useState(undefined);
-  const [viewSettingsOpen, setViewSettingsOpen] = useState(false);
+  const { model, createItem } = useItems(topic);
+  const [newItemType, setNewItemType] = useState(undefined);
+  const [itemSettingsOpen, setItemSettingsOpen] = useState(false);
 
   const handleSavedSettings = ({ name }, metadata = {}, callback) => {
-    assert(newViewType);
-    const viewId = createView(newViewType, name, metadata);
+    assert(newItemType);
+    const itemId = createItem(newItemType, name, metadata);
     handleCanceledSettings();
-    callback && callback(viewId);
-    router.push({ topic, item: viewId });
+    callback && callback(itemId);
+    router.push({ topic, item: itemId });
   };
 
   const handleCanceledSettings = () => {
-    setViewSettingsOpen(false);
-    setNewViewType(undefined);
+    setItemSettingsOpen(false);
+    setNewItemType(undefined);
   };
 
   const handleNewItemRequested = ({ type }) => {
-    setNewViewType(type);
-    setViewSettingsOpen(true);
+    setNewItemType(type);
+    setItemSettingsOpen(true);
   };
 
-  const pad = newViewType ? pads.find(pad => pad.type === newViewType) : undefined;
+  const pad = newItemType ? pads.find(pad => pad.type === newItemType) : undefined;
   const Settings = (pad && pad.settings) ? pad.settings : DefaultSettingsDialog;
 
   return (
@@ -48,8 +48,8 @@ const PartyCardContainer = ({ party }) => {
       <PartyCard
         client={client}
         party={party}
-        viewModel={model}
-        createView={createView}
+        itemModel={model}
+        createItem={createItem}
         router={router}
         pads={pads}
         onNewItemRequested={handleNewItemRequested}
@@ -57,11 +57,11 @@ const PartyCardContainer = ({ party }) => {
       <Settings
         party={party}
         topic={topic}
-        open={viewSettingsOpen}
+        open={itemSettingsOpen}
         onClose={handleSavedSettings}
         onCancel={handleCanceledSettings}
         item={undefined} // no item!
-        viewModel={model}
+        itemModel={model}
         Icon={pad && pad.icon}
       />
     </>

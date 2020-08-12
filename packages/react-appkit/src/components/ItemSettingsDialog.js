@@ -29,12 +29,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// TODO(burdon): Remove viewModel (pass in item and callbacks).
-const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, closingDisabled, children }) => {
+// TODO(burdon): Remove itemModel (pass in item and callbacks).
+const ItemSettingsDialog = ({ open, onClose, itemModel, itemId, closingDisabled, children }) => {
   const classes = useStyles();
 
   // TODO(burdon): Pass in item (this doesn't need to know about all items).
-  const item = viewModel.getById(viewId);
+  const item = itemModel.getById(itemId);
 
   const handleClose = () => {
     if (closingDisabled) {
@@ -63,7 +63,7 @@ const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, closingDisabled,
             variant='outlined'
             value={item.displayName}
             className={classes.margin}
-            onUpdate={value => viewModel.renameView(viewId, value)}
+            onUpdate={value => itemModel.renameItem(itemId, value)}
           />
         )}
 
@@ -82,4 +82,4 @@ const ViewSettingsDialog = ({ open, onClose, viewModel, viewId, closingDisabled,
   );
 };
 
-export default ViewSettingsDialog;
+export default ItemSettingsDialog;

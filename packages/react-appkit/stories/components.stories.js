@@ -10,7 +10,7 @@ import ConnectedIcon from '@material-ui/icons/Wifi';
 
 import { createKeyPair, keyToString } from '@dxos/crypto';
 
-import { MemberAvatar, useAssets, StatusBar, NewViewCreationMenu } from '../src/components';
+import { MemberAvatar, useAssets, StatusBar, NewItemCreationMenu } from '../src/components';
 import { pads } from './common';
 
 export default {
@@ -81,7 +81,7 @@ export const withStatusBar = () => {
   );
 };
 
-export const withNewViewCreationMenu = () => {
+export const withNewItemCreationMenu = () => {
   const anchorEl = useRef();
   const [initialized, setInitialized] = useState(false);
 
@@ -91,7 +91,7 @@ export const withNewViewCreationMenu = () => {
     <Box m={2}>
       <div ref={anchorEl} />
       {initialized && (
-        <NewViewCreationMenu
+        <NewItemCreationMenu
           open
           onClose={() => {}}
           onSelect={() => {}}

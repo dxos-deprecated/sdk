@@ -10,7 +10,7 @@ export CheckForErrors from './CheckForErrors';
 export DebugPanel from './DebugPanel';
 export DefaultSidebar from './DefaultSidebar';
 export DefaultSettingsDialog from './DefaultSettingsDialog';
-export DefaultViewList from './DefaultViewList';
+export DefaultItemList from './DefaultItemList';
 export PartyCardContainer from './PartyCardContainer';
 export Registration from './Registration';
 export RequireWallet from './RequireWallet';
