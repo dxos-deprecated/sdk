@@ -13,12 +13,12 @@ import { useParty } from '@dxos/react-client';
 
 import {
   MemberList,
-  NewViewCreationMenu,
+  NewItemCreationMenu,
   // PartyTreeAddItemButton,
   PartyTreeItem
 } from '../components';
 
-import { usePads, useAppRouter, useViews } from '../hooks';
+import { usePads, useAppRouter, useItems } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,43 +37,43 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DefaultViewList = () => {
+const DefaultItemList = () => {
   const router = useAppRouter();
   const party = useParty();
   const classes = useStyles();
   const { topic, item: active } = useParams();
   const [pads] = usePads();
-  const { model, createView } = useViews(topic);
-  const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
+  const { model, createItem } = useItems(topic);
+  const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const anchor = useRef();
 
-  const handleSelect = (viewId) => {
-    router.push({ topic, item: viewId });
+  const handleSelect = (itemId) => {
+    router.push({ topic, item: itemId });
   };
 
   const handleCreate = (type) => {
     assert(type);
-    setNewViewCreationMenuOpen(false);
-    const viewId = createView(type);
-    handleSelect(viewId);
+    setNewItemCreationMenuOpen(false);
+    const itemId = createItem(type);
+    handleSelect(itemId);
   };
 
   return (
     <div className={classes.root}>
       <TreeView>
-        {model.getAllViews().map(view => (
+        {model.getAllItems().map(item => (
           <PartyTreeItem
-            key={view.viewId}
-            id={view.viewId}
-            label={view.displayName}
-            icon={pads.find(pad => pad.type === view.type)?.icon}
-            isSelected={active === view.viewId}
-            onSelect={() => handleSelect(view.viewId)}
+            key={item.itemId}
+            id={item.itemId}
+            label={item.displayName}
+            icon={pads.find(pad => pad.type === item.type)?.icon}
+            isSelected={active === item.itemId}
+            onSelect={() => handleSelect(item.itemId)}
           />
         ))}
 
-        {/* <PartyTreeAddItemButton ref={anchor} topic={topic} onClick={() => setNewViewCreationMenuOpen(true)}>Item</PartyTreeAddItemButton> */}
-        <NewViewCreationMenu anchorEl={anchor.current} open={newViewCreationMenuOpen} onSelect={handleCreate} onClose={() => setNewViewCreationMenuOpen(false)} pads={pads} />
+        {/* <PartyTreeAddItemButton ref={anchor} topic={topic} onClick={() => setNewItemCreationMenuOpen(true)}>Item</PartyTreeAddItemButton> */}
+        <NewItemCreationMenu anchorEl={anchor.current} open={newItemCreationMenuOpen} onSelect={handleCreate} onClose={() => setNewItemCreationMenuOpen(false)} pads={pads} />
       </TreeView>
       <Divider />
       <MemberList party={party} />
@@ -81,4 +81,4 @@ const DefaultViewList = () => {
   );
 };
 
-export default DefaultViewList;
+export default DefaultItemList;

@@ -13,7 +13,7 @@ export Layout from './Layout';
 export MemberAvatar, {getAvatarStyle } from './MemberAvatar';
 export MemberList from './MemberList';
 export MemberTable from './MemberTable';
-export NewViewCreationMenu from './NewViewCreationMenu';
+export NewItemCreationMenu from './NewItemCreationMenu';
 export PartyCard from './PartyCard';
 export PartyList from './PartyList';
 // TODO(burdon): Break out into separate classes.
@@ -25,6 +25,6 @@ export RegistrationDialog from './RegistrationDialog';
 export Sidebar from './Sidebar';
 export StatusBar from './StatusBar';
 export Theme, { createTheme, defaultThemeProperties } from './Theme';
-export ViewSettingsDialog from './ViewSettingsDialog';
+export ItemSettingsDialog from './ItemSettingsDialog';
 
 export * from './util';

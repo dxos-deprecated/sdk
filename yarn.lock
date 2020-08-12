@@ -1218,6 +1218,29 @@
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
+"@dxos/model-factory@^1.0.0-beta.28":
+  version "1.0.0-beta.28"
+  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-1.0.0-beta.28.tgz#8fa142731e1b94a8d1228d399e37f31192d44ea0"
+  integrity sha512-maOEdBFL/zexDAg6LstZ3RIgaZRnvmIKGD0pB7S15j8i9HB+Egy7liL5LHLeSjb4TdOJicglPxgp54ksM53q+A==
+  dependencies:
+    "@dxos/crypto" "^1.0.0-beta.1"
+    "@dxos/debug" "^1.0.0-beta.20"
+    "@dxos/feed-level-indexer" "^1.1.0-alpha.9"
+    "@dxos/metrics" "^1.0.0-beta.8"
+    "@dxos/protocol-network-generator" "^1.1.0-beta.2"
+    charwise "^3.0.1"
+    debug "^4.1.1"
+    end-of-stream "^1.4.4"
+    level-mem "^5.0.1"
+    lodash.debounce "^4.0.8"
+    monotonic-timestamp "^0.0.9"
+    multi-read-stream "^2.0.0"
+    p-limit "^3.0.1"
+    pump "^3.0.0"
+    signal-promise "^1.0.3"
+    source-map-support "^0.5.12"
+    through2 "^3.0.1"
+
 "@dxos/network-generator@^1.0.0-beta.1":
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@dxos/network-generator/-/network-generator-1.0.0-beta.2.tgz#9c0debfb9be41e40047feaba4c3583b33d73e69c"
@@ -1357,13 +1380,13 @@
     prop-types "^15.5.8"
     react-base16-styling "^0.5.1"
 
-"@dxos/view-model@^1.0.0-beta.27":
-  version "1.0.0-beta.27"
-  resolved "https://registry.yarnpkg.com/@dxos/view-model/-/view-model-1.0.0-beta.27.tgz#7f1081a5a2a85501c8ce2dc53e0d3dc7bc3bb1ab"
-  integrity sha512-La7gNIoWaQDKQJcw1eMps5AfIE32lWovMOvgVOi2RdGfa//FJX+wK7joEBB9xRJtuSEdE1Yq42CiMeMn258+2Q==
+"@dxos/view-model@^1.0.0-beta.28":
+  version "1.0.0-beta.28"
+  resolved "https://registry.yarnpkg.com/@dxos/view-model/-/view-model-1.0.0-beta.28.tgz#7a311c4357990179bdc890766ada8238d103800e"
+  integrity sha512-K5NykObD0cqjeq80LyKFEKz0/3chBa4o/cRBIrNVJjiCsJQIbfL7enXQzeI1B7vT4PUbRnb2g5d59skDEJNA6Q==
   dependencies:
     "@dxos/crypto" "^0.0.1"
-    "@dxos/model-factory" "^1.0.0-beta.27"
+    "@dxos/model-factory" "^1.0.0-beta.28"
 
 "@emotion/cache@^10.0.27", "@emotion/cache@^10.0.9":
   version "10.0.29"

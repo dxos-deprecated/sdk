@@ -29,7 +29,7 @@ import { keyToString } from '@dxos/crypto';
 
 import { useAssets } from './util';
 
-import NewViewCreationMenu from './NewViewCreationMenu';
+import NewItemCreationMenu from './NewItemCreationMenu';
 import PartySharingDialog from './PartySharingDialog';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartyMemberList from './PartyMemberList';
@@ -105,25 +105,25 @@ const useStyles = makeStyles(theme => ({
 
 // TODO(burdon): Rename onCreateParty
 // TODO(burdon): Extract client, router and dialogs and inject actions.
-const PartyCard = ({ party, client, router, pads, viewModel, onNewParty, onNewItemRequested }) => {
+const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewItemRequested }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
-  const [newViewCreationMenuOpen, setNewViewCreationMenuOpen] = useState(false);
+  const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
-  const createViewAnchor = useRef();
+  const createItemAnchor = useRef();
 
   const topic = party ? keyToString(party.publicKey) : '';
 
-  const handleNewViewSelected = (type) => {
-    setNewViewCreationMenuOpen(false);
+  const handleNewItemSelected = (type) => {
+    setNewItemCreationMenuOpen(false);
     onNewItemRequested({ type });
   };
 
-  const handleSelect = (viewId) => {
-    router.push({ topic, item: viewId });
+  const handleSelect = (itemId) => {
+    router.push({ topic, item: itemId });
   };
 
   const handleSubscribe = async () => {
@@ -183,12 +183,12 @@ const PartyCard = ({ party, client, router, pads, viewModel, onNewParty, onNewIt
 
         <div className={classes.listContainer}>
           <List dense disablePadding>
-            {viewModel.getAllViews().map(item => (
+            {itemModel.getAllItems().map(item => (
               <ListItem
-                key={item.viewId}
+                key={item.itemId}
                 button
                 disabled={!party.subscribed}
-                onClick={() => handleSelect(item.viewId)}
+                onClick={() => handleSelect(item.itemId)}
               >
                 <ListItemIcon>
                   <PadIcon type={item.type} />
@@ -198,7 +198,7 @@ const PartyCard = ({ party, client, router, pads, viewModel, onNewParty, onNewIt
                 </ListItemText>
                 {party.subscribed && (
                   <ListItemSecondaryAction>
-                    <IconButton size='small' edge='end' aria-label='delete' onClick={() => viewModel.deleteView(item.viewId)}>
+                    <IconButton size='small' edge='end' aria-label='delete' onClick={() => itemModel.deleteItem(item.itemId)}>
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
@@ -206,8 +206,8 @@ const PartyCard = ({ party, client, router, pads, viewModel, onNewParty, onNewIt
               </ListItem>
             ))}
 
-            {party.subscribed && showDeleted && viewModel.getAllDeletedViews().map(item => (
-              <ListItem key={item.viewId} disabled>
+            {party.subscribed && showDeleted && itemModel.getAllDeletedItems().map(item => (
+              <ListItem key={item.itemId} disabled>
                 <ListItemIcon>
                   <PadIcon type={item.type} />
                 </ListItemIcon>
@@ -215,7 +215,7 @@ const PartyCard = ({ party, client, router, pads, viewModel, onNewParty, onNewIt
                   {item.displayName}
                 </ListItemText>
                 <ListItemSecondaryAction>
-                  <IconButton edge='end' aria-label='restore' onClick={() => viewModel.restoreView(item.viewId)}>
+                  <IconButton edge='end' aria-label='restore' onClick={() => itemModel.restoreItem(item.itemId)}>
                     <RestoreIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
@@ -229,11 +229,11 @@ const PartyCard = ({ party, client, router, pads, viewModel, onNewParty, onNewIt
             <>
               <PartyMemberList party={party} onShare={() => setShareDialogOpen(true)} />
               <IconButton
-                ref={createViewAnchor}
+                ref={createItemAnchor}
                 size='small'
                 edge='end'
-                aria-label='add view'
-                onClick={() => setNewViewCreationMenuOpen(true)}
+                aria-label='add item'
+                onClick={() => setNewItemCreationMenuOpen(true)}
               >
                 <AddIcon />
               </IconButton>
@@ -253,11 +253,11 @@ const PartyCard = ({ party, client, router, pads, viewModel, onNewParty, onNewIt
       </Card>
 
       {/* TODO(burdon): Move outside: don't create this FOR EACH party. */}
-      <NewViewCreationMenu
-        anchorEl={createViewAnchor.current}
-        open={newViewCreationMenuOpen}
-        onSelect={handleNewViewSelected}
-        onClose={() => setNewViewCreationMenuOpen(false)}
+      <NewItemCreationMenu
+        anchorEl={createItemAnchor.current}
+        open={newItemCreationMenuOpen}
+        onSelect={handleNewItemSelected}
+        onClose={() => setNewItemCreationMenuOpen(false)}
         pads={pads}
       />
 
