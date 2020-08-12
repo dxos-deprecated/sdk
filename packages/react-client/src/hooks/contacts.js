@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { useClient } from '@dxos/react-client';
+import { useClient } from './client';
 
 export function useContacts () {
   const client = useClient();

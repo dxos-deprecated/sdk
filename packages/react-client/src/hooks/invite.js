@@ -7,7 +7,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { trigger } from '@dxos/async';
 import { generatePasscode } from '@dxos/credentials';
 import { InviteType, InviteDetails, InvitationDescriptor } from '@dxos/party-manager';
-import { useClient } from '@dxos/react-client';
+
+import { useClient } from './client';
 
 const encodeInvitation = (invitation) => btoa(JSON.stringify(invitation.toQueryParameters()));
 const decodeInvitation = (code) => InvitationDescriptor.fromQueryParameters(JSON.parse(atob(code)));
