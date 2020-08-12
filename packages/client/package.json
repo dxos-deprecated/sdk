@@ -1,6 +1,6 @@
 {
   "name": "@dxos/client",
-  "version": "1.0.0-beta.255",
+  "version": "1.0.0-beta.256",
   "license": "AGPLv3",
   "author": "DXOS.org",
   "main": "dist/es/index.js",
