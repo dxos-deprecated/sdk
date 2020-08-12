@@ -14,7 +14,8 @@ import {
   createStatusCommand,
   createInvitationCommand,
   createBotManagementCommand,
-  createResetCommand
+  createResetCommand,
+  createStopCommand
 } from '@dxos/protocol-plugin-bot';
 
 import { keyToBuffer } from '@dxos/crypto';
@@ -107,18 +108,27 @@ export class BotFactoryClient {
     }
   }
 
-  async sendResetRequest () {
+  async sendResetRequest (source = false) {
     if (!this._connected) {
       await this._connect();
     }
 
     log('Sending reset request.');
-    const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createResetCommand());
+    const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createResetCommand(source));
     const { message: { error } } = response;
 
     if (error) {
       throw new Error(error);
     }
+  }
+
+  async sendStopRequest (code = 0) {
+    if (!this._connected) {
+      await this._connect();
+    }
+
+    log('Sending stop request.');
+    await this._botPlugin.sendCommand(this._botFactoryTopic, createStopCommand(code.toString()), true);
   }
 
   async getStatus () {

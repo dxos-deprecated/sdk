@@ -1582,15 +1582,15 @@
     pump "^3.0.0"
     source-map-support "^0.5.12"
 
-"@dxos/protocol-plugin-bot@^1.1.0-beta.12":
-  version "1.1.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.13.tgz#48b9ff881e9db0cf4b55a93b4c7ba3066cd5b015"
-  integrity sha512-Cxk0s+/3myLdYk9pRyPGnZsJb2pk0XtbcdjiFOM3JPijwfIG7qGEvxk/neTylJFUQQRpx5tiPqNfexIvl2u9uQ==
+"@dxos/protocol-plugin-bot@^1.1.0-beta.14":
+  version "1.1.0-beta.14"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.14.tgz#20784cd3ec27f16e73a6a6997ec044272d93977f"
+  integrity sha512-2fzLq4N1vzgtaIT4Nswg5bbGhwMlDuWahrOBcFE9va6M9WmHWsaz/B4nWJPjqZGEx9afR0l/Pfj7nO2dShORpg==
   dependencies:
     "@dxos/broadcast" "^1.0.0-beta.6"
     "@dxos/codec-protobuf" "^1.1.0-beta.7"
     "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/protocol" "^1.1.0-beta.13"
+    "@dxos/protocol" "^1.1.0-beta.14"
     debug "^4.1.1"
     source-map-support "^0.5.12"
 
@@ -1629,6 +1629,24 @@
     humanhash "^1.0.4"
     hypercore-protocol "^6.11.1"
     nanoerror "^1.1.0"
+    nanomessage "^5.4.0"
+    nanoresource-promise "^2.0.0"
+    signal-promise "^1.0.3"
+    source-map-support "^0.5.12"
+
+"@dxos/protocol@^1.1.0-beta.14":
+  version "1.1.0-beta.14"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol/-/protocol-1.1.0-beta.14.tgz#04a50cdb8df4490fa263770e9754232e3b842fc1"
+  integrity sha512-by6QfBSUMusx8xmG102lP8flGD75QLZ4JLwr8hsIxqwfSucgkHgYVHMiHNXg6tlW7i6cTkaTb/yEbhF9FqMMwQ==
+  dependencies:
+    "@dxos/codec-protobuf" "^1.1.0-beta.9"
+    assert "^2.0.0"
+    buffer-json-encoding "^1.0.2"
+    debug "^4.1.1"
+    end-of-stream "^1.4.1"
+    humanhash "^1.0.4"
+    hypercore-protocol "^6.11.1"
+    nanoerror "^1.2.1"
     nanomessage "^5.4.0"
     nanoresource-promise "^2.0.0"
     signal-promise "^1.0.3"
@@ -7017,6 +7035,13 @@ debug@3.1.0:
   dependencies:
     ms "2.0.0"
 
+debug@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.0.tgz#373687bffa678b38b1cd91f861b63850035ddc87"
+  integrity sha512-heNPJUJIqC+xB6ayLAMHaIrmN9HKa7aQO8MGqKpvCA+uJYVcvR6l5kgdrhRuwPFHU7P5/A1w0BjByPHwpfTDKg==
+  dependencies:
+    ms "^2.1.1"
+
 debug@^3.0.0, debug@^3.1.0, debug@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
@@ -7146,7 +7171,7 @@ deep-extend@^0.6.0:
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
   integrity sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==
 
-deep-is@~0.1.3:
+deep-is@^0.1.3, deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
@@ -10372,7 +10397,7 @@ is-typedarray@^1.0.0, is-typedarray@~1.0.0:
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
   integrity sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=
 
-is-url@1.2.4:
+is-url@1.2.4, is-url@^1.2.2:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/is-url/-/is-url-1.2.4.tgz#04a4df46d28c4cff3d73d01ff06abeb318a1aa52"
   integrity sha512-ITvGim8FhRiYe4IQ5uHSkj7pVaPDrCTkNd3yq3cV7iZAcJdHTUMPMEHcqSOy9xZ9qFenQCvi+2wjH9a1nXqHww==
@@ -10403,6 +10428,15 @@ is-wsl@^2.1.1, is-wsl@^2.2.0:
   integrity sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==
   dependencies:
     is-docker "^2.0.0"
+
+is2@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/is2/-/is2-2.0.1.tgz#8ac355644840921ce435d94f05d3a94634d3481a"
+  integrity sha512-+WaJvnaA7aJySz2q/8sLjMb2Mw14KTplHmSwcSpZ/fWJPkUmqw3YTzSWbPJ7OAwRvdYTWF2Wg+yYJ1AdP5Z8CA==
+  dependencies:
+    deep-is "^0.1.3"
+    ip-regex "^2.1.0"
+    is-url "^1.2.2"
 
 isarray@0.0.1:
   version "0.0.1"
@@ -12910,6 +12944,13 @@ nanoerror@^1.0.0, nanoerror@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/nanoerror/-/nanoerror-1.1.0.tgz#c358b1f249ff033e0d734013520d7e0a920b1f1e"
   integrity sha512-pMuD3WQ75amZzRorXRLZOqc4dpIei1+2oD9rAR5wy0t6/mRWtV5SFpitkiN7+ZV8jIe54C41cgia5n34QaYI6A==
+  dependencies:
+    quick-format-unescaped "^3.0.3"
+
+nanoerror@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/nanoerror/-/nanoerror-1.2.1.tgz#4a4d98e21f5f0b2222e85aff1be170ef825aa23f"
+  integrity sha512-pCXtdyUZUqkyJjrfKxSMCzdblgVbXOXPdFC+Th80IuQzuoaSwLmMu8rJID92VStrv7sMyqMj86PJMoj//bKcsg==
   dependencies:
     quick-format-unescaped "^3.0.3"
 
@@ -16705,6 +16746,14 @@ tar@^6.0.2:
     minizlib "^2.1.0"
     mkdirp "^1.0.3"
     yallist "^4.0.0"
+
+tcp-port-used@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/tcp-port-used/-/tcp-port-used-1.0.1.tgz#46061078e2d38c73979a2c2c12b5a674e6689d70"
+  integrity sha512-rwi5xJeU6utXoEIiMvVBMc9eJ2/ofzB+7nLOdnZuFTmNCLqRiQh2sMG9MqCxHU/69VC/Fwp5dV9306Qd54ll1Q==
+  dependencies:
+    debug "4.1.0"
+    is2 "2.0.1"
 
 telejson@^5.0.2:
   version "5.0.2"

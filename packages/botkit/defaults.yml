@@ -7,4 +7,5 @@ bot:
   invitation: null
   localDev: false
   ipc:
-    port: 8999
+    portFrom: 3250
+    portTo: 3350
