@@ -6,7 +6,7 @@ import { useEffect, useState, useMemo } from 'react';
 
 import { trigger } from '@dxos/async';
 import { generatePasscode } from '@dxos/credentials';
-import { InviteType, InviteDetails, InvitationDescriptor } from '@dxos/party-manager';
+import { InviteType, InvitationDescriptor } from '@dxos/party-manager';
 
 import { useClient } from './client';
 
@@ -94,11 +94,7 @@ export function useInviteContact ({ party, contact, onDone = noOp, onError = noO
   const contactKey = contact ? contact.publicKey.toString('hex') : '';
 
   useEffect(() => {
-    // client.inviteContactToParty(party.publicKey, contact)
-    client._partyManager.inviteToParty(
-      party.publicKey,
-      new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: contact.publicKey })
-    )
+    client.inviteContactToParty(party.publicKey, contact)
       .then(invitation => {
         setInvitationCode(encodeInvitation(invitation));
         onDone();
