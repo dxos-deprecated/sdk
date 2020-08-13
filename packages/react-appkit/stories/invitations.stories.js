@@ -11,7 +11,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { sleep } from '@dxos/async';
 import { ErrorHandler } from '@dxos/debug';
 
-import { AppKitContextProvider, BotDialog } from '../src';
+import { AppKitContextProvider, BotDialog, AuthenticatorDialog } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads, NoPartyComponent } from './common';
 
@@ -55,5 +55,62 @@ export const withBotDialog = () => {
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
     </AppKitContextProvider>
+  );
+};
+
+export const withAuthenticatorDialog = () => {
+  const [submitted, setSubmitted] = useState(false);
+  const [open, setOpen] = useState(true);
+
+  if (!open) {
+    return <p>Canceled.</p>;
+  }
+
+  if (submitted) {
+    return <p>Submitted!</p>;
+  }
+
+  return (
+    <Box m={2}>
+      <AuthenticatorDialog
+        onCancel={() => setOpen(false)}
+        onSubmit={() => setSubmitted(true)}
+      />
+    </Box>
+  );
+};
+
+export const withAuthenticatorDialogKnownFlow = () => {
+  const [open, setOpen] = useState(true);
+
+  if (!open) {
+    return <p>Canceled.</p>;
+  }
+
+  return (
+    <Box m={2}>
+      <AuthenticatorDialog
+        onCancel={() => setOpen(false)}
+        isOfflineKeyInvitation
+      />
+    </Box>
+  );
+};
+
+export const withAuthenticatorDialogError = () => {
+  const [open, setOpen] = useState(true);
+
+  if (!open) {
+    return <p>Canceled.</p>;
+  }
+
+  return (
+    <Box m={2}>
+      <AuthenticatorDialog
+        error='Something really bad has happened'
+        onCancel={() => setOpen(false)}
+        onSubmit={() => {}}
+      />
+    </Box>
   );
 };
