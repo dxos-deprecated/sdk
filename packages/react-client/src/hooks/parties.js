@@ -10,7 +10,7 @@ import { keyToBuffer } from '@dxos/crypto';
 import { useClient } from './client';
 
 /**
- * Obtains a PartyInfo object for the giver parteKey
+ * Obtains a PartyInfo object for the given party publicKey.
  * @param {String|Buffer} key party publicKey.
  * @returns {PartyInfo|undefined} PartyInfo provides details about the Party itself and about Party membership.
  */
