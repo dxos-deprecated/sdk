@@ -11,6 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { FullScreen, Passcode } from '@dxos/react-ux';
 
@@ -27,8 +28,9 @@ const useStyles = makeStyles(theme => ({
 
 /**
  * Displays the invitation challenge.
+ * @param {boolean} isOfflineKeyInvitation - Whether this is a "known" invitation flow, where there is no need for pin code
  */
-const AuthenticatorDialog = ({ error, onSubmit, onCancel }) => {
+const AuthenticatorDialog = ({ error, onSubmit, onCancel, isOfflineKeyInvitation = false }) => {
   const classes = useStyles();
 
   const [attempt, setAttempt] = useState(0);
@@ -49,17 +51,26 @@ const AuthenticatorDialog = ({ error, onSubmit, onCancel }) => {
     <FullScreen>
       <Dialog open>
         <DialogTitle>
-          Authenticate
+          {isOfflineKeyInvitation ? 'Authentication' : 'Authenticate'}
         </DialogTitle>
 
         <DialogContent>
-          <Typography className={classes.comment}>Enter the passcode.</Typography>
+          {isOfflineKeyInvitation ? (
+            <>
+              <Typography className={classes.comment}>Please wait until the authentication process is completed.</Typography>
+              {!error && <LinearProgress />}
+            </>
+          ) : (
+            <>
+              <Typography className={classes.comment}>Enter the passcode.</Typography>
 
-          <Passcode
-            editable
-            attempt={attempt}
-            onSubmit={handleSubmit}
-          />
+              <Passcode
+                editable
+                attempt={attempt}
+                onSubmit={handleSubmit}
+              />
+            </>
+          )}
 
           {error && (
             <Typography color='error' className={classes.error}>{error}</Typography>
