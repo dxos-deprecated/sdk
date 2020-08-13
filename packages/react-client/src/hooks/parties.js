@@ -11,17 +11,17 @@ import { useClient } from './client';
 
 /**
  * Obtains a PartyInfo object for the giver parteKey
- * @param {String} topic party publicKey.
+ * @param {String|Buffer} key party publicKey.
  * @returns {PartyInfo|undefined} PartyInfo provides details about the Party itself and about Party membership.
  */
-export const useParty = (topic) => {
+export const useParty = (key) => {
   const client = useClient();
-  const partyKey = topic ? keyToBuffer(topic) : undefined;
+  const partyKey = Buffer.isBuffer(key) ? key : keyToBuffer(key);
   const [partyInfo, setPartyInfo] = useState(partyKey ? client.partyManager.getPartyInfo(partyKey) : undefined);
 
   useEffect(() => {
     setPartyInfo(partyKey ? client.partyManager.getPartyInfo(partyKey) : undefined);
-  }, [topic]);
+  }, [key]);
 
   useEffect(() => {
     const listener = (eventPartyKey) => {
