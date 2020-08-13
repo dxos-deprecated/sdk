@@ -3,12 +3,11 @@
 //
 
 import React, { useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useParams } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
 import { withKnobs } from '@storybook/addon-knobs';
 
-import { keyToString } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParty } from '@dxos/react-client';
 
@@ -24,7 +23,8 @@ export default {
 // TODO(burdon): Consistency with dialogs as either components or containers (with hooks).
 const PartySettingsComponent = () => {
   const client = useClient();
-  const party = useParty();
+  const { topic } = useParams();
+  const party = useParty(topic);
   const [open, setOpen] = useState(true);
 
   return (
@@ -51,9 +51,9 @@ export const withPartySettingsDialog = () => {
 };
 
 const SidebarComponent = () => {
-  const party = useParty();
+  const { topic } = useParams();
+  const party = useParty(topic);
 
-  const topic = party ? keyToString(party.publicKey) : '';
   const { createItem } = useItems(topic);
 
   if (!party) return null;

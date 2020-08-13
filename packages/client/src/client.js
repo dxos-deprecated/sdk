@@ -159,14 +159,14 @@ export class Client {
 
   /**
    *
-   * @param {Buffer} publicKey Party publicKey
+   * @param {Buffer} partyKey Party publicKey
    * @param {SecretProvider} secretProvider
    * @param {Object} options
    * @param {Function} options.onFinish function to be called once invitation flow is done.
    */
-  async inviteToParty (publicKey, secretProvider, options = {}) {
+  async createInvitation (partyKey, secretProvider, options = {}) {
     return this._partyManager.inviteToParty(
-      publicKey,
+      partyKey,
       new InviteDetails(InviteType.INTERACTIVE, {
         secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
         secretProvider
@@ -178,12 +178,12 @@ export class Client {
   /**
    *
    * @param {Buffer} publicKey Party publicKey
-   * @param {Contact} contact
+   * @param {Buffer} recipient Recipient publicKey
    */
-  async inviteContactToParty (publicKey, contact) {
+  async createOfflineInvitation (partyKey, recipientKey) {
     return this._partyManager.inviteToParty(
-      publicKey,
-      new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: contact.publicKey })
+      partyKey,
+      new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: recipientKey })
     );
   }
 

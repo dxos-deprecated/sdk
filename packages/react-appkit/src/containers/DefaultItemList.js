@@ -39,9 +39,9 @@ const useStyles = makeStyles(theme => ({
 
 const DefaultItemList = () => {
   const router = useAppRouter();
-  const party = useParty();
-  const classes = useStyles();
   const { topic, item: active } = useParams();
+  const party = useParty(topic);
+  const classes = useStyles();
   const [pads] = usePads();
   const { model, createItem } = useItems(topic);
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);

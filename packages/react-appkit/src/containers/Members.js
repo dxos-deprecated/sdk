@@ -3,6 +3,7 @@
 //
 
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useParty } from '@dxos/react-client';
 
@@ -17,7 +18,8 @@ import MemberTable from '../components/MemberTable';
  * Displays Members for the current party.
  */
 const Members = () => {
-  const party = useParty();
+  const { topic } = useParams();
+  const party = useParty(topic);
 
   return (
     <AppContainer sidebarContent={<DefaultSidebar />}>

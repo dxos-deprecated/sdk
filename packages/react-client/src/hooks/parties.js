@@ -4,26 +4,24 @@
 
 import React, { useEffect, useState } from 'react';
 import getDisplayName from 'react-display-name';
-import { useParams } from 'react-router-dom';
 
 import { keyToBuffer } from '@dxos/crypto';
 
 import { useClient } from './client';
 
 /**
- * Obtains a PartyInfo object for the currently active Party (if any).
- * PartyInfo provides details about the Party itself and about Party membership.
- * @returns {PartyInfo|undefined}
+ * Obtains a PartyInfo object for the given party publicKey.
+ * @param {String|Buffer} key party publicKey.
+ * @returns {PartyInfo|undefined} PartyInfo provides details about the Party itself and about Party membership.
  */
-export const useParty = () => {
+export const useParty = (key) => {
   const client = useClient();
-  const { topic } = useParams(); // TODO(burdon): Get from context?
-  const partyKey = topic ? keyToBuffer(topic) : undefined;
+  const partyKey = Buffer.isBuffer(key) ? key : keyToBuffer(key);
   const [partyInfo, setPartyInfo] = useState(partyKey ? client.partyManager.getPartyInfo(partyKey) : undefined);
 
   useEffect(() => {
     setPartyInfo(partyKey ? client.partyManager.getPartyInfo(partyKey) : undefined);
-  }, [topic]);
+  }, [key]);
 
   useEffect(() => {
     const listener = (eventPartyKey) => {

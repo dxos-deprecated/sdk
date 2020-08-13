@@ -3,7 +3,7 @@
 //
 
 import React, { useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useParams } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
 import { withKnobs } from '@storybook/addon-knobs';
@@ -119,7 +119,8 @@ export const withAuthenticatorDialogError = () => {
 
 const PartySharingComponent = () => {
   const [open, setOpen] = useState(true);
-  const party = useParty();
+  const { topic } = useParams();
+  const party = useParty(topic);
   const client = useClient();
   const router = useAppRouter();
 
