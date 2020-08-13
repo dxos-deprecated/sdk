@@ -37,8 +37,9 @@ export const MemberList = ({ party }) => {
     <List className={classes.membersList}>
       {party.members.sort(sorter).map((member) => (
         <ListItem key={member.publicKey} className={classes.member}>
-          {shortenName(member.displayName || humanize(member.publicKey))}
           <MemberAvatar member={member} />
+          &nbsp;
+          {shortenName(member.displayName || humanize(member.publicKey))}
         </ListItem>
       ))}
     </List>

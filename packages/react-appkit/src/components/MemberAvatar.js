@@ -32,8 +32,8 @@ export const getAvatarStyle = (theme, publicKey) => {
   return {
     backgroundColor: color,
     color: theme.palette.getContrastText(color),
-    width: theme.spacing(4),
-    height: theme.spacing(4)
+    width: theme.spacing(4) - 2,
+    height: theme.spacing(4) - 2
   };
 };
 
