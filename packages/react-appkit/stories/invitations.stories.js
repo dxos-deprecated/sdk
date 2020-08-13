@@ -8,12 +8,14 @@ import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
 import { withKnobs } from '@storybook/addon-knobs';
 
+import { useClient, useParty } from '@dxos/react-client';
 import { sleep } from '@dxos/async';
 import { ErrorHandler } from '@dxos/debug';
 
-import { AppKitContextProvider, BotDialog, AuthenticatorDialog } from '../src';
+import { AppKitContextProvider, BotDialog, AuthenticatorDialog, PartySharingDialog } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads, NoPartyComponent } from './common';
+import { useAppRouter } from '../src/hooks';
 
 const errorHandler = new ErrorHandler();
 
@@ -112,5 +114,35 @@ export const withAuthenticatorDialogError = () => {
         onSubmit={() => {}}
       />
     </Box>
+  );
+};
+
+const PartySharingComponent = () => {
+  const [open, setOpen] = useState(true);
+  const party = useParty();
+  const client = useClient();
+  const router = useAppRouter();
+
+  return (
+    <Box m={2}>
+      <PartySharingDialog
+        party={party}
+        client={client}
+        open={open}
+        onClose={() => setOpen(false)}
+        router={router}
+      />
+    </Box>
+  );
+};
+
+export const withPartySharing = () => {
+  return (
+    <AppKitContextProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
+      <Switch>
+        <Route path='/:topic' exact component={PartySharingComponent} />
+        <Route path='/' exact component={NoPartyComponent} />
+      </Switch>
+    </AppKitContextProvider>
   );
 };
