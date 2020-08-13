@@ -5,7 +5,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { InvitationDescriptor } from '@dxos/party-manager';
+import { InvitationDescriptor, InvitationDescriptorType } from '@dxos/party-manager';
 import { useAuthenticator } from '@dxos/react-client';
 import { createPath, useQuery } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';
@@ -43,6 +43,7 @@ const Authenticator = () => {
         error={error}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
+        isOfflineKeyInvitation={invitation.type === InvitationDescriptorType.OFFLINE_KEY}
       />
     </FullScreen>
   );
