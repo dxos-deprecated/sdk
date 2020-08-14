@@ -70,8 +70,8 @@ const EditableText = ({
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
         fullWidth
-        InputProps={{
-          inputProps: {
+        inputProps={{
+          inputprops: {
             spellCheck: false
           }
         }}
@@ -87,8 +87,8 @@ const EditableText = ({
         disabled={disabled}
         onClick={disabled ? null : () => setEditable(true)}
         fullWidth
-        InputProps={{
-          inputProps: {
+        inputProps={{
+          inputprops: {
             spellCheck: false
           }
         }}
@@ -103,8 +103,8 @@ const EditableText = ({
       disabled={disabled}
       onClick={disabled ? null : () => setEditable(true)}
       fullWidth
-      InputProps={{
-        inputProps: {
+      inputProps={{
+        inputprops: {
           spellCheck: false
         }
       }}
