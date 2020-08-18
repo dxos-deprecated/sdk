@@ -37,10 +37,15 @@ const Authenticator = () => {
     history.push(createPath());
   };
 
+  const recognisedError = error &&
+    error.includes('ERR_GREET_INVALID_INVITATION') &&
+    'The invitation does not exist or the attempted access to it was unauthorized.';
+
   return (
     <FullScreen>
       <AuthenticatorDialog
         error={error}
+        recognisedError={recognisedError}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
         isOfflineKeyInvitation={invitation.type === InvitationDescriptorType.OFFLINE_KEY}
