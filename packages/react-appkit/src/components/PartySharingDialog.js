@@ -121,9 +121,7 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
     return invitation;
   };
 
-  const handleBotInvite = async (botFactoryTopic, bot, botVersion, spec = {}) => {
-    const botId = `wrn:bot:${bot}#${botVersion}`;
-
+  const handleBotInvite = async (botFactoryTopic, botId, spec = {}) => {
     const botFactoryClient = new BotFactoryClient(client.networkManager, botFactoryTopic);
 
     const secretProvider = () => {};
@@ -210,7 +208,7 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
 
         <BotDialog
           open={botDialogVisible}
-          onSubmit={async ({ topic: bfTopic, bot, botVersion, spec }) => handleBotInvite(bfTopic, bot, botVersion, spec)}
+          onSubmit={async ({ topic: bfTopic, bot, spec }) => handleBotInvite(bfTopic, bot, spec)}
           onClose={() => setBotDialogVisible(false)}
         />
 

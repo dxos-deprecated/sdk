@@ -59,7 +59,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
     setError(undefined);
     setPending(true);
     try {
-      await onSubmit({ topic: botFactoryTopic, bot, botVersion });
+      await onSubmit({ topic: botFactoryTopic, bot: botVersion });
     } catch (e) {
       console.error(e);
       setError(e);
@@ -70,12 +70,12 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
 
   useEffect(() => {
     const versions = registryBots
-      .filter(({ name }) => name === bot).map(({ version }) => version)
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-      .reverse();
+      .filter(({ names }) => bot.map(botName => names.find(name => name.startsWith(`${botName}@`))).filter(name => !!name))
+      .map(({ names }) => names)
+      .flat();
 
     setBotVersions(versions);
-    setBotVersion(versions[0] || '');
+    setBotVersion(bot[0] || '');
   }, [bot]);
 
   return (
@@ -113,11 +113,11 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             onChange={event => setBot(event.target.value)}
           >
             {registryBots
-              .map(({ name }) => name)
-              .filter((value, index, self) => self.indexOf(value) === index)
-              .map(name => (
-                <MenuItem key={name} value={name}>
-                  {name}
+              .map(({ names = [] }) => names.sort((a, b) => a.length - b.length).filter(name => name.indexOf('@') === -1))
+              .filter(names => names.length)
+              .map(names => (
+                <MenuItem key={names[0]} value={names}>
+                  {names[0]}
                 </MenuItem>
               ))}
           </Select>

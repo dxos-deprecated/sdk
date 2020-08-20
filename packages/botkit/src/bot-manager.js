@@ -371,7 +371,7 @@ export class BotManager {
       );
       return { attributes: { displayName: botInfo.name } };
     }
-    const records = await this._registry.resolveRecords([botId]);
+    const { records } = await this._registry.resolveNames([botId]);
     if (!records.length) {
       log(`Bot not found: ${botId}.`);
       throw new Error(`Invalid bot: ${botId}`);

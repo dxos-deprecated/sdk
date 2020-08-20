@@ -25,11 +25,11 @@ export const useRegistryBots = () => {
 
   useEffect(() => {
     const queryRegistry = async () => {
-      const botsResult = await registry.queryRecords({ type: WRN_TYPE_BOT, version: '*' });
-      setRegistryBots(botsResult.map(({ attributes: { version, name, displayName } }) => ({
+      const botsResult = await registry.queryRecords({ type: WRN_TYPE_BOT });
+      setRegistryBots(botsResult.map(({ attributes: { version, name }, names }) => ({
         version,
         name,
-        displayName
+        names
       })));
     };
 
@@ -46,9 +46,10 @@ export const useRegistryBotFactories = () => {
   useEffect(() => {
     const queryRegistry = async () => {
       const factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY });
-      setFactories(factoriesResult.map(({ attributes: { topic, name } }) => ({
+      setFactories(factoriesResult.map(({ attributes: { topic, name }, names }) => ({
         topic,
-        name
+        name,
+        names
       })));
     };
 
