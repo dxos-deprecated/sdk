@@ -40,11 +40,10 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   
   const handleSignUp = async (username) => {
-    // TODO: should provide a keyPair so we can avoid setting the keyRecord here.
-    await client.keyring.createKeyRecord({ type: KeyType.IDENTITY });
-    await client.createProfile({ username });
+    const { publicKey, secretKey } = createKeyPair();
+    await client.createProfile({ publicKey, secretKey, username });
   }
-  
+
   return (
     // ... 
   );
