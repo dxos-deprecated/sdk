@@ -70,7 +70,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
 
   useEffect(() => {
     const versions = registryBots
-      .filter(({ names }) => [bot].map(botName => names.find(name => name.startsWith(`${botName}@`))).filter(name => !!name))
+      .filter(({ names }) => !!names.find(name => name.startsWith(`${bot}@`)))
       .map(({ names }) => names).flat()
       .sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).reverse()
       .filter(name => name !== bot);
