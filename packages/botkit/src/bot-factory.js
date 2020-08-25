@@ -104,7 +104,8 @@ export class BotFactory {
     switch (message.__type_url) {
       case COMMAND_SPAWN: {
         try {
-          const botUID = await this._botManager.spawnBot(message.botId);
+          const { botId, options } = message;
+          const botUID = await this._botManager.spawnBot(botId, options);
           await waitForCondition(() => this._ipcServer.clientConnected(botUID), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
           return createSpawnResponse(botUID);
         } catch (err) {
