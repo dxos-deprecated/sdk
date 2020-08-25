@@ -45,7 +45,7 @@ const appReducer = (state, action) => ({
  * @param {Array} [pads]
  * @returns {function}
  */
-const AppKitContextProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [] }) => {
+const AppKitContextProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined }) => {
   const [state, dispatch] = useReducer(appReducer, defaultsDeep({}, initialState, defaultState));
   const reset = useReset();
   const config = useConfig();
@@ -79,7 +79,7 @@ const AppKitContextProvider = ({ children, initialState, router = DefaultRouter,
   }, []);
 
   return (
-    <AppKitContext.Provider value={{ state, dispatch, router, pads }}>
+    <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink }}>
       <ErrorBoundary onError={handleError} onRestart={handleRestart} onReset={handleReset}>
         {children}
       </ErrorBoundary>

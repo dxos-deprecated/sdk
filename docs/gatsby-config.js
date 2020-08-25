@@ -20,6 +20,14 @@ module.exports = {
             'index',
             'getting-started'
           ],
+          Tutorial: [
+            'tutorial/introduction',
+            'tutorial/client',
+            'tutorial/profile',
+            'tutorial/party',
+            'tutorial/invite',
+            'tutorial/data'
+          ],
           Botkit: [
             'botkit/index'
           ]
