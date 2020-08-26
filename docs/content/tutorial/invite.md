@@ -23,13 +23,17 @@ function Invite ({ party }) {
 
 ```
 
-// IMAGE OF INVITE DIALOG
+![Invite Dialog](./invite-00.png)
 
-At this stage, the have the `inviteCode` which is the code we have to share with the peer we want to invite. As mentioned before, this process is interactive. Once the code is redeemed by the peer, we will get notified and the `pin` value will be available. The peer will be required to enter the `pin` value to finish the invitation process.
+At this stage, we have the `inviteCode` which is the code we have to share with the peer we want to invite. 
+
+![Invite Dialog Show Code](./invite-01.png)
+
+As mentioned before, this process is interactive. Once the code is redeemed by the peer, we will get notified and the `pin` value will be available. The peer will be required to enter the `pin` value to finish the invitation process.
 
 In the code, we show the `inviteCode` till the `pin` is available and then switch and display the `pin` code.
 
-// IMAGE OF INVITE DIALOG SIDE BY SIDE WITH DISPLAY INVITE AND DISPLAY PIN
+![Invite Dialog Show Pin](./invite-02.png)
 
 ## Redeem
 
@@ -57,10 +61,11 @@ export default function RedeemDialog ({ onClose, ...props }) {
 The redeem process consists of 2 steps, redeem code then validate the pin number. The Dialog displays a simple form with a text area to introduce the invitation code, this is saved in a state variable `invitationCode`.
 The `handleEnterInvitationCode` is attached to a click button, the user enters the code provided by the other peer, and press the send button. The `invitationCode` is passed to `redeemCode` function. 
 
-// IMAGE OF REDEEM DIALOG STEP 0
+![Redeem Dialog Enter Code](./invite-03.png)
 
 Then we switch to the next step and display a input field to provide the pin number and store it in the `pinCode` state variable. Once the user press the send button, we call the `setPin` passing the `pinCode` value. If all goes well, then `onDone` will be called.
 
+![Redeem Dialog Enter PIN](./invite-04.png)
 
 ## Offline Invitations
 

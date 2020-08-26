@@ -30,7 +30,7 @@ The `handleCreateList` creates a new `Party` using the `client` and then sets th
 
 ## Retrieve a Party
 
-Once we have a party created, we can retrieve it using it's `publicKey` with the `useParty` hook. This is showcased in the Tasks Component (`containers/Tasks.js`). We will get back to this in the [DATA CHAPTER LINK HERE]
+Once we have a party created, we can retrieve it using its `publicKey` with the `useParty` hook. This is showcased in the Tasks Component (`containers/Tasks.js`). We will get back to this in the [DATA CHAPTER LINK HERE]
 
 ```js
 export default function Tasks({ partyKey }) {
