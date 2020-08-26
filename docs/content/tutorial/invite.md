@@ -23,13 +23,17 @@ function Invite ({ party }) {
 
 ```
 
-// IMAGE OF INVITE DIALOG
+![Invite Dialog](./invite-00.png)
 
-At this stage, the have the `inviteCode` which is the code we have to share with the peer we want to invite. As mentioned before, this process is interactive. Once the code is redeemed by the peer, we will get notified and the `pin` value will be available. The peer will be required to enter the `pin` value to finish the invitation process.
+At this stage, we have the `inviteCode` which is the code we have to share with the peer we want to invite. 
+
+![Invite Dialog Show Code](./invite-01.png)
+
+As mentioned before, this process is interactive. Once the code is redeemed by the peer, we will get notified and the `pin` value will be available. The peer will be required to enter the `pin` value to finish the invitation process.
 
 In the code, we show the `inviteCode` till the `pin` is available and then switch and display the `pin` code.
 
-// IMAGE OF INVITE DIALOG SIDE BY SIDE WITH DISPLAY INVITE AND DISPLAY PIN
+![Invite Dialog Show Pin](./invite-02.png)
 
 ## Redeem
 

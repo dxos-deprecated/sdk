@@ -29,8 +29,7 @@ Here we decide to show the `SignUp` component if there is no profile in the syst
 
 Jump into `containers/SignUp.js`. This component is a very simple Sign up form. The user have to provide a username in order to create a profile. The input element will save the state in the `username` variable and then `handleSignUp` is the invoked method when the user clicks on the `Sign Up` button.
 
-// TODO: IMAGE OF SIGN UP FORM
-
+![Registration](./profile-00.png)
 
 The `handleSignUp` generates a `keypair` and sets the profile using the client. The client is retrieved by the react hook `useClient`.
 
