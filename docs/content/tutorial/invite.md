@@ -61,10 +61,11 @@ export default function RedeemDialog ({ onClose, ...props }) {
 The redeem process consists of 2 steps, redeem code then validate the pin number. The Dialog displays a simple form with a text area to introduce the invitation code, this is saved in a state variable `invitationCode`.
 The `handleEnterInvitationCode` is attached to a click button, the user enters the code provided by the other peer, and press the send button. The `invitationCode` is passed to `redeemCode` function. 
 
-// IMAGE OF REDEEM DIALOG STEP 0
+![Redeem Dialog Enter Code](./invite-03.png)
 
 Then we switch to the next step and display a input field to provide the pin number and store it in the `pinCode` state variable. Once the user press the send button, we call the `setPin` passing the `pinCode` value. If all goes well, then `onDone` will be called.
 
+![Redeem Dialog Enter PIN](./invite-04.png)
 
 ## Offline Invitations
 
