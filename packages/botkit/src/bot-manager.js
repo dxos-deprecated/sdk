@@ -95,7 +95,7 @@ export class BotManager {
 
     const { command, args } = this._getCommand(botPathInfo);
 
-    const { attributes: { displayName } } = botRecord;
+    const { attributes: { name: displayName } } = botRecord;
     const name = `bot:${displayName} ${chance.animal()}`;
 
     return this._startBot(botUID, { childDir, botId, command, args, name });
@@ -371,7 +371,7 @@ export class BotManager {
       );
       return { attributes: { displayName: botInfo.name } };
     }
-    const records = await this._registry.resolveRecords([botId]);
+    const { records } = await this._registry.resolveNames([botId]);
     if (!records.length) {
       log(`Bot not found: ${botId}.`);
       throw new Error(`Invalid bot: ${botId}`);

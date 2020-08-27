@@ -59,7 +59,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
     setError(undefined);
     setPending(true);
     try {
-      await onSubmit({ topic: botFactoryTopic, bot, botVersion });
+      await onSubmit({ topic: botFactoryTopic, bot: botVersion });
     } catch (e) {
       console.error(e);
       setError(e);
@@ -70,12 +70,14 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
 
   useEffect(() => {
     const versions = registryBots
-      .filter(({ name }) => name === bot).map(({ version }) => version)
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-      .reverse();
+      .filter(({ names }) => !!names.find(name => name.startsWith(`${bot}@`)))
+      .map(({ names }) => names).flat()
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).reverse()
+      .filter(name => name !== bot);
 
+    versions.unshift(bot);
     setBotVersions(versions);
-    setBotVersion(versions[0] || '');
+    setBotVersion(bot || '');
   }, [bot]);
 
   return (
@@ -94,9 +96,9 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             onChange={event => setBotFactoryTopic(event.target.value)}
           >
             {registryBotFactories
-              .map(({ topic, name }) => (
+              .map(({ topic, names }) => (
                 <MenuItem key={topic} value={topic}>
-                  {name}
+                  {names[0]}
                 </MenuItem>
               ))}
           </Select>
@@ -113,11 +115,11 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             onChange={event => setBot(event.target.value)}
           >
             {registryBots
-              .map(({ name }) => name)
-              .filter((value, index, self) => self.indexOf(value) === index)
-              .map(name => (
-                <MenuItem key={name} value={name}>
-                  {name}
+              .map(({ names = [] }) => names.sort((a, b) => a.length - b.length).filter(name => name.indexOf('@') === -1))
+              .filter(names => names.length)
+              .map(names => (
+                <MenuItem key={names[0]} value={names[0]}>
+                  {names[0]}
                 </MenuItem>
               ))}
           </Select>

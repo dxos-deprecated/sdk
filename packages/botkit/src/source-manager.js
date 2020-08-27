@@ -62,7 +62,7 @@ export class SourceManager {
 
     const { id, attributes } = botRecord;
     const { platform, arch } = getPlatformInfo();
-    const packageAttrName = `${platform}.${arch}`;
+    const packageAttrName = `${platform}.${arch}["/"]`;
 
     const ipfsArtifactCID = deepGet(attributes.package || false, packageAttrName);
     if (!ipfsArtifactCID) {
