@@ -17,8 +17,15 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FormControl from '@material-ui/core/FormControl';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import { useRegistryBots, useRegistryBotFactories } from '../hooks/registry';
+
+// TODO(egorgripasov): Factor out to config/client.
+const BOT_FACTORY_DOMAIN = 'dxos.network';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,6 +38,19 @@ const useStyles = makeStyles((theme) => ({
   },
   errorMessage: {
     color: red[300]
+  },
+  advanced: {
+    border: 0,
+    boxShadow: 'none',
+    '&:before': {
+      display: 'none'
+    }
+  },
+  advancedHeader: {
+    padding: 0
+  },
+  advancedBody: {
+    display: 'block'
   }
 }));
 
@@ -50,6 +70,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
   const [botVersions, setBotVersions] = useState([]);
   const [botVersion, setBotVersion] = useState();
   const [error, setError] = useState();
+  const [advanced, setAdvanced] = useState(false);
 
   // TODO(burdon): Could have same topic?
   const registryBotFactories = useRegistryBotFactories();
@@ -80,30 +101,24 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
     setBotVersion(bot || '');
   }, [bot]);
 
+  useEffect(() => {
+    if (Array.isArray(registryBotFactories)) {
+      const botFactory = registryBotFactories.find(({ name }) => name === window.location.hostname) ||
+        registryBotFactories.find(({ name }) => name.endsWith(BOT_FACTORY_DOMAIN));
+      if (botFactory) {
+        setBotFactoryTopic(botFactory.topic);
+        setAdvanced(false);
+      } else {
+        setAdvanced(true);
+      }
+    }
+  }, [registryBotFactories]);
+
   return (
     <Dialog open={open} onClose={onClose} onExit={() => setPending(false)} classes={{ paper: classes.paper }}>
       <DialogTitle>Invite Bot</DialogTitle>
 
       <DialogContent>
-        <FormControl className={classes.formControl}>
-          <InputLabel id='botFactoryLabel'>Bot Factory</InputLabel>
-          <Select
-            labelId='botFactoryLabel'
-            id='botFactory'
-            value={botFactoryTopic}
-            fullWidth
-            disabled={pending}
-            onChange={event => setBotFactoryTopic(event.target.value)}
-          >
-            {registryBotFactories
-              .map(({ topic, names }) => (
-                <MenuItem key={topic} value={topic}>
-                  {names[0]}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-
         <FormControl className={classes.formControl}>
           <InputLabel id='botNameLabel'>Bot</InputLabel>
           <Select
@@ -125,23 +140,56 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
           </Select>
         </FormControl>
 
-        <FormControl className={classes.formControl}>
-          <InputLabel id='botVersionLabel'>Version</InputLabel>
-          <Select
-            labelId='botVersionLabel'
-            id='botVersion'
-            value={botVersion}
-            disabled={botVersions.length === 0 || pending}
-            fullWidth
-            onChange={event => setBotVersion(event.target.value)}
+        <Accordion
+          className={classes.advanced}
+          expanded={advanced}
+          onChange={() => setAdvanced(!advanced)}
+        >
+          <AccordionSummary
+            className={classes.advancedHeader}
+            expandIcon={<ArrowDropDownIcon />}
           >
-            {botVersions.map(version => (
-              <MenuItem key={version} value={version}>
-                {version}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            <InputLabel shrink>Advanced</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails className={classes.advancedBody}>
+            <FormControl className={classes.formControl}>
+              <InputLabel id='botVersionLabel'>Version</InputLabel>
+              <Select
+                labelId='botVersionLabel'
+                id='botVersion'
+                value={botVersion}
+                disabled={botVersions.length === 0 || pending}
+                fullWidth
+                onChange={event => setBotVersion(event.target.value)}
+              >
+                {botVersions.map(version => (
+                  <MenuItem key={version} value={version}>
+                    {version}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl className={classes.formControl}>
+              <InputLabel id='botFactoryLabel'>Bot Factory</InputLabel>
+              <Select
+                labelId='botFactoryLabel'
+                id='botFactory'
+                value={botFactoryTopic}
+                fullWidth
+                disabled={pending}
+                onChange={event => setBotFactoryTopic(event.target.value)}
+              >
+                {registryBotFactories
+                  .map(({ topic, names }) => (
+                    <MenuItem key={topic} value={topic}>
+                      {names[0]}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+          </AccordionDetails>
+        </Accordion>
         {pending && (<LinearProgress />)}
       </DialogContent>
 
