@@ -230,6 +230,11 @@ export class BotManager {
       env: {
         ...process.env,
         NODE_OPTIONS: '',
+        // TODO(egorgripasov): For node.js env - fix.
+        // $ export NODE_PATH=$(yarn global dir)/node_modules
+        // # or node
+        // $ export NODE_PATH=$(npm root --quiet -g)
+        NODE_PATH: '/Users/egorgripasov/.config/yarn/global/node_modules',
         ...wireEnv
       },
 
