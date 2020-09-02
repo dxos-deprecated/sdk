@@ -25,8 +25,6 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Clear';
 import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 import SettingsIcon from '@material-ui/icons/MoreVert';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import PublishIcon from '@material-ui/icons/Publish';
 
 import { keyToString } from '@dxos/crypto';
 
@@ -155,10 +153,6 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
 
   if (!partyContents || !partyContents.model) return null;
 
-  console.log('partyContents.model', partyContents.model);
-  console.log('partyContents.model.messages', partyContents.model.messages);
-  console.log('partyContents.items', partyContents.items);
-
   const handleDownload = () => {
     const file = new Blob([JSON.stringify(partyContents.items)], { type: 'text/plain' });
     const element = document.createElement('a');
@@ -254,20 +248,6 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
         </div>
 
         <CardActions className={classes.actions}>
-          <IconButton
-            size='small'
-            edge='end'
-            onClick={handleDownload}
-          >
-            <SaveAltIcon />
-          </IconButton>
-          <IconButton
-            size='small'
-            edge='end'
-            onClick={() => setRestoreDialogOpen(true)}
-          >
-            <PublishIcon />
-          </IconButton>
           {party.subscribed && (
             <>
               <PartyMemberList party={party} onShare={() => setShareDialogOpen(true)} />
@@ -328,6 +308,8 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
             showDeleted,
             subscribed: party.subscribed
           }}
+          onRestore={() => setRestoreDialogOpen(true)}
+          onExport={handleDownload}
           onClose={({ showDeleted, subscribed }) => {
             setShowDeleted(showDeleted);
             if (subscribed && !party.subscribed) {

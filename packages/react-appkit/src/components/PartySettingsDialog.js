@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // TODO(burdon): Separate storybook.
-const PartySettingsDialog = ({ party, client, open, onClose, properties = {} }) => {
+const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onRestore, onExport }) => {
   const classes = useStyles();
   const [subscribed, setSubscribed] = useState(properties.subscribed);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
@@ -46,12 +46,6 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {} }) 
   // TODO(burdon): Extract client (pass in callback).
   const handleSetTitle = (displayName) => {
     client.partyManager.setPartyProperty(party.publicKey, { displayName });
-  };
-
-  const handleDownload = () => {
-    console.log('party', party);
-    console.log('client', client);
-    console.log('client.feedStore', client.feedStore);
   };
 
   return (
@@ -101,8 +95,11 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {} }) 
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleDownload} color='secondary'>
-          Download
+        <Button onClick={onRestore} color='secondary'>
+          Restore
+        </Button>
+        <Button onClick={onExport} color='secondary'>
+          Export
         </Button>
         <Button onClick={handleClose} color='primary'>
           Done
