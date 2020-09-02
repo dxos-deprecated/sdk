@@ -10,7 +10,7 @@ import { keyToString } from '@dxos/crypto';
 import { useClient } from '@dxos/react-client';
 
 import PartyCard from '../components/PartyCard';
-import { useAppRouter, usePads, useItems } from '../hooks';
+import { useAppRouter, usePads, useItems, usePartyContents } from '../hooks';
 import DefaultSettingsDialog from './DefaultSettingsDialog';
 
 const PartyCardContainer = ({ party }) => {
@@ -21,6 +21,8 @@ const PartyCardContainer = ({ party }) => {
   const { model, createItem } = useItems(topic);
   const [newItemType, setNewItemType] = useState(undefined);
   const [itemSettingsOpen, setItemSettingsOpen] = useState(false);
+
+  const partyContents = usePartyContents(topic);
 
   const handleSavedSettings = ({ name }, metadata = {}, callback) => {
     assert(newItemType);
@@ -53,6 +55,7 @@ const PartyCardContainer = ({ party }) => {
         router={router}
         pads={pads}
         onNewItemRequested={handleNewItemRequested}
+        partyContents={partyContents}
       />
       <Settings
         party={party}

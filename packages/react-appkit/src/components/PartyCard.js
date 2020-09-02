@@ -37,7 +37,6 @@ import PartySettingsDialog from './PartySettingsDialog';
 import PartyMemberList from './PartyMemberList';
 
 import PadIcon from './PadIcon';
-import { usePartyContents } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -108,7 +107,7 @@ const useStyles = makeStyles(theme => ({
 
 // TODO(burdon): Rename onCreateParty
 // TODO(burdon): Extract client, router and dialogs and inject actions.
-const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewItemRequested }) => {
+const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewItemRequested, partyContents = undefined }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
@@ -120,8 +119,6 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
   const createItemAnchor = useRef();
 
   const topic = party ? keyToString(party.publicKey) : '';
-
-  const partyContents = usePartyContents(topic);
 
   const handleNewItemSelected = (type) => {
     setNewItemCreationMenuOpen(false);
@@ -150,8 +147,6 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
       </Card>
     );
   }
-
-  if (!partyContents || !partyContents.model) return null;
 
   const handleDownload = () => {
     const file = new Blob([JSON.stringify(partyContents.items)], { type: 'text/plain' });
@@ -308,8 +303,8 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
             showDeleted,
             subscribed: party.subscribed
           }}
-          onRestore={() => setRestoreDialogOpen(true)}
-          onExport={handleDownload}
+          onRestore={partyContents ? () => setRestoreDialogOpen(true) : undefined}
+          onExport={partyContents ? handleDownload : undefined}
           onClose={({ showDeleted, subscribed }) => {
             setShowDeleted(showDeleted);
             if (subscribed && !party.subscribed) {

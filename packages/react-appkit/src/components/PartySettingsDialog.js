@@ -95,12 +95,17 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onRestore} color='secondary'>
-          Restore
-        </Button>
-        <Button onClick={onExport} color='secondary'>
-          Export
-        </Button>
+        {onRestore && (
+          <Button onClick={onRestore} color='secondary'>
+            Restore
+          </Button>
+        )}
+        {onExport && (
+          <Button onClick={onExport} color='secondary'>
+            Export
+          </Button>
+        )}
+
         <Button onClick={handleClose} color='primary'>
           Done
         </Button>
