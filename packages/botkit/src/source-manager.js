@@ -57,7 +57,7 @@ export const getBotCID = (botRecord, env) => {
       break;
     }
     case NODE_ENV: {
-      packageAttrName = 'node';
+      packageAttrName = 'node["/"]';
       break;
     }
     default: {

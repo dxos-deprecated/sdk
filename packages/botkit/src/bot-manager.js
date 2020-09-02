@@ -84,7 +84,7 @@ export class BotManager {
       }
 
       if (!displayName) {
-        displayName = get(botRecord, 'attributes.displayName');
+        displayName = get(botRecord, 'attributes.name');
       }
 
       if (!id) {
