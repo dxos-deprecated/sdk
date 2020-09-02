@@ -7,7 +7,7 @@ Every Application starts by creating a Client. The `@dxos/client` is your entry 
 
 ## Create a Client
 
-We will focus on the `tutorial/apps/task-list` first. 
+We will focus on the `tutorials/apps/task-list` first. 
 
 We can now proceed on how to create our Client instance. In `index.js` we added the imports for `@dxos/client` and its dependencies:
 
