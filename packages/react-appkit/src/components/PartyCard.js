@@ -3,7 +3,6 @@
 //
 
 import clsx from 'clsx';
-import assert from 'assert';
 
 import React, { useState, useRef } from 'react';
 
@@ -107,7 +106,17 @@ const useStyles = makeStyles(theme => ({
 
 // TODO(burdon): Rename onCreateParty
 // TODO(burdon): Extract client, router and dialogs and inject actions.
-const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewItemRequested, partyContents = undefined }) => {
+const PartyCard = ({
+  party,
+  client,
+  router,
+  pads,
+  itemModel,
+  onNewItemRequested,
+  onNewParty = undefined,
+  onRestore = undefined,
+  onExport = undefined
+}) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
@@ -147,21 +156,6 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
       </Card>
     );
   }
-
-  const handleDownload = () => {
-    const file = new Blob([JSON.stringify(partyContents.items)], { type: 'text/plain' });
-    const element = document.createElement('a');
-    element.href = URL.createObjectURL(file);
-    element.download = `${party.displayName || 'party-contents'}.txt`;
-    element.click();
-  };
-
-  const handleRestore = (data) => {
-    const parsed = JSON.parse(data);
-    console.log('parsed', parsed);
-    assert(Array.isArray(parsed));
-    partyContents.restore(parsed);
-  };
 
   return (
     <>
@@ -291,7 +285,7 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
       <PartyRestoreDialog
         open={restoreDialogOpen}
         onClose={() => setRestoreDialogOpen(false)}
-        onSubmit={handleRestore}
+        onSubmit={onRestore}
       />
 
       {party.subscribed && (
@@ -303,8 +297,8 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
             showDeleted,
             subscribed: party.subscribed
           }}
-          onRestore={partyContents ? () => setRestoreDialogOpen(true) : undefined}
-          onExport={partyContents ? handleDownload : undefined}
+          onRestore={onExport ? () => setRestoreDialogOpen(true) : undefined}
+          onExport={onExport}
           onClose={({ showDeleted, subscribed }) => {
             setShowDeleted(showDeleted);
             if (subscribed && !party.subscribed) {
