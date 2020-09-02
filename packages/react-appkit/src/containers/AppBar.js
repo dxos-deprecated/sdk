@@ -25,7 +25,6 @@ import { generatePasscode } from '@dxos/credentials';
 import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { InviteType, InviteDetails } from '@dxos/party-manager';
 import { useClient, useConfig, useProfile } from '@dxos/react-client';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
 
 import BotDialog from '../components/BotDialog';
 import ExportKeyringDialog from '../components/ExportKeyringDialog';
@@ -342,10 +341,6 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
     }
   ];
 
-  const handleSaveParty = () => {
-    window.alert('saving');
-  };
-
   return (
     <MuiAppBar position='static'>
       <Toolbar variant='dense'>
@@ -369,14 +364,6 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
             <HomeIcon />
           </IconButton>
         )}
-        <IconButton
-          edge='start'
-          color='inherit'
-          aria-label='home'
-          onClick={handleSaveParty}
-        >
-          <SaveAltIcon />
-        </IconButton>
         <Grid container wrap='nowrap' alignItems='center'>
           <Typography variant='h6' className={classes.title}>{config.app.name}</Typography>
 
