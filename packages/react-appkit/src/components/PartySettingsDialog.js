@@ -48,6 +48,12 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {} }) 
     client.partyManager.setPartyProperty(party.publicKey, { displayName });
   };
 
+  const handleDownload = () => {
+    console.log('party', party);
+    console.log('client', client);
+    console.log('client.feedStore', client.feedStore);
+  };
+
   return (
     <Dialog classes={{ paper: classes.root }} open={open} onClose={handleClose}>
       <DialogTitle>
@@ -95,6 +101,9 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {} }) 
       </DialogContent>
 
       <DialogActions>
+        <Button onClick={handleDownload} color='secondary'>
+          Download
+        </Button>
         <Button onClick={handleClose} color='primary'>
           Done
         </Button>

@@ -3,6 +3,7 @@
 //
 
 import clsx from 'clsx';
+import assert from 'assert';
 
 import React, { useState, useRef } from 'react';
 
@@ -24,6 +25,8 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Clear';
 import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 import SettingsIcon from '@material-ui/icons/MoreVert';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import PublishIcon from '@material-ui/icons/Publish';
 
 import { keyToString } from '@dxos/crypto';
 
@@ -31,10 +34,12 @@ import { useAssets } from './util';
 
 import NewItemCreationMenu from './NewItemCreationMenu';
 import PartySharingDialog from './PartySharingDialog';
+import PartyRestoreDialog from './PartyRestoreDialog';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartyMemberList from './PartyMemberList';
 
 import PadIcon from './PadIcon';
+import { usePartyContents } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -110,12 +115,15 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
   const assets = useAssets();
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
   const createItemAnchor = useRef();
 
   const topic = party ? keyToString(party.publicKey) : '';
+
+  const partyContents = usePartyContents(topic);
 
   const handleNewItemSelected = (type) => {
     setNewItemCreationMenuOpen(false);
@@ -144,6 +152,27 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
       </Card>
     );
   }
+
+  if (!partyContents || !partyContents.model) return null;
+
+  console.log('partyContents.model', partyContents.model);
+  console.log('partyContents.model.messages', partyContents.model.messages);
+  console.log('partyContents.items', partyContents.items);
+
+  const handleDownload = () => {
+    const file = new Blob([JSON.stringify(partyContents.items)], { type: 'text/plain' });
+    const element = document.createElement('a');
+    element.href = URL.createObjectURL(file);
+    element.download = `${party.displayName || 'party-contents'}.txt`;
+    element.click();
+  };
+
+  const handleRestore = (data) => {
+    const parsed = JSON.parse(data);
+    console.log('parsed', parsed);
+    assert(Array.isArray(parsed));
+    partyContents.restore(parsed);
+  };
 
   return (
     <>
@@ -225,6 +254,20 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
         </div>
 
         <CardActions className={classes.actions}>
+          <IconButton
+            size='small'
+            edge='end'
+            onClick={handleDownload}
+          >
+            <SaveAltIcon />
+          </IconButton>
+          <IconButton
+            size='small'
+            edge='end'
+            onClick={() => setRestoreDialogOpen(true)}
+          >
+            <PublishIcon />
+          </IconButton>
           {party.subscribed && (
             <>
               <PartyMemberList party={party} onShare={() => setShareDialogOpen(true)} />
@@ -268,6 +311,12 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
         client={client}
         party={party}
         router={router}
+      />
+
+      <PartyRestoreDialog
+        open={restoreDialogOpen}
+        onClose={() => setRestoreDialogOpen(false)}
+        onSubmit={handleRestore}
       />
 
       {party.subscribed && (
