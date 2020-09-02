@@ -11,9 +11,14 @@ import { useModel } from '@dxos/react-client';
  * Provides a model for all the party contents,
  * can be used to download/save a party
  */
-export const usePartyRestore = (topic) => {
+export const usePartyRestore = (topic, pads) => {
   const [items, setItems] = useState([]);
-  const type = ['wrn_dxos_org_teamwork_messenger_channel', 'wrn_dxos_org_teamwork_messenger_message'];
+
+  const type = [
+    ...pads.map(p => p.type).flat(),
+    ...pads.map(p => p.contentType).flat()
+  ].filter(t => !!t);
+
   const model = useModel({ model: undefined, options: { type, topic } });
 
   useEffect(() => {

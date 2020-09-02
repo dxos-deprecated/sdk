@@ -23,7 +23,7 @@ const PartyCardContainer = ({ party }) => {
   const [newItemType, setNewItemType] = useState(undefined);
   const [itemSettingsOpen, setItemSettingsOpen] = useState(false);
 
-  const partyRestore = usePartyRestore(topic);
+  const partyRestore = usePartyRestore(topic, pads);
 
   const handleSavedSettings = ({ name }, metadata = {}, callback) => {
     assert(newItemType);
