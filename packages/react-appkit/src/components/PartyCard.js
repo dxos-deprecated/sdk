@@ -31,6 +31,7 @@ import { useAssets } from './util';
 
 import NewItemCreationMenu from './NewItemCreationMenu';
 import PartySharingDialog from './PartySharingDialog';
+import PartyRestoreDialog from './PartyRestoreDialog';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartyMemberList from './PartyMemberList';
 
@@ -105,11 +106,22 @@ const useStyles = makeStyles(theme => ({
 
 // TODO(burdon): Rename onCreateParty
 // TODO(burdon): Extract client, router and dialogs and inject actions.
-const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewItemRequested }) => {
+const PartyCard = ({
+  party,
+  client,
+  router,
+  pads,
+  itemModel,
+  onNewItemRequested,
+  onNewParty = undefined,
+  onRestore = undefined,
+  onExport = undefined
+}) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
@@ -270,6 +282,12 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
         router={router}
       />
 
+      <PartyRestoreDialog
+        open={restoreDialogOpen}
+        onClose={() => setRestoreDialogOpen(false)}
+        onSubmit={onRestore}
+      />
+
       {party.subscribed && (
         <PartySettingsDialog
           party={party}
@@ -279,6 +297,8 @@ const PartyCard = ({ party, client, router, pads, itemModel, onNewParty, onNewIt
             showDeleted,
             subscribed: party.subscribed
           }}
+          onRestore={onExport ? () => setRestoreDialogOpen(true) : undefined}
+          onExport={onExport}
           onClose={({ showDeleted, subscribed }) => {
             setShowDeleted(showDeleted);
             if (subscribed && !party.subscribed) {
