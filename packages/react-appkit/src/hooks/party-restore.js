@@ -27,7 +27,10 @@ export const usePartyRestore = (topic, pads) => {
   }, [model]);
 
   return {
-    export: () => JSON.stringify(items),
+    export: () => {
+      const strippedItems = items.map(i => ({ ...i, __meta: undefined }));
+      return JSON.stringify(strippedItems);
+    },
     restore: (messages) => {
       assert(model);
       messages.forEach(msg => model.appendMessage(msg));
