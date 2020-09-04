@@ -41,6 +41,7 @@ const ACTION_IMPORT_KEYRING = 5;
 const ACTION_RESET_STORAGE = 6;
 const ACTION_OPEN_SETTINGS = 7;
 const ACTION_OPEN_PARTY_HOME = 8;
+const ACTION_PARTY_FROM_FILE = 9;
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -60,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * App header.
  */
-const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigation, onPartyHomeNavigation }) => {
+const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigation, onPartyHomeNavigation, onPartyFromFile }) => {
   const classes = useStyles();
   const client = useClient();
   const config = useConfig();
@@ -242,6 +243,13 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
       handler: async () => {
         onPartyHomeNavigation && onPartyHomeNavigation();
       }
+    },
+
+    [ACTION_PARTY_FROM_FILE]: {
+      label: 'Party from file',
+      handler: async () => {
+        onPartyFromFile && onPartyFromFile();
+      }
     }
   };
 
@@ -272,6 +280,10 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
 
   if (onPartyHomeNavigation) {
     menuItems.push(action(ACTION_OPEN_PARTY_HOME));
+  }
+
+  if (onPartyFromFile) {
+    menuItems.push(action(ACTION_PARTY_FROM_FILE));
   }
 
   menuItems.push(action(ACTION_RESET_STORAGE));

@@ -20,6 +20,7 @@ export PartyList from './PartyList';
 export PartyMemberList from './PartyMemberList';
 export PartySettingsDialog from './PartySettingsDialog';
 export PartySharingDialog from './PartySharingDialog';
+export PartyFromFileDialog from './PartyFromFileDialog';
 export PartyTree, { PartyTreeAddItemButton, PartyTreeItem } from './PartyTree';
 export RegistrationDialog from './RegistrationDialog';
 export Sidebar from './Sidebar';
