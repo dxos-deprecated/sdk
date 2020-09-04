@@ -33,7 +33,15 @@ const useStyles = makeStyles(() => ({
 /**
  * Main application container.
  */
-const AppContainer = ({ appBarContent, sidebarContent, children, onSettingsOpened, onHomeNavigation, onPartyHomeNavigation }) => {
+const AppContainer = ({
+  appBarContent,
+  sidebarContent,
+  children,
+  onSettingsOpened,
+  onHomeNavigation,
+  onPartyHomeNavigation,
+  onPartyFromFile
+}) => {
   const classes = useStyles();
   const config = useConfig();
   const { topic } = useParams(); // TODO(burdon): Remove and make component?
@@ -122,6 +130,7 @@ const AppContainer = ({ appBarContent, sidebarContent, children, onSettingsOpene
               onSettingsOpened={onSettingsOpened}
               onHomeNavigation={onHomeNavigation}
               onPartyHomeNavigation={onPartyHomeNavigation}
+              onPartyFromFile={onPartyFromFile}
             >
               {appBarContent}
             </AppBar>

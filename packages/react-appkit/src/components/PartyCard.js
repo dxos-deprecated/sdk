@@ -3,6 +3,7 @@
 //
 
 import clsx from 'clsx';
+import assert from 'assert';
 
 import React, { useState, useRef } from 'react';
 
@@ -29,9 +30,9 @@ import { keyToString } from '@dxos/crypto';
 
 import { useAssets } from './util';
 
+import PartyFromFileDialog from './PartyFromFileDialog';
 import NewItemCreationMenu from './NewItemCreationMenu';
 import PartySharingDialog from './PartySharingDialog';
-import PartyRestoreDialog from './PartyRestoreDialog';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartyMemberList from './PartyMemberList';
 
@@ -114,15 +115,16 @@ const PartyCard = ({
   itemModel,
   onNewItemRequested,
   onNewParty = undefined,
-  onRestore = undefined,
-  onExport = undefined
+  onExport = undefined,
+  partyFromFileOpen = false,
+  onPartyFromFileClosed = undefined
 }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
-  const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
   const createItemAnchor = useRef();
@@ -146,6 +148,15 @@ const PartyCard = ({
     await client.partyManager.unsubscribe(party.publicKey);
   };
 
+  const handleImport = async (data) => {
+    const parsed = JSON.parse(data);
+    assert(Array.isArray(parsed));
+    const newParty = await client.partyManager.createParty();
+    const newPartyTopic = keyToString(newParty.publicKey);
+    const newPartyModel = await client.modelFactory.createModel(undefined, { type: [], topic: newPartyTopic });
+    parsed.forEach(msg => newPartyModel.appendMessage(msg));
+  };
+
   if (onNewParty) {
     return (
       <Card className={clsx(classes.card, classes.newCard)}>
@@ -153,6 +164,11 @@ const PartyCard = ({
           <AddIcon className={classes.addIcon} />
         </IconButton>
         <Typography className={classes.addSubtitle} variant='h5'>New Party</Typography>
+        <PartyFromFileDialog
+          open={partyFromFileOpen}
+          onClose={onPartyFromFileClosed}
+          onImport={handleImport}
+        />
       </Card>
     );
   }
@@ -282,12 +298,6 @@ const PartyCard = ({
         router={router}
       />
 
-      <PartyRestoreDialog
-        open={restoreDialogOpen}
-        onClose={() => setRestoreDialogOpen(false)}
-        onSubmit={onRestore}
-      />
-
       {party.subscribed && (
         <PartySettingsDialog
           party={party}
@@ -297,7 +307,6 @@ const PartyCard = ({
             showDeleted,
             subscribed: party.subscribed
           }}
-          onRestore={onExport ? () => setRestoreDialogOpen(true) : undefined}
           onExport={onExport}
           onClose={({ showDeleted, subscribed }) => {
             setShowDeleted(showDeleted);

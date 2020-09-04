@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // TODO(burdon): Separate storybook.
-const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onRestore, onExport }) => {
+const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onExport }) => {
   const classes = useStyles();
   const [subscribed, setSubscribed] = useState(properties.subscribed);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
@@ -95,11 +95,6 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
       </DialogContent>
 
       <DialogActions>
-        {onRestore && (
-          <Button onClick={onRestore} color='secondary'>
-            Restore
-          </Button>
-        )}
         {onExport && (
           <Button onClick={onExport} color='secondary'>
             Export
