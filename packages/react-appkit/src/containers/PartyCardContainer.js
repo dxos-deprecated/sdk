@@ -44,13 +44,7 @@ const PartyCardContainer = ({ party }) => {
   };
 
   const handleExport = () => {
-    download(partyRestore.export(), `${party.displayName || 'party-contents'}.txt`);
-  };
-
-  const handleRestore = (data) => {
-    const parsed = JSON.parse(data);
-    assert(Array.isArray(parsed));
-    partyRestore.restore(parsed);
+    download(partyRestore.export(), `${party.displayName || 'party-contents'}.json`);
   };
 
   const pad = newItemType ? pads.find(pad => pad.type === newItemType) : undefined;
@@ -66,7 +60,6 @@ const PartyCardContainer = ({ party }) => {
         pads={pads}
         onNewItemRequested={handleNewItemRequested}
         onExport={handleExport}
-        onRestore={handleRestore}
       />
       <Settings
         party={party}
