@@ -10,11 +10,11 @@ import { keyToString } from '@dxos/crypto';
 import { useClient } from '@dxos/react-client';
 
 import PartyCard from '../components/PartyCard';
-import download from '../download';
+import { download } from '../helpers';
 import { useAppRouter, usePads, useItems, usePartyRestore } from '../hooks';
 import DefaultSettingsDialog from './DefaultSettingsDialog';
 
-const PartyCardContainer = ({ party }) => {
+const PartyCardContainer = ({ party, ipfs }) => {
   const client = useClient();
   const router = useAppRouter();
   const [pads] = usePads();
@@ -43,8 +43,13 @@ const PartyCardContainer = ({ party }) => {
     setItemSettingsOpen(true);
   };
 
-  const handleExport = () => {
-    download(partyRestore.export(), `${party.displayName || 'party-contents'}.json`);
+  const handleExport = async (toIPFS = false) => {
+    const data = partyRestore.export();
+    if (!toIPFS) {
+      download(data, `${party.displayName || 'party-contents'}.json`);
+      return;
+    }
+    return ipfs.upload(data, 'text/plain');
   };
 
   const pad = newItemType ? pads.find(pad => pad.type === newItemType) : undefined;
