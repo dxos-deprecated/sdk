@@ -209,12 +209,13 @@ export class BotManager {
   async _startBot (botUID, options = {}) {
     const botInfo = this._bots.get(botUID);
 
-    let { childDir, command, args, name } = options; // || botInfo;
+    let { childDir, command, args, name, env } = options; // || botInfo;
     if (botInfo) {
       command = botInfo.command;
       args = botInfo.args;
       childDir = botInfo.childDir;
       name = botInfo.name;
+      env = botInfo.env;
     }
 
     const wireEnv = {
@@ -226,15 +227,13 @@ export class BotManager {
       WIRE_BOT_RESTARTED: !!botInfo
     };
 
+    const nodePath = (env !== NATIVE_ENV) ? this._config.get('cli.nodePath') : undefined;
+
     const childOptions = {
       env: {
         ...process.env,
         NODE_OPTIONS: '',
-        // TODO(egorgripasov): For node.js env - fix.
-        // $ export NODE_PATH=$(yarn global dir)/node_modules
-        // # or node
-        // $ export NODE_PATH=$(npm root --quiet -g)
-        NODE_PATH: '/Users/egorgripasov/.config/yarn/global/node_modules',
+        ...(nodePath ? { NODE_PATH: nodePath } : {}),
         ...wireEnv
       },
 
@@ -276,7 +275,8 @@ export class BotManager {
         args,
         watcher,
         stopped: false,
-        name
+        name,
+        env
       });
     }
     await this._saveBotsToFile();
@@ -331,7 +331,7 @@ export class BotManager {
   }
 
   async _saveBotsToFile () {
-    const data = [...this._bots.values()].map(({ botUID, type, childDir, parties, command, args, stopped, name }) => ({
+    const data = [...this._bots.values()].map(({ botUID, type, childDir, parties, command, args, stopped, name, env }) => ({
       botUID,
       type,
       name,
@@ -339,7 +339,8 @@ export class BotManager {
       parties,
       command,
       args,
-      stopped
+      stopped,
+      env
     }));
     await fs.writeJSON(this._botsFile, data);
   }
