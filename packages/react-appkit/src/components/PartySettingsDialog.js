@@ -52,7 +52,7 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
-  const [exportedCid, setExportedCid] = useState('QmTzt26T7i5CRoBYJ61TofnQ3hPSjLwwUgfQgsmgtVDYXK');
+  const [exportedCid, setExportedCid] = useState(undefined);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
   const handleClose = () => {
