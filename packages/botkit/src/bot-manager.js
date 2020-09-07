@@ -12,12 +12,13 @@ import moment from 'moment';
 import kill from 'tree-kill';
 import yaml from 'js-yaml';
 import { Chance } from 'chance';
+import get from 'lodash.get';
 
 import { keyToString, createKeyPair } from '@dxos/crypto';
 import { Registry } from '@wirelineio/registry-client';
 
 import { log, logBot } from './log';
-import { SourceManager } from './source-manager';
+import { NATIVE_ENV, SourceManager, getBotCID } from './source-manager';
 import { BOT_CONFIG_FILENAME } from './config';
 
 const chance = new Chance();
@@ -29,12 +30,6 @@ export const BOTS_DUMP_FILE = 'out/factory-state';
 
 // Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
 export const SPAWNED_BOTS_DIR = '.bots';
-
-// Command to spawn to run a bot in local development mode.
-export const LOCAL_BOT_RUN_COMMAND = 'yarn';
-
-// Fixed arguments to pass to LOCAL_BOT_RUN_COMMAND.
-export const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
 
 export class BotManager {
   /**
@@ -74,31 +69,43 @@ export class BotManager {
   /**
    * Spawn bot instance.
    * @param {String} botId
+   * @param {Object} options
    */
-  async spawnBot (botId) {
-    assert(botId);
+  async spawnBot (botId, options = {}) {
+    let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
+    assert(botId || ipfsCID);
 
-    log(`Spawn bot request for ${botId}`);
+    log(`Spawn bot request for ${botId || ipfsCID}`);
 
-    const botRecord = await this._getBotRecord(botId);
+    if (!ipfsCID) {
+      const botRecord = await this._getBotRecord(botId);
+      if (!this._localDev) {
+        ipfsCID = getBotCID(botRecord, env);
+      }
 
-    const botPathInfo = await this._sourceManager.getBotPathInfo(botRecord);
-    const botUID = keyToString(createKeyPair().publicKey);
+      if (!displayName) {
+        displayName = get(botRecord, 'attributes.name');
+      }
 
-    if (!botPathInfo) {
-      log(`Bot not found: ${botId}.`);
-      throw new Error(`Invalid bot: ${botId}`);
+      if (!id) {
+        id = get(botRecord, 'id');
+      }
     }
+
+    assert(id, 'Invalid Bot Id.');
+    assert(displayName, 'Invalid Bot Name.');
+
+    const botPathInfo = await this._sourceManager.getBotPathInfo(id, ipfsCID, env, options);
+    assert(botPathInfo, `Invalid bot: ${botId || ipfsCID}`);
+
+    const botUID = keyToString(createKeyPair().publicKey);
+    const name = `bot:${displayName} ${chance.animal()}`;
 
     const childDir = path.join(botPathInfo.installDirectory, SPAWNED_BOTS_DIR, botUID);
     await fs.ensureDir(childDir);
 
-    const { command, args } = this._getCommand(botPathInfo);
-
-    const { attributes: { name: displayName } } = botRecord;
-    const name = `bot:${displayName} ${chance.animal()}`;
-
-    return this._startBot(botUID, { childDir, botId, command, args, name });
+    const { command, args } = this._sourceManager.getCommand(botPathInfo, env);
+    return this._startBot(botUID, { childDir, botId, command, args, name, env });
   }
 
   /**
@@ -202,12 +209,13 @@ export class BotManager {
   async _startBot (botUID, options = {}) {
     const botInfo = this._bots.get(botUID);
 
-    let { childDir, command, args, name } = options; // || botInfo;
+    let { childDir, command, args, name, env } = options; // || botInfo;
     if (botInfo) {
       command = botInfo.command;
       args = botInfo.args;
       childDir = botInfo.childDir;
       name = botInfo.name;
+      env = botInfo.env;
     }
 
     const wireEnv = {
@@ -219,10 +227,13 @@ export class BotManager {
       WIRE_BOT_RESTARTED: !!botInfo
     };
 
+    const nodePath = (env !== NATIVE_ENV) ? this._config.get('cli.nodePath') : undefined;
+
     const childOptions = {
       env: {
         ...process.env,
         NODE_OPTIONS: '',
+        ...(nodePath ? { NODE_PATH: nodePath } : {}),
         ...wireEnv
       },
 
@@ -264,7 +275,8 @@ export class BotManager {
         args,
         watcher,
         stopped: false,
-        name
+        name,
+        env
       });
     }
     await this._saveBotsToFile();
@@ -296,24 +308,6 @@ export class BotManager {
   }
 
   /**
-   * Get process command (to spawn).
-   * @param {object} botPathInfo
-   */
-  _getCommand (botPathInfo) {
-    const { file } = botPathInfo;
-
-    let command = file;
-    let args = [];
-
-    if (this._localDev) {
-      command = LOCAL_BOT_RUN_COMMAND;
-      args = LOCAL_BOT_RUN_ARGS.concat([file]);
-    }
-
-    return { command, args };
-  }
-
-  /**
    * @param {String} botUID Unique Bot UID
    * @param {Boolean} stopped Whether bot should be marked as stopped
    */
@@ -337,7 +331,7 @@ export class BotManager {
   }
 
   async _saveBotsToFile () {
-    const data = [...this._bots.values()].map(({ botUID, type, childDir, parties, command, args, stopped, name }) => ({
+    const data = [...this._bots.values()].map(({ botUID, type, childDir, parties, command, args, stopped, name, env }) => ({
       botUID,
       type,
       name,
@@ -345,7 +339,8 @@ export class BotManager {
       parties,
       command,
       args,
-      stopped
+      stopped,
+      env
     }));
     await fs.writeJSON(this._botsFile, data);
   }
@@ -369,7 +364,7 @@ export class BotManager {
       const botInfo = yaml.load(
         await fs.readFile(path.join(process.cwd(), BOT_CONFIG_FILENAME))
       );
-      return { attributes: { displayName: botInfo.name } };
+      return { attributes: { displayName: botInfo.name }, id: botInfo.id };
     }
     const { records } = await this._registry.resolveNames([botId]);
     if (!records.length) {

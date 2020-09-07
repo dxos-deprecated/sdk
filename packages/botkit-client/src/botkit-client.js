@@ -52,15 +52,16 @@ export class BotFactoryClient {
   /**
    * Send request for bot spawning.
    * @param {String} botId
+   * @param {Object} options
    */
-  async sendSpawnRequest (botId) {
+  async sendSpawnRequest (botId, options) {
     if (!this._connected) {
       await this._connect();
     }
 
     log(`Sending spawn request for bot ${botId}`);
     const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
-      createSpawnCommand(botId));
+      createSpawnCommand(botId, options));
 
     assert(spawnResponse, `Unable to spawn bot ${botId}`);
 
