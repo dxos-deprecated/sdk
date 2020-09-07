@@ -16,6 +16,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 
@@ -38,6 +39,8 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
   const classes = useStyles();
   const [subscribed, setSubscribed] = useState(properties.subscribed);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
+  const [inProgress, setInProgress] = useState(false);
+  const [error, setError] = useState(undefined);
 
   const handleClose = () => {
     onClose({ subscribed, showDeleted });
@@ -46,6 +49,19 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
   // TODO(burdon): Extract client (pass in callback).
   const handleSetTitle = (displayName) => {
     client.partyManager.setPartyProperty(party.publicKey, { displayName });
+  };
+
+  const handleExportToIPFS = async () => {
+    setInProgress(true);
+    setError(undefined);
+    try {
+      await onExport(true);
+    } catch (e) {
+      console.error(e);
+      setError(e);
+    } finally {
+      setInProgress(false);
+    }
   };
 
   return (
@@ -92,13 +108,21 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
             />
           </FormGroup>
         </FormControl>
+
+        {inProgress && <LinearProgress />}
+        {!!error && <Typography variant='body2' color='error'>Export unsuccessful</Typography>}
       </DialogContent>
 
       <DialogActions>
         {onExport && (
-          <Button onClick={onExport} color='secondary'>
-            Export
-          </Button>
+          <>
+            <Button onClick={handleExportToIPFS} color='secondary' disabled={inProgress}>
+              Export to IPFS
+            </Button>
+            <Button onClick={() => onExport(false)} color='secondary' disabled={inProgress}>
+              Export to file
+            </Button>
+          </>
         )}
 
         <Button onClick={handleClose} color='primary'>

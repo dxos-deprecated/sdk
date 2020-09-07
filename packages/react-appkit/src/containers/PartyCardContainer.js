@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import assert from 'assert';
 
 import { keyToString } from '@dxos/crypto';
+import { sleep } from '@dxos/async';
 
 import { useClient } from '@dxos/react-client';
 
@@ -43,8 +44,12 @@ const PartyCardContainer = ({ party }) => {
     setItemSettingsOpen(true);
   };
 
-  const handleExport = () => {
-    download(partyRestore.export(), `${party.displayName || 'party-contents'}.json`);
+  const handleExport = async (toIPFS = false) => {
+    if (!toIPFS) {
+      download(partyRestore.export(), `${party.displayName || 'party-contents'}.json`);
+      return;
+    }
+    await sleep(1000);
   };
 
   const pad = newItemType ? pads.find(pad => pad.type === newItemType) : undefined;
