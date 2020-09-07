@@ -51,3 +51,5 @@ WIRE_BOT_LOCAL_DEV:
   type: boolean
 WIRE_BOT_IPC_SERVER:
   path: bot.ipc.serverId
+WIRE_CLI_NODE_PATH:
+  path: cli.nodePath
