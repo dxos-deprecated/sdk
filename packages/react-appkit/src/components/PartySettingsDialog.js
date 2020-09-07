@@ -3,6 +3,7 @@
 //
 
 import React, { useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -17,6 +18,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import CopyIcon from '@material-ui/icons/FileCopyOutlined';
+import Check from '@material-ui/icons/CheckCircleOutline';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 
@@ -31,6 +36,12 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     marginTop: theme.spacing(3)
+  },
+  exportedCid: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    marginTop: theme.spacing(3)
   }
 }));
 
@@ -41,6 +52,8 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
+  const [exportedCid, setExportedCid] = useState('QmTzt26T7i5CRoBYJ61TofnQ3hPSjLwwUgfQgsmgtVDYXK');
+  const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
   const handleClose = () => {
     onClose({ subscribed, showDeleted });
@@ -54,8 +67,11 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
   const handleExportToIPFS = async () => {
     setInProgress(true);
     setError(undefined);
+    setExportedCid(undefined);
+
     try {
-      await onExport(true);
+      const cid = await onExport(true);
+      setExportedCid(cid);
     } catch (e) {
       console.error(e);
       setError(e);
@@ -111,7 +127,37 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
 
         {inProgress && <LinearProgress />}
         {!!error && <Typography variant='body2' color='error'>Export unsuccessful</Typography>}
+        {!!exportedCid && (
+          <div className={classes.exportedCid}>
+            <Check htmlColor='green' />
+            <Typography variant='body1' color='primary'>
+              Successfully Exported
+            </Typography>
+            <CopyToClipboard
+              text={exportedCid}
+              onCopy={() => setCopiedSnackBarOpen(true)}
+            >
+              <Button
+                color='primary'
+                variant='contained'
+                size='small'
+              >
+                <CopyIcon />&nbsp;Copy CID
+              </Button>
+            </CopyToClipboard>
+          </div>
+        )}
       </DialogContent>
+
+      <Snackbar
+        open={copiedSnackBarOpen}
+        onClose={() => setCopiedSnackBarOpen(false)}
+        autoHideDuration={3000}
+      >
+        <Alert onClose={() => setCopiedSnackBarOpen(false)} severity='success' icon={<CopyIcon fontSize='inherit' />}>
+          CID copied
+        </Alert>
+      </Snackbar>
 
       <DialogActions>
         {onExport && (

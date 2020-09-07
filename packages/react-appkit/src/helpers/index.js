@@ -3,3 +3,4 @@
 //
 
 export * from './download';
+export * from './ipfs-helper';
