@@ -1,6 +1,6 @@
 {
   "name": "@dxos/botkit-client",
-  "version": "1.1.0-beta.6",
+  "version": "1.1.0-beta.7",
   "description": "Botkit client",
   "keywords": [],
   "license": "AGPLv3",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@dxos/async": "^1.0.0-beta.1",
-    "@dxos/client": "^1.1.0-beta.6",
+    "@dxos/client": "^1.1.0-beta.7",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/network-manager": "^1.0.0-beta.94",
