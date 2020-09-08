@@ -21,6 +21,7 @@ export PartyMemberList from './PartyMemberList';
 export PartySettingsDialog from './PartySettingsDialog';
 export PartySharingDialog from './PartySharingDialog';
 export PartyFromFileDialog from './PartyFromFileDialog';
+export PartyFromIpfsDialog from './PartyFromIpfsDialog';
 export PartyTree, { PartyTreeAddItemButton, PartyTreeItem } from './PartyTree';
 export RegistrationDialog from './RegistrationDialog';
 export Sidebar from './Sidebar';
