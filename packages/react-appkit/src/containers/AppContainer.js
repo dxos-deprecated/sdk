@@ -40,7 +40,8 @@ const AppContainer = ({
   onSettingsOpened,
   onHomeNavigation,
   onPartyHomeNavigation,
-  onPartyFromFile
+  onPartyFromFile,
+  onPartyFromIpfs
 }) => {
   const classes = useStyles();
   const config = useConfig();
@@ -131,6 +132,7 @@ const AppContainer = ({
               onHomeNavigation={onHomeNavigation}
               onPartyHomeNavigation={onPartyHomeNavigation}
               onPartyFromFile={onPartyFromFile}
+              onPartyFromIpfs={onPartyFromIpfs}
             >
               {appBarContent}
             </AppBar>

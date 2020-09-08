@@ -42,6 +42,7 @@ const ACTION_RESET_STORAGE = 6;
 const ACTION_OPEN_SETTINGS = 7;
 const ACTION_OPEN_PARTY_HOME = 8;
 const ACTION_PARTY_FROM_FILE = 9;
+const ACTION_PARTY_FROM_IPFS = 10;
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -61,7 +62,16 @@ const useStyles = makeStyles(theme => ({
 /**
  * App header.
  */
-const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigation, onPartyHomeNavigation, onPartyFromFile }) => {
+const AppBar = ({
+  topic,
+  children,
+  onToggleNav,
+  onSettingsOpened,
+  onHomeNavigation,
+  onPartyHomeNavigation,
+  onPartyFromFile,
+  onPartyFromIpfs
+}) => {
   const classes = useStyles();
   const client = useClient();
   const config = useConfig();
@@ -250,6 +260,13 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
       handler: async () => {
         onPartyFromFile && onPartyFromFile();
       }
+    },
+
+    [ACTION_PARTY_FROM_IPFS]: {
+      label: 'Party from IPFS',
+      handler: async () => {
+        onPartyFromIpfs && onPartyFromIpfs();
+      }
     }
   };
 
@@ -284,6 +301,10 @@ const AppBar = ({ topic, children, onToggleNav, onSettingsOpened, onHomeNavigati
 
   if (onPartyFromFile) {
     menuItems.push(action(ACTION_PARTY_FROM_FILE));
+  }
+
+  if (onPartyFromIpfs) {
+    menuItems.push(action(ACTION_PARTY_FROM_IPFS));
   }
 
   menuItems.push(action(ACTION_RESET_STORAGE));
