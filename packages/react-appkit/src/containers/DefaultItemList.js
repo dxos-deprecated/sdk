@@ -12,12 +12,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useParty } from '@dxos/react-client';
 
 import {
-  MemberList,
   NewItemCreationMenu,
   // PartyTreeAddItemButton,
   PartyTreeItem
 } from '../components';
 
+import MemberListWithStatuses from './MemberListWithStatuses';
 import { usePads, useAppRouter, useItems } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
@@ -76,7 +76,7 @@ const DefaultItemList = () => {
         <NewItemCreationMenu anchorEl={anchor.current} open={newItemCreationMenuOpen} onSelect={handleCreate} onClose={() => setNewItemCreationMenuOpen(false)} pads={pads} />
       </TreeView>
       <Divider />
-      <MemberList party={party} />
+      <MemberListWithStatuses party={party} />
     </div>
   );
 };
