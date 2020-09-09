@@ -14,7 +14,8 @@
   "license": "AGPLv3",
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "bot/*"
     ]
   },
   "scripts": {
