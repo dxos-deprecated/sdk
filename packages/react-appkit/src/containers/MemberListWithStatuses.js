@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const MemberListWithStatuses = ({ party }) => {
-  const [online, setOnline] = useState(0);
+  const [online, setOnline] = useState((party.presence.peers ?? []).length);
   const classes = useStyles();
 
   useEffect(() => {

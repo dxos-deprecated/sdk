@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export const MemberList = ({ party }) => {
+export const MemberList = ({ party, children }) => {
   const sorter = (a, b) => (a.displayName < b.displayName ? -1 : a.displayName > b.displayName ? 1 : a.isMe ? -1 : 1);
   const classes = useStyles();
 
@@ -35,6 +35,7 @@ export const MemberList = ({ party }) => {
 
   return (
     <List className={classes.membersList}>
+      {children}
       {party.members.sort(sorter).map((member) => (
         <ListItem key={member.publicKey} className={classes.member}>
           <MemberAvatar member={member} />
