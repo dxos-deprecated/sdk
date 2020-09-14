@@ -173,10 +173,10 @@ export class BotManager {
   }
 
   async getStatus () {
-    return [...this._bots.values()].map(({ timeState, ...rest }) => ({
+    return [...this._bots.values()].map(({ started, lastActive, ...rest }) => ({
       ...rest,
-      started: timeState ? timeState.started.format() : null,
-      lastActive: timeState ? timeState.lastActive.format() : null
+      started: started ? started.format() : null,
+      lastActive: lastActive ? lastActive.format() : null
     }));
   }
 

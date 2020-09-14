@@ -11,7 +11,7 @@ import kill from 'tree-kill';
 import watch from 'node-watch';
 import moment from 'moment';
 
-import { NATIVE_ENV, SourceManager } from './source-manager';
+import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
 import { createInvitationMessage } from './codec';
 import { startIPCServer } from './ipc';
 import { log, logBot } from './log';
@@ -176,7 +176,7 @@ export class BotContainer extends EventEmitter {
   }
 
   async removeSource () {
-    await this._sourceManager.removeSourceFiles();
+    await removeSourceFiles();
   }
 
   serializeBot ({ botId, type, childDir, parties, command, args, stopped, name, env }) {
