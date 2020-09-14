@@ -51,35 +51,35 @@ export class BotFactoryClient {
 
   /**
    * Send request for bot spawning.
-   * @param {String} botId
+   * @param {String} botName
    * @param {Object} options
    */
-  async sendSpawnRequest (botId, options) {
+  async sendSpawnRequest (botName, options) {
     if (!this._connected) {
       await this._connect();
     }
 
-    log(`Sending spawn request for bot ${botId}`);
+    log(`Sending spawn request for bot ${botName}`);
     const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
-      createSpawnCommand(botId, options));
+      createSpawnCommand(botName, options));
 
-    assert(spawnResponse, `Unable to spawn bot ${botId}`);
+    assert(spawnResponse, `Unable to spawn bot ${botName}`);
 
-    const { message: { botUID } } = spawnResponse;
+    const { message: { botId } } = spawnResponse;
 
-    return botUID;
+    return botId;
   }
 
-  async sendBotManagementRequest (botUID, command) {
+  async sendBotManagementRequest (botId, command) {
     if (!this._connected) {
       await this._connect();
     }
 
-    assert(botUID, 'Invalid Bot UID');
+    assert(botId, 'Invalid Bot Id');
     assert(command, 'Invalid command');
 
     const response =
-      await this._botPlugin.sendCommand(this._botFactoryTopic, createBotManagementCommand(botUID, command));
+      await this._botPlugin.sendCommand(this._botFactoryTopic, createBotManagementCommand(botId, command));
     const { message: { error } } = response;
 
     if (error) {
@@ -89,19 +89,19 @@ export class BotFactoryClient {
 
   /**
    * Send request for bot invitation.
-   * @param {String} botUID
+   * @param {String} botId
    * @param {String} partyToJoin
    * @param {Object} spec
    * @param {Object} invitation
    */
-  async sendInvitationRequest (botUID, partyToJoin, spec, invitation) {
+  async sendInvitationRequest (botId, partyToJoin, spec, invitation) {
     if (!this._connected) {
       await this._connect();
     }
 
     log(`Sending spawn request for party: ${partyToJoin} with invitation id: ${invitation}`);
     const invitationResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
-      createInvitationCommand(botUID, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation)));
+      createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation)));
     const { message: { error } } = invitationResponse;
 
     if (error) {

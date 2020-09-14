@@ -7,7 +7,7 @@ import ram from 'random-access-memory';
 import crypto from 'hypercore-crypto';
 
 import { waitForCondition } from '@dxos/async';
-import { keyToBuffer, keyToString, discoveryKey } from '@dxos/crypto';
+import { keyToBuffer, keyToString } from '@dxos/crypto';
 
 import {
   COMMAND_SPAWN,
@@ -29,10 +29,10 @@ import { transportProtocolProvider } from '@dxos/network-manager';
 // TODO(egorgripasov): Proper version from corresponding .yml file.
 import { version } from '../package'; // eslint-disable-line import/extensions
 import { getClientConfig } from './config';
-import { getPlatformInfo, removeSourceFiles } from './source-manager';
 import { BotManager } from './bot-manager';
+import { getPlatformInfo } from './env';
 
-import { COMMAND_SIGN, startIPCServer, createSignResponse, createInvitationMessage } from './ipc';
+import { COMMAND_SIGN, createSignResponse } from './codec';
 
 import { log } from './log';
 
@@ -46,8 +46,9 @@ export class BotFactory {
   /**
    * @constructor
    * @param {object} config
+   * @param {BotContainer} botContainer
    */
-  constructor (config) {
+  constructor (config, botContainer) {
     assert(config);
 
     this._config = config;
@@ -57,12 +58,14 @@ export class BotFactory {
     this._plugin = new BotPlugin(this._peerKey, (...args) => this.handleMessage(...args));
     this._localDev = this._config.get('bot.localDev');
 
+    this._botContainer = botContainer;
+
     const { platform, arch } = getPlatformInfo();
     this._platorm = `${platform}.${arch}`;
 
-    process.on('SIGINT', (...args) => {
+    process.on('SIGINT', async (...args) => {
       console.log('Signal received.', ...args);
-      this._botManager.stop();
+      await this.stop();
       process.exit(0);
     });
   }
@@ -71,13 +74,13 @@ export class BotFactory {
    * Start factory.
    */
   async start () {
-    this._ipcServer = await startIPCServer(this._config, this._botMessageHandler.bind(this));
     this._client = await createClient(ram, new Keyring(), getClientConfig(this._config), [this._plugin]);
-    this._botManager = new BotManager(this._config, { ipcServerId: this._ipcServer.id, ipcServerPort: this._ipcServer.port });
+    this._botManager = new BotManager(this._config, this._botContainer);
 
+    await this._botContainer.start(this.botMessageHandler.bind(this));
     await this._botManager.start();
 
-    await this._client.networkManager.joinProtocolSwarm(this._topic,
+    this._leaveSwarm = await this._client.networkManager.joinProtocolSwarm(this._topic,
       transportProtocolProvider(this._topic, this._peerKey, this._plugin));
 
     log(JSON.stringify(
@@ -85,8 +88,7 @@ export class BotFactory {
         started: true,
         topic: keyToString(this._topic),
         peerId: keyToString(this._peerKey),
-        localDev: this._localDev,
-        ipcPort: this._ipcServer.port
+        localDev: this._localDev
       }
     ));
   }
@@ -104,10 +106,11 @@ export class BotFactory {
     switch (message.__type_url) {
       case COMMAND_SPAWN: {
         try {
-          const { botId, options } = message;
-          const botUID = await this._botManager.spawnBot(botId, options);
-          await waitForCondition(() => this._ipcServer.clientConnected(botUID), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
-          return createSpawnResponse(botUID);
+          const { botName, options } = message;
+          const botId = await this._botManager.spawnBot(botName, options);
+          // TODO(egorgripasov): Move down.
+          await waitForCondition(() => this._botContainer.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
+          return createSpawnResponse(botId);
         } catch (err) {
           log(err);
           return createSpawnResponse(null);
@@ -115,18 +118,18 @@ export class BotFactory {
       }
 
       case COMMAND_INVITE: {
-        runCommand = async () => this.inviteBot(message.botUID, message);
+        runCommand = async () => this.inviteBot(message.botId, message);
         break;
       }
 
       case COMMAND_MANAGE: {
-        const { botUID, command } = message;
+        const { botId, command } = message;
         runCommand = async () => {
           switch (command) {
-            case 'start': return this._botManager.startBot(botUID);
-            case 'stop': return this._botManager.stopBot(botUID);
-            case 'restart': return this._botManager.restartBot(botUID);
-            case 'kill': return this._botManager.killBot(botUID);
+            case 'start': return this._botManager.startBot(botId);
+            case 'stop': return this._botManager.stopBot(botId);
+            case 'restart': return this._botManager.restartBot(botId);
+            case 'kill': return this._botManager.killBot(botId);
             default: break;
           }
         };
@@ -138,7 +141,7 @@ export class BotFactory {
         runCommand = async () => {
           await this._botManager.killAllBots();
           if (source) {
-            await removeSourceFiles();
+            await this._botContainer.removeSource();
           }
         };
         break;
@@ -178,41 +181,33 @@ export class BotFactory {
 
   /**
    * Invite bot to a party.
-   * @param {String} botUID
+   * @param {String} botId
    * @param {Object} botConfig
    */
-  async inviteBot (botUID, botConfig) {
-    assert(botUID);
+  async inviteBot (botId, botConfig) {
+    assert(botId);
     assert(botConfig);
 
     const { topic, invitation } = botConfig;
 
     assert(topic);
+    log(`Invite bot request for '${botId}': ${JSON.stringify(botConfig)}`);
 
-    log(`Invite bot request for '${botUID}': ${JSON.stringify(botConfig)}`);
-
-    await this._botManager.addParty(botUID, topic);
-
-    this._ipcServer.sendMessage(botUID, createInvitationMessage(topic, JSON.parse(invitation)));
+    await this._botManager.inviteBot(botId, topic, invitation);
   }
 
   async stop () {
-    this._ipcServer.stop();
-
-    this._swarm.on('leave', async () => {
-      setImmediate(async () => {
-        await this._swarm.close();
-      });
-    });
-    this._swarm.leave(discoveryKey(this._topic));
+    await this._leaveSwarm();
+    await this._client.networkManager.close();
     await this._botManager.stop();
+    await this._botContainer.stop();
   }
 
   /**
    * Handle incoming messages from bot processes.
    * @param {Object} command
    */
-  async _botMessageHandler (command) {
+  async botMessageHandler (command) {
     let result;
     switch (command.__type_url) {
       case COMMAND_SIGN: {

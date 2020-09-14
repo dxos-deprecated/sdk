@@ -4,7 +4,7 @@
 
 import assert from 'assert';
 
-import { MESSAGE_CONFIRM, codec } from './codec';
+import { MESSAGE_CONFIRM, codec } from '../codec';
 
 /**
  * Inter Process Communication (IPC) Server.
@@ -75,14 +75,14 @@ export class IPCServer {
 
   /**
    * Send message to IPC client.
-   * @param {String} botUID
+   * @param {String} botId
    * @param {Object} message
    * @param {Object} options
    */
-  async sendMessage (botUID, message, { waitForResponse = false } = {}) {
+  async sendMessage (botId, message, { waitForResponse = false } = {}) {
     return new Promise((resolve) => {
       const buffer = codec.encode(message);
-      const socket = this._clients.get(botUID);
+      const socket = this._clients.get(botId);
 
       this._ipc.server.emit(socket, buffer);
       if (waitForResponse) {

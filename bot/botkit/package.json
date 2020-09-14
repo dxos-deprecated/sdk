@@ -8,7 +8,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "npm run clean && npm run build:protobuf && npm run dist",
-    "build:protobuf": "pbjs -t json src/ipc/schema.proto -o src/ipc/schema.json && cpy src/ipc/schema.json dist/ipc",
+    "build:protobuf": "pbjs -t json src/codec/schema.proto -o src/codec/schema.json && cpy src/codec/schema.json dist/codec",
     "build:watch": "yarn run build --watch",
     "clean": "rm -rf dist",
     "dist": "babel ./src --out-dir ./dist --ignore \"**/*.test.js\"",

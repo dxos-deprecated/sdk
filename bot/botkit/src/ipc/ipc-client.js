@@ -4,7 +4,7 @@
 
 import assert from 'assert';
 
-import { codec, createConnectConfirmMessage } from './codec';
+import { codec, createConnectConfirmMessage } from '../codec';
 
 /**
  * Inter Process Communication (IPC) Client.
