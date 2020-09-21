@@ -195,7 +195,7 @@ export class Bot extends EventEmitter {
   }
 
   async emitBotEvent (type, data) {
-    await this._plugin.sendCommand(this._botFactoryPeerKey, createEvent(type, data));
+    await this._plugin.sendCommand(this._botFactoryPeerKey, createEvent(this._uid, type, data));
   }
 
   async _connectToControlTopic () {

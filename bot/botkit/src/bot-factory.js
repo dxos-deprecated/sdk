@@ -220,7 +220,7 @@ export class BotFactory {
   }
 
   async emitBotEvent (message) {
-    const { type, data } = message;
-    await this._plugin.broadcastCommand(createEvent(type, data));
+    const { botId, type, data } = message;
+    await this._plugin.broadcastCommand(createEvent(botId, type, data));
   }
 }
