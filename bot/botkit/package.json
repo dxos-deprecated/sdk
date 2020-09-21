@@ -7,8 +7,7 @@
   "author": "DXOS.org",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npm run clean && npm run build:protobuf && npm run dist",
-    "build:protobuf": "pbjs -t json src/codec/schema.proto -o src/codec/schema.json && cpy src/codec/schema.json dist/codec",
+    "build": "npm run clean && npm run dist",
     "build:watch": "yarn run build --watch",
     "clean": "rm -rf dist",
     "dist": "babel ./src --out-dir ./dist --ignore \"**/*.test.js\"",
@@ -47,7 +46,6 @@
     "lodash.isempty": "^4.4.0",
     "memdown": "^5.1.0",
     "moment": "^2.24.0",
-    "node-ipc": "^9.1.1",
     "node-watch": "^0.6.4",
     "random-access-memory": "^3.1.1",
     "tcp-port-used": "^1.0.1",
