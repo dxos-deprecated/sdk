@@ -10,7 +10,18 @@ import yaml from 'js-yaml';
 import { Chance } from 'chance';
 import get from 'lodash.get';
 
-import { keyToString, createKeyPair } from '@dxos/crypto';
+import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
+import { transportProtocolProvider } from '@dxos/network-manager';
+import {
+  COMMAND_SIGN,
+  MESSAGE_CONFIRM,
+  BOT_EVENT,
+  BotPlugin,
+  createInvitationMessage,
+  createSignResponse,
+  createBotCommand
+} from '@dxos/protocol-plugin-bot';
+
 import { Registry } from '@wirelineio/registry-client';
 
 import { log } from './log';
@@ -30,9 +41,17 @@ export class BotManager {
    */
   _bots = new Map();
 
-  constructor (config, botContainer) {
+  // TODO(egorgripasov): Merge to _bots.
+  _connectedBots = {};
+
+  constructor (config, botContainer, client, options) {
     this._config = config;
     this._botContainer = botContainer;
+    this._client = client;
+
+    const { signChallenge, emitBotEvent } = options;
+    this._signChallenge = signChallenge;
+    this._emitBotEvent = emitBotEvent;
 
     this._localDev = this._config.get('bot.localDev');
     this._botsFile = path.join(process.cwd(), BOTS_DUMP_FILE);
@@ -48,9 +67,21 @@ export class BotManager {
         await this._saveBotsToFile();
       }
     });
+
+    this._controlTopic = createKeyPair().publicKey;
+    this._controlPeerKey = this._controlTopic;
+  }
+
+  get controlTopic () {
+    return this._controlTopic;
   }
 
   async start () {
+    this._plugin = new BotPlugin(this._controlPeerKey, (...args) => this._botMessageHandler(...args));
+    // Join control swarm.
+    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
+      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin));
+
     await this._readBotsFromFile();
 
     const reset = this._config.get('bot.reset');
@@ -169,7 +200,8 @@ export class BotManager {
       botInfo.parties.push(topic);
       await this._saveBotsToFile();
     }
-    await this._botContainer.inviteBot(botId, topic, invitation);
+
+    await this._plugin.sendCommand(keyToBuffer(botId), createInvitationMessage(topic, JSON.parse(invitation)));
   }
 
   async getStatus () {
@@ -184,6 +216,16 @@ export class BotManager {
     for await (const { botId } of this._bots.values()) {
       await this._stopBot(botId);
     }
+    await this._leaveControlSwarm();
+  }
+
+  // TODO(egorgripasov): Merge to _bots.
+  botReady (botId) {
+    return this._connectedBots[botId] || false;
+  }
+
+  async sendDirectBotCommand (botId, command) {
+    return this._plugin.sendCommand(keyToBuffer(botId), createBotCommand(botId, command));
   }
 
   /**
@@ -237,12 +279,45 @@ export class BotManager {
     });
   }
 
+  /**
+   * Handle incoming messages from bot processes.
+   * @param {Protocol} protocol
+   * @param {{ message }} command.
+   */
+  async _botMessageHandler (protocol, { message }) {
+    let result;
+    switch (message.__type_url) {
+      case COMMAND_SIGN: {
+        result = createSignResponse(this._signChallenge(message.message));
+        break;
+      }
+
+      case MESSAGE_CONFIRM: {
+        const { botId } = message;
+        this._connectedBots[botId] = true;
+        break;
+      }
+
+      // Arbitrary event from bot.
+      case BOT_EVENT: {
+        await this._emitBotEvent(message);
+        break;
+      }
+
+      default: {
+        log('Unknown command:', message);
+      }
+    }
+
+    return result;
+  }
+
   async _getBotRecord (botName) {
     if (this._localDev) {
       const botInfo = yaml.load(
         await fs.readFile(path.join(process.cwd(), BOT_CONFIG_FILENAME))
       );
-      return { attributes: { displayName: botInfo.name }, id: botInfo.id };
+      return { attributes: { name: botInfo.name }, id: sha256(botInfo.name) };
     }
     const { records } = await this._registry.resolveNames([botName]);
     if (!records.length) {

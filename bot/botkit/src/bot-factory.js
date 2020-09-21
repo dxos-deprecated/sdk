@@ -16,10 +16,13 @@ import {
   COMMAND_MANAGE,
   COMMAND_RESET,
   COMMAND_STOP,
+  BOT_COMMAND,
   BotPlugin,
   createStatusResponse,
   createSpawnResponse,
-  createCommandResponse
+  createCommandResponse,
+  createBotCommandResponse,
+  createEvent
 } from '@dxos/protocol-plugin-bot';
 
 import { Keyring } from '@dxos/credentials';
@@ -31,8 +34,6 @@ import { version } from '../package'; // eslint-disable-line import/extensions
 import { getClientConfig } from './config';
 import { BotManager } from './bot-manager';
 import { getPlatformInfo } from './env';
-
-import { COMMAND_SIGN, createSignResponse } from './codec';
 
 import { log } from './log';
 
@@ -64,7 +65,7 @@ export class BotFactory {
     this._platorm = `${platform}.${arch}`;
 
     process.on('SIGINT', async (...args) => {
-      console.log('Signal received.', ...args);
+      log('Signal received.', ...args);
       await this.stop();
       process.exit(0);
     });
@@ -74,10 +75,13 @@ export class BotFactory {
    * Start factory.
    */
   async start () {
-    this._client = await createClient(ram, new Keyring(), getClientConfig(this._config), [this._plugin]);
-    this._botManager = new BotManager(this._config, this._botContainer);
+    this._client = await createClient(ram, new Keyring(), getClientConfig(this._config));
+    this._botManager = new BotManager(this._config, this._botContainer, this._client, {
+      signChallenge: this.signChallenge.bind(this),
+      emitBotEvent: this.emitBotEvent.bind(this)
+    });
 
-    await this._botContainer.start(this.botMessageHandler.bind(this));
+    await this._botContainer.start({ controlTopic: this._botManager.controlTopic });
     await this._botManager.start();
 
     this._leaveSwarm = await this._client.networkManager.joinProtocolSwarm(this._topic,
@@ -88,7 +92,8 @@ export class BotFactory {
         started: true,
         topic: keyToString(this._topic),
         peerId: keyToString(this._peerKey),
-        localDev: this._localDev
+        localDev: this._localDev,
+        controlTopic: keyToString(this._botManager.controlTopic)
       }
     ));
   }
@@ -109,7 +114,7 @@ export class BotFactory {
           const { botName, options } = message;
           const botId = await this._botManager.spawnBot(botName, options);
           // TODO(egorgripasov): Move down.
-          await waitForCondition(() => this._botContainer.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
+          await waitForCondition(() => this._botManager.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
           return createSpawnResponse(botId);
         } catch (err) {
           log(err);
@@ -161,6 +166,13 @@ export class BotFactory {
         );
       }
 
+      case BOT_COMMAND: {
+        const { botId, command } = message;
+        const result = await this._botManager.sendDirectBotCommand(botId, command);
+        const { message: { data, error } } = result;
+        return createBotCommandResponse(data, error);
+      }
+
       default: {
         log('Unknown command:', JSON.stringify(message));
       }
@@ -198,30 +210,17 @@ export class BotFactory {
 
   async stop () {
     await this._leaveSwarm();
-    await this._client.networkManager.close();
     await this._botManager.stop();
     await this._botContainer.stop();
+    await this._client.networkManager.close();
   }
 
-  /**
-   * Handle incoming messages from bot processes.
-   * @param {Object} command
-   */
-  async botMessageHandler (command) {
-    let result;
-    switch (command.__type_url) {
-      case COMMAND_SIGN: {
-        result = createSignResponse(
-          crypto.sign(command.message, keyToBuffer(this._config.get('bot.secretKey')))
-        );
-        break;
-      }
+  signChallenge (challenge) {
+    return crypto.sign(challenge, keyToBuffer(this._config.get('bot.secretKey')));
+  }
 
-      default: {
-        log('Unknown command:', command);
-      }
-    }
-
-    return result;
+  async emitBotEvent (message) {
+    const { type, data } = message;
+    await this._plugin.broadcastCommand(createEvent(type, data));
   }
 }

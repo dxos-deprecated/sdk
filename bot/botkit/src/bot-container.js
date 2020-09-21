@@ -11,9 +11,9 @@ import kill from 'tree-kill';
 import watch from 'node-watch';
 import moment from 'moment';
 
+import { keyToString } from '@dxos/crypto';
+
 import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
-import { createInvitationMessage } from './codec';
-import { startIPCServer } from './ipc';
 import { log, logBot } from './log';
 
 // Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
@@ -36,12 +36,13 @@ export class BotContainer extends EventEmitter {
     this._sourceManager = new SourceManager(config);
   }
 
-  async start (botMessageHandler) {
-    this._ipcServer = await startIPCServer(this._config, botMessageHandler);
+  async start (options) {
+    const { controlTopic } = options;
+    this._controlTopic = controlTopic;
   }
 
   async stop () {
-    this._ipcServer.stop();
+
   }
 
   async getBotAttributes (botName, botId, uniqId, ipfsCID, env, options) {
@@ -55,10 +56,6 @@ export class BotContainer extends EventEmitter {
     return { childDir, command, args };
   }
 
-  botReady (botId) {
-    return this._ipcServer.clientConnected(botId);
-  }
-
   /**
    * Start bot instance.
    * @param {String} botId
@@ -68,8 +65,7 @@ export class BotContainer extends EventEmitter {
     const { name, env, childDir, command, args } = botInfo || options;
 
     const wireEnv = {
-      WIRE_BOT_IPC_SERVER: this._ipcServer.id,
-      WIRE_IPC_PORT: this._ipcServer.port,
+      WIRE_BOT_CONTROL_TOPIC: keyToString(this._controlTopic),
       WIRE_BOT_UID: botId,
       WIRE_BOT_NAME: name,
       WIRE_BOT_CWD: childDir,
@@ -149,10 +145,6 @@ export class BotContainer extends EventEmitter {
     });
 
     return botInfo;
-  }
-
-  async inviteBot (botId, topic, invitation) {
-    this._ipcServer.sendMessage(botId, createInvitationMessage(topic, JSON.parse(invitation)));
   }
 
   async stopBot (botInfo) {
