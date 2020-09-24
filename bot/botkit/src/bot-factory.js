@@ -168,9 +168,13 @@ export class BotFactory {
 
       case BOT_COMMAND: {
         const { botId, command } = message;
-        const result = await this._botManager.sendDirectBotCommand(botId, command);
-        const { message: { data, error } } = result;
-        return createBotCommandResponse(data, error);
+        try {
+          const result = await this._botManager.sendDirectBotCommand(botId, command);
+          const { message: { data, error } } = result;
+          return createBotCommandResponse(data, error);
+        } catch (err) {
+          return createBotCommandResponse(null, err.message);
+        }
       }
 
       default: {

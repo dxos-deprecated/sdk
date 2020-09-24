@@ -225,6 +225,9 @@ export class BotManager {
   }
 
   async sendDirectBotCommand (botId, command) {
+    if (!this._bots.has(botId)) {
+      throw new Error(`Bot ${botId} does not exist.`);
+    }
     return this._plugin.sendCommand(keyToBuffer(botId), createBotCommand(botId, command));
   }
 
