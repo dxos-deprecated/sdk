@@ -15,7 +15,8 @@ import {
   createInvitationCommand,
   createBotManagementCommand,
   createResetCommand,
-  createStopCommand
+  createStopCommand,
+  createBotCommand
 } from '@dxos/protocol-plugin-bot';
 
 import { keyToBuffer } from '@dxos/crypto';
@@ -146,6 +147,14 @@ export class BotFactoryClient {
       log(err);
       return { started: false };
     }
+  }
+
+  async sendBotCommand (botId, command) {
+    if (!this._connected) {
+      await this._connect();
+    }
+
+    return this._botPlugin.sendCommand(this._botFactoryTopic, createBotCommand(botId, command));
   }
 
   /**

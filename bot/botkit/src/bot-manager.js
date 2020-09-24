@@ -103,7 +103,7 @@ export class BotManager {
    */
   async spawnBot (botName, options = {}) {
     let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
-    assert(botName || ipfsCID);
+    assert(botName || ipfsCID || this._localDev);
 
     log(`Spawn bot request for ${botName || ipfsCID}`);
 
