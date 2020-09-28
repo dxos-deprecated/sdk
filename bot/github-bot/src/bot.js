@@ -121,7 +121,7 @@ export class GitHubBot extends Bot {
     const { docModel, topic, lastSave = Date.now() } = docInfo;
 
     const partyInfo = this._botParties.get(topic) || {};
-    const { repo, repoPath, lastUpdate = Date.now() } = partyInfo;
+    const { repo, repoPath } = partyInfo;
 
     if (repo && repoPath) {
       const updateDoc = async () => {
@@ -144,22 +144,28 @@ export class GitHubBot extends Bot {
         docInfo.updateTimer = setTimeout(updateDoc, FILE_UPDATE_TIMEOUT);
       }
 
-      // Timer for git operations.
-      const pushToQueue = () => {
-        this._queue.push({
-          repoPath
-        }, err => console.error(err));
-      };
+      await this._handleRepoUpdate(partyInfo);
+    }
+  }
 
-      if (partyInfo.updateTimer) {
-        clearTimeout(partyInfo.updateTimer);
-      }
+  async _handleRepoUpdate (partyInfo) {
+    const { repoPath, lastUpdate = Date.now() } = partyInfo;
 
-      if (Date.now() - lastUpdate > MAX_NON_COMMITED_TIME) {
-        pushToQueue();
-      } else {
-        partyInfo.updateTimer = setTimeout(pushToQueue, GIT_UPDATE_TIMEOUT);
-      }
+    // Timer for git operations.
+    const pushToQueue = () => {
+      this._queue.push({
+        repoPath
+      }, err => console.error(err));
+    };
+
+    if (partyInfo.updateTimer) {
+      clearTimeout(partyInfo.updateTimer);
+    }
+
+    if (Date.now() - lastUpdate > MAX_NON_COMMITED_TIME) {
+      pushToQueue();
+    } else {
+      partyInfo.updateTimer = setTimeout(pushToQueue, GIT_UPDATE_TIMEOUT);
     }
   }
 }
