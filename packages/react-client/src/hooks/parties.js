@@ -5,64 +5,53 @@
 import React, { useEffect, useState } from 'react';
 import getDisplayName from 'react-display-name';
 
-import { keyToBuffer } from '@dxos/crypto';
-
 import { useClient } from './client';
 
 /**
- * Obtains a PartyInfo object for the given party publicKey.
- * @param {String|Buffer} key party publicKey.
- * @returns {PartyInfo|undefined} PartyInfo provides details about the Party itself and about Party membership.
+ * Get party.
  */
-export const useParty = (key) => {
-  const client = useClient();
-  const partyKey = Buffer.isBuffer(key) ? key : keyToBuffer(key);
-  const [partyInfo, setPartyInfo] = useState(partyKey ? client.partyManager.getPartyInfo(partyKey) : undefined);
+export const useParty = partyKey => {
+  const { client: { database } } = useClient();
+  const [party, setParty] = useState();
 
   useEffect(() => {
-    setPartyInfo(partyKey ? client.partyManager.getPartyInfo(partyKey) : undefined);
-  }, [key]);
+    setImmediate(async () => {
+      const party = await database.getParty(partyKey);
+      setParty(party);
+    });
+  }, [database]);
 
-  useEffect(() => {
-    const listener = (eventPartyKey) => {
-      if (eventPartyKey.equals(partyKey)) {
-        setPartyInfo(client.partyManager.getPartyInfo(partyKey));
-      }
-    };
-
-    client.partyManager.on('update', listener);
-
-    return () => {
-      client.partyManager.removeListener('update', listener);
-    };
-  }, []);
-
-  return partyInfo;
+  return party;
 };
 
 /**
- * Obtains an array of PartyInfo objects for all known Parties.
- * PartyInfo provides details about the Party itself and about Party membership.
- * @returns {PartyInfo[]}
+ * Get parties.
  */
 export const useParties = () => {
-  const client = useClient();
-  const [parties, setParties] = useState(client.partyManager.getPartyInfoList());
+  const { client: { database } } = useClient();
+  const [parties, setParties] = useState([]);
 
-  useEffect(() => {
-    const listener = () => {
-      setParties(client.partyManager.getPartyInfoList());
-    };
+  useEffect(asyncEffect(async () => {
+    const result = await database.queryParties();
+    setParties(result.value);
 
-    client.partyManager.on('update', listener);
-
-    return () => {
-      client.partyManager.off('update', listener);
-    };
-  }, []);
+    return result.subscribe(() => {
+      setParties(result.value);
+    });
+  }), [database]);
 
   return parties;
 };
+
+/**
+ * Helper to use async functions inside effects ?
+ */
+function asyncEffect (fun) {
+  return () => {
+    const promise = fun();
+    return () => promise.then(cb => cb());
+  };
+}
 
 export const withParties = WrappedComponent => {
   const Component = ({ ...rest }) => {

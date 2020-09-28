@@ -42,7 +42,7 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp } = {}) {
         setResolver(true);
       }
 
-      client.joinParty(invitation, secretProvider)
+      client.database.joinParty(invitation, secretProvider)
         .then(party => onDone(party))
         .catch(error => onError(error));
     } catch (error) {
