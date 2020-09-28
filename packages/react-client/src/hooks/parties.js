@@ -11,15 +11,16 @@ import { useClient } from './client';
  * Get party.
  */
 export const useParty = partyKey => {
-  const { client: { database } } = useClient();
+  const { client } = useClient();
   const [party, setParty] = useState();
 
   useEffect(() => {
     setImmediate(async () => {
-      const party = await database.getParty(partyKey);
+      if (!client) return;
+      const party = await client.database.getParty(partyKey);
       setParty(party);
     });
-  }, [database]);
+  }, [client]);
 
   return party;
 };
@@ -28,17 +29,18 @@ export const useParty = partyKey => {
  * Get parties.
  */
 export const useParties = () => {
-  const { client: { database } } = useClient();
+  const { client } = useClient();
   const [parties, setParties] = useState([]);
 
   useEffect(asyncEffect(async () => {
-    const result = await database.queryParties();
+    if (!client) return;
+    const result = await client.database.queryParties();
     setParties(result.value);
 
     return result.subscribe(() => {
       setParties(result.value);
     });
-  }), [database]);
+  }), [client]);
 
   return parties;
 };
