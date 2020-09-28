@@ -3,19 +3,22 @@
 //
 
 import defaultsDeep from 'lodash.defaultsdeep';
-import bufferJson from 'buffer-json-encoding';
+
 import memdown from 'memdown';
 
 import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
 import { createStorage } from '@dxos/random-access-multi-storage';
-import { Keyring, KeyStore, createAuthMessage, codec, KeyType } from '@dxos/credentials';
+import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
 import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
 import { ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { PartyManager, InviteType, InviteDetails } from '@dxos/party-manager';
+import {
+  codec, Database, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager
+} from '@dxos/echo-db';
+import { ObjectModel } from '@dxos/object-model';
 
 import { defaultClientConfig } from './config';
 
@@ -37,27 +40,25 @@ export class Client {
    * @param {Registry} config.registry Optional.
    */
   constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }) {
-    this._keyring = keyring || new Keyring(new KeyStore(memdown()));
     this._feedStore = feedStore || new FeedStore(
       storage || createStorage('dxos-storage-db', 'ram'),
-      {
-        feedOptions: {
-          valueEncoding: 'buffer-json'
-        },
-        codecs: {
-          'buffer-json': bufferJson
-        }
-      }
-    );
+      { feedOptions: { valueEncoding: codec } });
+    this._keyring = keyring || new Keyring(new KeyStore(memdown()));
     this._swarmConfig = swarm;
+
+    this._identityManager = new IdentityManager(this._keyring);
+    this._modelFactory = new ModelFactory()
+      .registerModel(ObjectModel.meta, ObjectModel);
+
     this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
-    this._partyManager = partyManager || new PartyManager(this._feedStore, this._keyring, this._networkManager);
-    this._modelFactory = new ModelFactory(this._feedStore, {
-      onAppend: async (message, { topic }) => this._appendMessage(message, topic),
-      // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
-      onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
-    });
-    this.registry = registry;
+
+    const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
+
+    this._partyFactory = new PartyFactory(this._keyring, feedStoreAdapter, this._modelFactory, this._networkManager);
+    this._partyManager = partyManager || new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
+
+    this._database = new Database(this._partyManager);
+    this._registry = registry;
 
     this._partyWriters = {};
     /** @type Map<string, Promise<PublicKey>> */
@@ -75,8 +76,9 @@ export class Client {
     await this._feedStore.open();
     await this._keyring.load();
 
-    await this._partyManager.initialize();
-    await this._waitForPartiesToBeOpen();
+    // If this has to be done, it should be done thru database.
+    // Actually, the we should move all initialze into database.
+    await this._partyManager.createHalo();
 
     this._initialized = true;
   }
@@ -150,64 +152,71 @@ export class Client {
   }
 
   /**
+   * @deprecated
    * Create a new party.
    * @return {Promise<Party>} The new Party.
    */
   async createParty () {
-    return this._partyManager.createParty();
+    console.warn('deprecated. Use client.database.createParty()');
+    // return this._partyManager.createParty();
   }
 
   /**
-   *
+   * @deprecated
    * @param {Buffer} partyKey Party publicKey
    * @param {SecretProvider} secretProvider
    * @param {Object} options
    * @param {Function} options.onFinish function to be called once invitation flow is done.
    */
   async createInvitation (partyKey, secretProvider, options = {}) {
-    return this._partyManager.inviteToParty(
-      partyKey,
-      new InviteDetails(InviteType.INTERACTIVE, {
-        secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
-        secretProvider
-      }),
-      options
-    );
+    console.log('createInvitation deprecated. Check database');
+    // return this.database._partyManager.inviteToParty(
+    //   partyKey,
+    //   new InviteDetails(InviteType.INTERACTIVE, {
+    //     secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
+    //     secretProvider
+    //   }),
+    //   options
+    // );
   }
 
   /**
-   *
+   * @deprecated
    * @param {Buffer} publicKey Party publicKey
    * @param {Buffer} recipient Recipient publicKey
    */
   async createOfflineInvitation (partyKey, recipientKey) {
-    return this._partyManager.inviteToParty(
-      partyKey,
-      new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: recipientKey })
-    );
+    console.warn('createOfflineInvitation deprecated. check Database');
+
+    // return this.database._partyManager.inviteToParty(
+    //   partyKey,
+    //   new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: recipientKey })
+    // );
   }
 
   /**
+   * @deprecated
    * Join a Party by redeeming an Invitation.
    * @param {InvitationDescriptor} invitation
    * @param {SecretProvider} secretProvider
    * @returns {Promise<Party>} The now open Party.
    */
   async joinParty (invitation, secretProvider) {
-    // An invitation where we can use our Identity key for auth.
-    if (InviteType.OFFLINE_KEY === invitation.type) {
-      // Connect to inviting peer.
-      return this._partyManager.joinParty(invitation, (info) =>
-        codec.encode(createAuthMessage(this._keyring, info.id.value,
-          this._partyManager.identityManager.keyRecord,
-          this._partyManager.identityManager.deviceManager.keyChain,
-          null, info.authNonce.value))
-      );
-    } else if (!invitation.identityKey) {
-      // An invitation for this Identity to join a Party.
-      // Connect to inviting peer.
-      return this._partyManager.joinParty(invitation, secretProvider);
-    }
+    console.warn('deprecated. Use client.database');
+    // // An invitation where we can use our Identity key for auth.
+    // if (InviteType.OFFLINE_KEY === invitation.type) {
+    //   // Connect to inviting peer.
+    //   return this._partyManager.joinParty(invitation, (info) =>
+    //     codec.encode(createAuthMessage(this._keyring, info.id.value,
+    //       this._partyManager.identityManager.keyRecord,
+    //       this._partyManager.identityManager.deviceManager.keyChain,
+    //       null, info.authNonce.value))
+    //   );
+    // } else if (!invitation.identityKey) {
+    //   // An invitation for this Identity to join a Party.
+    //   // Connect to inviting peer.
+    //   return this._partyManager.joinParty(invitation, secretProvider);
+    // }
   }
 
   /**
@@ -224,34 +233,50 @@ export class Client {
     }
   }
 
+  /**
+   * @deprecated
+   */
   getParties () {
-    return this._partyManager.getPartyInfoList();
-  }
-
-  getParty (partyKey) {
-    return this._partyManager.getPartyInfo(partyKey);
+    console.warn('deprecated. Use client.database');
+    // return this._partyManager.getPartyInfoList();
   }
 
   /**
+   * @deprecated
+   */
+  getParty (partyKey) {
+    console.warn('deprecated. Use client.database');
+    // return this._partyManager.getPartyInfo(partyKey);
+  }
+
+  /**
+   * @deprecated
    * Returns an Array of all known Contacts across all Parties.
    * @returns {Contact[]}
    */
   async getContacts () {
+    console.warn('deprecated. Use client.database');
     return this._partyManager.getContacts();
   }
 
   /**
+   * @deprecated
    * @param {Object} config
    * @param {} config.modelType
    * @param {} config.options
    * @return {model}
    */
   async createSubscription ({ modelType, options } = {}) {
-    return this._modelFactory.createModel(modelType, options);
+    console.warn('deprecated. Use client.database');
+    // return this._modelFactory.createModel(modelType, options);
   }
 
   get keyring () {
     return this._keyring;
+  }
+
+  get database () {
+    return this._database;
   }
 
   // keep this for devtools ???
@@ -261,6 +286,7 @@ export class Client {
 
   // TODO(burdon): Remove.
   get modelFactory () {
+    console.warn('client.modelFactory is deprecated.');
     return this._modelFactory;
   }
 
@@ -271,6 +297,7 @@ export class Client {
 
   // TODO(burdon): Remove.
   get partyManager () {
+    console.warn('deprecated. Use client.database');
     return this._partyManager;
   }
 
