@@ -4,6 +4,7 @@
 
 import fs from 'fs-extra';
 import path from 'path';
+import Queue from 'fastq';
 
 import { Bot } from '@dxos/botkit';
 import { docToMarkdown /*, markdownToDoc */ } from '@dxos/editor-core';
@@ -12,9 +13,12 @@ import { TextModel, TYPE_TEXT_MODEL_UPDATE } from '@dxos/text-model';
 import { cloneRepo, commitAndPush } from './git';
 
 const TYPE_EDITOR_DOCUMENT = 'wrn_dxos_org_teamwork_editor_document';
-const REPOS_PATH = './repos';
+const REPO_PATH = './repos';
 
 const GIT_UPDATE_TIMEOUT = 7000;
+const MAX_UNCOMMITED_TIME = 60000;
+
+const WORKERS_NUM = 1;
 
 /**
  * GitHub bot.
@@ -33,6 +37,8 @@ export class GitHubBot extends Bot {
     this.on('party', async (topic) => {
       await this.joinParty(topic);
     });
+
+    this._queue = Queue(this, this._docUpdateHandler, WORKERS_NUM);
   }
 
   async botCommandHandler (message) {
@@ -75,7 +81,7 @@ export class GitHubBot extends Bot {
         for (const message of model.messages) {
           const { itemId, displayName } = message;
           if (!this._docs.has(itemId)) {
-            console.log(`Opening doc ${itemId}`);
+            console.log(`Opening doc '${itemId}'.`);
             const docModel = await this._client.modelFactory.createModel(TextModel, { type: [TYPE_TEXT_MODEL_UPDATE], topic, documentId: itemId });
             this._docs.set(itemId, { documentId: itemId, displayName, docModel, topic });
 
@@ -87,7 +93,7 @@ export class GitHubBot extends Bot {
   }
 
   async _assignRepo (topic, repo, username, token) {
-    const repoPath = path.join(this._cwd, REPOS_PATH, topic);
+    const repoPath = path.join(this._cwd, REPO_PATH, topic);
     if (await fs.exists(repoPath)) {
       throw new Error('Party has already being replicated to another repo.');
     }
@@ -100,22 +106,45 @@ export class GitHubBot extends Bot {
 
   async _handleDocUpdate (documentId) {
     const docInfo = this._docs.get(documentId);
-    const { topic, docModel } = docInfo;
+    const { topic, lastUpdate = Date.now() } = docInfo;
 
     const trackedParty = this._botParties.get(topic) || {};
     const { repo, repoPath } = trackedParty;
+
+    const pushToQueue = () => {
+      this._queue.push({
+        docInfo,
+        repoPath
+      }, err => console.error(err));
+    };
 
     if (repo && repoPath) {
       if (docInfo.updateTimer) {
         clearTimeout(docInfo.updateTimer);
       }
-      docInfo.updateTimer = setTimeout(async () => {
-        const text = docToMarkdown(docModel.doc);
-        const docPath = path.join(repoPath, `${documentId}.md`);
-        await fs.writeFile(docPath, text);
 
-        await commitAndPush(repoPath);
-      }, GIT_UPDATE_TIMEOUT);
+      if (Date.now() - lastUpdate > MAX_UNCOMMITED_TIME) {
+        pushToQueue();
+      } else {
+        docInfo.updateTimer = setTimeout(pushToQueue, GIT_UPDATE_TIMEOUT);
+      }
     }
+  }
+
+  async _docUpdateHandler (options, cb) {
+    const { docInfo, repoPath } = options;
+    const { documentId, docModel } = docInfo;
+
+    const text = docToMarkdown(docModel.doc);
+    const docPath = path.join(repoPath, `${documentId}.md`);
+
+    docInfo.lastUpdate = Date.now();
+
+    fs.writeFile(docPath, text)
+      .then(() => {
+        return commitAndPush(repoPath);
+      })
+      .then(cb)
+      .catch(cb);
   }
 }

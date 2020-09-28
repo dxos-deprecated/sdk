@@ -45,6 +45,7 @@
     "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-watch": "7.0.0",
+    "fastq": "^1.8.0",
     "jest": "^25.1.0",
     "pkg": "^4.4.3",
     "semistandard": "14.2.0",
