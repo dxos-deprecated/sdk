@@ -78,6 +78,7 @@ export class Client {
 
     // If this has to be done, it should be done thru database.
     // Actually, the we should move all initialze into database.
+    await this._partyManager.open();
     await this._partyManager.createHalo();
 
     this._initialized = true;
