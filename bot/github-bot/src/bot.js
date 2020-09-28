@@ -5,6 +5,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import Queue from 'fastq';
+import { callbackify } from 'util';
 
 import { Bot } from '@dxos/botkit';
 import { docToMarkdown /*, markdownToDoc */ } from '@dxos/editor-core';
@@ -12,11 +13,22 @@ import { TextModel, TYPE_TEXT_MODEL_UPDATE } from '@dxos/text-model';
 
 import { cloneRepo, commitAndPush } from './git';
 
+const commitAndPushAsync = callbackify(commitAndPush);
+
+const updateRepo = async (options, cb) => {
+  const { repoPath } = options;
+
+  commitAndPushAsync(repoPath, cb);
+};
+
 const TYPE_EDITOR_DOCUMENT = 'wrn_dxos_org_teamwork_editor_document';
 const REPO_PATH = './repos';
 
+const FILE_UPDATE_TIMEOUT = 7000;
+const MAX_NON_UPDATED_TIME = 30000;
+
 const GIT_UPDATE_TIMEOUT = 7000;
-const MAX_UNCOMMITED_TIME = 60000;
+const MAX_NON_COMMITED_TIME = 60000;
 
 const WORKERS_NUM = 1;
 
@@ -38,7 +50,7 @@ export class GitHubBot extends Bot {
       await this.joinParty(topic);
     });
 
-    this._queue = Queue(this, this._docUpdateHandler, WORKERS_NUM);
+    this._queue = Queue(updateRepo, WORKERS_NUM);
   }
 
   async botCommandHandler (message) {
@@ -106,45 +118,48 @@ export class GitHubBot extends Bot {
 
   async _handleDocUpdate (documentId) {
     const docInfo = this._docs.get(documentId);
-    const { topic, lastUpdate = Date.now() } = docInfo;
+    const { docModel, topic, lastSave = Date.now() } = docInfo;
 
-    const trackedParty = this._botParties.get(topic) || {};
-    const { repo, repoPath } = trackedParty;
-
-    const pushToQueue = () => {
-      this._queue.push({
-        docInfo,
-        repoPath
-      }, err => console.error(err));
-    };
+    const partyInfo = this._botParties.get(topic) || {};
+    const { repo, repoPath, lastUpdate = Date.now() } = partyInfo;
 
     if (repo && repoPath) {
+      const updateDoc = async () => {
+        const text = docToMarkdown(docModel.doc);
+        const docPath = path.join(repoPath, `${documentId}.md`);
+
+        docInfo.lastSave = Date.now();
+
+        await fs.writeFile(docPath, text);
+      };
+
       if (docInfo.updateTimer) {
         clearTimeout(docInfo.updateTimer);
       }
 
-      if (Date.now() - lastUpdate > MAX_UNCOMMITED_TIME) {
+      // Timer for file save.
+      if (Date.now() - lastSave > MAX_NON_UPDATED_TIME) {
+        await updateDoc();
+      } else {
+        docInfo.updateTimer = setTimeout(updateDoc, FILE_UPDATE_TIMEOUT);
+      }
+
+      // Timer for git operations.
+      const pushToQueue = () => {
+        this._queue.push({
+          repoPath
+        }, err => console.error(err));
+      };
+
+      if (partyInfo.updateTimer) {
+        clearTimeout(partyInfo.updateTimer);
+      }
+
+      if (Date.now() - lastUpdate > MAX_NON_COMMITED_TIME) {
         pushToQueue();
       } else {
-        docInfo.updateTimer = setTimeout(pushToQueue, GIT_UPDATE_TIMEOUT);
+        partyInfo.updateTimer = setTimeout(pushToQueue, GIT_UPDATE_TIMEOUT);
       }
     }
-  }
-
-  async _docUpdateHandler (options, cb) {
-    const { docInfo, repoPath } = options;
-    const { documentId, docModel } = docInfo;
-
-    const text = docToMarkdown(docModel.doc);
-    const docPath = path.join(repoPath, `${documentId}.md`);
-
-    docInfo.lastUpdate = Date.now();
-
-    fs.writeFile(docPath, text)
-      .then(() => {
-        return commitAndPush(repoPath);
-      })
-      .then(cb)
-      .catch(cb);
   }
 }
