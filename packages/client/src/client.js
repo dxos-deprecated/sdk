@@ -132,8 +132,7 @@ export class Client {
    * @returns {ProfileInfo} User profile info.
    */
   getProfile () {
-    const { identityManager: idm } = this.partyManager;
-
+    const idm = this._identityManager;
     if (!idm || !idm.publicKey) return;
 
     const publicKey = keyToString(idm.publicKey);
