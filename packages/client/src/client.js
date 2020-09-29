@@ -79,7 +79,8 @@ export class Client {
     // If this has to be done, it should be done thru database.
     // Actually, the we should move all initialze into database.
     await this._partyManager.open();
-    if (!this._identityManager.identityKey) {
+
+    if (!this._identityManager.identityKey || (this._identityManager.identityKey && !this._identityManager.halo)) {
       await this._partyManager.createHalo();
     }
 
@@ -121,13 +122,13 @@ export class Client {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
     }
 
-    if (!this._identityManager.publicKey) {
+    if (!this._identityManager.indentityKey) {
       throw new Error('Cannot create profile. Either no keyPair (public and secret key) was provided or cannot read Identity from keyring.');
     }
 
     await this._identityManager.initializeForNewIdentity({
-      identityDisplayName: username || keyToString(this._partyManager.identityManager.publicKey),
-      deviceDisplayName: keyToString(this._partyManager.identityManager.deviceManager.publicKey)
+      identityDisplayName: username || keyToString(this._identityManager.indentityKey)
+      // deviceDisplayName: keyToString(this._identityManager.deviceManager.indentityKey)
     });
   }
 
