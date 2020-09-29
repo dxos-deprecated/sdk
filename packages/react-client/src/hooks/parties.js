@@ -32,28 +32,27 @@ export const useParties = () => {
   const { client } = useClient();
   const [parties, setParties] = useState([]);
 
-  useEffect(asyncEffect(async () => {
+  useEffect(() => {
+    let unsubscribe;
     if (!client) return;
-    const result = await client.echo.queryParties();
-    setParties(result.value);
-
-    return result.subscribe(() => {
+    setImmediate(async () => {
+      const result = await client.echo.queryParties();
       setParties(result.value);
+
+      unsubscribe = result.subscribe(() => {
+        setParties(result.value);
+      });
     });
-  }), [client]);
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [client]);
 
   return parties;
 };
-
-/**
- * Helper to use async functions inside effects ?
- */
-function asyncEffect (fun) {
-  return () => {
-    const promise = fun();
-    return () => promise.then(cb => cb());
-  };
-}
 
 export const withParties = WrappedComponent => {
   const Component = ({ ...rest }) => {
