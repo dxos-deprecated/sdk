@@ -24,10 +24,10 @@ const updateRepo = async (options, cb) => {
 const TYPE_EDITOR_DOCUMENT = 'wrn_dxos_org_teamwork_editor_document';
 const REPO_PATH = './repos';
 
-const FILE_UPDATE_TIMEOUT = 7000;
+const FILE_UPDATE_TIMEOUT = 3000;
 const MAX_NON_UPDATED_TIME = 30000;
 
-const GIT_UPDATE_TIMEOUT = 7000;
+const GIT_UPDATE_TIMEOUT = 20000;
 const MAX_NON_COMMITED_TIME = 60000;
 
 const WORKERS_NUM = 1;
@@ -131,6 +131,8 @@ export class GitHubBot extends Bot {
         docInfo.lastSave = Date.now();
 
         await fs.writeFile(docPath, text);
+
+        await this._handleRepoUpdate(partyInfo);
       };
 
       if (docInfo.updateTimer) {
@@ -143,8 +145,6 @@ export class GitHubBot extends Bot {
       } else {
         docInfo.updateTimer = setTimeout(updateDoc, FILE_UPDATE_TIMEOUT);
       }
-
-      await this._handleRepoUpdate(partyInfo);
     }
   }
 
