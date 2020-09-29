@@ -6,11 +6,10 @@ import { useState, useEffect } from 'react';
 import { useClient } from './client';
 
 export const useItems = ({ partyKey, ...filter } = {}) => {
-  const { client } = useClient();
+  const client = useClient();
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    if (!client) return;
     let unsubscribe;
     setImmediate(async () => {
       const party = await client.echo.getParty(partyKey);
@@ -27,7 +26,7 @@ export const useItems = ({ partyKey, ...filter } = {}) => {
         unsubscribe();
       }
     };
-  }, [client]);
+  }, []);
 
   return items;
 };

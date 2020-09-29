@@ -11,16 +11,15 @@ import { useClient } from './client';
  * Get party.
  */
 export const useParty = partyKey => {
-  const { client } = useClient();
+  const client = useClient();
   const [party, setParty] = useState();
 
   useEffect(() => {
-    if (!client) return;
     setImmediate(async () => {
       const party = await client.echo.getParty(partyKey);
       setParty(party);
     });
-  }, [client]);
+  }, []);
 
   return party;
 };
@@ -29,12 +28,11 @@ export const useParty = partyKey => {
  * Get parties.
  */
 export const useParties = () => {
-  const { client } = useClient();
+  const client = useClient();
   const [parties, setParties] = useState([]);
 
   useEffect(() => {
     let unsubscribe;
-    if (!client) return;
     setImmediate(async () => {
       const result = await client.echo.queryParties();
       setParties(result.value);
@@ -49,7 +47,7 @@ export const useParties = () => {
         unsubscribe();
       }
     };
-  }, [client]);
+  }, []);
 
   return parties;
 };
