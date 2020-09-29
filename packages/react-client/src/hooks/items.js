@@ -6,14 +6,15 @@ import { useState, useEffect } from 'React';
 import { useClient } from './client';
 
 export const useItems = ({ partyKey }) => {
-  const { client: { database } } = useClient();
+  const { client } = useClient();
   const [items, setItems] = useState([]);
 
   useEffect(() => {
+    if (!client) return;
     let unsubscribe;
     setImmediate(async () => {
-      const party = await database.getParty(partyKey);
-      const result = await party.queryItems();
+      const party = await client.echo.getParty(partyKey);
+      const result = await party.datababse.queryItems();
       unsubscribe = result.subscribe(() => {
         setItems(result.value);
       });
@@ -26,7 +27,7 @@ export const useItems = ({ partyKey }) => {
         unsubscribe();
       }
     };
-  }, []);
+  }, [client]);
 
   return items;
 };

@@ -15,9 +15,9 @@ export const useParty = partyKey => {
   const [party, setParty] = useState();
 
   useEffect(() => {
+    if (!client) return;
     setImmediate(async () => {
-      if (!client) return;
-      const party = await client.database.getParty(partyKey);
+      const party = await client.echo.getParty(partyKey);
       setParty(party);
     });
   }, [client]);
@@ -34,7 +34,7 @@ export const useParties = () => {
 
   useEffect(asyncEffect(async () => {
     if (!client) return;
-    const result = await client.database.queryParties();
+    const result = await client.echo.queryParties();
     setParties(result.value);
 
     return result.subscribe(() => {
