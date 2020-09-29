@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import { useState, useEffect } from 'React';
+import { useState, useEffect } from 'react';
 import { useClient } from './client';
 
 export const useItems = ({ partyKey }) => {
