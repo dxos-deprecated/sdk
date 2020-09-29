@@ -125,7 +125,7 @@ export class Client {
     }
 
     await this._identityManager.initializeForNewIdentity({
-      identityDisplayName: username || keyToString(this._identityManager.indentityKey)
+      identityDisplayName: username || keyToString(this._identityManager.indentityKey.publicKey)
       // deviceDisplayName: keyToString(this._identityManager.deviceManager.indentityKey)
     });
   }
@@ -134,13 +134,12 @@ export class Client {
    * @returns {ProfileInfo} User profile info.
    */
   getProfile () {
-    const idm = this._identityManager;
-    if (!idm || !idm.publicKey) return;
+    if (!this._identityManager.indentityKey) return;
 
-    const publicKey = keyToString(idm.publicKey);
+    const publicKey = keyToString(this._identityManager.indentityKey.publicKey);
 
     return {
-      username: idm.displayName || publicKey,
+      username: publicKey,
       publicKey
     };
   }
