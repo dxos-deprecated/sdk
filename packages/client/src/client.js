@@ -121,11 +121,11 @@ export class Client {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
     }
 
-    if (!this._partyManager.identityManager.publicKey) {
+    if (!this._identityManager.publicKey) {
       throw new Error('Cannot create profile. Either no keyPair (public and secret key) was provided or cannot read Identity from keyring.');
     }
 
-    await this._partyManager.identityManager.initializeForNewIdentity({
+    await this._identityManager.initializeForNewIdentity({
       identityDisplayName: username || keyToString(this._partyManager.identityManager.publicKey),
       deviceDisplayName: keyToString(this._partyManager.identityManager.deviceManager.publicKey)
     });
