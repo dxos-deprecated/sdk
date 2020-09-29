@@ -120,13 +120,13 @@ export class Client {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
     }
 
-    if (!this._identityManager.indentityKey) {
+    if (!this._identityManager.identityKey) {
       throw new Error('Cannot create profile. Either no keyPair (public and secret key) was provided or cannot read Identity from keyring.');
     }
 
     await this._identityManager.initializeForNewIdentity({
-      identityDisplayName: username || keyToString(this._identityManager.indentityKey.publicKey)
-      // deviceDisplayName: keyToString(this._identityManager.deviceManager.indentityKey)
+      identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
+      // deviceDisplayName: keyToString(this._identityManager.deviceManager.identityKey)
     });
   }
 
@@ -134,9 +134,9 @@ export class Client {
    * @returns {ProfileInfo} User profile info.
    */
   getProfile () {
-    if (!this._identityManager.indentityKey) return;
+    if (!this._identityManager.identityKey) return;
 
-    const publicKey = keyToString(this._identityManager.indentityKey.publicKey);
+    const publicKey = keyToString(this._identityManager.identityKey.publicKey);
 
     return {
       username: publicKey,
