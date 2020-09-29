@@ -13,7 +13,7 @@ export const useItems = ({ partyKey, ...filter } = {}) => {
     let unsubscribe;
     setImmediate(async () => {
       const party = await client.echo.getParty(partyKey);
-      const result = await party.datababse.queryItems(filter);
+      const result = await party.database.queryItems(filter);
       unsubscribe = result.subscribe(() => {
         setItems(result.value);
       });
