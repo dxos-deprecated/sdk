@@ -15,6 +15,11 @@ import { cloneRepo, commitAndPush } from './git';
 
 const commitAndPushAsync = callbackify(commitAndPush);
 
+/**
+ * Worker function for queue.
+ * @param {{ repoPath }} options
+ * @param {Function} cb
+ */
 const updateRepo = async (options, cb) => {
   const { repoPath } = options;
 
@@ -24,10 +29,14 @@ const updateRepo = async (options, cb) => {
 const TYPE_EDITOR_DOCUMENT = 'wrn_dxos_org_teamwork_editor_document';
 const REPO_PATH = './repos';
 
+// Timeout after last model update event before saving to filesystem.
 const FILE_UPDATE_TIMEOUT = 3000;
+// Maximum postponing time of a filesystem write due to a continuous document updating.
 const MAX_NON_UPDATED_TIME = 30000;
 
+// Timeout after last filesystem update before updating repo.
 const GIT_UPDATE_TIMEOUT = 20000;
+// Maximum postponing time of an updating repo due to a continuous saving to filesystem.
 const MAX_NON_COMMITED_TIME = 60000;
 
 const WORKERS_NUM = 1;
@@ -37,7 +46,7 @@ const WORKERS_NUM = 1;
  */
 export class GitHubBot extends Bot {
   /**
-   * @type {Map<String, {documentId: String, displayName: String, party: String, model: Model}>}
+   * @type {Map<String, {documentId: String, displayName: String, topic: String, docModel: Model, lastSave: Number}>}
    */
   _docs = new Map();
 
@@ -104,6 +113,13 @@ export class GitHubBot extends Bot {
     });
   }
 
+  /**
+   * Assign repo to a specific party.
+   * @param {String} topic
+   * @param {String} repo
+   * @param {String} username
+   * @param {String} token
+   */
   async _assignRepo (topic, repo, username, token) {
     const repoPath = path.join(this._cwd, REPO_PATH, topic);
     if (await fs.exists(repoPath)) {
@@ -116,6 +132,9 @@ export class GitHubBot extends Bot {
     this._botParties.set(topic, { topic, repo, repoPath });
   }
 
+  /**
+   * @param {String} documentId
+   */
   async _handleDocUpdate (documentId) {
     const docInfo = this._docs.get(documentId);
     const { docModel, topic, lastSave = Date.now() } = docInfo;
@@ -148,6 +167,9 @@ export class GitHubBot extends Bot {
     }
   }
 
+  /**
+   * @param {Object} partyInfo
+   */
   async _handleRepoUpdate (partyInfo) {
     const { repoPath, lastUpdate = Date.now() } = partyInfo;
 
