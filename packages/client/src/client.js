@@ -123,11 +123,14 @@ export class Client {
     if (!this._identityManager.identityKey) {
       throw new Error('Cannot create profile. Either no keyPair (public and secret key) was provided or cannot read Identity from keyring.');
     }
-
-    await this._identityManager.initializeForNewIdentity({
+    await this._partyManager.createHalo({
       identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
-      // deviceDisplayName: keyToString(this._identityManager.deviceManager.identityKey)
     });
+
+    // await this._identityManager.initializeForNewIdentity({
+    //   identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
+    //   // deviceDisplayName: keyToString(this._identityManager.deviceManager.identityKey)
+    // });
   }
 
   /**
