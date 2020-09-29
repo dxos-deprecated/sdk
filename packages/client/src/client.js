@@ -79,7 +79,7 @@ export class Client {
     // If this has to be done, it should be done thru database.
     // Actually, the we should move all initialze into database.
     await this._partyManager.open();
-    if (!this._identityManager.halo && this._identityManager.identityKey) {
+    if (!this._identityManager.identityKey) {
       await this._partyManager.createHalo();
     }
 
