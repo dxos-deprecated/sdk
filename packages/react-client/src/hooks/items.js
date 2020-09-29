@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { useClient } from './client';
 
-export const useItems = ({ partyKey }) => {
+export const useItems = ({ partyKey, ...filter } = {}) => {
   const { client } = useClient();
   const [items, setItems] = useState([]);
 
@@ -14,7 +14,7 @@ export const useItems = ({ partyKey }) => {
     let unsubscribe;
     setImmediate(async () => {
       const party = await client.echo.getParty(partyKey);
-      const result = await party.datababse.queryItems();
+      const result = await party.datababse.queryItems(filter);
       unsubscribe = result.subscribe(() => {
         setItems(result.value);
       });

@@ -157,8 +157,7 @@ export class Client {
    * @return {Promise<Party>} The new Party.
    */
   async createParty () {
-    console.warn('deprecated. Use client.database.createParty()');
-    // return this._partyManager.createParty();
+    return this._echo.createParty();
   }
 
   /**
