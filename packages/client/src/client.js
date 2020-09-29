@@ -258,7 +258,8 @@ export class Client {
    */
   async getContacts () {
     console.warn('deprecated. Use client.echo');
-    return this._partyManager.getContacts();
+    // return this._partyManager.getContacts();
+    return [];
   }
 
   /**
