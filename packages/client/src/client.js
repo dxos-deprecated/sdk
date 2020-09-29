@@ -16,7 +16,7 @@ import metrics from '@dxos/metrics';
 import { ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import {
-  codec, Database, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager
+  codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager
 } from '@dxos/echo-db';
 import { ObjectModel } from '@dxos/object-model';
 
@@ -57,7 +57,7 @@ export class Client {
     this._partyFactory = new PartyFactory(this._keyring, feedStoreAdapter, this._modelFactory, this._networkManager);
     this._partyManager = partyManager || new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
 
-    this._database = new Database(this._partyManager);
+    this._echo = new ECHO(this._partyManager);
     this._registry = registry;
 
     this._partyWriters = {};
@@ -79,7 +79,9 @@ export class Client {
     // If this has to be done, it should be done thru database.
     // Actually, the we should move all initialze into database.
     await this._partyManager.open();
-    await this._partyManager.createHalo();
+    if (!this._identityManager.halo && this._identityManager.identityKey) {
+      await this._partyManager.createHalo();
+    }
 
     this._initialized = true;
   }
@@ -202,7 +204,7 @@ export class Client {
    * @returns {Promise<Party>} The now open Party.
    */
   async joinParty (invitation, secretProvider) {
-    console.warn('deprecated. Use client.database');
+    console.warn('deprecated. Use client.echo');
     // // An invitation where we can use our Identity key for auth.
     // if (InviteType.OFFLINE_KEY === invitation.type) {
     //   // Connect to inviting peer.
@@ -237,7 +239,7 @@ export class Client {
    * @deprecated
    */
   getParties () {
-    console.warn('deprecated. Use client.database');
+    console.warn('deprecated. Use client.echo');
     // return this._partyManager.getPartyInfoList();
   }
 
@@ -245,7 +247,7 @@ export class Client {
    * @deprecated
    */
   getParty (partyKey) {
-    console.warn('deprecated. Use client.database');
+    console.warn('deprecated. Use client.echo');
     // return this._partyManager.getPartyInfo(partyKey);
   }
 
@@ -255,7 +257,7 @@ export class Client {
    * @returns {Contact[]}
    */
   async getContacts () {
-    console.warn('deprecated. Use client.database');
+    console.warn('deprecated. Use client.echo');
     return this._partyManager.getContacts();
   }
 
@@ -267,7 +269,7 @@ export class Client {
    * @return {model}
    */
   async createSubscription ({ modelType, options } = {}) {
-    console.warn('deprecated. Use client.database');
+    console.warn('deprecated');
     // return this._modelFactory.createModel(modelType, options);
   }
 
@@ -275,8 +277,8 @@ export class Client {
     return this._keyring;
   }
 
-  get database () {
-    return this._database;
+  get echo () {
+    return this._echo;
   }
 
   // keep this for devtools ???
