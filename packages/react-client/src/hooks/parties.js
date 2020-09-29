@@ -5,6 +5,8 @@
 import React, { useEffect, useState } from 'react';
 import getDisplayName from 'react-display-name';
 
+import { keyToString } from '@dxos/crypto';
+
 import { useClient } from './client';
 
 /**
@@ -12,6 +14,7 @@ import { useClient } from './client';
  */
 export const useParty = partyKey => {
   const client = useClient();
+  const key = keyToString(partyKey);
   const [party, setParty] = useState();
 
   useEffect(() => {
@@ -19,7 +22,7 @@ export const useParty = partyKey => {
       const party = await client.echo.getParty(partyKey);
       setParty(party);
     });
-  }, []);
+  }, [key]);
 
   return party;
 };
