@@ -2,22 +2,23 @@
 // Copyright 2020 DXOS.org
 //
 
-import { useState, useEffect } from 'react';
-import { useClient } from './client';
+import { useState } from 'react';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+
+import { useParty } from './parties';
 
 export const useItems = ({ partyKey, ...filter } = {}) => {
-  const client = useClient();
+  const party = useParty(partyKey);
   const [items, setItems] = useState([]);
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     let unsubscribe;
+    if (!party) return;
     setImmediate(async () => {
-      const party = await client.echo.getParty(partyKey);
       const result = await party.database.queryItems(filter);
       unsubscribe = result.subscribe(() => {
         setItems(result.value);
       });
-
       setItems(result.value);
     });
 
@@ -26,7 +27,7 @@ export const useItems = ({ partyKey, ...filter } = {}) => {
         unsubscribe();
       }
     };
-  }, []);
+  }, [party, filter]);
 
   return items;
 };
