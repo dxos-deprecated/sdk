@@ -12,22 +12,21 @@ export const useItems = ({ partyKey, ...filter } = {}) => {
   const [items, setItems] = useState([]);
 
   useDeepCompareEffect(() => {
-    let unsubscribe;
     if (!party) return;
-    setImmediate(async () => {
-      const result = await party.database.queryItems(filter);
-      unsubscribe = result.subscribe(() => {
-        setItems(result.value);
-      });
+
+    const result = party.database.queryItems(filter);
+
+    const unsubscribe = result.subscribe(() => {
       setItems(result.value);
     });
+    setItems(result.value);
 
     return () => {
       if (unsubscribe) {
         unsubscribe();
       }
     };
-  }, [party, filter]);
+  }, [filter]);
 
   return items;
 };

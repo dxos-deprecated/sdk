@@ -98,7 +98,6 @@ export class Client {
    * Warning: Inconsistent state after reset, do not continue to use this client instance.
    */
   async reset () {
-    await this._feedStore.close();
     if (this._feedStore.storage.destroy) {
       await this._feedStore.storage.destroy();
     }
