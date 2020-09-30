@@ -33,10 +33,15 @@ export const commitAndPush = async (repoPath, message = `Update ${Date.now()}`) 
  * @param {String} repoPath
  */
 export const pullRepo = async (repoPath) => {
+  const result = {};
+
   const git = Git(repoPath);
   await git.fetch();
   const status = await git.status();
   if (status.behind > 0) {
     await git.merge('origin', 'master', { '-X': 'ours' });
+    result.merged = true;
   }
+
+  return result;
 };

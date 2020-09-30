@@ -4,27 +4,12 @@
 
 import fs from 'fs-extra';
 import path from 'path';
-import Queue from 'fastq';
-import { callbackify } from 'util';
 
 import { Bot } from '@dxos/botkit';
-import { docToMarkdown /*, markdownToDoc */ } from '@dxos/editor-core';
+import { docToMarkdown, markdownToDoc } from '@dxos/editor-core';
 import { TextModel, TYPE_TEXT_MODEL_UPDATE } from '@dxos/text-model';
 
-import { cloneRepo, commitAndPush } from './git';
-
-const commitAndPushAsync = callbackify(commitAndPush);
-
-/**
- * Worker function for queue.
- * @param {{ repoPath }} options
- * @param {Function} cb
- */
-const updateRepo = async (options, cb) => {
-  const { repoPath } = options;
-
-  commitAndPushAsync(repoPath, cb);
-};
+import { Repo } from './repo';
 
 const TYPE_EDITOR_DOCUMENT = 'wrn_dxos_org_teamwork_editor_document';
 const REPO_PATH = './repos';
@@ -33,13 +18,8 @@ const REPO_PATH = './repos';
 const FILE_UPDATE_TIMEOUT = 3000;
 // Maximum postponing time of a filesystem write due to a continuous document updating.
 const MAX_NON_UPDATED_TIME = 30000;
-
-// Timeout after last filesystem update before updating repo.
-const GIT_UPDATE_TIMEOUT = 20000;
-// Maximum postponing time of an updating repo due to a continuous saving to filesystem.
-const MAX_NON_COMMITED_TIME = 60000;
-
-const WORKERS_NUM = 1;
+// Interval of repo polling for remote changes.
+const REPO_PULL_INTERVAL = 60000;
 
 /**
  * GitHub bot.
@@ -58,8 +38,6 @@ export class GitHubBot extends Bot {
     this.on('party', async (topic) => {
       await this.joinParty(topic);
     });
-
-    this._queue = Queue(updateRepo, WORKERS_NUM);
   }
 
   async botCommandHandler (message) {
@@ -116,20 +94,29 @@ export class GitHubBot extends Bot {
   /**
    * Assign repo to a specific party.
    * @param {String} topic
-   * @param {String} repo
+   * @param {String} url
    * @param {String} username
    * @param {String} token
    */
-  async _assignRepo (topic, repo, username, token) {
+  async _assignRepo (topic, url, username, token) {
     const repoPath = path.join(this._cwd, REPO_PATH, topic);
     if (await fs.exists(repoPath)) {
       throw new Error('Party has already being replicated to another repo.');
     }
 
     await fs.ensureDir(repoPath);
-    await cloneRepo(repoPath, repo, username, token);
 
-    this._botParties.set(topic, { topic, repo, repoPath });
+    const repo = new Repo(url, repoPath);
+    await repo.clone(username, token);
+
+    repo.on('pull', ({ merged }) => this.handleRepoPull(repoPath, merged));
+
+    // TODO(egorgripasov): Configurable.
+    setInterval(async () => {
+      await repo.handleRepoPull();
+    }, REPO_PULL_INTERVAL);
+
+    this._botParties.set(topic, { topic, repo });
   }
 
   /**
@@ -140,18 +127,18 @@ export class GitHubBot extends Bot {
     const { docModel, topic, lastSave = Date.now() } = docInfo;
 
     const partyInfo = this._botParties.get(topic) || {};
-    const { repo, repoPath } = partyInfo;
+    const { repo } = partyInfo;
 
-    if (repo && repoPath) {
+    if (repo) {
       const updateDoc = async () => {
         const text = docToMarkdown(docModel.doc);
-        const docPath = path.join(repoPath, `${documentId}.md`);
+        const docPath = path.join(repo.repoPath, `${documentId}.md`);
 
         docInfo.lastSave = Date.now();
 
         await fs.writeFile(docPath, text);
 
-        await this._handleRepoUpdate(partyInfo);
+        await repo.handleRepoPush();
       };
 
       if (docInfo.updateTimer) {
@@ -167,27 +154,25 @@ export class GitHubBot extends Bot {
     }
   }
 
-  /**
-   * @param {Object} partyInfo
-   */
-  async _handleRepoUpdate (partyInfo) {
-    const { repoPath, lastUpdate = Date.now() } = partyInfo;
+  async handleRepoPull (repoPath, newChanges) {
+    if (newChanges) {
+      // TODO(egorgripasov): Improve.
+      const files = await fs.readdir(repoPath);
+      for await (const file of files) {
+        const match = file.match(/([0-9a-fA-F]{64})\./);
+        if (match) {
+          const [, documentId] = match;
+          const docInfo = this._docs.get(documentId);
+          if (docInfo) {
+            const { docModel } = docInfo;
+            const text = await fs.readFile(path.join(repoPath, file), 'utf8');
 
-    // Timer for git operations.
-    const pushToQueue = () => {
-      this._queue.push({
-        repoPath
-      }, err => console.error(err));
-    };
-
-    if (partyInfo.updateTimer) {
-      clearTimeout(partyInfo.updateTimer);
-    }
-
-    if (Date.now() - lastUpdate > MAX_NON_COMMITED_TIME) {
-      pushToQueue();
-    } else {
-      partyInfo.updateTimer = setTimeout(pushToQueue, GIT_UPDATE_TIMEOUT);
+            markdownToDoc(text, docModel.doc);
+          } else {
+            // TODO(egorgripasov): Create new doc.
+          }
+        }
+      }
     }
   }
 }
