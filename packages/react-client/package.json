@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-client",
-  "version": "1.1.0-beta.15",
+  "version": "1.1.0-canary.22+09e437b",
   "description": "React client API",
   "keywords": [],
   "license": "AGPLv3",
@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@dxos/async": "^1.0.0-beta.1",
-    "@dxos/client": "^1.1.0-beta.15",
-    "@dxos/credentials": "^0.2.7",
+    "@dxos/client": "^1.1.0-canary.22+09e437b",
+    "@dxos/credentials": "^1.0.1-beta.29",
     "@dxos/crypto": "^1.0.0-beta.0",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/metrics": "^1.0.0-beta.6",
@@ -69,5 +69,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "09e437bae00c4c244667cc235a13e39b99aa9ab6"
 }
