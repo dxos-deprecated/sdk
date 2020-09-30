@@ -5,8 +5,6 @@
 import React, { useEffect, useState } from 'react';
 import getDisplayName from 'react-display-name';
 
-import { keyToString } from '@dxos/crypto';
-
 import { useClient } from './client';
 
 /**
@@ -14,17 +12,7 @@ import { useClient } from './client';
  */
 export const useParty = partyKey => {
   const client = useClient();
-  const key = keyToString(partyKey);
-  const [party, setParty] = useState();
-
-  useEffect(() => {
-    setImmediate(async () => {
-      const party = await client.echo.getParty(partyKey);
-      setParty(party);
-    });
-  }, [key]);
-
-  return party;
+  return partyKey ? client.echo.getParty(partyKey) : undefined;
 };
 
 /**
@@ -35,14 +23,11 @@ export const useParties = () => {
   const [parties, setParties] = useState([]);
 
   useEffect(() => {
-    let unsubscribe;
-    setImmediate(async () => {
-      const result = await client.echo.queryParties();
-      setParties(result.value);
+    const result = client.echo.queryParties();
+    setParties(result.value);
 
-      unsubscribe = result.subscribe(() => {
-        setParties(result.value);
-      });
+    const unsubscribe = result.subscribe(() => {
+      setParties(result.value);
     });
 
     return () => {
