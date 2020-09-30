@@ -8,7 +8,8 @@ import assert from 'assert';
 import { trigger } from '@dxos/async';
 import { generatePasscode } from '@dxos/credentials';
 import { keyToString } from '@dxos/crypto';
-import { InviteType, InvitationDescriptor } from '@dxos/party-manager';
+
+import { InvitationDescriptor } from '@dxos/echo-db';
 
 import { useClient } from './client';
 
@@ -38,12 +39,12 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp } = {}) {
     try {
       const invitation = decodeInvitation(code);
 
-      if (InviteType.INTERACTIVE === invitation.type) {
-        setResolver(true);
-      }
+      // if (InviteType.INTERACTIVE === invitation.type) {
+      setResolver(true);
+      // }
 
-      client.database.joinParty(invitation, secretProvider)
-        .then(party => onDone(party))
+      client.echo.joinParty(invitation, secretProvider)
+        .then(party => { party.open().then(() => onDone(party)); })
         .catch(error => onError(error));
     } catch (error) {
       onError(error);
@@ -58,22 +59,22 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp } = {}) {
 
 /**
  * Hook to create an Invitation for a given party
- * @param {Party} party the Party to create invite for. Required.
+ * @param {Buffer} partyKey the Party to create invite for. Required.
  * @param {Object} options
  * @param {() => void} options.onDone called once the invite flow finishes successfully.
  * @param {() => void} options.onError called if the invite flow produces an error.
  * @returns {[invitationCode: String, pin: String ]}
  */
-export function useInvitation (party, { onDone = noOp, onError = noOp } = {}) {
-  assert(party);
+export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {}) {
+  assert(partyKey);
   const client = useClient();
   const [invitationCode, setInvitationCode] = useState();
   const [pin, setPin] = useState();
-  const partyKey = keyToString(party.publicKey);
+  const key = keyToString(partyKey);
 
   useEffect(() => {
     client.createInvitation(
-      party.publicKey,
+      partyKey,
       () => {
         const pin = generatePasscode();
         setPin(pin);
@@ -82,7 +83,7 @@ export function useInvitation (party, { onDone = noOp, onError = noOp } = {}) {
       { onFinish: () => onDone() })
       .then(invitation => setInvitationCode(encodeInvitation(invitation)))
       .catch(error => onError(error));
-  }, [partyKey]);
+  }, [key]);
 
   return [
     invitationCode,
@@ -100,23 +101,24 @@ export function useInvitation (party, { onDone = noOp, onError = noOp } = {}) {
  * @returns {[invitationCode: String ]}
  */
 export function useOfflineInvitation (party, recipient, { onDone = noOp, onError = noOp } = {}) {
-  assert(party);
-  assert(recipient);
-  const client = useClient();
-  const [invitationCode, setInvitationCode] = useState();
-  const partyKey = keyToString(party.publicKey);
-  const recipientKey = keyToString(recipient.publicKey);
+  // TODO
+  // assert(party);
+  // assert(recipient);
+  // const client = useClient();
+  // const [invitationCode, setInvitationCode] = useState();
+  // const partyKey = keyToString(party.publicKey);
+  // const recipientKey = keyToString(recipient.publicKey);
 
-  useEffect(() => {
-    client.createOfflineInvitation(party.publicKey, recipient.publicKey)
-      .then(invitation => {
-        setInvitationCode(encodeInvitation(invitation));
-        onDone();
-      })
-      .catch(error => onError(error));
-  }, [partyKey, recipientKey]);
+  // useEffect(() => {
+  //   client.createOfflineInvitation(party.publicKey, recipient.publicKey)
+  //     .then(invitation => {
+  //       setInvitationCode(encodeInvitation(invitation));
+  //       onDone();
+  //     })
+  //     .catch(error => onError(error));
+  // }, [partyKey, recipientKey]);
 
-  return [
-    invitationCode
-  ];
+  // return [
+  //   invitationCode
+  // ];
 }

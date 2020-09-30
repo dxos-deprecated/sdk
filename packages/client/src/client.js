@@ -163,22 +163,15 @@ export class Client {
   }
 
   /**
-   * @deprecated
    * @param {Buffer} partyKey Party publicKey
    * @param {SecretProvider} secretProvider
-   * @param {Object} options
-   * @param {Function} options.onFinish function to be called once invitation flow is done.
    */
-  async createInvitation (partyKey, secretProvider, options = {}) {
-    console.log('createInvitation deprecated. Check database');
-    // return this.database._partyManager.inviteToParty(
-    //   partyKey,
-    //   new InviteDetails(InviteType.INTERACTIVE, {
-    //     secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
-    //     secretProvider
-    //   }),
-    //   options
-    // );
+  async createInvitation (partyKey, secretProvider) {
+    const party = await this.echo.getParty(partyKey);
+    return party.createInvitation({
+      secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
+      secretProvider
+    });
   }
 
   /**
