@@ -4,11 +4,14 @@
 
 import { useState } from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
+import { keyToString } from '@dxos/crypto';
 
-import { useParty } from './parties';
+import { useClient } from './client';
 
 export const useItems = ({ partyKey, ...filter } = {}) => {
-  const party = useParty(partyKey);
+  const client = useClient();
+  const party = client.echo.getParty(partyKey);
+  const key = keyToString(partyKey);
   const [items, setItems] = useState([]);
 
   useDeepCompareEffect(() => {
@@ -26,7 +29,7 @@ export const useItems = ({ partyKey, ...filter } = {}) => {
         unsubscribe();
       }
     };
-  }, [filter]);
+  }, [key, filter]);
 
   return items;
 };
