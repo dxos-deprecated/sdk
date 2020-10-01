@@ -244,12 +244,11 @@ export class Client {
   }
 
   /**
-   * @deprecated
    * Returns an Array of all known Contacts across all Parties.
    * @returns {Contact[]}
    */
   async getContacts () {
-    console.warn('deprecated. Use client.echo');
+    console.warn('client.getContacts not impl. Returning []');
     // return this._partyManager.getContacts();
     return [];
   }
