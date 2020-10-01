@@ -18,7 +18,7 @@
   "dependencies": {
     "@dxos/async": "^1.0.0-beta.1",
     "@dxos/client": "^1.1.0-canary.22+09e437b",
-    "@dxos/credentials": "^1.0.1-beta.29",
+    "@dxos/credentials": "1.0.1-beta.51",
     "@dxos/crypto": "^1.0.0-beta.0",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/metrics": "^1.0.0-beta.6",
