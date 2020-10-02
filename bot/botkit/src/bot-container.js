@@ -21,11 +21,6 @@ export const SPAWNED_BOTS_DIR = '.bots';
 
 export class BotContainer extends EventEmitter {
   /**
-   * Handler of bot messages.
-   */
-  _botMessageHandler = null;
-
-  /**
    * @constructor
    * @param {object} config
    */
@@ -171,8 +166,9 @@ export class BotContainer extends EventEmitter {
     await removeSourceFiles();
   }
 
-  serializeBot ({ botId, type, childDir, parties, command, args, stopped, name, env }) {
+  serializeBot ({ id, botId, type, childDir, parties, command, args, stopped, name, env }) {
     return {
+      id,
       botId,
       type,
       name,
