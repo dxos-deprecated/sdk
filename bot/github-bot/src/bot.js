@@ -44,7 +44,7 @@ export class GitHubBot extends Bot {
     const command = JSON.parse(message.toString()) || {};
     let result = {};
     switch (command.type) {
-      case 'list': {
+      case 'status': {
         result = [...this._botParties.values()];
         break;
       }
