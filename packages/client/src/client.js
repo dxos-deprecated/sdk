@@ -48,7 +48,7 @@ export class Client {
 
     this._identityManager = new IdentityManager(this._keyring);
     this._modelFactory = new ModelFactory()
-      .registerModel(ObjectModel.meta, ObjectModel);
+      .registerModel(ObjectModel);
 
     this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
 
