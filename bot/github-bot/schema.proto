@@ -1,0 +1,41 @@
+//
+// Copyright 2020 DXOS.org
+//
+
+syntax = "proto3";
+
+package dxos.protocol.bot.github;
+
+import "google/protobuf/any.proto";
+
+//
+// Root codec message.
+//
+message Message {
+  google.protobuf.Any message = 1;
+}
+
+message Assign {
+  string party = 1;
+  string repo = 2;
+  string username = 3;
+  string token = 4;
+}
+
+message AssignResponse {
+  string status = 1;
+  string error = 2;
+}
+
+message Status {
+
+}
+
+message StatusResponse {
+  message Repo {
+    string repo = 1;
+    string party = 2;
+  }
+
+  repeated Repo repos = 10;
+}
