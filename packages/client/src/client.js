@@ -54,7 +54,7 @@ export class Client {
 
     const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
 
-    this._partyFactory = new PartyFactory(this._keyring, feedStoreAdapter, this._modelFactory, this._networkManager);
+    this._partyFactory = new PartyFactory(this._identityManager, feedStoreAdapter, this._modelFactory, this._networkManager);
     this._partyManager = partyManager || new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
 
     this._echo = new ECHO(this._partyManager);
