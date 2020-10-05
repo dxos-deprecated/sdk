@@ -18,9 +18,9 @@ export const useItems = ({ partyKey, ...filter } = {}) => {
   useDeepCompareEffect(() => {
     const result = party.database.queryItems(filter);
 
-    batch = (fn) => {
+    batch = async (fn) => {
       result.paused = true;
-      fn();
+      await fn();
       result.paused = false;
       setItems(result.value);
     };
