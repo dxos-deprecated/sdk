@@ -13,14 +13,22 @@ export const useItems = ({ partyKey, ...filter } = {}) => {
   const party = client.echo.getParty(partyKey);
   const key = keyToString(partyKey);
   const [items, setItems] = useState([]);
+  let batch;
 
   useDeepCompareEffect(() => {
-    if (!party) return;
-
     const result = party.database.queryItems(filter);
 
-    const unsubscribe = result.subscribe(() => {
+    batch = (fn) => {
+      result.paused = true;
+      fn();
+      result.paused = false;
       setItems(result.value);
+    };
+
+    const unsubscribe = result.subscribe(() => {
+      if (!result.paused) {
+        setItems(result.value);
+      }
     });
     setItems(result.value);
 
@@ -31,5 +39,5 @@ export const useItems = ({ partyKey, ...filter } = {}) => {
     };
   }, [key, filter]);
 
-  return items;
+  return [items, batch];
 };
