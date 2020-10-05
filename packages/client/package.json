@@ -1,6 +1,6 @@
 {
   "name": "@dxos/client",
-  "version": "1.1.0-canary.22+09e437b",
+  "version": "1.1.0-canary.39+e96e495",
   "license": "AGPLv3",
   "author": "DXOS.org",
   "main": "dist/es/index.js",
@@ -91,5 +91,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "09e437bae00c4c244667cc235a13e39b99aa9ab6"
+  "gitHead": "e96e49570a02d2aa6e2908c50669705bba0f7329"
 }

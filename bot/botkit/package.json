@@ -1,6 +1,6 @@
 {
   "name": "@dxos/botkit",
-  "version": "1.1.0-canary.22+09e437b",
+  "version": "1.1.0-canary.39+e96e495",
   "description": "Botkit",
   "keywords": [],
   "license": "AGPLv3",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@dxos/async": "^1.0.0-beta.2",
-    "@dxos/client": "^1.1.0-canary.22+09e437b",
+    "@dxos/client": "^1.1.0-canary.39+e96e495",
     "@dxos/codec-protobuf": "^1.1.0-beta.7",
     "@dxos/config": "^1.0.0-beta.73",
     "@dxos/credentials": "^1.0.1-beta.29",
@@ -82,5 +82,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "09e437bae00c4c244667cc235a13e39b99aa9ab6"
+  "gitHead": "e96e49570a02d2aa6e2908c50669705bba0f7329"
 }
