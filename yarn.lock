@@ -1593,10 +1593,10 @@
     ngraph.graph "^19.0.3"
     source-map-support "^0.5.12"
 
-"@dxos/network-manager@^1.0.0-beta.107":
-  version "1.0.0-beta.107"
-  resolved "https://registry.yarnpkg.com/@dxos/network-manager/-/network-manager-1.0.0-beta.107.tgz#86cb14f1ad27a92c69fb6779124ff350f9c1eb7e"
-  integrity sha512-c9l74MctHmHS4AiMdy8WnKdDMBcGTQDGP7MksqCrnz1wm7KfiP16nB58beTf//rO1WxmXkOIDlNyOrbi3dfwTw==
+"@dxos/network-manager@^1.0.0-beta.108":
+  version "1.0.0-beta.108"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fnetwork-manager/-/network-manager-1.0.0-beta.108.tgz#b672a3a719b7f84a739cabb6b61c5d5e6938d6f5"
+  integrity sha512-NicBnLZYA1yiyBi9u+1bA2twgDIfFTLiIzrRSB6T6PAHYgMRz4qqh063lnWn3cin2rz12WdkL35hhoWrJPETfA==
   dependencies:
     "@dxos/crypto" "^1.0.0-beta.1"
     "@dxos/metrics" "^1.0.0-beta.6"
