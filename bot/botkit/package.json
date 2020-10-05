@@ -26,7 +26,7 @@
     "@dxos/config": "^1.0.0-beta.73",
     "@dxos/credentials": "^1.0.1-beta.29",
     "@dxos/crypto": "^1.0.0-beta.1",
-    "@dxos/network-manager": "^1.0.0-beta.94",
+    "@dxos/network-manager": "^1.0.0-beta.107",
     "@dxos/party-manager": "^1.0.1-beta.39",
     "@dxos/protocol-plugin-bot": "^1.1.0-beta.16",
     "@dxos/protocol-plugin-messenger": "^1.1.0-alpha.4",
