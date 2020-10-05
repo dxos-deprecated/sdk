@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-appkit",
-  "version": "1.1.0-canary.22+09e437b",
+  "version": "1.1.0-canary.39+e96e495",
   "description": "Application framework components",
   "keywords": [],
   "license": "AGPLv3",
@@ -16,16 +16,16 @@
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
   "dependencies": {
-    "@dxos/botkit-client": "^1.1.0-canary.22+09e437b",
+    "@dxos/botkit-client": "^1.1.0-canary.39+e96e495",
     "@dxos/credentials": "^1.0.1-beta.29",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/metrics": "^1.0.0-beta.6",
     "@dxos/party-manager": "^1.0.1-beta.39",
-    "@dxos/react-client": "^1.1.0-canary.22+09e437b",
+    "@dxos/react-client": "^1.1.0-canary.39+e96e495",
     "@dxos/react-json-tree": "^0.11.3",
-    "@dxos/react-router": "^1.1.0-canary.22+09e437b",
-    "@dxos/react-ux": "^1.1.0-canary.22+09e437b",
+    "@dxos/react-router": "^1.1.0-canary.39+e96e495",
+    "@dxos/react-ux": "^1.1.0-canary.39+e96e495",
     "@dxos/view-model": "^1.0.0-beta.28",
     "@material-ui/core": "^4.9.0",
     "@material-ui/icons": "^4.5.1",
@@ -87,5 +87,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "09e437bae00c4c244667cc235a13e39b99aa9ab6"
+  "gitHead": "e96e49570a02d2aa6e2908c50669705bba0f7329"
 }
