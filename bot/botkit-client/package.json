@@ -23,7 +23,7 @@
     "@dxos/client": "^1.1.0-canary.39+e96e495",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
-    "@dxos/network-manager": "^1.0.0-beta.94",
+    "@dxos/network-manager": "^1.0.0-beta.108",
     "@dxos/protocol-plugin-bot": "^1.1.0-beta.16",
     "assert": "^2.0.0",
     "debug": "^4.1.1",
