@@ -1178,7 +1178,45 @@
     stream-to-array "^2.3.0"
     uuid "^3.3.2"
 
-"@dxos/credentials@^1.0.1-beta.29", "@dxos/credentials@^1.0.1-beta.48":
+"@dxos/credentials@^0.2.7":
+  version "0.2.7"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fcredentials/-/credentials-0.2.7.tgz#1581e783d45e41d857da069dc932a018b684aa4f"
+  integrity sha512-ntRMASik9of8pjflBhgv53uoYYbB63J5L3Mq+Th+9xwC0wo23+W9s7IRQAQDFgL6rvLwmBKL/XOvF/CY9eP3zA==
+  dependencies:
+    "@dxos/codec-protobuf" "^1.1.0-beta.10"
+    "@dxos/crypto" "^1.0.0-beta.1"
+    "@dxos/feed-store" "^1.2.0-beta.23"
+    "@dxos/protocol" "^1.1.0-beta.1"
+    "@types/pify" "^3.0.2"
+    "@types/pump" "^1.1.0"
+    bip39 "^3.0.2"
+    buffer-json-encoding "^1.0.2"
+    crypto-js "^3.1.9-1"
+    debug "^4.1.1"
+    encoding-down "^6.3.0"
+    end-of-stream "^1.4.1"
+    hypercore-crypto "^1.0.0"
+    hypercore-protocol "^6.11.1"
+    hypertrie "^3.8.0"
+    json-stable-stringify "^1.0.1"
+    leveldown "^5.4.1"
+    levelup "^4.3.2"
+    lodash.defaultsdeep "^4.6.1"
+    lodash.get "^4.4.2"
+    lodash.isobject "^3.0.2"
+    lodash.isplainobject "^4.0.6"
+    lodash.mapvalues "^4.6.0"
+    lodash.matches "^4.6.0"
+    memdown "^5.1.0"
+    moment "^2.24.0"
+    ngraph.graph "^18.0.1"
+    pump "^3.0.0"
+    queue-microtask "^1.1.2"
+    source-map-support "^0.5.12"
+    stream-to-array "^2.3.0"
+    uuid "^3.3.2"
+
+"@dxos/credentials@^1.0.1-beta.29", "@dxos/credentials@^1.0.1-beta.48", "@dxos/credentials@^1.0.1-beta.51", "@dxos/credentials@^1.0.1-beta.52":
   version "1.0.1-canary.6"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2fcredentials/-/credentials-1.0.1-canary.6.tgz#1dfbde2debf2cc6829a7913d1cd1aec8142840f5"
   integrity sha512-44QqWx896hHK87M25ZPAHtMgX5fbIiebFAaB+AtHtFYZxdmURLMCrqVRZEUeS6wyaOBpBaCCMTdP5P+1T/Go6A==
@@ -1283,40 +1321,24 @@
     source-map-support "^0.5.12"
     stream-buffers "^3.0.2"
 
-"@dxos/echo-db@^1.0.0-beta.21":
-  version "1.0.0-canary.118"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-db/-/echo-db-1.0.0-canary.118.tgz#b32f5d26ead5a49d8fd22d0bfdbc5859a29bad65"
-  integrity sha512-cYR7Re1LRw89BCWSuKXF/MozsdUlTuVPycHaPfgm90ON0dot3lYdKiOw32IoltmFHtvQ7q15iATTMwRN/AoY2A==
+"@dxos/echo-db@1.0.0-beta.28":
+  version "1.0.0-beta.28"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-db/-/echo-db-1.0.0-beta.28.tgz#b89dca21ac7ba93b329d87d1e0000f89d02764ef"
+  integrity sha512-ZFkvnQwxjQ6TtDbszJhbOfwBIQLuTj6rWK7wi46lxz6p6uBEulZzLOYsBzH5yJ/RhmMYn5WOZwJ00f6gT31/UQ==
   dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
-    "@dxos/credentials" "^1.0.1-beta.48"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^1.0.0-canary.118+18d9f8a"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^1.0.0-canary.118+18d9f8a"
-    "@dxos/network-manager" "1.0.0-beta.106"
-    "@dxos/object-model" "^1.0.0-canary.118+18d9f8a"
-    "@dxos/protocol-plugin-replicator" "^1.1.0-beta.14"
-    "@dxos/util" "^1.0.0-canary.118+18d9f8a"
+    "@dxos/crypto" "^0.0.1"
+    "@dxos/feed-store" "^1.2.0-beta.23"
+    "@dxos/model-factory" "^1.0.0-beta.28"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
-    "@types/json-stable-stringify" "^1.0.32"
-    "@types/lodash" "^4.14.159"
     "@types/node" "^14.0.9"
     "@types/stream-buffers" "^3.0.2"
-    crypto-js "^4.0.0"
+    "@types/through2" "^2.0.36"
     debug "^4.1.1"
-    hypercore "^7.7.1"
     js-data-structs "^1.1.2"
-    json-stable-stringify "^1.0.1"
-    lodash.merge "^4.6.2"
-    pify "^5.0.0"
     protobufjs "^6.9.0"
-    pump "^3.0.0"
-    random-access-memory "^3.1.1"
     source-map-support "^0.5.12"
-    stream-buffers "^3.0.2"
 
 "@dxos/echo-protocol@^0.2.0-dev.3+85a5fe0":
   version "0.2.0-dev.3"
@@ -1357,6 +1379,33 @@
     "@dxos/crypto" "^1.0.0-beta.7"
     "@dxos/feed-store" "^1.2.0-beta.30"
     "@dxos/util" "^1.0.0-canary.118+18d9f8a"
+    "@types/debug" "^4.1.1"
+    "@types/end-of-stream" "^1.4.0"
+    "@types/lodash" "^4.14.159"
+    "@types/node" "^14.0.9"
+    "@types/readable-stream" "^2.3.9"
+    "@types/stream-buffers" "^3.0.2"
+    "@types/through2" "^2.0.36"
+    debug "^4.1.1"
+    hypercore "^7.7.1"
+    js-data-structs "^1.1.2"
+    lodash.merge "^4.6.2"
+    protobufjs "^6.9.0"
+    readable-stream "^3.6.0"
+    source-map-support "^0.5.12"
+
+"@dxos/echo-protocol@^1.0.0-dev.122+c4e9662":
+  version "1.0.0-dev.122"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-protocol/-/echo-protocol-1.0.0-dev.122.tgz#9b4342b8ecae78a52c1a7740513ba97b36344844"
+  integrity sha512-BojK06nB1fIChS62/0U6EKEnA7CVSlZtfRcVTArCQnB3jwxlmGerD0xt1MkxXN3tjgB1RQ9sXFX7CthLpnlvcg==
+  dependencies:
+    "@dxos/async" "^1.0.0-beta.8"
+    "@dxos/codec-experimental-runtime" "^1.0.2"
+    "@dxos/codec-protobuf" "^1.1.0-beta.0"
+    "@dxos/credentials" "^1.0.1-beta.51"
+    "@dxos/crypto" "^1.0.0-beta.7"
+    "@dxos/feed-store" "^1.2.0-beta.30"
+    "@dxos/util" "^1.0.0-dev.122+c4e9662"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1450,10 +1499,10 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/model-factory@^1.0.0-beta.21":
-  version "1.0.0-beta.26"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-1.0.0-beta.26.tgz#6f3cd65678ec22ada8d8f8e4d121674190a6632e"
-  integrity sha512-q6ku2pC+YDfOUm1PG71Itq+uV1NYGA1SHWmhW/r9v8GnN1nzzoknDWb98kKEgpYbn6ZQpRv3rWAObPDrHluxdw==
+"@dxos/model-factory@1.0.0-beta.28":
+  version "1.0.0-beta.28"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-1.0.0-beta.28.tgz#8fa142731e1b94a8d1228d399e37f31192d44ea0"
+  integrity sha512-maOEdBFL/zexDAg6LstZ3RIgaZRnvmIKGD0pB7S15j8i9HB+Egy7liL5LHLeSjb4TdOJicglPxgp54ksM53q+A==
   dependencies:
     "@dxos/crypto" "^1.0.0-beta.1"
     "@dxos/debug" "^1.0.0-beta.20"
@@ -1473,7 +1522,31 @@
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
-"@dxos/model-factory@^1.0.0-canary.106+38205ae", "@dxos/model-factory@^1.0.0-canary.118+18d9f8a":
+"@dxos/model-factory@^1.0.0-beta.28":
+  version "1.0.0-dev.122"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-1.0.0-dev.122.tgz#0e19dbe307215dcb7ab67d2156a06e118b09c2e7"
+  integrity sha512-FGv5xpmQ4Nf3bU7xM6makPtSiOiVzawwkKI9t1xPBA+Fh2rB2aaNdcVnvH8uELs/YRIZl3RIPBSJA0cwDm9d7A==
+  dependencies:
+    "@dxos/async" "^1.0.0-beta.8"
+    "@dxos/codec-protobuf" "^1.1.0-beta.0"
+    "@dxos/crypto" "^1.0.0-beta.7"
+    "@dxos/echo-protocol" "^1.0.0-dev.122+c4e9662"
+    "@dxos/feed-store" "^1.2.0-beta.30"
+    "@dxos/util" "^1.0.0-dev.122+c4e9662"
+    "@types/debug" "^4.1.1"
+    "@types/end-of-stream" "^1.4.0"
+    "@types/lodash" "^4.14.159"
+    "@types/node" "^14.0.9"
+    "@types/stream-buffers" "^3.0.2"
+    "@types/through2" "^2.0.36"
+    debug "^4.1.1"
+    hypercore "^7.7.1"
+    js-data-structs "^1.1.2"
+    lodash.merge "^4.6.2"
+    protobufjs "^6.9.0"
+    source-map-support "^0.5.12"
+
+"@dxos/model-factory@^1.0.0-canary.106+38205ae":
   version "1.0.0-canary.118"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-1.0.0-canary.118.tgz#2428ed4faaab36dfaedafe5f4527a1930bfdf31b"
   integrity sha512-8MTDVYttOJKXV24mlFjJxb9oV1aDTy4ps+GAvuAdfNJ4OGYRPZa3klD3C4M0c44Tz2p885sycgnVNFPfN/OKEg==
@@ -1508,7 +1581,7 @@
     ngraph.graph "^19.0.3"
     source-map-support "^0.5.12"
 
-"@dxos/network-manager@1.0.0-beta.106", "@dxos/network-manager@^1.0.0-beta.93", "@dxos/network-manager@^1.0.0-beta.94", "@dxos/network-manager@^1.0.0-beta.97":
+"@dxos/network-manager@1.0.0-beta.106":
   version "1.0.0-beta.106"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2fnetwork-manager/-/network-manager-1.0.0-beta.106.tgz#e11b199d1ae665ffee437a4ea1cf7620b751bfb3"
   integrity sha512-Kgz1Z98SFPjnHeaUt9RUMu8RwNztl2zBN0qc2/wCUSOBVEmabSVAS5iXXbDjOPwiv7vr9whSdVqqwGmO5iLnEw==
@@ -1517,6 +1590,34 @@
     "@dxos/metrics" "^1.0.0-beta.6"
     "@dxos/protocol" "^1.1.0-beta.1"
     "@geut/discovery-swarm-webrtc" "^3.0.0-beta.3"
+    "@wirelineio/discovery-swarm-memory" "^0.2.17"
+    assert "^2.0.0"
+    debug "^4.1.1"
+    wrtc "^0.4.3"
+
+"@dxos/network-manager@^1.0.0-beta.107":
+  version "1.0.0-beta.107"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fnetwork-manager/-/network-manager-1.0.0-beta.107.tgz#86cb14f1ad27a92c69fb6779124ff350f9c1eb7e"
+  integrity sha512-c9l74MctHmHS4AiMdy8WnKdDMBcGTQDGP7MksqCrnz1wm7KfiP16nB58beTf//rO1WxmXkOIDlNyOrbi3dfwTw==
+  dependencies:
+    "@dxos/crypto" "^1.0.0-beta.1"
+    "@dxos/metrics" "^1.0.0-beta.6"
+    "@dxos/protocol" "^1.1.0-beta.1"
+    "@geut/discovery-swarm-webrtc" "^4.0.1"
+    "@wirelineio/discovery-swarm-memory" "^0.2.17"
+    assert "^2.0.0"
+    debug "^4.1.1"
+    wrtc "^0.4.3"
+
+"@dxos/network-manager@^1.0.0-beta.108":
+  version "1.0.0-beta.108"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fnetwork-manager/-/network-manager-1.0.0-beta.108.tgz#b672a3a719b7f84a739cabb6b61c5d5e6938d6f5"
+  integrity sha512-NicBnLZYA1yiyBi9u+1bA2twgDIfFTLiIzrRSB6T6PAHYgMRz4qqh063lnWn3cin2rz12WdkL35hhoWrJPETfA==
+  dependencies:
+    "@dxos/crypto" "^1.0.0-beta.1"
+    "@dxos/metrics" "^1.0.0-beta.6"
+    "@dxos/protocol" "^1.1.0-beta.1"
+    "@geut/discovery-swarm-webrtc" "^4.0.1"
     "@wirelineio/discovery-swarm-memory" "^0.2.17"
     assert "^2.0.0"
     debug "^4.1.1"
@@ -1547,42 +1648,17 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/object-model@^1.0.0-canary.118+18d9f8a":
-  version "1.0.0-canary.118"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fobject-model/-/object-model-1.0.0-canary.118.tgz#be2051c19bce8a7300d1eff55271d29b25d8cb79"
-  integrity sha512-3hLGe1uJg037ZSOa2N0JBjk7KwM1fU0kPN4zOJrv2AOPTM0upMmaIviQpApxMETlvMoh3hUnxMW1dSvVTWkVtg==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^1.1.0-beta.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^1.0.0-canary.118+18d9f8a"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^1.0.0-canary.118+18d9f8a"
-    "@dxos/util" "^1.0.0-canary.118+18d9f8a"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    source-map-support "^0.5.12"
-
-"@dxos/party-manager@^1.0.1-beta.39":
-  version "1.0.1-canary.6"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fparty-manager/-/party-manager-1.0.1-canary.6.tgz#a466511187bfb439bcdcb48be794e7f8408ba60b"
-  integrity sha512-uRoW+rm9qRoURNRNvr/N5/3a1FypEBOT9rOyBLYsJccdrxZz4LghRn0cQqWMax2SOsnFkOGIUhyKFKzldTt2rg==
+"@dxos/party-manager@^0.2.7":
+  version "0.2.7"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fparty-manager/-/party-manager-0.2.7.tgz#7e1c3ea507b36607317cca803225d12a4bf6ac23"
+  integrity sha512-mYRNtJnO61P6SrJVHnDMqr1q97YCCxz4GucQuV6qnHrIjdXFDEB27p5nuuuxYgTFnlrzIktXVLYG3aOXDPgKAw==
   dependencies:
     "@dxos/async" "^1.0.0-beta.1"
-    "@dxos/credentials" "^1.0.1-beta.48"
+    "@dxos/credentials" "^1.0.1-beta.52"
     "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/echo-db" "^1.0.0-beta.21"
-    "@dxos/model-factory" "^1.0.0-beta.21"
-    "@dxos/network-manager" "^1.0.0-beta.97"
+    "@dxos/echo-db" "1.0.0-beta.28"
+    "@dxos/model-factory" "1.0.0-beta.28"
+    "@dxos/network-manager" "^1.0.0-beta.107"
     "@dxos/protocol" "^1.1.0-beta.1"
     "@dxos/protocol-plugin-presence" "^1.1.0-beta.17"
     "@dxos/protocol-plugin-replicator" "^1.1.0-beta.1"
@@ -1726,6 +1802,27 @@
   version "1.0.0-canary.118"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2futil/-/util-1.0.0-canary.118.tgz#6364ebd0c0ac64008d4fa1c81579f33f4a60da61"
   integrity sha512-S6+WFjaER8Zxl5hsuOgn7XUGvGIm4sI4+QzuHdSDGOtiOPcwwLxbnR4wYKcPFlN+2aiFok2efMC5gBqp6Kg5yA==
+  dependencies:
+    "@dxos/async" "^1.0.0-beta.8"
+    "@dxos/codec-protobuf" "^1.1.0-beta.0"
+    "@dxos/crypto" "^1.0.0-beta.7"
+    "@types/debug" "^4.1.1"
+    "@types/end-of-stream" "^1.4.0"
+    "@types/lodash" "^4.14.159"
+    "@types/node" "^14.0.9"
+    "@types/stream-buffers" "^3.0.2"
+    "@types/through2" "^2.0.36"
+    debug "^4.1.1"
+    hypercore "^7.7.1"
+    js-data-structs "^1.1.2"
+    lodash.merge "^4.6.2"
+    protobufjs "^6.9.0"
+    source-map-support "^0.5.12"
+
+"@dxos/util@^1.0.0-dev.122+c4e9662":
+  version "1.0.0-dev.122"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2futil/-/util-1.0.0-dev.122.tgz#912877987f4c79ebe4d1a3123c448fcff045d164"
+  integrity sha512-kA/wPMvitI0+0H3Fft/Y88/SQj1coXmBmdWHB8m27DGCK6fhfMF/pH84Szia1Cghc4KGl/FJ4E5fzqgWM/jR2g==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
@@ -1948,6 +2045,20 @@
     nanoerror "^1.1.0"
     pump "^3.0.0"
     socket-signal-websocket "^4.0.0"
+
+"@geut/discovery-swarm-webrtc@^4.0.1":
+  version "4.0.1"
+  resolved "http://npm.dev.dxos.network:5736/@geut%2fdiscovery-swarm-webrtc/-/discovery-swarm-webrtc-4.0.1.tgz#9efaf5f4356bfe93eb32f158f91423914047faac"
+  integrity sha512-x00Hu0+dG0S1kmAy14h73lSLNDi52IPp2ExqUnkc+NqW6wxexbfTYK16ZyDm/l0/cES18D7L04l9wLiyUezaVw==
+  dependencies:
+    debug "^4.1.1"
+    end-of-stream "^1.4.4"
+    minimist "^1.2.0"
+    mostly-minimal-spanning-tree "^1.0.2"
+    nanocustomassert "^1.0.0"
+    nanoerror "^1.1.0"
+    pump "^3.0.0"
+    socket-signal-websocket "^9.0.0"
 
 "@graphql-tools/schema@^6.0.16":
   version "6.2.4"
@@ -8278,7 +8389,7 @@ fast-levenshtein@~2.0.6:
   resolved "http://npm.dev.dxos.network:5736/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-fastq@^1.6.0:
+fastq@^1.6.0, fastq@^1.8.0:
   version "1.8.0"
   resolved "http://npm.dev.dxos.network:5736/fastq/-/fastq-1.8.0.tgz#550e1f9f59bbc65fe185cb6a9b4d95357107f481"
   integrity sha512-SMIZoZdLh/fgofivvIkmknUXyPnvxRE3DhtZ5Me3Mrsk5gyPL42F0xr51TdRXskBxHfMp+07bcYzfsYEsSQA9Q==
@@ -12595,6 +12706,19 @@ nanomessage-rpc@^1.2.1:
     nanomessage "^5.3.0"
     nanoresource-promise "^1.2.1"
 
+nanomessage-rpc@^3.0.0:
+  version "3.0.0"
+  resolved "http://npm.dev.dxos.network:5736/nanomessage-rpc/-/nanomessage-rpc-3.0.0.tgz#76f894c7167a0994ef228492b551abb098bfac3e"
+  integrity sha512-z8ymZCKmhoaLB8/rz7DnKaywlcOtjJOoOIcwoIvTRQlKdUFi4CwUyPjVeZy4Jdt5sQ52xC/oJGjmR7AXMc8urA==
+  dependencies:
+    emittery "^0.6.0"
+    end-of-stream "^1.4.4"
+    nanocustomassert "^1.0.0"
+    nanoerror "^1.1.0"
+    nanomessage "^8.2.0"
+    nanoresource-promise "^2.0.0"
+    varint "^5.0.0"
+
 nanomessage@^5.3.0, nanomessage@^5.4.0:
   version "5.4.0"
   resolved "http://npm.dev.dxos.network:5736/nanomessage/-/nanomessage-5.4.0.tgz#df4c8ad09c23befd3b8d6d1fe204a2b44e181fad"
@@ -12605,6 +12729,17 @@ nanomessage@^5.3.0, nanomessage@^5.4.0:
     nanoerror "^1.1.0"
     nanoresource-promise "^2.0.0-beta.2"
     p-queue "^6.3.0"
+
+nanomessage@^8.2.0:
+  version "8.2.0"
+  resolved "http://npm.dev.dxos.network:5736/nanomessage/-/nanomessage-8.2.0.tgz#5094f716e17327f2bcc74c9a44bd7aa684e16641"
+  integrity sha512-8MH6xggcEFhEJ2LvKx3PR3ygjgpjSVRrgmtBTeFodXCOLK7kXFlFcVq6vr+uu37MQcc3EBNZ4cP8uMsjfSJy/Q==
+  dependencies:
+    fastq "^1.8.0"
+    nanocustomassert "^1.0.0"
+    nanoerror "^1.1.0"
+    nanoresource-promise "^2.0.0"
+    varint "^5.0.0"
 
 nanoresource-promise@^1.2.1:
   version "1.2.2"
@@ -15586,6 +15721,17 @@ simple-websocket@^8.1.1:
     readable-stream "^3.1.1"
     ws "^7.0.0"
 
+simple-websocket@^9.0.0:
+  version "9.0.0"
+  resolved "http://npm.dev.dxos.network:5736/simple-websocket/-/simple-websocket-9.0.0.tgz#fda93b9cdeb106e57e5fcc436ee0d1d8eb8836fc"
+  integrity sha512-Q+u1BJ06/FR30xS1Sf6zDuL+vAdAA7VFqZ0TdKpmQKB2uNTAPKWQFFhUDV4YD7TDi7gSRJXoxv21WprNPR0ykQ==
+  dependencies:
+    debug "^4.1.1"
+    queue-microtask "^1.1.0"
+    randombytes "^2.0.3"
+    readable-stream "^3.1.1"
+    ws "^7.0.0"
+
 siphash24@^1.0.1:
   version "1.1.1"
   resolved "http://npm.dev.dxos.network:5736/siphash24/-/siphash24-1.1.1.tgz#94ad021a2b2c62de381b546ee02df0cf778acd50"
@@ -15679,6 +15825,19 @@ socket-signal-websocket@^4.0.0:
     socket-signal "^4.0.0"
     ws "^7.2.3"
 
+socket-signal-websocket@^9.0.0:
+  version "9.0.2"
+  resolved "http://npm.dev.dxos.network:5736/socket-signal-websocket/-/socket-signal-websocket-9.0.2.tgz#4bfa7b323e32130b22dee447bf096308d8a9a81d"
+  integrity sha512-oEZDCvmDCsI3fmJBXiATBUk3n0UZ6p5Q3OneWTJGk2QHghdtuiaRIUIW+VRD7okDXco8+O3h1qJ3R7g1o4QPBw==
+  dependencies:
+    isomorphic-ws "^4.0.1"
+    minimist "^1.2.5"
+    nanocustomassert "^1.0.0"
+    reconnecting-websocket "^4.4.0"
+    simple-websocket "^9.0.0"
+    socket-signal "^9.0.0"
+    ws "^7.2.3"
+
 socket-signal@^4.0.0:
   version "4.0.2"
   resolved "http://npm.dev.dxos.network:5736/socket-signal/-/socket-signal-4.0.2.tgz#08c8cb791f5d4dc96134bd1a547c73fd37780f87"
@@ -15695,6 +15854,22 @@ socket-signal@^4.0.0:
     p-queue "^6.3.0"
     simple-peer "^9.6.2"
     varint "^5.0.0"
+
+socket-signal@^9.0.0:
+  version "9.0.0"
+  resolved "http://npm.dev.dxos.network:5736/socket-signal/-/socket-signal-9.0.0.tgz#baf51e7e2b57e9b21aef939dab8935c63ca4adc9"
+  integrity sha512-tnyvDFYI2+VgboN2oeCRCikyBmZwiZeXuQgt/th4PkyEcC+npGxOONfS9LGX9UH+/UEBDjnbW1ziRIs78Qn2jQ==
+  dependencies:
+    debug "^4.1.1"
+    end-of-stream "^1.4.4"
+    fastq "^1.8.0"
+    nanocustomassert "^1.0.0"
+    nanoerror "^1.0.0"
+    nanomessage-rpc "^3.0.0"
+    nanoresource-promise "^2.0.0"
+    p-event "^4.1.0"
+    p-limit "^3.0.2"
+    simple-peer "^9.6.2"
 
 socks-proxy-agent@^4.0.0:
   version "4.0.2"
