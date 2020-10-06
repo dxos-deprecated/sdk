@@ -160,12 +160,13 @@ export class Client {
    * @param {Buffer} partyKey Party publicKey
    * @param {SecretProvider} secretProvider
    */
-  async createInvitation (partyKey, secretProvider) {
+  async createInvitation (partyKey, secretProvider, options) {
     const party = await this.echo.getParty(partyKey);
     return party.createInvitation({
       secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
       secretProvider
-    });
+    },
+    options);
   }
 
   /**
