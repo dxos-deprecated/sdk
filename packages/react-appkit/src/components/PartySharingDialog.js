@@ -36,11 +36,14 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
 import { humanize, keyToBuffer, verify, SIGNATURE_LENGTH, keyToString } from '@dxos/crypto';
-import { InviteDetails, InviteType } from '@dxos/party-manager';
 
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 import BotDialog from './BotDialog';
 import { useAsync } from '../hooks/async';
+
+// TODO(telackey): This file is dead code, and these types no longer exist.
+const InviteDetails = () => {};
+const InviteType = null;
 
 const useStyles = makeStyles(theme => ({
   title: {

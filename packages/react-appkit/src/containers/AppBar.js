@@ -23,7 +23,6 @@ import ShareIcon from '@material-ui/icons/Share';
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
 import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
-import { InviteType, InviteDetails } from '@dxos/party-manager';
 import { useClient, useConfig, useProfile } from '@dxos/react-client';
 
 import BotDialog from '../components/BotDialog';
@@ -32,6 +31,10 @@ import ImportKeyringDialog from '../components/ImportKeyringDialog';
 import InvitationDialog from '../components/InvitationDialog';
 
 import { Action, useActionHandler, useAppRouter } from '../hooks';
+
+// TODO(telackey): This file is dead code, and these types no longer exist.
+const InviteDetails = () => {};
+const InviteType = null;
 
 const ACTION_USER_INVITATION = 1;
 const ACTION_DEVICE_INVITATION = 2;

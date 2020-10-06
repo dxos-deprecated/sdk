@@ -1109,9 +1109,9 @@
     tiny-lru "^7.0.6"
 
 "@dxos/codec-experimental-runtime@^1.0.2":
-  version "1.0.2"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fcodec-experimental-runtime/-/codec-experimental-runtime-1.0.2.tgz#fc9a9d287926e2764c7e1d77406ffc0a7d01967e"
-  integrity sha512-nMzLTJJICfm2RIUtt54P2SH9aw/3J0FuojwSUVfcNisgrV9oQQ6gWSjJwC1o0pIBGzzOrxHrTEHyQCRwyy6rTQ==
+  version "1.0.4"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fcodec-experimental-runtime/-/codec-experimental-runtime-1.0.4.tgz#55df019b5aa4ce9abaed5445f650395bffd8a078"
+  integrity sha512-M23RCmszk0f3Hhq1xE4Ao7L1pXucMQl5+vEkR6N+XSGEkQgMqy0PvpDC9Ge2MjZ6a/4zI2s5kFGt/lDi7spGjA==
   dependencies:
     protobufjs "^6.10.1"
 
@@ -1139,44 +1139,6 @@
     lodash.set "^4.3.2"
   optionalDependencies:
     webpack "^4.10.0"
-
-"@dxos/credentials@1.0.1-beta.52":
-  version "1.0.1-beta.52"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fcredentials/-/credentials-1.0.1-beta.52.tgz#310c9178641ddc99a083f3b2430dc231d92e1ddf"
-  integrity sha512-Lsg/HSA4emp8oXYiEjrxTuXkT5e4f+5C783+SRFkCmsELX9k5ykXkraZ9Ofj5jqW/CjZSt1/hM/MqQMOHkH4zg==
-  dependencies:
-    "@dxos/codec-protobuf" "^1.1.0-beta.10"
-    "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/feed-store" "^1.2.0-beta.23"
-    "@dxos/protocol" "^1.1.0-beta.1"
-    "@types/pify" "^3.0.2"
-    "@types/pump" "^1.1.0"
-    bip39 "^3.0.2"
-    buffer-json-encoding "^1.0.2"
-    crypto-js "^3.1.9-1"
-    debug "^4.1.1"
-    encoding-down "^6.3.0"
-    end-of-stream "^1.4.1"
-    hypercore-crypto "^1.0.0"
-    hypercore-protocol "^6.11.1"
-    hypertrie "^3.8.0"
-    json-stable-stringify "^1.0.1"
-    leveldown "^5.4.1"
-    levelup "^4.3.2"
-    lodash.defaultsdeep "^4.6.1"
-    lodash.get "^4.4.2"
-    lodash.isobject "^3.0.2"
-    lodash.isplainobject "^4.0.6"
-    lodash.mapvalues "^4.6.0"
-    lodash.matches "^4.6.0"
-    memdown "^5.1.0"
-    moment "^2.24.0"
-    ngraph.graph "^18.0.1"
-    pump "^3.0.0"
-    queue-microtask "^1.1.2"
-    source-map-support "^0.5.12"
-    stream-to-array "^2.3.0"
-    uuid "^3.3.2"
 
 "@dxos/credentials@^0.2.7":
   version "0.2.7"
@@ -1216,7 +1178,7 @@
     stream-to-array "^2.3.0"
     uuid "^3.3.2"
 
-"@dxos/credentials@^1.0.1-beta.29", "@dxos/credentials@^1.0.1-beta.48", "@dxos/credentials@^1.0.1-beta.51", "@dxos/credentials@^1.0.1-beta.52":
+"@dxos/credentials@^1.0.1-beta.51", "@dxos/credentials@^1.0.1-beta.52":
   version "1.0.1-canary.6"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2fcredentials/-/credentials-1.0.1-canary.6.tgz#1dfbde2debf2cc6829a7913d1cd1aec8142840f5"
   integrity sha512-44QqWx896hHK87M25ZPAHtMgX5fbIiebFAaB+AtHtFYZxdmURLMCrqVRZEUeS6wyaOBpBaCCMTdP5P+1T/Go6A==
@@ -1264,9 +1226,9 @@
     hypercore-crypto "^1.0.0"
 
 "@dxos/crypto@^1.0.0-beta.0", "@dxos/crypto@^1.0.0-beta.1", "@dxos/crypto@^1.0.0-beta.7":
-  version "1.0.0-beta.8"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fcrypto/-/crypto-1.0.0-beta.8.tgz#b4e58152b083c959a652f55a17012012a9fd84e9"
-  integrity sha512-dQDgLz0u1W4yxeMOQBvwZZKK8Q6dPlrEL9uSsKj5RGkXLjv0AlrHbNDAqoUJRo9g3dqCrMYbVO5Cx7RN1hu/uA==
+  version "1.0.0-beta.9"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fcrypto/-/crypto-1.0.0-beta.9.tgz#cc261bf3910c271e8a08f67835e7b2b4e760a47a"
+  integrity sha512-aWvKRAC6jjv3HBa+MqobPAHutvf+6D7yWwLFt0paoAhQXab8IJH1NDYOAAYRa8qLnKGIr4TSqed9mRqZ9cfHEg==
   dependencies:
     crypto-js "^3.1.9-1"
     humanhash "^1.0.4"
@@ -1285,41 +1247,6 @@
   integrity sha512-wiDCYA+stgNyhXZUNj5xGxWxyKFbJw3pwrzU9PGnmYh0J0DXrJwvJ8dkBITxDXQRLESKFW1SW5ixb/7kmTl77w==
   dependencies:
     debug "^4.1.1"
-
-"@dxos/echo-db@0.2.0-dev.6":
-  version "0.2.0-dev.6"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-db/-/echo-db-0.2.0-dev.6.tgz#2030348a63fd46f1b94f6c283a99b329646fc761"
-  integrity sha512-Ku1+yQgZnO94uOFVFgT54mSaed4eA301VblV5RqMe8Lddn+Njn8aUyQ9z0xxD4jDIPkIP6op9H4ZEKB5I0XATQ==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^1.1.0-beta.0"
-    "@dxos/credentials" "1.0.1-beta.52"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^0.2.0-dev.6+811f881"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^0.2.0-dev.6+811f881"
-    "@dxos/network-manager" "^1.0.0-beta.108"
-    "@dxos/object-model" "^0.2.0-dev.6+811f881"
-    "@dxos/protocol-plugin-replicator" "^1.1.0-beta.14"
-    "@dxos/util" "^0.2.0-dev.6+811f881"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/json-stable-stringify" "^1.0.32"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    crypto-js "^4.0.0"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    json-stable-stringify "^1.0.1"
-    lodash.merge "^4.6.2"
-    pify "^5.0.0"
-    protobufjs "^6.9.0"
-    pump "^3.0.0"
-    random-access-memory "^3.1.1"
-    source-map-support "^0.5.12"
-    stream-buffers "^3.0.2"
 
 "@dxos/echo-db@1.0.0-beta.28":
   version "1.0.0-beta.28"
@@ -1340,45 +1267,53 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/echo-protocol@^0.2.0-dev.6+811f881":
-  version "0.2.0-dev.6"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-protocol/-/echo-protocol-0.2.0-dev.6.tgz#20a79bb9a42699a41e606ef86370be37cf7d11ca"
-  integrity sha512-loYisn6SMQeqlMpg6M+FRtH10lNRDpBuOaTiEM9U/Jifbqiw1B9yv9lb2YdwJSRciezOFtk6/acQkAlRA/mGLA==
+"@dxos/echo-db@^0.2.0-dev.7":
+  version "0.2.0-dev.7"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-db/-/echo-db-0.2.0-dev.7.tgz#ceb19f522407571d6effe010f6a16260d385de2b"
+  integrity sha512-janIbuYlc1wDPcpZz5X64EzjoF0cQ4KbVsBm91+Fg6R6Jn25CZ6XjKKuGEHA8AT9yNzPMzZtsuXne5R7H/MPAw==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-experimental-runtime" "^1.0.2"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
-    "@dxos/credentials" "1.0.1-beta.52"
+    "@dxos/credentials" "^0.2.7"
     "@dxos/crypto" "^1.0.0-beta.7"
+    "@dxos/echo-protocol" "^0.2.0-dev.7+c68d25e"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^0.2.0-dev.6+811f881"
+    "@dxos/model-factory" "^0.2.0-dev.7+c68d25e"
+    "@dxos/network-manager" "^1.0.0-beta.108"
+    "@dxos/object-model" "^0.2.0-dev.7+c68d25e"
+    "@dxos/protocol-plugin-replicator" "^1.1.0-beta.14"
+    "@dxos/util" "^0.2.0-dev.7+c68d25e"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
+    "@types/json-stable-stringify" "^1.0.32"
     "@types/lodash" "^4.14.159"
     "@types/node" "^14.0.9"
-    "@types/readable-stream" "^2.3.9"
     "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
+    crypto-js "^4.0.0"
     debug "^4.1.1"
     hypercore "^7.7.1"
     js-data-structs "^1.1.2"
+    json-stable-stringify "^1.0.1"
     lodash.merge "^4.6.2"
+    pify "^5.0.0"
     protobufjs "^6.9.0"
-    readable-stream "^3.6.0"
+    pump "^3.0.0"
+    random-access-memory "^3.1.1"
     source-map-support "^0.5.12"
+    stream-buffers "^3.0.2"
 
-"@dxos/echo-protocol@^1.0.0-canary.118+18d9f8a":
-  version "1.0.0-canary.118"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-protocol/-/echo-protocol-1.0.0-canary.118.tgz#5b142a3a0a06ce1c8fe6d95c7eeff97c95071750"
-  integrity sha512-692qRLQtlgexuBQIN05CuErOw1T3QtigTuuqtJWNGKsnnKmVg334xBPPhIypapVUfRU7AIyhNetDLXxaP4jfSQ==
+"@dxos/echo-protocol@^0.2.0-dev.7+c68d25e":
+  version "0.2.0-dev.7"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-protocol/-/echo-protocol-0.2.0-dev.7.tgz#a6ffe89533d0d95cbd5ed3d7d251e0aceb0e46b1"
+  integrity sha512-qCoPxUyvNUtqQCg78yGtxuM50ePseSYEHzPJsfe+O77Y2JQ9LHGXTcO/2ocpQgwi5duTsf3Driwb5t6PGvuEGA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-experimental-runtime" "^1.0.2"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
-    "@dxos/credentials" "^1.0.1-beta.48"
+    "@dxos/credentials" "^0.2.7"
     "@dxos/crypto" "^1.0.0-beta.7"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^1.0.0-canary.118+18d9f8a"
+    "@dxos/util" "^0.2.0-dev.7+c68d25e"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1475,30 +1410,6 @@
     lodash.set "^4.3.2"
     lodash.unset "^4.5.2"
 
-"@dxos/model-factory@0.2.0-dev.6", "@dxos/model-factory@^0.2.0-dev.6+811f881":
-  version "0.2.0-dev.6"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-0.2.0-dev.6.tgz#e2596436c05405fb40da78742ee15c33ea8aca8e"
-  integrity sha512-jDOFEADPYYh1jYVs9822X3vyPOZOq1hXBEHr6Gxsi7+mjQ2bFlvRyNi0nKh+r0tojCP+NAAWFSVqEqhhie+OhA==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^1.1.0-beta.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^0.2.0-dev.6+811f881"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^0.2.0-dev.6+811f881"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    source-map-support "^0.5.12"
-
 "@dxos/model-factory@1.0.0-beta.28":
   version "1.0.0-beta.28"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-1.0.0-beta.28.tgz#8fa142731e1b94a8d1228d399e37f31192d44ea0"
@@ -1522,17 +1433,17 @@
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
-"@dxos/model-factory@^1.0.0-beta.28":
-  version "1.0.0-dev.122"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-1.0.0-dev.122.tgz#0e19dbe307215dcb7ab67d2156a06e118b09c2e7"
-  integrity sha512-FGv5xpmQ4Nf3bU7xM6makPtSiOiVzawwkKI9t1xPBA+Fh2rB2aaNdcVnvH8uELs/YRIZl3RIPBSJA0cwDm9d7A==
+"@dxos/model-factory@^0.2.0-dev.7", "@dxos/model-factory@^0.2.0-dev.7+c68d25e":
+  version "0.2.0-dev.7"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-0.2.0-dev.7.tgz#3ead87873f8cce9ee509d859c36442bcb197d964"
+  integrity sha512-LzbvUoOGVrQ8jDZcYTG4NmkYl5Vl7ABcYb7yiC8+c3SoERbzM7dRnqMRKfQcFT98u90EtN61+JEfGFhlnXNrgg==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
     "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^1.0.0-dev.122+c4e9662"
+    "@dxos/echo-protocol" "^0.2.0-dev.7+c68d25e"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^1.0.0-dev.122+c4e9662"
+    "@dxos/util" "^0.2.0-dev.7+c68d25e"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1546,17 +1457,17 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/model-factory@^1.0.0-canary.106+38205ae":
-  version "1.0.0-canary.118"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-1.0.0-canary.118.tgz#2428ed4faaab36dfaedafe5f4527a1930bfdf31b"
-  integrity sha512-8MTDVYttOJKXV24mlFjJxb9oV1aDTy4ps+GAvuAdfNJ4OGYRPZa3klD3C4M0c44Tz2p885sycgnVNFPfN/OKEg==
+"@dxos/model-factory@^1.0.0-beta.28", "@dxos/model-factory@^1.0.0-canary.106+38205ae":
+  version "1.0.0-dev.122"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-1.0.0-dev.122.tgz#0e19dbe307215dcb7ab67d2156a06e118b09c2e7"
+  integrity sha512-FGv5xpmQ4Nf3bU7xM6makPtSiOiVzawwkKI9t1xPBA+Fh2rB2aaNdcVnvH8uELs/YRIZl3RIPBSJA0cwDm9d7A==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
     "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^1.0.0-canary.118+18d9f8a"
+    "@dxos/echo-protocol" "^1.0.0-dev.122+c4e9662"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^1.0.0-canary.118+18d9f8a"
+    "@dxos/util" "^1.0.0-dev.122+c4e9662"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1596,9 +1507,9 @@
     wrtc "^0.4.3"
 
 "@dxos/network-manager@^1.0.0-beta.108":
-  version "1.0.0-beta.108"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fnetwork-manager/-/network-manager-1.0.0-beta.108.tgz#b672a3a719b7f84a739cabb6b61c5d5e6938d6f5"
-  integrity sha512-NicBnLZYA1yiyBi9u+1bA2twgDIfFTLiIzrRSB6T6PAHYgMRz4qqh063lnWn3cin2rz12WdkL35hhoWrJPETfA==
+  version "1.0.0-beta.110"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fnetwork-manager/-/network-manager-1.0.0-beta.110.tgz#318c91fe7de8d2f569ace16a15c2df06d85bcce8"
+  integrity sha512-BybtSRX5PDp6l6njWdvhIjY99TUo8yUrAA+0yb6SOIMhsKMJc/1EQ/oNJReqjs0DWxC0y/RnQ/3VErP5+sWjsw==
   dependencies:
     "@dxos/crypto" "^1.0.0-beta.1"
     "@dxos/metrics" "^1.0.0-beta.6"
@@ -1609,18 +1520,18 @@
     debug "^4.1.1"
     wrtc "^0.4.3"
 
-"@dxos/object-model@0.2.0-dev.6", "@dxos/object-model@^0.2.0-dev.6+811f881":
-  version "0.2.0-dev.6"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fobject-model/-/object-model-0.2.0-dev.6.tgz#e7ca5ea0b3c20b47c8dfc9428b65a66ae334dd37"
-  integrity sha512-vnAmRQkTuuwZnYUV9u+MvmxWPJTpmj/rDawfiG+vJ72aXnO3lARA9RHthnwQ/8kKp2O2/PDoLDsmVifaEQxTFg==
+"@dxos/object-model@^0.2.0-dev.7", "@dxos/object-model@^0.2.0-dev.7+c68d25e":
+  version "0.2.0-dev.7"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fobject-model/-/object-model-0.2.0-dev.7.tgz#118e3fef6ddaca691b3ef395cf5d749ed70bd05d"
+  integrity sha512-35u+NPNEMx1touhfk/L20WYVZ1nJcQHhf+wHpM0XLGDpcoFdYNWmrJbzH1EU5p/ivym3GoEQy/W3/ae9rx9LLA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
     "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^0.2.0-dev.6+811f881"
+    "@dxos/echo-protocol" "^0.2.0-dev.7+c68d25e"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^0.2.0-dev.6+811f881"
-    "@dxos/util" "^0.2.0-dev.6+811f881"
+    "@dxos/model-factory" "^0.2.0-dev.7+c68d25e"
+    "@dxos/util" "^0.2.0-dev.7+c68d25e"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1763,31 +1674,10 @@
     prop-types "^15.5.8"
     react-base16-styling "^0.5.1"
 
-"@dxos/util@^0.2.0-dev.6+811f881":
-  version "0.2.0-dev.6"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2futil/-/util-0.2.0-dev.6.tgz#75374c00b8be8e988f5be4e09e2d92b5157bf0ca"
-  integrity sha512-bWjLSsb+oFcATj68LLllNoC/T107KeLQNxY2WHTjk8vPPOvYPHnvOF3eZuJ7wrOof3/ZffiG44QIQrctDCoOOA==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^1.1.0-beta.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    source-map-support "^0.5.12"
-
-"@dxos/util@^1.0.0-canary.118+18d9f8a":
-  version "1.0.0-canary.118"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2futil/-/util-1.0.0-canary.118.tgz#6364ebd0c0ac64008d4fa1c81579f33f4a60da61"
-  integrity sha512-S6+WFjaER8Zxl5hsuOgn7XUGvGIm4sI4+QzuHdSDGOtiOPcwwLxbnR4wYKcPFlN+2aiFok2efMC5gBqp6Kg5yA==
+"@dxos/util@^0.2.0-dev.7+c68d25e":
+  version "0.2.0-dev.7"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2futil/-/util-0.2.0-dev.7.tgz#041d20fc93b4605ac9223a75f8247c836c48a864"
+  integrity sha512-+KX2QVRgHzjlQQwZwkxDCoybDxDyGKFjfODb4A4smHw+1QXRIgPgskSFBEoCU3a573ePs6mDdsf9EaV6uYAtoA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
@@ -3068,9 +2958,9 @@
     "@octokit/types" "^5.0.0"
 
 "@octokit/endpoint@^6.0.1":
-  version "6.0.6"
-  resolved "http://npm.dev.dxos.network:5736/@octokit%2fendpoint/-/endpoint-6.0.6.tgz#4f09f2b468976b444742a1d5069f6fa45826d999"
-  integrity sha512-7Cc8olaCoL/mtquB7j/HTbPM+sY6Ebr4k2X2y4JoXpVKQ7r5xB4iGQE0IoO58wIPsUk4AzoT65AMEpymSbWTgQ==
+  version "6.0.8"
+  resolved "http://npm.dev.dxos.network:5736/@octokit%2fendpoint/-/endpoint-6.0.8.tgz#91b07e236fdb69929c678c6439f7a560dc6058ac"
+  integrity sha512-MuRrgv+bM4Q+e9uEvxAB/Kf+Sj0O2JAOBA131uo1o6lgdq1iS8ejKwtqHgdfY91V3rN9R/hdGKFiQYMzVzVBEQ==
   dependencies:
     "@octokit/types" "^5.0.0"
     is-plain-object "^5.0.0"
@@ -3260,16 +3150,16 @@
     type-detect "4.0.8"
 
 "@storybook/addon-actions@^6.0.4":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2faddon-actions/-/addon-actions-6.0.22.tgz#40dff4101274c512df1e1134a1ec4da16eca44e7"
-  integrity sha512-yP8BCxHscKhrXha0Z2nw+8OuFJDSCBAygju2HAr915g8+mAMIlpKmlPu6QOhwY9gP/Cn9HQCmrtPzuTeV2Ogug==
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2faddon-actions/-/addon-actions-6.0.26.tgz#d0de9e4d78a8f8f5bf8730c04d0b6d1741c29273"
+  integrity sha512-9tWbAqSwzWWVz8zwAndZFusZYjIcRYgZUC0LqC8QlH79DgF3ASjw9y97+w1VTTAzdb6LYnsMuSpX6+8m5hrR4g==
   dependencies:
-    "@storybook/addons" "6.0.22"
-    "@storybook/api" "6.0.22"
-    "@storybook/client-api" "6.0.22"
-    "@storybook/components" "6.0.22"
-    "@storybook/core-events" "6.0.22"
-    "@storybook/theming" "6.0.22"
+    "@storybook/addons" "6.0.26"
+    "@storybook/api" "6.0.26"
+    "@storybook/client-api" "6.0.26"
+    "@storybook/components" "6.0.26"
+    "@storybook/core-events" "6.0.26"
+    "@storybook/theming" "6.0.26"
     core-js "^3.0.1"
     fast-deep-equal "^3.1.1"
     global "^4.3.2"
@@ -3284,17 +3174,17 @@
     uuid "^8.0.0"
 
 "@storybook/addon-knobs@^6.0.4":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2faddon-knobs/-/addon-knobs-6.0.22.tgz#c14f0c46317d417774446f77b1de57bb01e45031"
-  integrity sha512-y5p92f7IVOxQ/5rJnMB/BuzwNXbdtfJhV7hvBjW8OS4E95EW+HXe7+gNOE2uEbALZZbBHX43H8lYlB+QoyZXcA==
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2faddon-knobs/-/addon-knobs-6.0.26.tgz#c574a817c8d791aced89a272eb0c6baaee9a0bdf"
+  integrity sha512-a25hOepctnsqX1nym80HLKrn8fvXFqsbcL3ZkAZWAIXZhf+zPYTJFrw25FxvbyhktmjQv6l89jteAfGfC0g8DA==
   dependencies:
-    "@storybook/addons" "6.0.22"
-    "@storybook/api" "6.0.22"
-    "@storybook/channels" "6.0.22"
-    "@storybook/client-api" "6.0.22"
-    "@storybook/components" "6.0.22"
-    "@storybook/core-events" "6.0.22"
-    "@storybook/theming" "6.0.22"
+    "@storybook/addons" "6.0.26"
+    "@storybook/api" "6.0.26"
+    "@storybook/channels" "6.0.26"
+    "@storybook/client-api" "6.0.26"
+    "@storybook/components" "6.0.26"
+    "@storybook/core-events" "6.0.26"
+    "@storybook/theming" "6.0.26"
     copy-to-clipboard "^3.0.8"
     core-js "^3.0.1"
     escape-html "^1.0.3"
@@ -3308,34 +3198,34 @@
     react-select "^3.0.8"
     regenerator-runtime "^0.13.3"
 
-"@storybook/addons@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2faddons/-/addons-6.0.22.tgz#90958365dcd16cd1f71dcf1f7497c6554293b6a5"
-  integrity sha512-D7GfOZ16DAyIUoNXY/aisKlXxHlk61XDIAvN102n/GGrmiNQhCKO2cuwjrmpqQGIXW/+QAsc0YUUAptEKpw9vw==
+"@storybook/addons@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2faddons/-/addons-6.0.26.tgz#343cbea3eee2d39413b80bc2d66535a7f61488fc"
+  integrity sha512-OhAApFKgsj9an7FLYfHI4cJQuZ4Zm6yoGOpaxhOvKQMw7dXUPsLvbCyw/6dZOLvaFhjJjQiXtbxtZG+UjR8nvA==
   dependencies:
-    "@storybook/api" "6.0.22"
-    "@storybook/channels" "6.0.22"
-    "@storybook/client-logger" "6.0.22"
-    "@storybook/core-events" "6.0.22"
-    "@storybook/router" "6.0.22"
-    "@storybook/theming" "6.0.22"
+    "@storybook/api" "6.0.26"
+    "@storybook/channels" "6.0.26"
+    "@storybook/client-logger" "6.0.26"
+    "@storybook/core-events" "6.0.26"
+    "@storybook/router" "6.0.26"
+    "@storybook/theming" "6.0.26"
     core-js "^3.0.1"
     global "^4.3.2"
     regenerator-runtime "^0.13.3"
 
-"@storybook/api@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fapi/-/api-6.0.22.tgz#ef6bbb4f06036cf09bb355fc5fd41d16ead37e23"
-  integrity sha512-GfGRXAe0h5cFTwJUJ7XqhaaE4+aXk/f+QCWfuUQkipUsGhGL+KLY80OU5cqC7LDB2nbhZ2bKUaLCzXu1Qsw5pw==
+"@storybook/api@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fapi/-/api-6.0.26.tgz#c45222c132eb8bc2e383536adfebbeb7a89867d0"
+  integrity sha512-aszDoz1c6T+eRtTUwWvySoyd3gRXmQxsingD084NnEp4VfFLA5H7VS/0sre0ZvU5GWh8d9COxY0DS2Ry/QSKvw==
   dependencies:
     "@reach/router" "^1.3.3"
-    "@storybook/channels" "6.0.22"
-    "@storybook/client-logger" "6.0.22"
-    "@storybook/core-events" "6.0.22"
+    "@storybook/channels" "6.0.26"
+    "@storybook/client-logger" "6.0.26"
+    "@storybook/core-events" "6.0.26"
     "@storybook/csf" "0.0.1"
-    "@storybook/router" "6.0.22"
+    "@storybook/router" "6.0.26"
     "@storybook/semver" "^7.3.2"
-    "@storybook/theming" "6.0.22"
+    "@storybook/theming" "6.0.26"
     "@types/reach__router" "^1.3.5"
     core-js "^3.0.1"
     fast-deep-equal "^3.1.1"
@@ -3349,38 +3239,38 @@
     ts-dedent "^1.1.1"
     util-deprecate "^1.0.2"
 
-"@storybook/channel-postmessage@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fchannel-postmessage/-/channel-postmessage-6.0.22.tgz#0a928d25fe3b87340e5670e897dc8fa4ee6ca6df"
-  integrity sha512-Upa2rG9H65MPdVxT9pNeDL9VlX5VeP7bpvR/TTEf2cRCiq6SC93pAs45XPWBcD8Jhq3p5+uFDARKReb2iF49+w==
+"@storybook/channel-postmessage@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fchannel-postmessage/-/channel-postmessage-6.0.26.tgz#a98a0132d6bdf06741afac2607e9feabe34ab98b"
+  integrity sha512-FT6lC8M5JlNBxPT0rYfmF1yl9mBv04nfYs82TZpp1CzpLxf7wxdCBZ8SSRmvWIVBoNwGZPDhIk5+6JWyDEISBg==
   dependencies:
-    "@storybook/channels" "6.0.22"
-    "@storybook/client-logger" "6.0.22"
-    "@storybook/core-events" "6.0.22"
+    "@storybook/channels" "6.0.26"
+    "@storybook/client-logger" "6.0.26"
+    "@storybook/core-events" "6.0.26"
     core-js "^3.0.1"
     global "^4.3.2"
     qs "^6.6.0"
     telejson "^5.0.2"
 
-"@storybook/channels@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fchannels/-/channels-6.0.22.tgz#4cdfee7c1581462ec872b310917003c9e4dc7224"
-  integrity sha512-d/RlPFDq9NXA/Y3CVDsSVsWgvYiiiifxQN9hz5+y3T6MnRJPEfAPWYkbv+wLixWbDF2ULzjQHp4zcfTm6T7A4w==
+"@storybook/channels@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fchannels/-/channels-6.0.26.tgz#3e8678b4b40085081257a39b9e85fab13a19943c"
+  integrity sha512-H0iUorayYqS+zfhbjd+cYRzAdRLGLWUeWFu2Aa+oJ4/zeAQNL+DafWboHc567RQ4Vb5KqE5QZoCFskWUUYqJYA==
   dependencies:
     core-js "^3.0.1"
     ts-dedent "^1.1.1"
     util-deprecate "^1.0.2"
 
-"@storybook/client-api@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fclient-api/-/client-api-6.0.22.tgz#b6079d376b49eb23b69661474446ed402bdef235"
-  integrity sha512-GP9m1LW3C79EJxTGToCvBZDEApMRCl9tVXGfB9yEB0dIFC9jTwsPfpwjnhh2Imp9xJjszahSqxkhv4rAZ8C44Q==
+"@storybook/client-api@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fclient-api/-/client-api-6.0.26.tgz#ac9334ba86834e5cb23fc4fb577de60bda66164d"
+  integrity sha512-Qd5wR5b5lio/EchuJMhAmmJAE1pfvnEyu+JnyFGwMZLV9mN9NSspz+YsqbSCCDZsYcP5ewvPEnumIWqmj/wagQ==
   dependencies:
-    "@storybook/addons" "6.0.22"
-    "@storybook/channel-postmessage" "6.0.22"
-    "@storybook/channels" "6.0.22"
-    "@storybook/client-logger" "6.0.22"
-    "@storybook/core-events" "6.0.22"
+    "@storybook/addons" "6.0.26"
+    "@storybook/channel-postmessage" "6.0.26"
+    "@storybook/channels" "6.0.26"
+    "@storybook/client-logger" "6.0.26"
+    "@storybook/core-events" "6.0.26"
     "@storybook/csf" "0.0.1"
     "@types/qs" "^6.9.0"
     "@types/webpack-env" "^1.15.2"
@@ -3394,22 +3284,22 @@
     ts-dedent "^1.1.1"
     util-deprecate "^1.0.2"
 
-"@storybook/client-logger@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fclient-logger/-/client-logger-6.0.22.tgz#4e4b2c40b708b500611d5e207099a4e46e825590"
-  integrity sha512-AQD2Zz7BIIwrP0/sNZMXgP/BEZo5qK1YPDl2mPppSJdFocVCYDlc6HgYPZZHtPvD5BVWAENg2NQoGBOivuMl3g==
+"@storybook/client-logger@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fclient-logger/-/client-logger-6.0.26.tgz#e3d28bd8dc02ec2c53a9d69773a68189590b746f"
+  integrity sha512-VNoL6/oehVhn3hZi9vrTNT+C/3oAZKV+smfZFnPtsCR/Fq7CKbmsBd0pGPL57f81RU8e8WygwrIlAGJTDSNIjw==
   dependencies:
     core-js "^3.0.1"
     global "^4.3.2"
 
-"@storybook/components@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fcomponents/-/components-6.0.22.tgz#07b0804fb9b39787967be88d435540adddce328d"
-  integrity sha512-sc7O4djNLajyJdVY4dUSO73L/+VM8IyzYKK9c5kSw4pN+l6M3EUBi4Zt/jdQc+WxSBmmriSe7aBOKrOSxBBSiA==
+"@storybook/components@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fcomponents/-/components-6.0.26.tgz#e1f6e16aae850a71c9ac7bdd1d44a068ec9cfdc1"
+  integrity sha512-8wigI1pDFJO1m1IQWPguOK+nOsaAVRWkVdu+2te/rDcIR9QNvMzzou0+Lhfp3zKSVT4E6mEoGB/TWXXF5Iq0sQ==
   dependencies:
-    "@storybook/client-logger" "6.0.22"
+    "@storybook/client-logger" "6.0.26"
     "@storybook/csf" "0.0.1"
-    "@storybook/theming" "6.0.22"
+    "@storybook/theming" "6.0.26"
     "@types/overlayscrollbars" "^1.9.0"
     "@types/react-color" "^3.0.1"
     "@types/react-syntax-highlighter" "11.0.4"
@@ -3430,17 +3320,17 @@
     react-textarea-autosize "^8.1.1"
     ts-dedent "^1.1.1"
 
-"@storybook/core-events@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fcore-events/-/core-events-6.0.22.tgz#1bbdef9d50cea628f6f761117b6ddb9927caebf8"
-  integrity sha512-XQplzZwC9o4OQbKPjBruIOSFGto6qtmIAuh94NaHB6Hpv8YpsDwy1fXxEr990fj/5bOXmL4YV3x1AD6fOK/1sA==
+"@storybook/core-events@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fcore-events/-/core-events-6.0.26.tgz#61181c9a8610d26cc85d47f133a563879044ca2d"
+  integrity sha512-nWjS/+kMiw31OPgeJQaiFsJk9ZJJo3/d4c+kc6GOl2iC1H3Q4/5cm3NvJBn/7bUtKHmSFwfbDouj+XjUk5rZbQ==
   dependencies:
     core-js "^3.0.1"
 
-"@storybook/core@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fcore/-/core-6.0.22.tgz#3ea911f486bbf5918976f0101627057af58d2f34"
-  integrity sha512-VgzybAKw5Jd5HzpVukvKLj2ScZ8bzJAvhoFAab3zegNyk1bK+qUK8vYDWP5dzaINvW63zA/D5kyjfZP8T9EofQ==
+"@storybook/core@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fcore/-/core-6.0.26.tgz#ff587929d0f55cefa8405686e831e79aeeb6870e"
+  integrity sha512-2kmkxbzDJVrjzCjlseffoQJwZRH9bHZUumo5m8gpbN9kVnADER7yd6RUf2Zle5BK3ExC+0PPI1Whfg0qkiXvqw==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.8.3"
     "@babel/plugin-proposal-decorators" "^7.8.3"
@@ -3463,20 +3353,20 @@
     "@babel/preset-react" "^7.8.3"
     "@babel/preset-typescript" "^7.9.0"
     "@babel/register" "^7.10.5"
-    "@storybook/addons" "6.0.22"
-    "@storybook/api" "6.0.22"
-    "@storybook/channel-postmessage" "6.0.22"
-    "@storybook/channels" "6.0.22"
-    "@storybook/client-api" "6.0.22"
-    "@storybook/client-logger" "6.0.22"
-    "@storybook/components" "6.0.22"
-    "@storybook/core-events" "6.0.22"
+    "@storybook/addons" "6.0.26"
+    "@storybook/api" "6.0.26"
+    "@storybook/channel-postmessage" "6.0.26"
+    "@storybook/channels" "6.0.26"
+    "@storybook/client-api" "6.0.26"
+    "@storybook/client-logger" "6.0.26"
+    "@storybook/components" "6.0.26"
+    "@storybook/core-events" "6.0.26"
     "@storybook/csf" "0.0.1"
-    "@storybook/node-logger" "6.0.22"
-    "@storybook/router" "6.0.22"
+    "@storybook/node-logger" "6.0.26"
+    "@storybook/router" "6.0.26"
     "@storybook/semver" "^7.3.2"
-    "@storybook/theming" "6.0.22"
-    "@storybook/ui" "6.0.22"
+    "@storybook/theming" "6.0.26"
+    "@storybook/ui" "6.0.26"
     "@types/glob-base" "^0.3.0"
     "@types/micromatch" "^4.0.1"
     "@types/node-fetch" "^2.5.4"
@@ -3547,10 +3437,10 @@
   dependencies:
     lodash "^4.17.15"
 
-"@storybook/node-logger@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fnode-logger/-/node-logger-6.0.22.tgz#a95bb605309baf6bd768fa57dff77760f41c7f10"
-  integrity sha512-H5j0zjMmg6o+wQgiY1GWlgz6cciHJN5vw7/B/hUksMHOwc+30nrGa89dDouj2ze1vJfiY3AaOMrsgtuMYFXaHQ==
+"@storybook/node-logger@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fnode-logger/-/node-logger-6.0.26.tgz#2ef95ea1e2defd4efcba6b23431ea5c5cbaa110b"
+  integrity sha512-mdILu91d/2ZgYfICoAMBjwBAYOgjk2URsPudrs5+23lFoPPIwf4CPWcfgs0f4GdfoICk3kV0W7+8bIARhRKp3g==
   dependencies:
     "@types/npmlog" "^4.1.2"
     chalk "^4.0.0"
@@ -3559,15 +3449,15 @@
     pretty-hrtime "^1.0.3"
 
 "@storybook/react@^6.0.4":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2freact/-/react-6.0.22.tgz#64ff401194d7be62d238f766b47e85d7f170e4d1"
-  integrity sha512-sErMo8+KxuELTbx4VboAYEsgDEXXio1Tqmp1jfLoUhXIvQtcfbT9DrtwOoR4mixf7LwISuLikorTyOL+Z6Vg3g==
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2freact/-/react-6.0.26.tgz#5d4b8f2c6d8003912d371298a6e5a945e24680b4"
+  integrity sha512-X02VpIEhpVc4avYiff861c015++tvMVSXJSrDP5J1xTAglVEiRFcU0Kn5h96o9N8FTup2n2xyj6Y7e8oC9yLXQ==
   dependencies:
     "@babel/preset-flow" "^7.0.0"
     "@babel/preset-react" "^7.0.0"
-    "@storybook/addons" "6.0.22"
-    "@storybook/core" "6.0.22"
-    "@storybook/node-logger" "6.0.22"
+    "@storybook/addons" "6.0.26"
+    "@storybook/core" "6.0.26"
+    "@storybook/node-logger" "6.0.26"
     "@storybook/semver" "^7.3.2"
     "@svgr/webpack" "^5.4.0"
     "@types/webpack-env" "^1.15.2"
@@ -3584,10 +3474,10 @@
     ts-dedent "^1.1.1"
     webpack "^4.43.0"
 
-"@storybook/router@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2frouter/-/router-6.0.22.tgz#90dc8eb5c766b85b555cc103ac6197d7c11700be"
-  integrity sha512-Gu3PmWXaDDhDqTY/S8/ag2OCdTb0S+aD/QkXvQzSht5gt5d8M2tQxBlhXDVFNhYGRz7zQtjRmTxqT/3YX9tjrg==
+"@storybook/router@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2frouter/-/router-6.0.26.tgz#5b991001afa7d7eb5e40c53cd4c58266b6f9edfd"
+  integrity sha512-kQ1LF/2gX3IkjS1wX7CsoeBc9ptHQzOsyax16rUyJa769DT5vMNtFtQxjNXMqSiSapPg2yrXJFKQNaoWvKgQEQ==
   dependencies:
     "@reach/router" "^1.3.3"
     "@types/reach__router" "^1.3.5"
@@ -3604,15 +3494,15 @@
     core-js "^3.6.5"
     find-up "^4.1.0"
 
-"@storybook/theming@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2ftheming/-/theming-6.0.22.tgz#c50877d19c9807cc35655d78f8b5c866b861b853"
-  integrity sha512-aR11z70vq0G+F61PIJHW1Kt1lmA2vYxGWF1TL6rsECXNt4fN+X9ig082G0Uhag0mV/FJZdKhhpv360paJFYF2g==
+"@storybook/theming@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2ftheming/-/theming-6.0.26.tgz#e5b545fb2653dfd1b043b567197d490b1c3c0da3"
+  integrity sha512-9yon2ofb9a+RT1pdvn8Njydy7XRw0qXcIsMqGsJRKoZecmRRozqB6DxH9Gbdf1vRSbM9gYUUDjbiMDFz7+4RiQ==
   dependencies:
     "@emotion/core" "^10.0.20"
     "@emotion/is-prop-valid" "^0.8.6"
     "@emotion/styled" "^10.0.17"
-    "@storybook/client-logger" "6.0.22"
+    "@storybook/client-logger" "6.0.26"
     core-js "^3.0.1"
     deep-object-diff "^1.1.0"
     emotion-theming "^10.0.19"
@@ -3622,21 +3512,21 @@
     resolve-from "^5.0.0"
     ts-dedent "^1.1.1"
 
-"@storybook/ui@6.0.22":
-  version "6.0.22"
-  resolved "http://npm.dev.dxos.network:5736/@storybook%2fui/-/ui-6.0.22.tgz#f8aa93c66e66e99010d98a7344adf1c7a9839224"
-  integrity sha512-iueyQ3EnLHhbV6xWQWMoN1aenEh3jLAXFmabxrf1s/l0JKn0u6qr7BHZcu3VZJ4EJCEsh6wDFNWjaUbTpfDU5g==
+"@storybook/ui@6.0.26":
+  version "6.0.26"
+  resolved "http://npm.dev.dxos.network:5736/@storybook%2fui/-/ui-6.0.26.tgz#60e97d2044a3f63b489d7ad0b0529d93373b71ee"
+  integrity sha512-Jb7oUJs6uyW+rM4zA8xDn9T0/0XtUAOC/zBl6ofdhYU9rVjYKAQUJqmYgUHNOggq1NGS7BVp1RJIzDWGYEagsA==
   dependencies:
     "@emotion/core" "^10.0.20"
-    "@storybook/addons" "6.0.22"
-    "@storybook/api" "6.0.22"
-    "@storybook/channels" "6.0.22"
-    "@storybook/client-logger" "6.0.22"
-    "@storybook/components" "6.0.22"
-    "@storybook/core-events" "6.0.22"
-    "@storybook/router" "6.0.22"
+    "@storybook/addons" "6.0.26"
+    "@storybook/api" "6.0.26"
+    "@storybook/channels" "6.0.26"
+    "@storybook/client-logger" "6.0.26"
+    "@storybook/components" "6.0.26"
+    "@storybook/core-events" "6.0.26"
+    "@storybook/router" "6.0.26"
     "@storybook/semver" "^7.3.2"
-    "@storybook/theming" "6.0.22"
+    "@storybook/theming" "6.0.26"
     "@types/markdown-to-jsx" "^6.11.0"
     copy-to-clipboard "^3.0.8"
     core-js "^3.0.1"
@@ -3805,11 +3695,6 @@
   resolved "http://npm.dev.dxos.network:5736/@types%2fbraces/-/braces-3.0.0.tgz#7da1c0d44ff1c7eb660a36ec078ea61ba7eb42cb"
   integrity sha512-TbH79tcyi9FHwbyboOKeRachRq63mSuWYXOflsNO9ZyE5ClQ/JaozNKl+aWUq87qPNsXasXxi2AbgfwIJ+8GQw==
 
-"@types/color-name@^1.1.1":
-  version "1.1.1"
-  resolved "http://npm.dev.dxos.network:5736/@types%2fcolor-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
-  integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
-
 "@types/debug@^4.1.1":
   version "4.1.5"
   resolved "http://npm.dev.dxos.network:5736/@types%2fdebug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
@@ -3930,9 +3815,9 @@
     form-data "^3.0.0"
 
 "@types/node@*", "@types/node@>= 8", "@types/node@^14.0.9":
-  version "14.11.2"
-  resolved "http://npm.dev.dxos.network:5736/@types%2fnode/-/node-14.11.2.tgz#2de1ed6670439387da1c9f549a2ade2b0a799256"
-  integrity sha512-jiE3QIxJ8JLNcb1Ps6rDbysDhN4xa8DJJvuC9prr6w+1tIh+QAbYyNF3tyiZNLDBIuBCf4KEcV2UvQm/V60xfA==
+  version "14.11.5"
+  resolved "http://npm.dev.dxos.network:5736/@types%2fnode/-/node-14.11.5.tgz#fecad41c041cae7f2404ad4b2d0742fdb628b305"
+  integrity sha512-jVFzDV6NTbrLMxm4xDSIW/gKnk8rQLF9wAzLWIOg+5nU6ACrIMndeBdXci0FGtqJbP9tQvm6V39eshc96TO2wQ==
 
 "@types/node@10.12.18":
   version "10.12.18"
@@ -3945,9 +3830,9 @@
   integrity sha512-Exw4yUWMBXM3X+8oqzJNRqZSwUAaS4+7NdvHqQuFi/d+synz++xmX3QIf+BFqneW8N31R8Ky+sikfZUXq07ggQ==
 
 "@types/node@^13.7.0":
-  version "13.13.21"
-  resolved "http://npm.dev.dxos.network:5736/@types%2fnode/-/node-13.13.21.tgz#e48d3c2e266253405cf404c8654d1bcf0d333e5c"
-  integrity sha512-tlFWakSzBITITJSxHV4hg4KvrhR/7h3xbJdSFbYJBVzKubrASbnnIFuSgolUh7qKGo/ZeJPKUfbZ0WS6Jp14DQ==
+  version "13.13.23"
+  resolved "http://npm.dev.dxos.network:5736/@types%2fnode/-/node-13.13.23.tgz#abd99b4b806144b257ae298b3aec5a2c10c74534"
+  integrity sha512-L31WmMJYKb15PDqFWutn8HNwrNK6CE6bkWgSB0dO1XpNoHrszVKV1Clcnfgd6c/oG54TVF8XQEvY2gQrW8K6Mw==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -4032,9 +3917,9 @@
     "@types/react" "*"
 
 "@types/react@*":
-  version "16.9.49"
-  resolved "http://npm.dev.dxos.network:5736/@types%2freact/-/react-16.9.49.tgz#09db021cf8089aba0cdb12a49f8021a69cce4872"
-  integrity sha512-DtLFjSj0OYAdVLBbyjhuV9CdGVHCkHn2R+xr3XkBvK2rS1Y1tkc14XSGjYgm5Fjjr90AxH9tiSzc1pCFMGO06g==
+  version "16.9.51"
+  resolved "http://npm.dev.dxos.network:5736/@types%2freact/-/react-16.9.51.tgz#f8aa51ffa9996f1387f63686696d9b59713d2b60"
+  integrity sha512-lQa12IyO+DMlnSZ3+AGHRUiUcpK47aakMMoBG8f7HGxJT8Yfe+WE128HIXaHOHVPReAW0oDS3KAI0JI2DDe1PQ==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -4439,14 +4324,14 @@ acorn-walk@^6.0.1:
   integrity sha512-7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==
 
 acorn@^6.0.1, acorn@^6.4.1:
-  version "6.4.1"
-  resolved "http://npm.dev.dxos.network:5736/acorn/-/acorn-6.4.1.tgz#531e58ba3f51b9dacb9a6646ca4debf5b14ca474"
-  integrity sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==
+  version "6.4.2"
+  resolved "http://npm.dev.dxos.network:5736/acorn/-/acorn-6.4.2.tgz#35866fd710528e92de10cf06016498e47e39e1e6"
+  integrity sha512-XtGIhXwF8YM8bJhGxG5kXgjkEuNGLTkoYqVE+KMR+aspr4KGYmKYg7yUe3KghyQ9yheNwLnjmzh/7+gfDBmHCQ==
 
 acorn@^7.1.0, acorn@^7.1.1:
-  version "7.4.0"
-  resolved "http://npm.dev.dxos.network:5736/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
-  integrity sha512-+G7P8jJmCHr+S+cLfQxygbWhXy+8YTVGzAkpEbcLo2mLoL7tij/VG41QSHACSf5QgYRhMZYHuNc6drJaO0Da+w==
+  version "7.4.1"
+  resolved "http://npm.dev.dxos.network:5736/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
+  integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
 address@1.1.2, address@^1.0.1:
   version "1.1.2"
@@ -4587,11 +4472,10 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
     color-convert "^1.9.0"
 
 ansi-styles@^4.0.0, ansi-styles@^4.1.0:
-  version "4.2.1"
-  resolved "http://npm.dev.dxos.network:5736/ansi-styles/-/ansi-styles-4.2.1.tgz#90ae75c424d008d2624c5bf29ead3177ebfcf359"
-  integrity sha512-9VGjrMsG1vePxcSweQsN20KY/c4zN0h9fLjqAbwbPfahM3t+NL+M9HC8xeXG2I8pX5NoamTGNuomEUFI7fcUjA==
+  version "4.3.0"
+  resolved "http://npm.dev.dxos.network:5736/ansi-styles/-/ansi-styles-4.3.0.tgz#edd803628ae71c04c85ae7a0906edad34b648937"
+  integrity sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==
   dependencies:
-    "@types/color-name" "^1.1.1"
     color-convert "^2.0.1"
 
 ansi-to-html@^0.6.11:
@@ -5234,9 +5118,9 @@ babel-plugin-transform-undefined-to-void@^6.9.4:
   integrity sha1-viQcqBQEAwZ4t0hxcyK4nQyP4oA=
 
 babel-preset-current-node-syntax@^0.1.2:
-  version "0.1.3"
-  resolved "http://npm.dev.dxos.network:5736/babel-preset-current-node-syntax/-/babel-preset-current-node-syntax-0.1.3.tgz#b4b547acddbf963cba555ba9f9cbbb70bfd044da"
-  integrity sha512-uyexu1sVwcdFnyq9o8UQYsXwXflIh8LvrF5+cKrYam93ned1CStffB3+BEcsxGSgagoA3GEyjDqO4a/58hyPYQ==
+  version "0.1.4"
+  resolved "http://npm.dev.dxos.network:5736/babel-preset-current-node-syntax/-/babel-preset-current-node-syntax-0.1.4.tgz#826f1f8e7245ad534714ba001f84f7e906c3b615"
+  integrity sha512-5/INNCYhUGqw7VbVjT/hb3ucjgkVHKXY7lX3ZjlN4gm565VyFmJUrJ/h+h16ECVB38R/9SF6aACydpKMLZ/c9w==
   dependencies:
     "@babel/plugin-syntax-async-generators" "^7.8.4"
     "@babel/plugin-syntax-bigint" "^7.8.3"
@@ -5949,9 +5833,9 @@ camelcase@^6.0.0:
   integrity sha512-8KMDF1Vz2gzOq54ONPJS65IvTUaB1cHJ2DMM7MbPmLZljDH1qpzzLsWdiN9pHh6qvkRVDTi/07+eNGch/oLU4w==
 
 caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001135:
-  version "1.0.30001140"
-  resolved "http://npm.dev.dxos.network:5736/caniuse-lite/-/caniuse-lite-1.0.30001140.tgz#30dae27599f6ede2603a0962c82e468bca894232"
-  integrity sha512-xFtvBtfGrpjTOxTpjP5F2LmN04/ZGfYV8EQzUIC/RmKpdrmzJrjqlJ4ho7sGuAMPko2/Jl08h7x9uObCfBFaAA==
+  version "1.0.30001144"
+  resolved "http://npm.dev.dxos.network:5736/caniuse-lite/-/caniuse-lite-1.0.30001144.tgz#bca0fffde12f97e1127a351fec3bfc1971aa3b3d"
+  integrity sha512-4GQTEWNMnVZVOFG3BK0xvGeaDAtiPAbG2N8yuMXuXzx/c2Vd4XoMPO8+E918zeXn5IF0FRVtGShBfkfQea2wHQ==
 
 canonical-json@^0.0.4:
   version "0.0.4"
@@ -6860,9 +6744,9 @@ css-what@2.1:
   integrity sha512-a+EPoD+uZiNfh+5fxw2nO9QwFa6nJe2Or35fGY6Ipw1R3R4AGz1d1TEZrCegvw2YTmZ0jXirGYlzxxpYSHwpEg==
 
 css-what@^3.2.1:
-  version "3.3.0"
-  resolved "http://npm.dev.dxos.network:5736/css-what/-/css-what-3.3.0.tgz#10fec696a9ece2e591ac772d759aacabac38cd39"
-  integrity sha512-pv9JPyatiPaQ6pf4OvD/dbfm0o5LviWmwxNWzblYf/1u9QZd0ihV+PMwy5jdQWQ3349kZmKEx9WXuSka2dM4cg==
+  version "3.4.1"
+  resolved "http://npm.dev.dxos.network:5736/css-what/-/css-what-3.4.1.tgz#81cb70b609e4b1351b1e54cbc90fd9c54af86e2e"
+  integrity sha512-wHOppVDKl4vTAOWzJt5Ek37Sgd9qq1Bmj/T1OjvicWbU5W7ru7Pqbn0Jdqii3Drx/h+dixHKXNhZYx7blthL7g==
 
 cssesc@^3.0.0:
   version "3.0.0"
@@ -7553,9 +7437,9 @@ ejs@^3.1.2:
     jake "^10.6.1"
 
 electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.571:
-  version "1.3.576"
-  resolved "http://npm.dev.dxos.network:5736/electron-to-chromium/-/electron-to-chromium-1.3.576.tgz#2e70234484e03d7c7e90310d7d79fd3775379c34"
-  integrity sha512-uSEI0XZ//5ic+0NdOqlxp0liCD44ck20OAGyLMSymIWTEAtHKVJi6JM18acOnRgUgX7Q65QqnI+sNncNvIy8ew==
+  version "1.3.577"
+  resolved "http://npm.dev.dxos.network:5736/electron-to-chromium/-/electron-to-chromium-1.3.577.tgz#9885f3f72c6e3367010b461ff6f2d9624a929720"
+  integrity sha512-dSb64JQSFif/pD8mpVAgSFkbVi6YHbK6JeEziwNNmXlr/Ne2rZtseFK5SM7JoWSLf6gP0gVvRGi4/2ZRhSX/rA==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -7715,37 +7599,37 @@ error-ex@^1.2.0, error-ex@^1.3.1:
     is-arrayish "^0.2.1"
 
 es-abstract@^1.17.0, es-abstract@^1.17.0-next.0, es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstract@^1.17.4, es-abstract@^1.17.5:
-  version "1.17.6"
-  resolved "http://npm.dev.dxos.network:5736/es-abstract/-/es-abstract-1.17.6.tgz#9142071707857b2cacc7b89ecb670316c3e2d52a"
-  integrity sha512-Fr89bON3WFyUi5EvAeI48QTWX0AyekGgLA8H+c+7fbfCkJwRWRMLd8CQedNEyJuoYYhmtEqY92pgte1FAhBlhw==
+  version "1.17.7"
+  resolved "http://npm.dev.dxos.network:5736/es-abstract/-/es-abstract-1.17.7.tgz#a4de61b2f66989fc7421676c1cb9787573ace54c"
+  integrity sha512-VBl/gnfcJ7OercKA9MVaegWsBHFjV492syMudcnQZvt/Dw8ezpcOHYZXa/J96O8vx+g4x65YKhxOwDUh63aS5g==
   dependencies:
     es-to-primitive "^1.2.1"
     function-bind "^1.1.1"
     has "^1.0.3"
     has-symbols "^1.0.1"
-    is-callable "^1.2.0"
-    is-regex "^1.1.0"
-    object-inspect "^1.7.0"
+    is-callable "^1.2.2"
+    is-regex "^1.1.1"
+    object-inspect "^1.8.0"
     object-keys "^1.1.1"
-    object.assign "^4.1.0"
+    object.assign "^4.1.1"
     string.prototype.trimend "^1.0.1"
     string.prototype.trimstart "^1.0.1"
 
-es-abstract@^1.18.0-next.0:
-  version "1.18.0-next.0"
-  resolved "http://npm.dev.dxos.network:5736/es-abstract/-/es-abstract-1.18.0-next.0.tgz#b302834927e624d8e5837ed48224291f2c66e6fc"
-  integrity sha512-elZXTZXKn51hUBdJjSZGYRujuzilgXo8vSPQzjGYXLvSlGiCo8VO8ZGV3kjo9a0WNJJ57hENagwbtlRuHuzkcQ==
+es-abstract@^1.18.0-next.0, es-abstract@^1.18.0-next.1:
+  version "1.18.0-next.1"
+  resolved "http://npm.dev.dxos.network:5736/es-abstract/-/es-abstract-1.18.0-next.1.tgz#6e3a0a4bda717e5023ab3b8e90bec36108d22c68"
+  integrity sha512-I4UGspA0wpZXWENrdA0uHbnhte683t3qT/1VFH9aX2dA5PPSf6QW5HHXf5HImaqPmjXaVeVk4RGWnaylmV7uAA==
   dependencies:
     es-to-primitive "^1.2.1"
     function-bind "^1.1.1"
     has "^1.0.3"
     has-symbols "^1.0.1"
-    is-callable "^1.2.0"
+    is-callable "^1.2.2"
     is-negative-zero "^2.0.0"
     is-regex "^1.1.1"
     object-inspect "^1.8.0"
     object-keys "^1.1.1"
-    object.assign "^4.1.0"
+    object.assign "^4.1.1"
     string.prototype.trimend "^1.0.1"
     string.prototype.trimstart "^1.0.1"
 
@@ -10065,7 +9949,7 @@ is-buffer@^1.0.2, is-buffer@^1.1.5:
   resolved "http://npm.dev.dxos.network:5736/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
-is-callable@^1.1.4, is-callable@^1.2.0:
+is-callable@^1.1.4, is-callable@^1.2.2:
   version "1.2.2"
   resolved "http://npm.dev.dxos.network:5736/is-callable/-/is-callable-1.2.2.tgz#c7c6715cd22d4ddb48d3e19970223aceabb080d9"
   integrity sha512-dnMqspv5nU3LoewK2N/y7KLtxtakvTuaCsU9FU50/QDmdbHNy/4/JuRtMHqRU22o3q+W89YQndQEeCVwK+3qrA==
@@ -10354,7 +10238,7 @@ is-promise@^2.1.0:
   resolved "http://npm.dev.dxos.network:5736/is-promise/-/is-promise-2.2.2.tgz#39ab959ccbf9a774cf079f7b40c7a26f763135f1"
   integrity sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==
 
-is-regex@^1.0.4, is-regex@^1.1.0, is-regex@^1.1.1:
+is-regex@^1.0.4, is-regex@^1.1.1:
   version "1.1.1"
   resolved "http://npm.dev.dxos.network:5736/is-regex/-/is-regex-1.1.1.tgz#c6f98aacc546f6cec5468a07b7b153ab564a57b9"
   integrity sha512-1+QkEcxiLlB7VEyFtyBg94e08OAsvq7FUBgApTq/w2ymCLyKJgDPsybBENVtA7XCQEgEXxKPonG+mvYRxh/LIg==
@@ -10948,9 +10832,9 @@ jest-worker@^25.5.0:
     supports-color "^7.0.0"
 
 jest-worker@^26.2.1:
-  version "26.3.0"
-  resolved "http://npm.dev.dxos.network:5736/jest-worker/-/jest-worker-26.3.0.tgz#7c8a97e4f4364b4f05ed8bca8ca0c24de091871f"
-  integrity sha512-Vmpn2F6IASefL+DVBhPzI2J9/GJUsqzomdeN+P+dK8/jKxbh8R3BtFnx3FIta7wYlPU62cpJMJQo4kuOowcMnw==
+  version "26.5.0"
+  resolved "http://npm.dev.dxos.network:5736/jest-worker/-/jest-worker-26.5.0.tgz#87deee86dbbc5f98d9919e0dadf2c40e3152fa30"
+  integrity sha512-kTw66Dn4ZX7WpjZ7T/SUDgRhapFRKWmisVAF0Rv4Fu8SLFD7eLbqpLvbxVqYhSgaWa7I+bW7pHnbyfNsH6stug==
   dependencies:
     "@types/node" "*"
     merge-stream "^2.0.0"
@@ -10966,9 +10850,9 @@ jest@^25.1.0:
     jest-cli "^25.5.4"
 
 js-data-structs@^1.1.2:
-  version "1.1.2"
-  resolved "http://npm.dev.dxos.network:5736/js-data-structs/-/js-data-structs-1.1.2.tgz#94f3c92474f23f98abd1553230c447b5f286a63e"
-  integrity sha512-GmAcRihJgGfZlY6WPn99yjiP3Bu5FKDudEFT5vYN9DWfHFcc3uiMGhjsSN4OjCLRKsftBx+DDxpjaK+mKJHb8Q==
+  version "1.1.3"
+  resolved "http://npm.dev.dxos.network:5736/js-data-structs/-/js-data-structs-1.1.3.tgz#9f7c1ad60bac5f6302081d7a5c5b6c547406b773"
+  integrity sha512-DUt0LPC98VMdIokd1WB6NJw8FYacMSX+TVEifWi36tFJxb0cvLaUT6+8kfq+MR661JY8Rg0qR8c7naic8HCMSg==
 
 js-message@1.0.5:
   version "1.0.5"
@@ -11155,9 +11039,9 @@ jsonparse@^1.2.0:
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
 jsonschema@^1.2.4:
-  version "1.2.7"
-  resolved "http://npm.dev.dxos.network:5736/jsonschema/-/jsonschema-1.2.7.tgz#4e6d6dc4d83dc80707055ba22c00ec6152c0e6e9"
-  integrity sha512-3dFMg9hmI9LdHag/BRIhMefCfbq1hicvYMy8YhZQorAdzOzWz7NjniSpn39yjpzUAMIWtGyyZuH2KNBloH7ZLw==
+  version "1.2.8"
+  resolved "http://npm.dev.dxos.network:5736/jsonschema/-/jsonschema-1.2.8.tgz#76efb90aa6062f9bd24ba4414965089b948e35ce"
+  integrity sha512-HZrVvnv9Ri3WK3t53Anu55eS+IYiQm+UcGE23oBEYi3gD1qODW+I7y4R28q2FyVhzGTDhxAEqTjbe5+jNkqmeQ==
 
 jsprim@^1.2.2:
   version "1.4.1"
@@ -12463,9 +12347,9 @@ modify-values@^1.0.0:
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
 moment@^2.24.0:
-  version "2.29.0"
-  resolved "http://npm.dev.dxos.network:5736/moment/-/moment-2.29.0.tgz#fcbef955844d91deb55438613ddcec56e86a3425"
-  integrity sha512-z6IJ5HXYiuxvFTI6eiQ9dm77uE0gyy1yXNApVHqTcnIKfY9tIwEjlzsZ6u1LQXvVgKeTnv9Xm7NDvJ7lso3MtA==
+  version "2.29.1"
+  resolved "http://npm.dev.dxos.network:5736/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 monotonic-timestamp@^0.0.9:
   version "0.0.9"
@@ -13176,18 +13060,18 @@ object-copy@^0.1.0:
     define-property "^0.2.5"
     kind-of "^3.0.3"
 
-object-inspect@^1.7.0, object-inspect@^1.8.0:
+object-inspect@^1.8.0:
   version "1.8.0"
   resolved "http://npm.dev.dxos.network:5736/object-inspect/-/object-inspect-1.8.0.tgz#df807e5ecf53a609cc6bfe93eac3cc7be5b3a9d0"
   integrity sha512-jLdtEOB112fORuypAyl/50VRVIBIdVQOSUUGQHzJ4xBSbit81zRarz7GThkEFZy1RceYrWYcPcBFPQwHyAc1gA==
 
 object-is@^1.0.1:
-  version "1.1.2"
-  resolved "http://npm.dev.dxos.network:5736/object-is/-/object-is-1.1.2.tgz#c5d2e87ff9e119f78b7a088441519e2eec1573b6"
-  integrity sha512-5lHCz+0uufF6wZ7CRFWJN3hp8Jqblpgve06U5CMQ3f//6iDjPr2PEo9MWCjEssDsa+UZEL4PkFpr+BMop6aKzQ==
+  version "1.1.3"
+  resolved "http://npm.dev.dxos.network:5736/object-is/-/object-is-1.1.3.tgz#2e3b9e65560137455ee3bd62aec4d90a2ea1cc81"
+  integrity sha512-teyqLvFWzLkq5B9ki8FVWA902UER2qkxmdA4nLf+wjOLAWgxzCWZNCxpDq9MvE8MmhWNr+I8w3BN49Vx36Y6Xg==
   dependencies:
     define-properties "^1.1.3"
-    es-abstract "^1.17.5"
+    es-abstract "^1.18.0-next.1"
 
 object-keys@^1.0.12, object-keys@^1.1.1:
   version "1.1.1"
@@ -13201,7 +13085,7 @@ object-visit@^1.0.0:
   dependencies:
     isobject "^3.0.0"
 
-object.assign@^4.1.0:
+object.assign@^4.1.0, object.assign@^4.1.1:
   version "4.1.1"
   resolved "http://npm.dev.dxos.network:5736/object.assign/-/object.assign-4.1.1.tgz#303867a666cdd41936ecdedfb1f8f3e32a478cdd"
   integrity sha512-VT/cxmx5yaoHSOTSyrCygIDFco+RsibY2NM0a4RdEeY/4KgqezwFtK1yr3U67xYhqJSlASm2pKhLVzPj2lr4bA==
@@ -14333,9 +14217,9 @@ query-string@^5.0.1:
     strict-uri-encode "^1.0.0"
 
 query-string@^6.9.0:
-  version "6.13.4"
-  resolved "http://npm.dev.dxos.network:5736/query-string/-/query-string-6.13.4.tgz#b35a9a3bd4955bce55f94feb0e819b3d0be6f66f"
-  integrity sha512-E2NPIeJoBEJGQNy3ib1k/Z/OkDBUKIo8IV2ZVwbKfoa65IS9unqWWUlLcbfU70Da0qNoxUZZA8CfKUjKLE641Q==
+  version "6.13.5"
+  resolved "http://npm.dev.dxos.network:5736/query-string/-/query-string-6.13.5.tgz#99e95e2fb7021db90a6f373f990c0c814b3812d8"
+  integrity sha512-svk3xg9qHR39P3JlHuD7g3nRnyay5mHbrPctEBDUxUkHRifPHXJDhBUycdCC0NBjXoDf44Gb+IsOZL1Uwn8M/Q==
   dependencies:
     decode-uri-component "^0.2.0"
     split-on-first "^1.0.0"
@@ -16415,12 +16299,12 @@ strong-log-transformer@^2.0.0:
     through "^2.3.4"
 
 style-loader@^1.2.1:
-  version "1.2.1"
-  resolved "http://npm.dev.dxos.network:5736/style-loader/-/style-loader-1.2.1.tgz#c5cbbfbf1170d076cfdd86e0109c5bba114baa1a"
-  integrity sha512-ByHSTQvHLkWE9Ir5+lGbVOXhxX10fbprhLvdg96wedFZb4NDekDPxVKv5Fwmio+QcMlkkNfuK+5W1peQ5CUhZg==
+  version "1.3.0"
+  resolved "http://npm.dev.dxos.network:5736/style-loader/-/style-loader-1.3.0.tgz#828b4a3b3b7e7aa5847ce7bae9e874512114249e"
+  integrity sha512-V7TCORko8rs9rIqkSrlMfkqA63DfoGBBJmK1kKGCcSi+BWb4cqz0SRsnp4l6rU5iwOEd0/2ePv68SV22VXon4Q==
   dependencies:
     loader-utils "^2.0.0"
-    schema-utils "^2.6.6"
+    schema-utils "^2.7.0"
 
 subleveldown@^4.1.4:
   version "4.1.4"
@@ -16931,14 +16815,14 @@ ts-pnp@^1.1.6:
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
 
 tslib@^1.10.0, tslib@^1.9.0:
-  version "1.13.0"
-  resolved "http://npm.dev.dxos.network:5736/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
-  integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
+  version "1.14.0"
+  resolved "http://npm.dev.dxos.network:5736/tslib/-/tslib-1.14.0.tgz#d624983f3e2c5e0b55307c3dd6c86acd737622c6"
+  integrity sha512-+Zw5lu0D9tvBMjGP8LpvMb0u2WW2QV3y+D8mO6J+cNzCYIN4sVy43Bf9vl92nqFahutN0I8zHa7cc4vihIshnw==
 
 tslib@^2.0.0, tslib@^2.0.1, tslib@~2.0.1:
-  version "2.0.1"
-  resolved "http://npm.dev.dxos.network:5736/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
-  integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
+  version "2.0.2"
+  resolved "http://npm.dev.dxos.network:5736/tslib/-/tslib-2.0.2.tgz#462295631185db44b21b1ea3615b63cd1c038242"
+  integrity sha512-wAH28hcEKwna96/UacuWaVspVLkg4x1aDM9JlzqaQTOFczCktkVAb5fmXChgandR1EraDPs2w8P+ozM+oafwxg==
 
 tty-browserify@0.0.0:
   version "0.0.0"
@@ -17040,9 +16924,9 @@ typeforce@^1.11.5:
   integrity sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==
 
 uglify-js@^3.1.4:
-  version "3.11.0"
-  resolved "http://npm.dev.dxos.network:5736/uglify-js/-/uglify-js-3.11.0.tgz#67317658d76c21e0e54d3224aee2df4ee6c3e1dc"
-  integrity sha512-e1KQFRCpOxnrJsJVqDUCjURq+wXvIn7cK2sRAx9XL3HYLL9aezOP4Pb1+Y3/o693EPk111Yj2Q+IUXxcpHlygQ==
+  version "3.11.1"
+  resolved "http://npm.dev.dxos.network:5736/uglify-js/-/uglify-js-3.11.1.tgz#32d274fea8aac333293044afd7f81409d5040d38"
+  integrity sha512-OApPSuJcxcnewwjSGGfWOjx3oix5XpmrK9Z2j0fTRlHGoZ49IU6kExfZTM0++fCArOOCet+vIfWwFHbvWqwp6g==
 
 uid-number@0.0.6:
   version "0.0.6"
@@ -17357,10 +17241,10 @@ uuid-parse@^1.1.0:
   resolved "http://npm.dev.dxos.network:5736/uuid-parse/-/uuid-parse-1.1.0.tgz#7061c5a1384ae0e1f943c538094597e1b5f3a65b"
   integrity sha512-OdmXxA8rDsQ7YpNVbKSJkNzTw2I+S5WsbMDnCtIWSQaosNAcWtFuI/YK1TjzUI6nbkgiqEyh8gWngfcv8Asd9A==
 
-uuid@8.3.0, uuid@^8.0.0:
-  version "8.3.0"
-  resolved "http://npm.dev.dxos.network:5736/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
-  integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
+uuid@8.3.1, uuid@^8.0.0:
+  version "8.3.1"
+  resolved "http://npm.dev.dxos.network:5736/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
+  integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
 
 uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2, uuid@^3.3.3, uuid@^3.4.0:
   version "3.4.0"
@@ -17368,12 +17252,12 @@ uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2, uuid@^3.3.3, uuid@^3.4.0:
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
 uuidv4@^6.0.2:
-  version "6.2.3"
-  resolved "http://npm.dev.dxos.network:5736/uuidv4/-/uuidv4-6.2.3.tgz#b478932d508484fda8a6a964fe2b897cca5eede2"
-  integrity sha512-4hxGisl76Y6A7nkadg5gMrPGVYVGLmJ3fZHVvmnXsy+8DMA7n7YV/4Y72Fw38CCwpZpyPgOaa/4YxhkCYwyNNQ==
+  version "6.2.4"
+  resolved "http://npm.dev.dxos.network:5736/uuidv4/-/uuidv4-6.2.4.tgz#8cd299e68c007c268f974d3fbe681902434f61a1"
+  integrity sha512-H6sXuVFXjI0YXX2ItB0ZTJF+qx/W138S0707p1dbrWeb5yzQJhJIfH0dgq0LNFcPaHYM8NSI3r+tlZbfABPNWQ==
   dependencies:
     "@types/uuid" "8.3.0"
-    uuid "8.3.0"
+    uuid "8.3.1"
 
 v8-compile-cache@^2.0.3, v8-compile-cache@^2.1.1:
   version "2.1.1"
