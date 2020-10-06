@@ -1286,22 +1286,22 @@
   dependencies:
     debug "^4.1.1"
 
-"@dxos/echo-db@0.2.0-dev.3":
-  version "0.2.0-dev.3"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-db/-/echo-db-0.2.0-dev.3.tgz#671471aef2ab79543eec446b21f748b82c999413"
-  integrity sha512-p7pMgjXe3/ogXm3v8k3RoGvHmDCDakx7MIFh1Wh9tqzMGfFR0+0oNOqdk23jonhivmqZaAf6IaVP++wNhpUaFQ==
+"@dxos/echo-db@0.2.0-dev.6":
+  version "0.2.0-dev.6"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-db/-/echo-db-0.2.0-dev.6.tgz#2030348a63fd46f1b94f6c283a99b329646fc761"
+  integrity sha512-Ku1+yQgZnO94uOFVFgT54mSaed4eA301VblV5RqMe8Lddn+Njn8aUyQ9z0xxD4jDIPkIP6op9H4ZEKB5I0XATQ==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
     "@dxos/credentials" "1.0.1-beta.52"
     "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^0.2.0-dev.3+85a5fe0"
+    "@dxos/echo-protocol" "^0.2.0-dev.6+811f881"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^0.2.0-dev.3+85a5fe0"
-    "@dxos/network-manager" "1.0.0-beta.106"
-    "@dxos/object-model" "^0.2.0-dev.3+85a5fe0"
+    "@dxos/model-factory" "^0.2.0-dev.6+811f881"
+    "@dxos/network-manager" "^1.0.0-beta.108"
+    "@dxos/object-model" "^0.2.0-dev.6+811f881"
     "@dxos/protocol-plugin-replicator" "^1.1.0-beta.14"
-    "@dxos/util" "^0.2.0-dev.3+85a5fe0"
+    "@dxos/util" "^0.2.0-dev.6+811f881"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/json-stable-stringify" "^1.0.32"
@@ -1340,10 +1340,10 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/echo-protocol@^0.2.0-dev.3+85a5fe0":
-  version "0.2.0-dev.3"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-protocol/-/echo-protocol-0.2.0-dev.3.tgz#a808867830ef2779404910ed2ef8457703e4fec9"
-  integrity sha512-CU2GWzs+wPE/BiNL/PPnsRYTx5sImaidEEBzSD8yyKiJcdUwb87wNJ5+pGGivi+xcFkO2kBxzztwkX8IDtIL+g==
+"@dxos/echo-protocol@^0.2.0-dev.6+811f881":
+  version "0.2.0-dev.6"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fecho-protocol/-/echo-protocol-0.2.0-dev.6.tgz#20a79bb9a42699a41e606ef86370be37cf7d11ca"
+  integrity sha512-loYisn6SMQeqlMpg6M+FRtH10lNRDpBuOaTiEM9U/Jifbqiw1B9yv9lb2YdwJSRciezOFtk6/acQkAlRA/mGLA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-experimental-runtime" "^1.0.2"
@@ -1351,7 +1351,7 @@
     "@dxos/credentials" "1.0.1-beta.52"
     "@dxos/crypto" "^1.0.0-beta.7"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^0.2.0-dev.3+85a5fe0"
+    "@dxos/util" "^0.2.0-dev.6+811f881"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1475,17 +1475,17 @@
     lodash.set "^4.3.2"
     lodash.unset "^4.5.2"
 
-"@dxos/model-factory@0.2.0-dev.3", "@dxos/model-factory@^0.2.0-dev.3+85a5fe0":
-  version "0.2.0-dev.3"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-0.2.0-dev.3.tgz#f81ef165bd4a730f402a30ccffb9549850217f03"
-  integrity sha512-lYnX1MbXDxNNbRfxWwEU1aHlSMuBFPXXvEvMy4aPKibG+jvYPkPS+PSSwgABNzfx/oVhenlz+2pQqnSTBu0n3g==
+"@dxos/model-factory@0.2.0-dev.6", "@dxos/model-factory@^0.2.0-dev.6+811f881":
+  version "0.2.0-dev.6"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fmodel-factory/-/model-factory-0.2.0-dev.6.tgz#e2596436c05405fb40da78742ee15c33ea8aca8e"
+  integrity sha512-jDOFEADPYYh1jYVs9822X3vyPOZOq1hXBEHr6Gxsi7+mjQ2bFlvRyNi0nKh+r0tojCP+NAAWFSVqEqhhie+OhA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
     "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^0.2.0-dev.3+85a5fe0"
+    "@dxos/echo-protocol" "^0.2.0-dev.6+811f881"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^0.2.0-dev.3+85a5fe0"
+    "@dxos/util" "^0.2.0-dev.6+811f881"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1581,20 +1581,6 @@
     ngraph.graph "^19.0.3"
     source-map-support "^0.5.12"
 
-"@dxos/network-manager@1.0.0-beta.106":
-  version "1.0.0-beta.106"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fnetwork-manager/-/network-manager-1.0.0-beta.106.tgz#e11b199d1ae665ffee437a4ea1cf7620b751bfb3"
-  integrity sha512-Kgz1Z98SFPjnHeaUt9RUMu8RwNztl2zBN0qc2/wCUSOBVEmabSVAS5iXXbDjOPwiv7vr9whSdVqqwGmO5iLnEw==
-  dependencies:
-    "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/metrics" "^1.0.0-beta.6"
-    "@dxos/protocol" "^1.1.0-beta.1"
-    "@geut/discovery-swarm-webrtc" "^3.0.0-beta.3"
-    "@wirelineio/discovery-swarm-memory" "^0.2.17"
-    assert "^2.0.0"
-    debug "^4.1.1"
-    wrtc "^0.4.3"
-
 "@dxos/network-manager@^1.0.0-beta.107":
   version "1.0.0-beta.107"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2fnetwork-manager/-/network-manager-1.0.0-beta.107.tgz#86cb14f1ad27a92c69fb6779124ff350f9c1eb7e"
@@ -1623,18 +1609,18 @@
     debug "^4.1.1"
     wrtc "^0.4.3"
 
-"@dxos/object-model@0.2.0-dev.3", "@dxos/object-model@^0.2.0-dev.3+85a5fe0":
-  version "0.2.0-dev.3"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fobject-model/-/object-model-0.2.0-dev.3.tgz#4e6e9ba0a71a6d9a081eee702c419bc4b0312e43"
-  integrity sha512-uDBqdxBVMf7Jbuja3z5VLgjJbGzxQNPqMB2KARhkJ+7j5V81exlOVo2T9soON4GmRNF3FQRzO966Ozg3rbsvWQ==
+"@dxos/object-model@0.2.0-dev.6", "@dxos/object-model@^0.2.0-dev.6+811f881":
+  version "0.2.0-dev.6"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fobject-model/-/object-model-0.2.0-dev.6.tgz#e7ca5ea0b3c20b47c8dfc9428b65a66ae334dd37"
+  integrity sha512-vnAmRQkTuuwZnYUV9u+MvmxWPJTpmj/rDawfiG+vJ72aXnO3lARA9RHthnwQ/8kKp2O2/PDoLDsmVifaEQxTFg==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
     "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^0.2.0-dev.3+85a5fe0"
+    "@dxos/echo-protocol" "^0.2.0-dev.6+811f881"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^0.2.0-dev.3+85a5fe0"
-    "@dxos/util" "^0.2.0-dev.3+85a5fe0"
+    "@dxos/model-factory" "^0.2.0-dev.6+811f881"
+    "@dxos/util" "^0.2.0-dev.6+811f881"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1777,10 +1763,10 @@
     prop-types "^15.5.8"
     react-base16-styling "^0.5.1"
 
-"@dxos/util@^0.2.0-dev.3+85a5fe0":
-  version "0.2.0-dev.3"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2futil/-/util-0.2.0-dev.3.tgz#b83ac9edf20805985001f1bf6eb00378570219a8"
-  integrity sha512-fEVgAhB7kgVxjmFICb0LeT0rnclsJPET497s6B7frUsuwg6+75HwG0fn87v8ZhoyVMyg4neGBl5kZslSyCi18Q==
+"@dxos/util@^0.2.0-dev.6+811f881":
+  version "0.2.0-dev.6"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2futil/-/util-0.2.0-dev.6.tgz#75374c00b8be8e988f5be4e09e2d92b5157bf0ca"
+  integrity sha512-bWjLSsb+oFcATj68LLllNoC/T107KeLQNxY2WHTjk8vPPOvYPHnvOF3eZuJ7wrOof3/ZffiG44QIQrctDCoOOA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^1.1.0-beta.0"
