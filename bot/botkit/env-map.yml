@@ -53,3 +53,5 @@ WIRE_BOT_IPC_SERVER:
   path: bot.ipc.serverId
 WIRE_CLI_NODE_PATH:
   path: cli.nodePath
+WIRE_BOT_CONTROL_TOPIC:
+  path: bot.controlTopic

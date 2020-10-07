@@ -4,11 +4,9 @@
 
 import assert from 'assert';
 import fs from 'fs-extra';
-import os from 'os';
 import path from 'path';
 import download from 'download';
 import url from 'url';
-import get from 'lodash.get';
 
 import { log } from './log';
 
@@ -35,40 +33,6 @@ export const LOCAL_BOT_RUN_COMMAND = 'yarn';
 export const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
 
 const DOWNLOAD_TIMEOUT = 40000;
-
-/**
- * Get platform info.
- */
-export const getPlatformInfo = () => {
-  let platform = os.type().toLowerCase();
-  platform = (platform === 'darwin' ? 'macos' : platform);
-
-  const arch = os.arch();
-
-  return { platform, arch };
-};
-
-export const getBotCID = (botRecord, env) => {
-  let packageAttrName;
-  switch (env) {
-    case NATIVE_ENV: {
-      const { platform, arch } = getPlatformInfo();
-      packageAttrName = `${platform}.${arch}["/"]`;
-      break;
-    }
-    case NODE_ENV: {
-      packageAttrName = 'node["/"]';
-      break;
-    }
-    default: {
-      throw new Error(`Environment '${env}' not supported.`);
-    }
-  }
-  const ipfsCID = get(botRecord, `attributes.package.${packageAttrName}`);
-  assert(ipfsCID, `Package '${packageAttrName}' not found.`);
-
-  return ipfsCID;
-};
 
 export const removeSourceFiles = async () => {
   await fs.remove(BOT_PACKAGE_DOWNLOAD_DIR);

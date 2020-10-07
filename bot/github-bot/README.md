@@ -1,4 +1,4 @@
-# Store Bot
+# GitHub Bot
 
 ## Development
 
@@ -19,7 +19,7 @@ New instance of bot could be spawned using either CLI or Invitation Popup in GUI
 In new terminal, use CLI to spawn a bot, using topic from BotFactory output:
 
 ```
-$ wire bot spawn --bot-id="wrn://dxos/bot/store" --topic <Bot Factory Topic>
+$ wire bot spawn --bot-id="wrn://dxos/bot/github" --topic <Bot Factory Topic>
 ```
 
 This will produce an output that contains unique Bot ID.
