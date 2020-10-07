@@ -1236,6 +1236,44 @@
     stream-to-array "^2.3.0"
     uuid "^3.3.2"
 
+"@dxos/credentials@^0.2.8":
+  version "0.2.8"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fcredentials/-/credentials-0.2.8.tgz#7822130bce35dfa8e6c8b4f812f517e09f155294"
+  integrity sha512-XBykaY3QQrtl1wIlaG3AcRJaxyB0FMqZY8rV6Gt2o95WTdD0p8zN5Y9c6SLesUDxhxgIfq6nIGguWh9O1pTY1w==
+  dependencies:
+    "@dxos/codec-protobuf" "^1.1.0-beta.10"
+    "@dxos/crypto" "^1.0.0-beta.1"
+    "@dxos/feed-store" "^1.2.0-beta.23"
+    "@dxos/protocol" "^1.1.0-beta.1"
+    "@types/pify" "^3.0.2"
+    "@types/pump" "^1.1.0"
+    bip39 "^3.0.2"
+    buffer-json-encoding "^1.0.2"
+    crypto-js "^3.1.9-1"
+    debug "^4.1.1"
+    encoding-down "^6.3.0"
+    end-of-stream "^1.4.1"
+    hypercore-crypto "^1.0.0"
+    hypercore-protocol "^6.11.1"
+    hypertrie "^3.8.0"
+    json-stable-stringify "^1.0.1"
+    leveldown "^5.4.1"
+    levelup "^4.3.2"
+    lodash.defaultsdeep "^4.6.1"
+    lodash.get "^4.4.2"
+    lodash.isobject "^3.0.2"
+    lodash.isplainobject "^4.0.6"
+    lodash.mapvalues "^4.6.0"
+    lodash.matches "^4.6.0"
+    memdown "^5.1.0"
+    moment "^2.24.0"
+    ngraph.graph "^18.0.1"
+    pump "^3.0.0"
+    queue-microtask "^1.1.2"
+    source-map-support "^0.5.12"
+    stream-to-array "^2.3.0"
+    uuid "^3.3.2"
+
 "@dxos/credentials@^1.0.1-beta.51", "@dxos/credentials@^1.0.1-beta.52":
   version "1.0.1-canary.6"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2fcredentials/-/credentials-1.0.1-canary.6.tgz#1dfbde2debf2cc6829a7913d1cd1aec8142840f5"
@@ -1618,10 +1656,10 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/party-manager@^0.2.7":
-  version "0.2.7"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fparty-manager/-/party-manager-0.2.7.tgz#7e1c3ea507b36607317cca803225d12a4bf6ac23"
-  integrity sha512-mYRNtJnO61P6SrJVHnDMqr1q97YCCxz4GucQuV6qnHrIjdXFDEB27p5nuuuxYgTFnlrzIktXVLYG3aOXDPgKAw==
+"@dxos/party-manager@^0.2.8":
+  version "0.2.8"
+  resolved "http://npm.dev.dxos.network:5736/@dxos%2fparty-manager/-/party-manager-0.2.8.tgz#57a012f9e798793625ad2effa37c76ced06b499f"
+  integrity sha512-FpWdxf2YeCjlGIt/j54c/ztKUAnRQcKubHYNiJvIP/c91wgyTfV25AB8le68quFojpFE8pGgZbezMzLwAGnyQw==
   dependencies:
     "@dxos/async" "^1.0.0-beta.1"
     "@dxos/credentials" "^1.0.1-beta.52"
