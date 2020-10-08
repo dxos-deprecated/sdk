@@ -1,6 +1,6 @@
 # On every push to the desgnated branch, build test and publish to private npm registry using lerna.
 
-name: Build and Publish Canary Branch to DXOS NPM
+name: Build and Publish Dev Branch to DXOS NPM
 
 on:
   push:
