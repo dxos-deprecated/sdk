@@ -1712,17 +1712,6 @@
     debug "^4.1.1"
     source-map-support "^0.5.12"
 
-"@dxos/protocol-plugin-messenger@^1.1.0-alpha.4":
-  version "1.1.0-beta.17"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fprotocol-plugin-messenger/-/protocol-plugin-messenger-1.1.0-beta.17.tgz#1cc04d1fc3825a26bcd6a6f45371990dd330a1e1"
-  integrity sha512-kIxLt3j0M2vFbeMB4evNvQqPSHkr1bPSIM59syNXeD7ncLVvhyWUe+ebw5y6BzoOEcEUcY6lLGhZlerDwKCl6Q==
-  dependencies:
-    "@dxos/broadcast" "^1.0.0-beta.6"
-    "@dxos/codec-protobuf" "^1.1.0-beta.9"
-    "@dxos/protocol" "^1.1.0-beta.17"
-    debug "^4.1.1"
-    source-map-support "^0.5.12"
-
 "@dxos/protocol-plugin-presence@^1.1.0-beta.17":
   version "1.1.0-beta.17"
   resolved "http://npm.dev.dxos.network:5736/@dxos%2fprotocol-plugin-presence/-/protocol-plugin-presence-1.1.0-beta.17.tgz#26d3ad56694fe1d1899695f007a7552611c24fae"

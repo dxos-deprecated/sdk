@@ -105,8 +105,6 @@ export class BotManager {
     let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
     assert(botName || ipfsCID || this._localDev);
 
-    log(`Spawn bot request for ${botName || ipfsCID}`);
-
     if (!ipfsCID) {
       const botRecord = await this._getBotRecord(botName);
       if (!this._localDev) {
@@ -121,6 +119,8 @@ export class BotManager {
         id = get(botRecord, 'id');
       }
     }
+
+    log(`Spawn bot request for ${botName || ipfsCID || displayName}`);
 
     assert(id, 'Invalid Bot Id.');
     assert(displayName, 'Invalid Bot Name.');
