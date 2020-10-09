@@ -25,8 +25,7 @@ import {
   createEvent
 } from '@dxos/protocol-plugin-bot';
 
-import { Keyring } from '@dxos/credentials';
-import { createClient } from '@dxos/client';
+import { Client } from '@dxos/client';
 import { transportProtocolProvider } from '@dxos/network-manager';
 
 // TODO(egorgripasov): Proper version from corresponding .yml file.
@@ -75,7 +74,12 @@ export class BotFactory {
    * Start factory.
    */
   async start () {
-    this._client = await createClient(ram, new Keyring(), getClientConfig(this._config));
+    this._client = new Client({
+      storage: ram,
+      swarm: getClientConfig(this._config).swarm
+    });
+    await this._client.initialize();
+
     this._botManager = new BotManager(this._config, this._botContainer, this._client, {
       signChallenge: this.signChallenge.bind(this),
       emitBotEvent: this.emitBotEvent.bind(this)

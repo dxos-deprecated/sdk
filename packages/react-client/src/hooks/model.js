@@ -15,6 +15,9 @@ const { log, error } = logs('react-client:model');
 const defaultOptionsFn = props => props;
 const defaultPropsFn = props => props;
 
+/**
+ * @deprecated
+ */
 export const useModel = ({
   model: modelType,
   options: {
@@ -22,6 +25,8 @@ export const useModel = ({
     ...options
   }
 }) => {
+  console.warn('useModel is deprecated. Please see useItems and useParties instead.');
+
   const client = useClient();
 
   const [, forceUpdate] = useState(null);
