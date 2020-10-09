@@ -5,7 +5,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { InvitationDescriptor, InvitationDescriptorType } from '@dxos/party-manager';
+import { InvitationDescriptor, InvitationDescriptorType } from '@dxos/echo-db';
 import { useAuthenticator } from '@dxos/react-client';
 import { createPath, useQuery } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';

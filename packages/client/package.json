@@ -1,6 +1,6 @@
 {
   "name": "@dxos/client",
-  "version": "1.1.0-beta.15",
+  "version": "1.1.0-canary.39+e96e495",
   "license": "AGPLv3",
   "author": "DXOS.org",
   "main": "dist/es/index.js",
@@ -15,14 +15,15 @@
   "dependencies": {
     "@babel/runtime": "^7.9.6",
     "@dxos/async": "^1.0.0-beta.1",
-    "@dxos/credentials": "^0.2.7",
+    "@dxos/credentials": "^0.2.8",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
+    "@dxos/echo-db": "^0.2.0-dev.10",
     "@dxos/feed-store": "^1.2.0-beta.1",
     "@dxos/metrics": "^1.0.0-beta.6",
-    "@dxos/model-factory": "^1.0.0-beta.27",
+    "@dxos/model-factory": "^0.2.0-dev.10",
     "@dxos/network-manager": "^1.0.0-beta.108",
-    "@dxos/party-manager": "^0.2.7",
+    "@dxos/object-model": "^0.2.0-dev.10",
     "@dxos/protocol": "^1.1.0-alpha.4",
     "@dxos/protocol-plugin-replicator": "^1.1.0-alpha.4",
     "@geut/discovery-swarm-webrtc": "^3.0.0-beta.3",
@@ -89,5 +90,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "e96e49570a02d2aa6e2908c50669705bba0f7329"
 }

@@ -3,24 +3,22 @@
 //
 
 import defaultsDeep from 'lodash.defaultsdeep';
-import bufferJson from 'buffer-json-encoding';
+
 import memdown from 'memdown';
 
-import { promiseTimeout, waitForCondition, waitForEvent } from '@dxos/async';
 import { createStorage } from '@dxos/random-access-multi-storage';
-import { Keyring, KeyStore, createAuthMessage, codec, KeyType } from '@dxos/credentials';
-import { keyToString, keyToBuffer } from '@dxos/crypto';
-import { logs } from '@dxos/debug';
+import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
+import { keyToString } from '@dxos/crypto';
 import { FeedStore } from '@dxos/feed-store';
 import metrics from '@dxos/metrics';
 import { ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { PartyManager, InviteType, InviteDetails } from '@dxos/party-manager';
+import {
+  codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager
+} from '@dxos/echo-db';
+import { ObjectModel } from '@dxos/object-model';
 
 import { defaultClientConfig } from './config';
-
-const { error: membershipError } = logs('dxos:client:membership');
-const MAX_WAIT = 5000;
 
 /**
  * Data client.
@@ -37,30 +35,27 @@ export class Client {
    * @param {Registry} config.registry Optional.
    */
   constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }) {
-    this._keyring = keyring || new Keyring(new KeyStore(memdown()));
     this._feedStore = feedStore || new FeedStore(
       storage || createStorage('dxos-storage-db', 'ram'),
-      {
-        feedOptions: {
-          valueEncoding: 'buffer-json'
-        },
-        codecs: {
-          'buffer-json': bufferJson
-        }
-      }
-    );
+      { feedOptions: { valueEncoding: codec } });
+    this._keyring = keyring || new Keyring(new KeyStore(memdown()));
     this._swarmConfig = swarm;
+
+    this._identityManager = new IdentityManager(this._keyring);
+    this._modelFactory = new ModelFactory()
+      .registerModel(ObjectModel);
+
     this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
-    this._partyManager = partyManager || new PartyManager(this._feedStore, this._keyring, this._networkManager);
-    this._modelFactory = new ModelFactory(this._feedStore, {
-      onAppend: async (message, { topic }) => this._appendMessage(message, topic),
-      // TODO(telackey): This is obviously not an efficient lookup mechanism, but it works as an example of
-      onMessage: async (message, { topic }) => this._getOwnershipInformation(message, topic)
-    });
-    this.registry = registry;
+
+    const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
+
+    this._partyFactory = new PartyFactory(this._identityManager, feedStoreAdapter, this._modelFactory, this._networkManager);
+    this._partyManager = partyManager || new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
+
+    this._echo = new ECHO(this._partyManager);
+    this._registry = registry;
 
     this._partyWriters = {};
-    /** @type Map<string, Promise<PublicKey>> */
     this._feedOwnershipCache = new Map();
   }
 
@@ -72,12 +67,15 @@ export class Client {
       return;
     }
 
-    await this._feedStore.open();
     await this._keyring.load();
 
-    await this._partyManager.initialize();
-    await this._waitForPartiesToBeOpen();
+    // If this has to be done, it should be done thru database.
+    // Actually, the we should move all initialze into database.
+    await this._partyManager.open();
 
+    if (!this._identityManager.halo && this._identityManager.identityKey) {
+      await this._partyManager.createHalo();
+    }
     this._initialized = true;
   }
 
@@ -94,7 +92,6 @@ export class Client {
    * Warning: Inconsistent state after reset, do not continue to use this client instance.
    */
   async reset () {
-    await this._feedStore.close();
     if (this._feedStore.storage.destroy) {
       await this._feedStore.storage.destroy();
     }
@@ -116,28 +113,29 @@ export class Client {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
     }
 
-    if (!this._partyManager.identityManager.publicKey) {
+    if (!this._identityManager.identityKey) {
       throw new Error('Cannot create profile. Either no keyPair (public and secret key) was provided or cannot read Identity from keyring.');
     }
-
-    await this._partyManager.identityManager.initializeForNewIdentity({
-      identityDisplayName: username || keyToString(this._partyManager.identityManager.publicKey),
-      deviceDisplayName: keyToString(this._partyManager.identityManager.deviceManager.publicKey)
+    await this._partyManager.createHalo({
+      identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
     });
+
+    // await this._identityManager.initializeForNewIdentity({
+    //   identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
+    //   // deviceDisplayName: keyToString(this._identityManager.deviceManager.identityKey)
+    // });
   }
 
   /**
    * @returns {ProfileInfo} User profile info.
    */
   getProfile () {
-    const { identityManager: idm } = this.partyManager;
+    if (!this._identityManager.identityKey) return;
 
-    if (!idm || !idm.publicKey) return;
-
-    const publicKey = keyToString(idm.publicKey);
+    const publicKey = keyToString(this._identityManager.identityKey.publicKey);
 
     return {
-      username: idm.displayName || publicKey,
+      username: publicKey,
       publicKey
     };
   }
@@ -150,64 +148,64 @@ export class Client {
   }
 
   /**
+   * @deprecated
    * Create a new party.
    * @return {Promise<Party>} The new Party.
    */
   async createParty () {
-    return this._partyManager.createParty();
+    return this._echo.createParty();
   }
 
   /**
-   *
    * @param {Buffer} partyKey Party publicKey
    * @param {SecretProvider} secretProvider
-   * @param {Object} options
-   * @param {Function} options.onFinish function to be called once invitation flow is done.
    */
-  async createInvitation (partyKey, secretProvider, options = {}) {
-    return this._partyManager.inviteToParty(
-      partyKey,
-      new InviteDetails(InviteType.INTERACTIVE, {
-        secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
-        secretProvider
-      }),
-      options
-    );
+  async createInvitation (partyKey, secretProvider, options) {
+    const party = await this.echo.getParty(partyKey);
+    return party.createInvitation({
+      secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
+      secretProvider
+    },
+    options);
   }
 
   /**
-   *
+   * @deprecated
    * @param {Buffer} publicKey Party publicKey
    * @param {Buffer} recipient Recipient publicKey
    */
   async createOfflineInvitation (partyKey, recipientKey) {
-    return this._partyManager.inviteToParty(
-      partyKey,
-      new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: recipientKey })
-    );
+    console.warn('createOfflineInvitation deprecated. check Database');
+
+    // return this.database._partyManager.inviteToParty(
+    //   partyKey,
+    //   new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: recipientKey })
+    // );
   }
 
   /**
+   * @deprecated
    * Join a Party by redeeming an Invitation.
    * @param {InvitationDescriptor} invitation
    * @param {SecretProvider} secretProvider
    * @returns {Promise<Party>} The now open Party.
    */
   async joinParty (invitation, secretProvider) {
-    // An invitation where we can use our Identity key for auth.
-    if (InviteType.OFFLINE_KEY === invitation.type) {
-      // Connect to inviting peer.
-      return this._partyManager.joinParty(invitation, (info) =>
-        codec.encode(createAuthMessage(this._keyring, info.id.value,
-          this._partyManager.identityManager.keyRecord,
-          this._partyManager.identityManager.deviceManager.keyChain,
-          null, info.authNonce.value))
-      );
-    } else if (!invitation.identityKey) {
-      // An invitation for this Identity to join a Party.
-      // Connect to inviting peer.
-      return this._partyManager.joinParty(invitation, secretProvider);
-    }
+    console.warn('deprecated. Use client.echo');
+    // // An invitation where we can use our Identity key for auth.
+    // if (InviteType.OFFLINE_KEY === invitation.type) {
+    //   // Connect to inviting peer.
+    //   return this._partyManager.joinParty(invitation, (info) =>
+    //     codec.encode(createAuthMessage(this._keyring, info.id.value,
+    //       this._partyManager.identityManager.keyRecord,
+    //       this._partyManager.identityManager.deviceManager.keyChain,
+    //       null, info.authNonce.value))
+    //   );
+    // } else if (!invitation.identityKey) {
+    //   // An invitation for this Identity to join a Party.
+    //   // Connect to inviting peer.
+    //   return this._partyManager.joinParty(invitation, secretProvider);
+    // }
   }
 
   /**
@@ -224,12 +222,20 @@ export class Client {
     }
   }
 
+  /**
+   * @deprecated
+   */
   getParties () {
-    return this._partyManager.getPartyInfoList();
+    console.warn('deprecated. Use client.echo');
+    // return this._partyManager.getPartyInfoList();
   }
 
+  /**
+   * @deprecated
+   */
   getParty (partyKey) {
-    return this._partyManager.getPartyInfo(partyKey);
+    console.warn('deprecated. Use client.echo');
+    // return this._partyManager.getPartyInfo(partyKey);
   }
 
   /**
@@ -237,21 +243,29 @@ export class Client {
    * @returns {Contact[]}
    */
   async getContacts () {
-    return this._partyManager.getContacts();
+    console.warn('client.getContacts not impl. Returning []');
+    // return this._partyManager.getContacts();
+    return [];
   }
 
   /**
+   * @deprecated
    * @param {Object} config
    * @param {} config.modelType
    * @param {} config.options
    * @return {model}
    */
   async createSubscription ({ modelType, options } = {}) {
-    return this._modelFactory.createModel(modelType, options);
+    console.warn('deprecated');
+    // return this._modelFactory.createModel(modelType, options);
   }
 
   get keyring () {
     return this._keyring;
+  }
+
+  get echo () {
+    return this._echo;
   }
 
   // keep this for devtools ???
@@ -261,6 +275,7 @@ export class Client {
 
   // TODO(burdon): Remove.
   get modelFactory () {
+    console.warn('client.modelFactory is deprecated.');
     return this._modelFactory;
   }
 
@@ -271,104 +286,9 @@ export class Client {
 
   // TODO(burdon): Remove.
   get partyManager () {
+    console.warn('deprecated. Use client.database');
     return this._partyManager;
   }
-
-  // ----- MOVE THESE TO PARTYMANAGER
-
-  async _appendMessage (message, topic) {
-    let append = this._partyWriters[topic];
-    if (!append) {
-      const feed = await this._partyManager.getWritableFeed(keyToBuffer(topic));
-      append = (message) => new Promise((resolve, reject) => {
-        feed.append(message, (err, seq) => {
-          if (err) return reject(err);
-          resolve(seq);
-        });
-      });
-      this._partyWriters[topic] = append;
-    }
-
-    return append(message);
-  }
-
-  async _waitForPartiesToBeOpen () {
-    const partyWaiters = [];
-    for (const { publicKey } of this._partyManager.getPartyInfoList()) {
-      if (!this._partyManager.hasParty(publicKey)) {
-        partyWaiters.push(waitForEvent(this._partyManager, 'party',
-          partyKey => partyKey.equals(publicKey)));
-      }
-    }
-    await Promise.all(partyWaiters);
-  }
-
-  async _getOwnershipInformation (message, topic) {
-    if (!topic) return message;
-
-    // If the feed is being replicated, we must have established the ownership info for it, but there is race
-    // between that and all the event propagation for updating the PartyInfo, PartyMemberInfo, etc. That only
-    // needs done once per-feed, but it must be done before we can gather the owner info here. We set a max wait
-    // because not responding in a timely fashion would be evidence of an error.
-
-    let owner;
-    const { key: feedKey } = message;
-    const partyKey = keyToBuffer(topic);
-
-    // Check if there is a already a Promise for this information.
-    let ownerPromise = this._feedOwnershipCache.get(keyToString(feedKey));
-
-    // If not, create one which will resolve when the ownership information of this feed is known.
-    if (!ownerPromise) {
-      // If the feed is being replicated, we must have established the ownership info for it, but there is race
-      // between that and all the event propagation for updating the PartyInfo, PartyMemberInfo, etc. That only
-      // needs done once per-feed, but it must be done before we can gather the owner info here.
-      ownerPromise = waitForCondition(() => {
-        const partyInfo = this._partyManager.getPartyInfo(partyKey);
-        if (partyInfo) {
-          for (const member of partyInfo.members) {
-            for (const memberFeed of member.feeds) {
-              if (memberFeed.equals(feedKey)) {
-                return member.publicKey;
-              }
-            }
-          }
-        }
-        return undefined;
-      });
-      this._feedOwnershipCache.set(keyToString(feedKey), ownerPromise);
-    }
-
-    try {
-      // We set a max wait because, while we may have to wait for a moment for event propagation to update,
-      // all the state, not responding in a timely fashion would indicate a problem.
-      owner = await promiseTimeout(ownerPromise, MAX_WAIT);
-    } catch (err) {
-      membershipError(`Timed out waiting for owner of feed ${keyToString(feedKey)}`, err);
-      owner = undefined;
-    }
-
-    if (!owner) {
-      // Lack of ownership info is a fatal error for this message.
-      membershipError(`No owner of feed ${keyToString(feedKey)} on ${topic}, rejecting message:`,
-        JSON.stringify(message.data));
-      return undefined;
-    }
-
-    // TODO(telackey): This should not modify the data, instead we should deliver a (data, metadata) tuple.
-    // However, that means adjusting all the current uses of Model, so will take appropriate planning.
-    message.data.__meta = {
-      credentials: {
-        party: partyKey,
-        feed: message.key,
-        member: owner
-      }
-    };
-
-    return message;
-  }
-
-// ---- END MOVE THESE TO PM
 }
 
 /**
