@@ -146,7 +146,7 @@ const PartyCard = ({
   if (onNewParty) {
     return (
       <Card className={clsx(classes.card, classes.newCard)}>
-        <IconButton className={classes.addButton} onClick={onNewParty}>
+        <IconButton className={classes.addButton} onClick={onNewParty} name='new-party'>
           <AddIcon className={classes.addIcon} />
         </IconButton>
         <Typography className={classes.addSubtitle} variant='h5'>New Party</Typography>
