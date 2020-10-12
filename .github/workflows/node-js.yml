@@ -19,16 +19,12 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-      - name: Build and NPM publish
+      - name: Line, Build, Test
         run: |
-          git config --global user.email "npm@dxos.network"
-          git config --global user.name "DXOS"
           yarn
           yarn lint
           yarn build
           yarn test
-          npm whoami
-          yarn lerna publish -y prerelease --dist-tag="beta" --force-publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
           WIRE_WNS_USER_KEY: ${{secrets.wns_user_key}}
