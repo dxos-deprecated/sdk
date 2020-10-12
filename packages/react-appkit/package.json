@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-appkit",
-  "version": "1.1.0-beta.15",
+  "version": "1.1.0-beta.18",
   "description": "Application framework components",
   "keywords": [],
   "license": "AGPLv3",
@@ -16,16 +16,16 @@
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
   "dependencies": {
-    "@dxos/botkit-client": "^1.1.0-beta.15",
+    "@dxos/botkit-client": "^1.1.0-beta.18",
     "@dxos/credentials": "^0.2.7",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/metrics": "^1.0.0-beta.6",
     "@dxos/party-manager": "^0.2.7",
-    "@dxos/react-client": "^1.1.0-beta.15",
+    "@dxos/react-client": "^1.1.0-beta.18",
     "@dxos/react-json-tree": "^0.11.3",
-    "@dxos/react-router": "^1.1.0-beta.15",
-    "@dxos/react-ux": "^1.1.0-beta.15",
+    "@dxos/react-router": "^1.1.0-beta.18",
+    "@dxos/react-ux": "^1.1.0-beta.18",
     "@dxos/view-model": "^1.0.0-beta.28",
     "@material-ui/core": "^4.9.0",
     "@material-ui/icons": "^4.5.1",
