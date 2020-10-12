@@ -174,6 +174,7 @@ const PartyCard = ({
               classes={{ root: classes.title }}
               component='h2'
               variant='h5'
+              className='party-header-title'
             >
               {party.displayName}
             </Typography>
