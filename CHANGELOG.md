@@ -1,8 +1,8 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 1.0.0 (2020-10-13)
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+### Features
+
+* Initial release-please. ([5564a98](https://www.github.com/dxos/sdk/commit/5564a987baa537c117a975c58392cc85672e44ed))
