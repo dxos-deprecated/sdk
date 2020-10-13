@@ -14,6 +14,7 @@ import ShareIcon from '@material-ui/icons/GroupAdd';
 import { humanize } from '@dxos/crypto';
 
 import { getAvatarStyle } from './MemberAvatar';
+import { useMembers } from '../hooks';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,11 +27,12 @@ const useStyles = makeStyles(() => ({
 const PartyMemberList = ({ party, onShare }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const members = useMembers(party);
 
   return (
     <div className={classes.root}>
       <AvatarGroup>
-        {party.members.map(member => (
+        {members.map(member => (
           <Tooltip key={member.publicKey} title={member.displayName || humanize(member.publicKey)} placement='top'>
             <Avatar style={getAvatarStyle(theme, member.publicKey)}>
               {member.displayName ? member.displayName.slice(0, 1).toUpperCase() : <FaceIcon />}

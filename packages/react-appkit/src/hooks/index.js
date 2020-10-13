@@ -9,6 +9,7 @@ export * from './filter';
 export * from './issues-link';
 export * from './items';
 export * from './layout';
+export * from './members';
 export * from './router';
 export * from './pads';
 export * from './party-restore';

@@ -24,7 +24,7 @@ function RenderPartyKnobs ({ story }) {
   const parties = useParties();
 
   const options = parties.reduce((prev, p) => {
-    const key = keyToString(p.publicKey);
+    const key = keyToString(p.key);
     return {
       ...prev,
       [key]: key
