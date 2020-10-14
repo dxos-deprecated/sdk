@@ -7,7 +7,7 @@ describe('RegistrationDialog', () => {
   let finished;
 
   const defaultProps = {
-    onFinish: function () { finished = true; }
+    onFinish: () => { finished = true; }
   };
 
   const createInputValue = (val) => {
@@ -87,6 +87,33 @@ describe('RegistrationDialog', () => {
       fireEvent.click(screen.getByText('Next'));
       expect(() => screen.getByText('Create your Identity')).toThrow();
       expect(() => screen.getByText('Seed Phrase')).not.toThrow();
+    });
+  });
+
+  describe('Seed Phrase stage', () => {
+    beforeEach(() => {
+      fireEvent.click(screen.getByText('Create Wallet'));
+      fireEvent.change(screen.getByRole('textbox'), createInputValue('Tester'));
+      fireEvent.click(screen.getByText('Next'));
+    });
+
+    test('12 secret words are displayed', async () => {
+      const chips = screen.getAllByTestId('chip');
+      expect(chips.length).toEqual(12);
+    });
+
+    test('Clicking "Back" leads to Create Identitity stage', async () => {
+      fireEvent.click(screen.getByText('Back'));
+      expect(() => screen.getByText('Seed Phrase')).toThrow();
+      expect(() => screen.getByText('Create your Identity').not.toThrow());
+    });
+
+    test('Clicking "Download" fires seed phrases download', async () => {
+      // TODO
+    });
+
+    test('Clicking "Next" leads to Verify Seed Phrase stage', async () => {
+
     });
   });
 });

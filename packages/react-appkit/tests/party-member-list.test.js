@@ -7,6 +7,7 @@ import '@testing-library/jest-dom/extend-expect';
 // import leveljs from 'level-js';
 import PartyMemberList from '../src/components/PartyMemberList';
 import { renderWithTheme } from './test-utils';
+// import ram from 'random-access-memory';
 
 // import { Client } from '@dxos/client';
 // import { createStorage } from '@dxos/random-access-multi-storage';
@@ -17,9 +18,13 @@ import { renderWithTheme } from './test-utils';
 // import Adapter from 'enzyme-adapter-react-16';
 // enzyme.configure({ adapter: new Adapter() });
 
-describe('PartyMemberList', () => {
-  // from client.md
-//   const client = new Client({});
+describe.only('PartyMemberList', () => {
+  // const client = new Client({
+  //   storage: ram,
+  //   swarm: {
+  //     signal: 'wss://signal2.dxos.network/dxos/signal'
+  //   }
+  // });
 
   test('Avatars displays first letter of name or face icon', async () => {
     const party = {

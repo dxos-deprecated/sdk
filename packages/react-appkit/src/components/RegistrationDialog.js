@@ -203,6 +203,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
               icon={<Avatar className={classes.seedNumber}>{i + 1}</Avatar>}
               classes={{ root: classes.seedChip, label: classes.seedLabel }}
               label={word}
+              data-testid='chip'
             />
           </Grid>
         ))}
