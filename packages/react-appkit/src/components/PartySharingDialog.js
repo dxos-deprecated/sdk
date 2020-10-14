@@ -4,7 +4,6 @@
 
 import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import copy from 'copy-to-clipboard';
 
 import { useTheme } from '@material-ui/styles';
 import { makeStyles, withStyles } from '@material-ui/core';
@@ -28,22 +27,15 @@ import Alert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Clear';
 import FaceIcon from '@material-ui/icons/Face';
 import LinkIcon from '@material-ui/icons/Link';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import InviteIcon from '@material-ui/icons/Add';
 import PeopleIcon from '@material-ui/icons/People';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
-import { BotFactoryClient } from '@dxos/botkit-client';
-import { generatePasscode } from '@dxos/credentials';
-import { humanize, keyToBuffer, verify, SIGNATURE_LENGTH, keyToString } from '@dxos/crypto';
+import { humanize } from '@dxos/crypto';
+import { useInvitation } from '@dxos/react-client';
 
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 import BotDialog from './BotDialog';
-import { useAsync } from '../hooks/async';
-
-// TODO(telackey): This file is dead code, and these types no longer exist.
-const InviteDetails = () => {};
-const InviteType = null;
+import { useMembers } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -93,90 +85,68 @@ const TableCell = withStyles(theme => ({
   }
 }))(MuiTableCell);
 
+function PendingInvitation ({ party, pending, handleCopy }) {
+  const classes = useStyles();
+  const [done, setDone] = useState(false);
+  const [inviteCode, pin] = useInvitation(party.key, { onDone: () => { setDone(true); } });
+
+  return (
+    <TableRow>
+      <TableCell classes={{ root: classes.colAvatar }}>
+        <Avatar style={getAvatarStyle(useTheme())}>
+          <FaceIcon />
+        </Avatar>
+      </TableCell>
+      <TableCell />
+      <TableCell classes={{ root: classes.colPasscode }}>
+        {pin && (
+          <>
+            <span className={classes.label}>Passcode</span>
+            <span className={classes.passcode}>{pin}</span>
+          </>
+        )}
+      </TableCell>
+      <TableCell classes={{ root: classes.colStatus }}>
+        <span className={classes.label}>{done ? 'Done' : 'Pending'}</span>
+      </TableCell>
+      <TableCell classes={{ root: classes.colActions }}>
+        {pin ? null : (
+          <>
+            <CopyToClipboard
+              text={inviteCode}
+              onCopy={handleCopy}
+            >
+              <IconButton
+                size='small'
+                color='inherit'
+                aria-label='copy to clipboard'
+                title='Copy to clipboard'
+                edge='start'
+              >
+                <LinkIcon />
+              </IconButton>
+            </CopyToClipboard>
+          </>)}
+      </TableCell>
+    </TableRow>
+  );
+}
+
 const PartySharingDialog = ({ party, open, onClose, client, router }) => {
   const classes = useStyles();
-  const topic = keyToString(party.publicKey);
-  const [pendingInvitations, setPendingInvitations] = useState([]);
-  const [contactsInvitations, setContactsInvitations] = useState([]);
-  const [contacts, contactsError] = useAsync(async () => client.partyManager.getContacts(), []);
-  const newContacts = contacts?.filter(c => !party.members.some(m => m.publicKey.toString('hex') === c.publicKey.toString('hex')));
+  const [invitations, setInvitations] = useState([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
-  if (contactsError) throw contactsError;
 
-  const createInvitation = async () => {
-    const invitation = await client.partyManager.inviteToParty(
-      party.publicKey,
-      new InviteDetails(InviteType.INTERACTIVE, {
-        secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
-        secretProvider: () => {
-          const passcode = generatePasscode();
-          // TODO(burdon): Don't use generic variable names like 'arr' and 'x'
-          setPendingInvitations(arr => arr.map(x => x.invitation === invitation ? { ...x, passcode } : x));
-          return Buffer.from(passcode);
-        }
-      }),
-      {
-        onFinish: () => setPendingInvitations(arr => arr.filter(x => x.invitation !== invitation))
-      }
-    );
+  const members = useMembers(party);
 
-    return invitation;
-  };
+  const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
 
-  const handleBotInvite = async (botFactoryTopic, botId, spec = {}) => {
-    const botFactoryClient = new BotFactoryClient(client.networkManager, botFactoryTopic);
-
-    const secretProvider = () => {};
-
-    // Provided by inviter node.
-    const secretValidator = async (invitation, secret) => {
-      const signature = secret.slice(0, SIGNATURE_LENGTH);
-      const message = secret.slice(SIGNATURE_LENGTH);
-      return verify(message, signature, keyToBuffer(botFactoryTopic));
-    };
-
-    const invitation = await client.partyManager.inviteToParty(
-      keyToBuffer(topic),
-      new InviteDetails(InviteType.INTERACTIVE, { secretValidator, secretProvider }),
-      {
-        onFinish: () => {
-          botFactoryClient.close();
-          setBotDialogVisible(false);
-        }
-      }
-    );
-
-    const botUID = await botFactoryClient.sendSpawnRequest(botId);
-    await botFactoryClient.sendInvitationRequest(botUID, topic, spec, invitation.toQueryParameters());
-  };
+  const handleBotInvite = () => console.warn('Bot invitation not yet ported to the new echo');
 
   const handleCopy = (value) => {
     setCopiedSnackBarOpen(true);
     console.log(value);
-  };
-
-  const handleNewPendingInvitation = async () => {
-    const invitation = await createInvitation();
-    const inviteUrl = router.createInvitationUrl(invitation);
-    copy(inviteUrl);
-    handleCopy(inviteUrl);
-    setPendingInvitations(old => [...old, { invitation }]);
-  };
-
-  const handleNewContactInvitation = async (contact) => {
-    const invitation = await client.partyManager.inviteToParty(party.publicKey,
-      new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: contact.publicKey }));
-    const inviteUrl = router.createInvitationUrl(invitation);
-    copy(inviteUrl);
-    handleCopy(inviteUrl);
-    setContactsInvitations(old => [...old, { invitation, contact }]);
-  };
-
-  const handleRecreateLink = async (pending) => {
-    const recreatedInvitation = await createInvitation();
-    setPendingInvitations(
-      arr => arr.map(x => x.invitation === pending.invitation ? { invitation: recreatedInvitation } : x));
   };
 
   // TODO(burdon): Columns in EACH section should have same content:
@@ -196,13 +166,14 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
           <div>
             <Button
               size='small'
-              onClick={handleNewPendingInvitation}
+              onClick={createInvitation}
             >
               Invite User
             </Button>
             <Button
               size='small'
               onClick={() => setBotDialogVisible(true)}
+              disabled
             >
               Invite Bot
             </Button>
@@ -215,71 +186,23 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
           onClose={() => setBotDialogVisible(false)}
         />
 
+        <Snackbar
+          open={copiedSnackBarOpen}
+          onClose={() => setCopiedSnackBarOpen(false)}
+          autoHideDuration={3000}
+        >
+          <Alert onClose={() => setCopiedSnackBarOpen(false)} severity='success' icon={<FileCopyIcon fontSize='inherit' />}>
+            Invite code copied
+          </Alert>
+        </Snackbar>
+
         <TableContainer className={classes.tableContainer}>
           <Table className={classes.table} size='small' padding='none' aria-label='contacts'>
             <TableBody>
-              {pendingInvitations.map((pending) => (
-                <TableRow key={pending.invitation.secret}>
-                  <TableCell classes={{ root: classes.colAvatar }}>
-                    <Avatar style={getAvatarStyle(useTheme())}>
-                      <FaceIcon />
-                    </Avatar>
-                  </TableCell>
-                  <TableCell />
-                  <TableCell classes={{ root: classes.colPasscode }}>
-                    {pending.passcode && (
-                      <>
-                        <span className={classes.label}>Passcode</span>
-                        <span className={classes.passcode}>{pending.passcode}</span>
-                      </>
-                    )}
-                  </TableCell>
-                  <TableCell classes={{ root: classes.colStatus }}>
-                    <span className={classes.label}>Pending</span>
-                  </TableCell>
-                  <TableCell classes={{ root: classes.colActions }}>
-                    {pending.passcode ? (
-                      <IconButton
-                        size='small'
-                        onClick={() => handleRecreateLink(pending)}
-                        title='Regenerate PIN'
-                      >
-                        <RefreshIcon />
-                      </IconButton>
-                    ) : (
-                      <>
-                        <CopyToClipboard
-                          text={router.createInvitationUrl(pending.invitation)}
-                          onCopy={handleCopy}
-                        >
-                          <IconButton
-                            size='small'
-                            color='inherit'
-                            aria-label='copy to clipboard'
-                            title='Copy to clipboard'
-                            edge='start'
-                          >
-                            <LinkIcon />
-                          </IconButton>
-                        </CopyToClipboard>
-                      </>)}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {invitations.map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} />)}
             </TableBody>
-
-            <Snackbar
-              open={copiedSnackBarOpen}
-              onClose={() => setCopiedSnackBarOpen(false)}
-              autoHideDuration={3000}
-            >
-              <Alert onClose={() => setCopiedSnackBarOpen(false)} severity='success' icon={<FileCopyIcon fontSize='inherit' />}>
-                Invitation link copied
-              </Alert>
-            </Snackbar>
-
             <TableBody>
-              {party.members.map((member) => (
+              {members.map((member) => (
                 <TableRow key={member.publicKey}>
                   <TableCell classes={{ root: classes.colAvatar }}>
                     <MemberAvatar member={member} />
@@ -295,45 +218,6 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
                     <IconButton size='small'>
                       <DeleteIcon />
                     </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-
-            <TableBody>
-              {newContacts?.map(contact => (
-                <TableRow key={contact.publicKey}>
-                  <TableCell classes={{ root: classes.colAvatar }}>
-                    <MemberAvatar member={contact} />
-                  </TableCell>
-                  <TableCell>
-                    {contact.displayName || humanize(contact.publicKey)}
-                  </TableCell>
-                  <TableCell />
-                  <TableCell />
-                  <TableCell classes={{ root: classes.colActions }}>
-                    {contactsInvitations.find(p => p.contact === contact) === undefined ? (
-                      <IconButton size='small'>
-                        <InviteIcon
-                          onClick={async () => handleNewContactInvitation(contact)}
-                        />
-                      </IconButton>
-                    ) : (
-                      <CopyToClipboard
-                        text={router.createInvitationUrl(contactsInvitations.find(p => p.contact === contact).invitation)}
-                        onCopy={handleCopy}
-                      >
-                        <IconButton
-                          size='small'
-                          color='inherit'
-                          aria-label='copy to clipboard'
-                          title='Copy to clipboard'
-                          edge='start'
-                        >
-                          <LinkIcon />
-                        </IconButton>
-                      </CopyToClipboard>
-                    )}
                   </TableCell>
                 </TableRow>
               ))}

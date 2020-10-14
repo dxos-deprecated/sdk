@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
 import { withKnobs } from '@storybook/addon-knobs';
 
-import { keyToString } from '@dxos/crypto';
+import { keyToBuffer, keyToString } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParties, useParty } from '@dxos/react-client';
 
@@ -32,11 +32,11 @@ const NoPartyComponent = () => {
       <p>Create and select a party using the knobs.</p>
       <h2>Keys</h2>
       {keys.map(key => (
-        <div key={key.publicKey}>{keyToString(key.publicKey)}</div>
+        <div key={key.publicKey}>{key.key}</div>
       ))}
       <h2>Parties</h2>
       {parties.map(party => {
-        const publicKey = keyToString(party.publicKey);
+        const publicKey = keyToString(party.key);
         return (<div key={publicKey}>{publicKey}</div>);
       })}
     </Box>
@@ -45,12 +45,12 @@ const NoPartyComponent = () => {
 
 const PartyComponent = () => {
   const { topic } = useParams();
-  const party = useParty(topic);
+  const party = useParty(keyToBuffer(topic));
 
   return (
     <Box m={2}>
       <h1>Party</h1>
-      <div>Public Key: {keyToString(party.publicKey)}</div>
+      <div>Public Key: {keyToString(party.key)}</div>
       <div>DisplayName: {party.displayName}</div>
     </Box>
   );

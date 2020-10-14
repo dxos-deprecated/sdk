@@ -20,6 +20,8 @@ import { Action, useErrorReducer, useLayoutReducer, useActionHandler } from '../
 import AppBar from './AppBar';
 import DebugPanel from './DebugPanel';
 import Sidebar from '../components/Sidebar';
+// import Redeem from './Redeem';
+import RedeemDialog from './Redeem';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -51,6 +53,7 @@ const AppContainer = ({
   const [showKeyMap, setShowKeyMap] = useState(false);
   const handleAction = useActionHandler();
   const hotKeys = createRef();
+  const [redeemOpen, setRedeemOpen] = useState(false);
 
   useEffect(() => {
     hotKeys.current.focus();
@@ -133,6 +136,7 @@ const AppContainer = ({
               onPartyHomeNavigation={onPartyHomeNavigation}
               onPartyFromFile={onPartyFromFile}
               onPartyFromIpfs={onPartyFromIpfs}
+              onRedeemOpen={() => setRedeemOpen(true)}
             >
               {appBarContent}
             </AppBar>
@@ -165,6 +169,8 @@ const AppContainer = ({
         </Layout>
 
         <KeyMap keyMap={getApplicationKeyMap()} showKeyMap={showKeyMap} onClose={() => setShowKeyMap(false)} />
+
+        <RedeemDialog onClose={() => setRedeemOpen(false)} open={redeemOpen} />
       </HotKeys>
     </FullScreen>
   );

@@ -10,10 +10,12 @@ import { withKnobs } from '@storybook/addon-knobs';
 
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParty } from '@dxos/react-client';
+import { ObjectModel } from '@dxos/object-model';
 
-import { AppKitContextProvider, useItems, DefaultItemList, PartySettingsDialog } from '../src';
+import { AppKitContextProvider, DefaultItemList, PartySettingsDialog } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads, NoPartyComponent } from './common';
+import { keyToBuffer } from '@dxos/crypto';
 
 export default {
   title: 'Party Contents',
@@ -24,7 +26,7 @@ export default {
 const PartySettingsComponent = () => {
   const client = useClient();
   const { topic } = useParams();
-  const party = useParty(topic);
+  const party = useParty(keyToBuffer(topic));
   const [open, setOpen] = useState(true);
 
   return (
@@ -52,14 +54,17 @@ export const withPartySettingsDialog = () => {
 
 const SidebarComponent = () => {
   const { topic } = useParams();
-  const party = useParty(topic);
-
-  const { createItem } = useItems(topic);
+  const party = useParty(keyToBuffer(topic));
 
   if (!party) return null;
 
-  const handleCreateItem = () => {
-    createItem(pads[0].type);
+  const handleCreateItem = async () => {
+    const itemId = await party.database.createItem({
+      model: ObjectModel,
+      type: pads[0].type,
+      props: {}
+    });
+    console.log('created:', itemId);
   };
 
   return (

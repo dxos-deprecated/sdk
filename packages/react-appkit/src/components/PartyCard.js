@@ -6,7 +6,6 @@ import clsx from 'clsx';
 import React, { useState, useRef } from 'react';
 
 import { makeStyles } from '@material-ui/styles';
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -17,14 +16,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Clear';
-import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 import SettingsIcon from '@material-ui/icons/MoreVert';
 
-import { keyToString } from '@dxos/crypto';
+import { humanize, keyToString } from '@dxos/crypto';
 
 import { useAssets } from './util';
 
@@ -124,7 +120,7 @@ const PartyCard = ({
   const [showDeleted, setShowDeleted] = useState(false);
   const createItemAnchor = useRef();
 
-  const topic = party ? keyToString(party.publicKey) : '';
+  const topic = party ? keyToString(party.key) : '';
 
   const handleNewItemSelected = (type) => {
     setNewItemCreationMenuOpen(false);
@@ -136,11 +132,11 @@ const PartyCard = ({
   };
 
   const handleSubscribe = async () => {
-    await client.partyManager.subscribe(party.publicKey);
+    await client.partyManager.subscribe(party.key);
   };
 
   const handleUnsubscribe = async () => {
-    await client.partyManager.unsubscribe(party.publicKey);
+    await client.partyManager.unsubscribe(party.key);
   };
 
   if (onNewParty) {
@@ -156,7 +152,7 @@ const PartyCard = ({
 
   return (
     <>
-      <Card className={clsx(classes.card, !party.subscribed && classes.unsubscribed)}>
+      <Card className={classes.card}>
         <CardMedia
           component='img'
           height={100}
@@ -175,10 +171,10 @@ const PartyCard = ({
               component='h2'
               variant='h5'
             >
-              {party.displayName}
+              {party.displayName || humanize(party.key)}
             </Typography>
           }
-          action={party.subscribed && (
+          action={(
             <IconButton
               size='small'
               edge='end'
@@ -192,72 +188,34 @@ const PartyCard = ({
 
         <div className={classes.listContainer}>
           <List dense disablePadding>
-            {itemModel.getAllItems().map(item => (
+            {itemModel.map(item => (
               <ListItem
-                key={item.itemId}
+                key={item.id}
                 button
-                disabled={!party.subscribed}
-                onClick={() => handleSelect(item.itemId)}
+                onClick={() => handleSelect(item.id)}
               >
                 <ListItemIcon>
                   <PadIcon type={item.type} />
                 </ListItemIcon>
                 <ListItemText>
-                  {item.displayName}
+                  {item._model.getProperty('title') || 'Untitled'}
                 </ListItemText>
-                {party.subscribed && (
-                  <ListItemSecondaryAction>
-                    <IconButton size='small' edge='end' aria-label='delete' onClick={() => itemModel.deleteItem(item.itemId)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                )}
-              </ListItem>
-            ))}
-
-            {party.subscribed && showDeleted && itemModel.getAllDeletedItems().map(item => (
-              <ListItem key={item.itemId} disabled>
-                <ListItemIcon>
-                  <PadIcon type={item.type} />
-                </ListItemIcon>
-                <ListItemText>
-                  {item.displayName}
-                </ListItemText>
-                <ListItemSecondaryAction>
-                  <IconButton edge='end' aria-label='restore' onClick={() => itemModel.restoreItem(item.itemId)}>
-                    <RestoreIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>
         </div>
 
         <CardActions className={classes.actions}>
-          {party.subscribed && (
-            <>
-              <PartyMemberList party={party} onShare={() => setShareDialogOpen(true)} />
-              <IconButton
-                ref={createItemAnchor}
-                size='small'
-                edge='end'
-                aria-label='add item'
-                onClick={() => setNewItemCreationMenuOpen(true)}
-              >
-                <AddIcon />
-              </IconButton>
-            </>
-          )}
-
-          {!party.subscribed && (
-            <Button
-              size='small'
-              color='secondary'
-              onClick={handleSubscribe}
-            >
-              Subscribe
-            </Button>
-          )}
+          <PartyMemberList party={party} onShare={() => setShareDialogOpen(true)} />
+          <IconButton
+            ref={createItemAnchor}
+            size='small'
+            edge='end'
+            aria-label='add item'
+            onClick={() => setNewItemCreationMenuOpen(true)}
+          >
+            <AddIcon />
+          </IconButton>
         </CardActions>
       </Card>
 
@@ -279,14 +237,14 @@ const PartyCard = ({
         router={router}
       />
 
-      {party.subscribed && (
+      {(
         <PartySettingsDialog
           party={party}
           client={client}
           open={settingsDialogOpen}
           properties={{
             showDeleted,
-            subscribed: party.subscribed
+            subscribed: true
           }}
           onExport={onExport}
           onClose={({ showDeleted, subscribed }) => {
