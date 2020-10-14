@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.1.2](https://www.github.com/dxos/sdk/compare/v2.1.1...v2.1.2) (2020-10-14)
+
+
+### Bug Fixes
+
+* Enable publishing ([0f2d365](https://www.github.com/dxos/sdk/commit/0f2d365242209a0d92f184d099caf6272bb55add))
+
 ### [2.1.1](https://www.github.com/dxos/sdk/compare/v2.1.0...v2.1.1) (2020-10-14)
 
 
