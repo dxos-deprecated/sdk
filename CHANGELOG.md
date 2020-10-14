@@ -1,8 +1,21 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 1.0.0 (2020-10-14)
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+### ⚠ BREAKING CHANGES
+
+* Publish to NPM
+
+### Features
+
+* Initial release-please. ([5564a98](https://www.github.com/dxos/sdk/commit/5564a987baa537c117a975c58392cc85672e44ed))
+* Publish to NPM ([a18cd34](https://www.github.com/dxos/sdk/commit/a18cd3467baf840bbd0a29c3b55ea2e51b276dd3))
+
+
+### Bug Fixes
+
+* Disable alpha publishing until correct version. ([9cb4498](https://www.github.com/dxos/sdk/commit/9cb449862c168c86054bb6567ba20d7dc000c287))
+* main/beta/release publishing scheme ([8631ea4](https://www.github.com/dxos/sdk/commit/8631ea429e5f8971b8fb0930b35ad47f3d41bf71))
+* Update babel configuration for nullish coalescence and optional chaining ([#193](https://www.github.com/dxos/sdk/issues/193)) ([f1a6b9e](https://www.github.com/dxos/sdk/commit/f1a6b9e46e0a88297fb82c166056a7b2d7f9243b))
+* Use latest published packages. ([7a53ee3](https://www.github.com/dxos/sdk/commit/7a53ee39b6a5829408795fec8a6cbddc506ebc3b))
