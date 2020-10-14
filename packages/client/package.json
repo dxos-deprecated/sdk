@@ -1,6 +1,6 @@
 {
   "name": "@dxos/client",
-  "version": "2.0.0-beta.0",
+  "version": "2.1.1",
   "license": "AGPLv3",
   "author": "DXOS.org",
   "main": "dist/es/index.js",
@@ -18,9 +18,9 @@
     "@dxos/credentials": "^2.0.0",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
-    "@dxos/metrics": "^1.0.0-beta.6",
     "@dxos/echo-db": "^2.0.0",
     "@dxos/feed-store": "^1.2.0-beta.1",
+    "@dxos/metrics": "^1.0.0-beta.6",
     "@dxos/model-factory": "^2.0.0",
     "@dxos/network-manager": "^1.0.0-beta.108",
     "@dxos/object-model": "^2.0.0",
