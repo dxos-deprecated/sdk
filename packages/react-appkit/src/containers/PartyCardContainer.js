@@ -18,7 +18,7 @@ const PartyCardContainer = ({ party, ipfs }) => {
   const [pads] = usePads();
   const topic = keyToString(party.key);
   // const { model, createItem } = useItems(topic);
-  const items = useItems({ partyKey: keyToBuffer(topic), type: pads[0].type });
+  const items = useItems({ partyKey: keyToBuffer(topic), type: pads.map(pad => pad.type) });
   const [newItemType, setNewItemType] = useState(undefined);
   const [itemSettingsOpen, setItemSettingsOpen] = useState(false);
 
