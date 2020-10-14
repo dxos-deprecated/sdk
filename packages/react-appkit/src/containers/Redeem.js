@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import { useInvitationRedeemer } from '@dxos/react-client';
 
 export default function RedeemDialog ({ onClose, ...props }) {
-  const [redeemCode, setPin] = useInvitationRedeemer({ onDone: onClose });
+  const [redeemCode, setPin] = useInvitationRedeemer({ onDone: onClose, onError: (e) => { throw e; } });
   const [step, setStep] = useState(0);
   const [invitationCode, setInvitationCode] = useState('');
   const [pinCode, setPinCode] = useState('');
@@ -67,6 +67,7 @@ export default function RedeemDialog ({ onClose, ...props }) {
             />
           </DialogContent>
           <DialogActions>
+            <Button autoFocus color='secondary' onClick={onClose}>Cancel</Button>
             <Button autoFocus color='primary' onClick={handleEnterPinCode}>Send</Button>
           </DialogActions>
         </>

@@ -85,9 +85,9 @@ const TableCell = withStyles(theme => ({
   }
 }))(MuiTableCell);
 
-function PendingInvitation ({ party, pending, router, handleCopy }) {
+function PendingInvitation ({ party, pending, handleCopy }) {
   const classes = useStyles();
-  const [, setDone] = useState(false);
+  const [done, setDone] = useState(false);
   const [inviteCode, pin] = useInvitation(party.key, { onDone: () => { setDone(true); } });
 
   return (
@@ -107,7 +107,7 @@ function PendingInvitation ({ party, pending, router, handleCopy }) {
         )}
       </TableCell>
       <TableCell classes={{ root: classes.colStatus }}>
-        <span className={classes.label}>Pending</span>
+        <span className={classes.label}>{done ? 'Done' : 'Pending'}</span>
       </TableCell>
       <TableCell classes={{ root: classes.colActions }}>
         {pin ? null : (
@@ -186,22 +186,21 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
           onClose={() => setBotDialogVisible(false)}
         />
 
+        <Snackbar
+          open={copiedSnackBarOpen}
+          onClose={() => setCopiedSnackBarOpen(false)}
+          autoHideDuration={3000}
+        >
+          <Alert onClose={() => setCopiedSnackBarOpen(false)} severity='success' icon={<FileCopyIcon fontSize='inherit' />}>
+            Invite code copied
+          </Alert>
+        </Snackbar>
+
         <TableContainer className={classes.tableContainer}>
           <Table className={classes.table} size='small' padding='none' aria-label='contacts'>
             <TableBody>
-              {invitations.map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} router={router} handleCopy={handleCopy} />)}
+              {invitations.map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} />)}
             </TableBody>
-
-            <Snackbar
-              open={copiedSnackBarOpen}
-              onClose={() => setCopiedSnackBarOpen(false)}
-              autoHideDuration={3000}
-            >
-              <Alert onClose={() => setCopiedSnackBarOpen(false)} severity='success' icon={<FileCopyIcon fontSize='inherit' />}>
-                Invite code copied
-              </Alert>
-            </Snackbar>
-
             <TableBody>
               {members.map((member) => (
                 <TableRow key={member.publicKey}>
