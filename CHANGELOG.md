@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/dxos/sdk/compare/v2.0.0...v2.1.0) (2020-10-14)
+
+
+### Features
+
+* Bump minor. ([af95b56](https://www.github.com/dxos/sdk/commit/af95b5618b72d0ea5a345fd69cedd27083ddb317))
+
 ## [2.0.0](https://www.github.com/dxos/sdk/compare/v1.0.0...v2.0.0) (2020-10-14)
 
 
