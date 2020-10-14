@@ -289,6 +289,10 @@ export class Client {
     console.warn('deprecated. Use client.database');
     return this._partyManager;
   }
+
+  get registry () {
+    return this._registry;
+  }
 }
 
 /**

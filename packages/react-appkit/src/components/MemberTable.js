@@ -81,7 +81,7 @@ const MemberTable = ({ party, onMemberSelect }) => {
           const key = keyToString(member.publicKey);
           let admittedBy = '';
           if (member.admittedBy) {
-            if (party.publicKey.equals(member.admittedBy)) {
+            if (party.key.equals(member.admittedBy)) {
               admittedBy = formatDisplay(member.admittedBy, party.displayName);
             } else {
               const match = party.members.find(other => other.publicKey.equals(member.admittedBy));
