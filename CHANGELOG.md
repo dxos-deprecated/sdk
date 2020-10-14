@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.0.1](https://www.github.com/dxos/sdk/compare/v2.0.0...v2.0.1) (2020-10-14)
+
+
+### Bug Fixes
+
+* Use latest published packages. ([7a53ee3](https://www.github.com/dxos/sdk/commit/7a53ee39b6a5829408795fec8a6cbddc506ebc3b))
+
 ## [2.0.0](https://www.github.com/dxos/sdk/compare/v1.0.0...v2.0.0) (2020-10-13)
 
 
