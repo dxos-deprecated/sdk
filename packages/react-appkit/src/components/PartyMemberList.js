@@ -32,8 +32,8 @@ const PartyMemberList = ({ party, onShare }) => {
       <AvatarGroup>
         {party.members.map(member => (
           <Tooltip key={member.publicKey} title={member.displayName || humanize(member.publicKey)} placement='top'>
-            <Avatar style={getAvatarStyle(theme, member.publicKey)}>
-              {member.displayName ? member.displayName.slice(0, 1).toUpperCase() : <FaceIcon />}
+            <Avatar style={getAvatarStyle(theme, member.publicKey)} data-testid='avatar'>
+              {member.displayName ? member.displayName.slice(0, 1).toUpperCase() : <FaceIcon data-testid='face-icon' />}
             </Avatar>
           </Tooltip>
         ))}

@@ -13,7 +13,8 @@
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir ./src --verbose --passWithNoTests"
+    "test": "jest --rootDir ./src --verbose --passWithNoTests",
+    "test:components": "jest --no-cache tests/components.test.js"
   },
   "dependencies": {
     "@dxos/botkit-client": "^1.1.0-beta.14",
@@ -56,11 +57,16 @@
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",
     "@storybook/react": "^6.0.4",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.0.4",
+    "@types/jest": "^26.0.14",
     "@wirelineio/registry-client": "^1.1.0-beta.2",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "^1.0.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "jest": "^25.1.0",
     "semistandard": "14.2.0",
     "storybook-react-router": "^1.0.8"
