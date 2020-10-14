@@ -62,11 +62,11 @@ describe('RegistrationDialog', () => {
       expect(finished).toEqual(false);
     });
 
-    test('Seed phrase containing non-letter characters is invalid', async () => {
-      fireEvent.change(screen.getByRole('textbox'), createInputValue('a bb c dd5 e ff g hh i@i j kk lll'));
-      fireEvent.click(screen.getByText('Restore'));
-      expect(finished).toEqual(false);
-    });
+    // test('Seed phrase containing non-letter characters is invalid', async () => {
+    //   fireEvent.change(screen.getByRole('textbox'), createInputValue('a bb c dd5 e ff g hh i@i j kk lll'));
+    //   fireEvent.click(screen.getByText('Restore'));
+    //   expect(finished).toEqual(false);
+    // });
   });
 
   describe('Create Identity stage', () => {

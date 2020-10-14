@@ -45,4 +45,8 @@ describe('AuthenticatorDialog', () => {
 
     expect(() => screen.getByRole('textbox')).toThrow();
   });
+
+  test('Cancel click is handled', async () => {
+
+  });
 });
