@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.1.1](https://www.github.com/dxos/sdk/compare/v2.1.0...v2.1.1) (2020-10-14)
+
+
+### Bug Fixes
+
+* Update babel configuration for nullish coalescence and optional chaining ([#193](https://www.github.com/dxos/sdk/issues/193)) ([f1a6b9e](https://www.github.com/dxos/sdk/commit/f1a6b9e46e0a88297fb82c166056a7b2d7f9243b))
+
 ## [2.1.0](https://www.github.com/dxos/sdk/compare/v2.0.1...v2.1.0) (2020-10-14)
 
 
