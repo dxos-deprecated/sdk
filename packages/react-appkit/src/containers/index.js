@@ -12,6 +12,7 @@ export DefaultSidebar from './DefaultSidebar';
 export DefaultSettingsDialog from './DefaultSettingsDialog';
 export DefaultItemList from './DefaultItemList';
 export PartyCardContainer from './PartyCardContainer';
+export Redeem from './Redeem';
 export Registration from './Registration';
 export RequireWallet from './RequireWallet';
 export SystemRoutes from './SystemRoutes';

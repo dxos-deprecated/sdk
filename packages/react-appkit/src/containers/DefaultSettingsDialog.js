@@ -3,17 +3,20 @@
 //
 
 import React from 'react';
+import { Chance } from 'chance';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import ItemSettings from '../components/ItemSettings';
+
+const chance = new Chance();
 
 const DefaultSettingsDialog = ({ open, onClose, onCancel, item, itemModel, Icon }) => {
   const handleClose = ({ name }) => {
     if (item) {
       itemModel.renameItem(item.itemId, name);
     }
-    onClose({ name });
+    onClose({ name: name || `item-${chance.word()}` });
   };
 
   return (

@@ -229,7 +229,7 @@ const PartyTree = ({ parties, items = () => <></>, selected, onSelect, onCreate 
     setExpanded(nodeIds);
   };
 
-  const selectedParty = parties.find(party => keyToString(party.publicKey) === selected);
+  const selectedParty = parties.find(party => keyToString(party.key) === selected);
 
   // TODO(burdon): Factor out control buttons.
   return (
