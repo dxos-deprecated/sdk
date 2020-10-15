@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.2.1](https://www.github.com/dxos/sdk/compare/v2.2.0...v2.2.1) (2020-10-15)
+
+
+### Bug Fixes
+
+* Add lockfile linting. ([2b2f111](https://www.github.com/dxos/sdk/commit/2b2f1112d9072f86d80c1d27c69e97c93a430440))
+* lockfile-lint, add github ([dfe5f2c](https://www.github.com/dxos/sdk/commit/dfe5f2c03a8a10dab5d511d1b2667692be3896f8))
+
 ## [2.2.0](https://www.github.com/dxos/sdk/compare/v2.1.2...v2.2.0) (2020-10-15)
 
 
