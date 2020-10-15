@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-appkit",
-  "version": "1.1.0-beta.14",
+  "version": "2.1.2-alpha.0",
   "description": "Application framework components",
   "keywords": [],
   "license": "AGPLv3",
@@ -17,16 +17,15 @@
     "test:components": "jest tests/*.test.js --coverage"
   },
   "dependencies": {
-    "@dxos/botkit-client": "^1.1.0-beta.14",
-    "@dxos/credentials": "^0.2.7",
+    "@dxos/botkit-client": "^2.1.2-alpha.0",
+    "@dxos/credentials": "^2.0.0",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/metrics": "^1.0.0-beta.6",
-    "@dxos/party-manager": "^0.2.7",
-    "@dxos/react-client": "^1.1.0-beta.14",
+    "@dxos/react-client": "^2.1.2-alpha.0",
     "@dxos/react-json-tree": "^0.11.3",
-    "@dxos/react-router": "^1.1.0-beta.14",
-    "@dxos/react-ux": "^1.1.0-beta.14",
+    "@dxos/react-router": "^2.1.2-alpha.0",
+    "@dxos/react-ux": "^2.1.2-alpha.0",
     "@dxos/view-model": "^1.0.0-beta.28",
     "@material-ui/core": "^4.9.0",
     "@material-ui/icons": "^4.5.1",
@@ -51,6 +50,8 @@
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.3.0",
     "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
@@ -92,5 +93,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "e96e49570a02d2aa6e2908c50669705bba0f7329"
 }

@@ -23,7 +23,6 @@ import ShareIcon from '@material-ui/icons/Share';
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
 import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
-import { InviteType, InviteDetails } from '@dxos/party-manager';
 import { useClient, useConfig, useProfile } from '@dxos/react-client';
 
 import BotDialog from '../components/BotDialog';
@@ -32,6 +31,10 @@ import ImportKeyringDialog from '../components/ImportKeyringDialog';
 import InvitationDialog from '../components/InvitationDialog';
 
 import { Action, useActionHandler, useAppRouter } from '../hooks';
+
+// TODO(telackey): This file is dead code, and these types no longer exist.
+const InviteDetails = () => {};
+const InviteType = null;
 
 const ACTION_USER_INVITATION = 1;
 const ACTION_DEVICE_INVITATION = 2;
@@ -43,6 +46,7 @@ const ACTION_OPEN_SETTINGS = 7;
 const ACTION_OPEN_PARTY_HOME = 8;
 const ACTION_PARTY_FROM_FILE = 9;
 const ACTION_PARTY_FROM_IPFS = 10;
+const ACTION_OPEN_REDEEM = 11;
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -70,7 +74,8 @@ const AppBar = ({
   onHomeNavigation,
   onPartyHomeNavigation,
   onPartyFromFile,
-  onPartyFromIpfs
+  onPartyFromIpfs,
+  onRedeemOpen
 }) => {
   const classes = useStyles();
   const client = useClient();
@@ -267,6 +272,13 @@ const AppBar = ({
       handler: async () => {
         onPartyFromIpfs && onPartyFromIpfs();
       }
+    },
+
+    [ACTION_OPEN_REDEEM]: {
+      label: 'Redeem party',
+      handler: async () => {
+        onRedeemOpen && onRedeemOpen();
+      }
     }
   };
 
@@ -305,6 +317,10 @@ const AppBar = ({
 
   if (onPartyFromIpfs) {
     menuItems.push(action(ACTION_PARTY_FROM_IPFS));
+  }
+
+  if (onRedeemOpen) {
+    menuItems.push(action(ACTION_OPEN_REDEEM));
   }
 
   menuItems.push(action(ACTION_RESET_STORAGE));

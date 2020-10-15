@@ -6,8 +6,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useClient, useConfig } from '@dxos/react-client';
-import { keyPairFromSeedPhrase, KeyType } from '@dxos/credentials';
-import { keyToString } from '@dxos/crypto';
+import { keyPairFromSeedPhrase } from '@dxos/credentials';
 import { useQuery, createUrl } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';
 
@@ -28,11 +27,11 @@ const Registration = () => {
     await Promise.all(client.feedStore.getDescriptors().map(({ path }) => client.feedStore.deleteDescriptor(path)));
 
     const identityKeyPair = keyPairFromSeedPhrase(seedPhrase);
-    await client.keyring.addKeyRecord({ ...identityKeyPair, type: KeyType.IDENTITY });
-    await client.partyManager.identityManager.initializeForNewIdentity({
-      identityDisplayName: username || keyToString(client.partyManager.identityManager.publicKey),
-      deviceDisplayName: keyToString(client.partyManager.identityManager.deviceManager.publicKey)
-    });
+    await client.createProfile({ ...identityKeyPair, username });
+    // await client.partyManager.identityManager.initializeForNewIdentity({
+    //   identityDisplayName: username || keyToString(client.partyManager.identityManager.publicKey),
+    //   deviceDisplayName: keyToString(client.partyManager.identityManager.deviceManager.publicKey)
+    // });
 
     history.push(createUrl(redirectUrl, rest));
   };

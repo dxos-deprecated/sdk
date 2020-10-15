@@ -37,9 +37,9 @@ export const useAuthenticator = (invitation) => {
           setState({ identity: keyToString(invitation.identityKey) });
         }
       } else {
-        const party = await client.joinParty(invitation, secretProvider);
+        const party = await client.database.joinParty(invitation, secretProvider);
         if (!signal.aborted) {
-          setState({ topic: keyToString(party.publicKey) });
+          setState({ topic: keyToString(party.key) });
         }
       }
     }

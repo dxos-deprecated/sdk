@@ -3,34 +3,34 @@
 //
 
 import React, { useState } from 'react';
-import assert from 'assert';
 
-import { keyToString } from '@dxos/crypto';
-
-import { useClient } from '@dxos/react-client';
+import { keyToBuffer, keyToString } from '@dxos/crypto';
+import { ObjectModel } from '@dxos/object-model';
+import { useClient, useItems } from '@dxos/react-client';
 
 import PartyCard from '../components/PartyCard';
-import { download } from '../helpers';
-import { useAppRouter, usePads, useItems, usePartyRestore } from '../hooks';
+import { useAppRouter, usePads } from '../hooks';
 import DefaultSettingsDialog from './DefaultSettingsDialog';
 
 const PartyCardContainer = ({ party, ipfs }) => {
   const client = useClient();
   const router = useAppRouter();
   const [pads] = usePads();
-  const topic = keyToString(party.publicKey);
-  const { model, createItem } = useItems(topic);
+  const topic = keyToString(party.key);
+  // const { model, createItem } = useItems(topic);
+  const items = useItems({ partyKey: keyToBuffer(topic), type: pads[0].type });
   const [newItemType, setNewItemType] = useState(undefined);
   const [itemSettingsOpen, setItemSettingsOpen] = useState(false);
 
-  const partyRestore = usePartyRestore(topic, pads);
-
-  const handleSavedSettings = ({ name }, metadata = {}, callback) => {
-    assert(newItemType);
-    const itemId = createItem(newItemType, name, metadata);
+  const handleSavedSettings = async ({ name }, metadata = {}, callback) => {
+    const item = await party.database.createItem({
+      model: ObjectModel,
+      type: newItemType,
+      props: { title: name || 'random-name' }
+    });
     handleCanceledSettings();
-    callback && callback(itemId);
-    router.push({ topic, item: itemId });
+    callback && callback(item.id);
+    router.push({ topic, item: item.id });
   };
 
   const handleCanceledSettings = () => {
@@ -43,15 +43,6 @@ const PartyCardContainer = ({ party, ipfs }) => {
     setItemSettingsOpen(true);
   };
 
-  const handleExport = async (toIPFS = false) => {
-    const data = partyRestore.export();
-    if (!toIPFS) {
-      download(data, `${party.displayName || 'party-contents'}.json`);
-      return;
-    }
-    return ipfs.upload(data, 'text/plain');
-  };
-
   const pad = newItemType ? pads.find(pad => pad.type === newItemType) : undefined;
   const Settings = (pad && pad.settings) ? pad.settings : DefaultSettingsDialog;
 
@@ -60,11 +51,11 @@ const PartyCardContainer = ({ party, ipfs }) => {
       <PartyCard
         client={client}
         party={party}
-        itemModel={model}
+        itemModel={items}
         router={router}
         pads={pads}
         onNewItemRequested={handleNewItemRequested}
-        onExport={handleExport}
+        onExport={undefined} // not yet ported
       />
       <Settings
         party={party}
@@ -73,7 +64,7 @@ const PartyCardContainer = ({ party, ipfs }) => {
         onClose={handleSavedSettings}
         onCancel={handleCanceledSettings}
         item={undefined} // no item!
-        itemModel={model}
+        // itemModel={model}
         Icon={pad && pad.icon}
       />
     </>

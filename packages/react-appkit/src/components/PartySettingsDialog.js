@@ -61,7 +61,7 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
 
   // TODO(burdon): Extract client (pass in callback).
   const handleSetTitle = (displayName) => {
-    client.partyManager.setPartyProperty(party.publicKey, { displayName });
+    client.partyManager.setPartyProperty(party.key, { displayName });
   };
 
   const handleExportToIPFS = async () => {

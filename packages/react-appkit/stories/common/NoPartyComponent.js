@@ -24,7 +24,7 @@ export const NoPartyComponent = () => {
       ))}
       <h2>Parties</h2>
       {parties.map(party => {
-        const publicKey = keyToString(party.publicKey);
+        const publicKey = keyToString(party.key);
         return (<div key={publicKey}>{publicKey}</div>);
       })}
     </Box>

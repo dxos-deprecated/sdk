@@ -130,6 +130,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
             onChange={event => setBot(event.target.value)}
           >
             {registryBots
+              .filter(bots => bots.names && bots.names.length)
               .map(({ names = [] }) => names.sort((a, b) => a.length - b.length).filter(name => name.indexOf('@') === -1))
               .filter(names => names.length)
               .map(names => (
@@ -181,6 +182,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
                 onChange={event => setBotFactoryTopic(event.target.value)}
               >
                 {registryBotFactories
+                  .filter(factories => factories.names && factories.names.length)
                   .map(({ topic, names }) => (
                     <MenuItem key={topic} value={topic}>
                       {names[0]}

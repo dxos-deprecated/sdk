@@ -22,7 +22,7 @@ In new terminal, use CLI to spawn a bot, using topic from BotFactory output:
 $ wire bot spawn --bot-id="wrn://dxos/bot/store" --topic <Bot Factory Topic>
 ```
 
-This will produce an output that contains unique Bot ID (botUID).
+This will produce an output that contains unique Bot ID.
 
 Then, use CLI to create a party:
 
@@ -34,5 +34,5 @@ This command will send CLI into interactive mode.
 Within the created party, invite bot using topic from BotFactory output:
 
 ```
-[wire]> bot invite --topic <Bot Factory Topic> --bot-uid <botUID>
+[wire]> bot invite --topic <Bot Factory Topic> --bot-uid <botId>
 ```

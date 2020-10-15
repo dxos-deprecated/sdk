@@ -5,7 +5,7 @@
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 
-import { useClient } from '@dxos/react-client';
+import { useProfile } from '@dxos/react-client';
 import { createUrl, useQuery } from '@dxos/react-router';
 
 /**
@@ -18,11 +18,11 @@ import { createUrl, useQuery } from '@dxos/react-router';
  * ```
  */
 const RequireWallet = ({ children, redirect = '/', isRequired = () => true }) => {
-  const client = useClient();
   const query = useQuery();
   let { pathname } = useLocation();
+  const profile = useProfile();
 
-  const hasIdentity = !!client.partyManager.identityManager.hasIdentity();
+  const hasIdentity = !!profile;
   if (!hasIdentity) {
     if (pathname === '/') {
       pathname = undefined;

@@ -5,20 +5,27 @@
 import debug from 'debug';
 import assert from 'assert';
 import fs, { ensureFileSync } from 'fs-extra';
-import watch from 'node-watch';
 import path from 'path';
-import { spawn } from 'child_process';
-import moment from 'moment';
-import kill from 'tree-kill';
 import yaml from 'js-yaml';
 import { Chance } from 'chance';
 import get from 'lodash.get';
 
-import { keyToString, createKeyPair } from '@dxos/crypto';
+import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
+import { transportProtocolProvider } from '@dxos/network-manager';
+import {
+  COMMAND_SIGN,
+  MESSAGE_CONFIRM,
+  BOT_EVENT,
+  BotPlugin,
+  createInvitationMessage,
+  createSignResponse,
+  createBotCommand
+} from '@dxos/protocol-plugin-bot';
+
 import { Registry } from '@wirelineio/registry-client';
 
-import { log, logBot } from './log';
-import { NATIVE_ENV, SourceManager, getBotCID } from './source-manager';
+import { log } from './log';
+import { NATIVE_ENV, getBotCID } from './env';
 import { BOT_CONFIG_FILENAME } from './config';
 
 const chance = new Chance();
@@ -28,39 +35,62 @@ const logInfo = debug('dxos:botkit');
 // File where information about running bots is stored.
 export const BOTS_DUMP_FILE = 'out/factory-state';
 
-// Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
-export const SPAWNED_BOTS_DIR = '.bots';
-
 export class BotManager {
   /**
-   * @type {Map<String, {botUID: String, process: Process, type: String, parties: Array, timeState: Object, command: String, args: Array, watcher: Object, stopped: Boolean, name: String}>}
+   * @type {Map<String, {botId: String, id: String, parties: Array, started: Object, lastActive: Object, stopped: Boolean, name: String}>}
    */
   _bots = new Map();
 
-  constructor (config, { ipcServerId, ipcServerPort }) {
+  // TODO(egorgripasov): Merge to _bots.
+  _connectedBots = {};
+
+  constructor (config, botContainer, client, options) {
     this._config = config;
-    this._ipcServerId = ipcServerId;
-    this._ipcServerPort = ipcServerPort;
+    this._botContainer = botContainer;
+    this._client = client;
+
+    const { signChallenge, emitBotEvent } = options;
+    this._signChallenge = signChallenge;
+    this._emitBotEvent = emitBotEvent;
 
     this._localDev = this._config.get('bot.localDev');
     this._botsFile = path.join(process.cwd(), BOTS_DUMP_FILE);
 
     this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
-    this._sourceManager = new SourceManager(config);
 
     ensureFileSync(this._botsFile);
+
+    this._botContainer.on('bot-close', async (botId, code) => {
+      const botInfo = this._bots.get(botId);
+      if (!code && botInfo) {
+        botInfo.stopped = true;
+        await this._saveBotsToFile();
+      }
+    });
+
+    this._controlTopic = createKeyPair().publicKey;
+    this._controlPeerKey = this._controlTopic;
+  }
+
+  get controlTopic () {
+    return this._controlTopic;
   }
 
   async start () {
+    this._plugin = new BotPlugin(this._controlPeerKey, (...args) => this._botMessageHandler(...args));
+    // Join control swarm.
+    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
+      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin));
+
     await this._readBotsFromFile();
 
     const reset = this._config.get('bot.reset');
     if (reset) {
       await this.killAllBots();
     } else {
-      for await (const { botUID, stopped } of this._bots.values()) {
+      for await (const { botId, stopped } of this._bots.values()) {
         if (!stopped) {
-          await this._startBot(botUID);
+          await this._startBot(botId);
         }
       }
     }
@@ -68,17 +98,15 @@ export class BotManager {
 
   /**
    * Spawn bot instance.
-   * @param {String} botId
+   * @param {String} botName
    * @param {Object} options
    */
-  async spawnBot (botId, options = {}) {
+  async spawnBot (botName, options = {}) {
     let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
-    assert(botId || ipfsCID);
-
-    log(`Spawn bot request for ${botId || ipfsCID}`);
+    assert(botName || ipfsCID || this._localDev);
 
     if (!ipfsCID) {
-      const botRecord = await this._getBotRecord(botId);
+      const botRecord = await this._getBotRecord(botName);
       if (!this._localDev) {
         ipfsCID = getBotCID(botRecord, env);
       }
@@ -92,256 +120,151 @@ export class BotManager {
       }
     }
 
+    log(`Spawn bot request for ${botName || ipfsCID || displayName}`);
+
     assert(id, 'Invalid Bot Id.');
     assert(displayName, 'Invalid Bot Name.');
 
-    const botPathInfo = await this._sourceManager.getBotPathInfo(id, ipfsCID, env, options);
-    assert(botPathInfo, `Invalid bot: ${botId || ipfsCID}`);
-
-    const botUID = keyToString(createKeyPair().publicKey);
+    const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;
 
-    const childDir = path.join(botPathInfo.installDirectory, SPAWNED_BOTS_DIR, botUID);
-    await fs.ensureDir(childDir);
+    const params = await this._botContainer.getBotAttributes(botName, botId, id, ipfsCID, env, options);
 
-    const { command, args } = this._sourceManager.getCommand(botPathInfo, env);
-    return this._startBot(botUID, { childDir, botId, command, args, name, env });
+    return this._startBot(botId, { botName, env, name, ...params });
   }
 
   /**
-   * @param {String} botUID Unique Bot ID.
+   * @param {String} botId Unique Bot ID.
    */
-  async stopBot (botUID) {
-    this._stopBot(botUID, true);
+  async stopBot (botId) {
+    await this._stopBot(botId, true);
   }
 
   /**
-   * @param {String} botUID Unique Bot ID.
+   * @param {String} botId Unique Bot ID.
    */
-  async killBot (botUID) {
-    const botInfo = this._bots.get(botUID);
-    assert(botInfo, 'Invalid Bot UID');
+  async killBot (botId) {
+    const botInfo = this._bots.get(botId);
+    assert(botInfo, 'Invalid Bot Id');
 
-    this._stopBot(botUID);
-    this._bots.delete(botUID);
+    await this._botContainer.killBot(botInfo);
+    this._bots.delete(botId);
     await this._saveBotsToFile();
 
-    const { childDir } = botInfo;
-
-    await fs.remove(childDir);
-    log(`Bot '${botUID}' removed from Bot Container.`);
+    log(`Bot '${botId}' removed from Bot Container.`);
   }
 
   async killAllBots () {
-    for await (const { process, watcher, childDir } of this._bots.values()) {
-      if (process) {
-        kill(process.pid, 'SIGKILL');
-      }
-      if (watcher) {
-        watcher.close();
-      }
-      if (childDir) {
-        await fs.remove(childDir);
-      }
+    for await (const botInfo of this._bots.values()) {
+      await this._botContainer.killBot(botInfo);
     }
     this._bots.clear();
     await this._saveBotsToFile();
   }
 
   /**
-   * @param {String} botUID Unique Bot ID.
+   * @param {String} botId Unique Bot ID.
    */
-  async restartBot (botUID) {
-    this._stopBot(botUID);
-    await this._startBot(botUID);
+  async restartBot (botId) {
+    await this._stopBot(botId);
+    await this._startBot(botId);
   }
 
   async restartBots () {
-    for await (const { botUID } of this._bots.values()) {
-      await this.restartBot(botUID);
+    for await (const { botId } of this._bots.values()) {
+      await this.restartBot(botId);
     }
   }
 
   /**
-   * @param {String} botUID Unique Bot ID.
+   * @param {String} botId Unique Bot ID.
    */
-  async startBot (botUID) {
-    const botInfo = this._bots.get(botUID);
+  async startBot (botId) {
+    const botInfo = this._bots.get(botId);
 
-    assert(botInfo, 'Invalid Bot UID');
-    assert(botInfo.stopped, `Bot ${botUID} already running`);
-    await this._startBot(botUID);
+    assert(botInfo, 'Invalid Bot ID');
+    assert(botInfo.stopped, `Bot ${botId} already running`);
+    await this._startBot(botId);
   }
 
   /**
-   * @param {String} botUID Unique Bot ID.
+   * @param {String} botId Unique Bot ID.
    * @param {String} topic Party to join.
+   * @param {Object} invitation Invitation.
    */
-  async addParty (botUID, topic) {
-    const botInfo = this._bots.get(botUID);
+  async inviteBot (botId, topic, invitation) {
+    const botInfo = this._bots.get(botId);
 
-    assert(botInfo, 'Invalid Bot UID');
+    assert(botInfo, 'Invalid Bot Id');
     if (botInfo.parties.indexOf(topic) === -1) {
       botInfo.parties.push(topic);
+      await this._saveBotsToFile();
     }
-    await this._saveBotsToFile();
+
+    await this._plugin.sendCommand(keyToBuffer(botId), createInvitationMessage(topic, JSON.parse(invitation)));
   }
 
   async getStatus () {
-    return [...this._bots.values()].map(({ timeState, ...rest }) => ({
+    return [...this._bots.values()].map(({ started, lastActive, ...rest }) => ({
       ...rest,
-      started: timeState ? timeState.started.format() : null,
-      lastActive: timeState ? timeState.lastActive.format() : null
+      started: started ? started.format() : null,
+      lastActive: lastActive ? lastActive.format() : null
     }));
   }
 
-  stop () {
-    for (const { botUID } of this._bots.values()) {
-      this._stopBot(botUID);
+  async stop () {
+    for await (const { botId } of this._bots.values()) {
+      await this._stopBot(botId);
     }
+    await this._leaveControlSwarm();
+  }
+
+  // TODO(egorgripasov): Merge to _bots.
+  botReady (botId) {
+    return this._connectedBots[botId] || false;
+  }
+
+  async sendDirectBotCommand (botId, command) {
+    if (!this._bots.has(botId)) {
+      throw new Error(`Bot ${botId} does not exist.`);
+    }
+    return this._plugin.sendCommand(keyToBuffer(botId), createBotCommand(botId, command));
   }
 
   /**
    * Start bot instance.
-   * @param {String} botUID
+   * @param {String} botId
    * @param {Object} options
    */
-  async _startBot (botUID, options = {}) {
-    const botInfo = this._bots.get(botUID);
+  async _startBot (botId, options = {}) {
+    let botInfo = this._bots.get(botId);
+    botInfo = await this._botContainer.startBot(botId, botInfo, options);
 
-    let { childDir, command, args, name, env } = options; // || botInfo;
-    if (botInfo) {
-      command = botInfo.command;
-      args = botInfo.args;
-      childDir = botInfo.childDir;
-      name = botInfo.name;
-      env = botInfo.env;
-    }
-
-    const wireEnv = {
-      WIRE_BOT_IPC_SERVER: this._ipcServerId,
-      WIRE_IPC_PORT: this._ipcServerPort,
-      WIRE_BOT_UID: botUID,
-      WIRE_BOT_NAME: name,
-      WIRE_BOT_CWD: childDir,
-      WIRE_BOT_RESTARTED: !!botInfo
-    };
-
-    const nodePath = (env !== NATIVE_ENV) ? this._config.get('cli.nodePath') : undefined;
-
-    const childOptions = {
-      env: {
-        ...process.env,
-        NODE_OPTIONS: '',
-        ...(nodePath ? { NODE_PATH: nodePath } : {}),
-        ...wireEnv
-      },
-
-      cwd: childDir,
-
-      // https://nodejs.org/api/child_process.html#child_process_options_detached
-      detached: false
-    };
-
-    const botProcess = spawn(command, args, childOptions);
-
-    const timeState = {
-      started: moment.utc(),
-      lastActive: moment.utc()
-    };
-
-    const watcher = watch(childDir, { recursive: true }, () => {
-      timeState.lastActive = moment.utc();
-    });
-
-    if (botInfo) {
-      // Restart.
-      Object.assign(botInfo, {
-        process: botProcess,
-        timeState,
-        watcher,
-        stopped: false
-      });
-    } else {
-      // New instance.
-      this._bots.set(botUID, {
-        botUID,
-        childDir,
-        process: botProcess,
-        type: options.botId,
-        parties: [],
-        timeState,
-        command,
-        args,
-        watcher,
-        stopped: false,
-        name,
-        env
-      });
-    }
+    this._bots.set(botId, botInfo);
     await this._saveBotsToFile();
 
-    log(`Spawned bot: ${JSON.stringify({ pid: botProcess.pid, command, args, wireEnv, cwd: childDir })}`);
-
-    botProcess.stdout.on('data', (data) => {
-      logBot[botProcess.pid](`${data}`);
-    });
-
-    botProcess.stderr.on('data', (data) => {
-      logBot[botProcess.pid](`${data}`);
-    });
-
-    botProcess.on('close', async (code) => {
-      const botInfo = this._bots.get(botUID);
-      if (!code && botInfo) {
-        botInfo.stopped = true;
-        await this._saveBotsToFile();
-      }
-      log(`Bot pid: ${botProcess.pid} exited with code ${code}.`);
-    });
-
-    botProcess.on('error', (err) => {
-      logBot[botProcess.pid](`Error: ${err}`);
-    });
-
-    return botUID;
+    return botId;
   }
 
   /**
-   * @param {String} botUID Unique Bot UID
+   * @param {String} botId Unique Bot Id
    * @param {Boolean} stopped Whether bot should be marked as stopped
    */
-  _stopBot (botUID, stopped = false) {
-    const botInfo = this._bots.get(botUID);
-    assert(botInfo, 'Invalid Bot UID');
+  async _stopBot (botId, stopped = false) {
+    const botInfo = this._bots.get(botId);
+    assert(botInfo, 'Invalid Bot Id');
 
-    const { process, watcher } = botInfo;
-
-    if (process && process.pid) {
-      kill(process.pid, 'SIGKILL');
-    }
-    if (watcher) {
-      watcher.close();
-    }
+    await this._botContainer.stopBot(botInfo);
 
     if (stopped) {
       botInfo.stopped = true;
+      await this._saveBotsToFile();
     }
-    log(`Bot '${botUID}' stopped.`);
+    log(`Bot '${botId}' stopped.`);
   }
 
   async _saveBotsToFile () {
-    const data = [...this._bots.values()].map(({ botUID, type, childDir, parties, command, args, stopped, name, env }) => ({
-      botUID,
-      type,
-      name,
-      childDir,
-      parties,
-      command,
-      args,
-      stopped,
-      env
-    }));
+    const data = [...this._bots.values()].map(this._botContainer.serializeBot);
     await fs.writeJSON(this._botsFile, data);
   }
 
@@ -354,22 +277,55 @@ export class BotManager {
     } catch (err) {
       logInfo(err);
     }
-    data.forEach(({ botUID, ...rest }) => {
-      this._bots.set(botUID, { botUID, ...rest });
+    data.forEach(({ botId, ...rest }) => {
+      this._bots.set(botId, { botId, ...rest });
     });
   }
 
-  async _getBotRecord (botId) {
+  /**
+   * Handle incoming messages from bot processes.
+   * @param {Protocol} protocol
+   * @param {{ message }} command.
+   */
+  async _botMessageHandler (protocol, { message }) {
+    let result;
+    switch (message.__type_url) {
+      case COMMAND_SIGN: {
+        result = createSignResponse(this._signChallenge(message.message));
+        break;
+      }
+
+      case MESSAGE_CONFIRM: {
+        const { botId } = message;
+        this._connectedBots[botId] = true;
+        break;
+      }
+
+      // Arbitrary event from bot.
+      case BOT_EVENT: {
+        await this._emitBotEvent(message);
+        break;
+      }
+
+      default: {
+        log('Unknown command:', message);
+      }
+    }
+
+    return result;
+  }
+
+  async _getBotRecord (botName) {
     if (this._localDev) {
       const botInfo = yaml.load(
         await fs.readFile(path.join(process.cwd(), BOT_CONFIG_FILENAME))
       );
-      return { attributes: { displayName: botInfo.name }, id: botInfo.id };
+      return { attributes: { name: botInfo.name }, id: sha256(botInfo.name) };
     }
-    const { records } = await this._registry.resolveNames([botId]);
+    const { records } = await this._registry.resolveNames([botName]);
     if (!records.length) {
-      log(`Bot not found: ${botId}.`);
-      throw new Error(`Invalid bot: ${botId}`);
+      log(`Bot not found: ${botName}.`);
+      throw new Error(`Invalid bot: ${botName}`);
     }
     return records[0];
   }

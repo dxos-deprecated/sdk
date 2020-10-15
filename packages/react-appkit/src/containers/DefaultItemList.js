@@ -8,8 +8,9 @@ import { useParams } from 'react-router-dom';
 import TreeView from '@material-ui/lab/TreeView';
 import { Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { ObjectModel } from '@dxos/object-model';
 
-import { useParty } from '@dxos/react-client';
+import { useParty, useItems } from '@dxos/react-client';
 
 import {
   NewItemCreationMenu,
@@ -17,8 +18,9 @@ import {
   PartyTreeItem
 } from '../components';
 
-import MemberListWithStatuses from './MemberListWithStatuses';
-import { usePads, useAppRouter, useItems } from '../hooks';
+import MemberList from '../components/MemberList';
+import { usePads, useAppRouter } from '../hooks';
+import { keyToBuffer } from '@dxos/crypto';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,10 +42,10 @@ const useStyles = makeStyles(theme => ({
 const DefaultItemList = () => {
   const router = useAppRouter();
   const { topic, item: active } = useParams();
-  const party = useParty(topic);
+  const party = useParty(keyToBuffer(topic));
   const classes = useStyles();
   const [pads] = usePads();
-  const { model, createItem } = useItems(topic);
+  const items = useItems({ partyKey: keyToBuffer(topic), type: pads[0].type });
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const anchor = useRef();
 
@@ -51,24 +53,28 @@ const DefaultItemList = () => {
     router.push({ topic, item: itemId });
   };
 
-  const handleCreate = (type) => {
+  const handleCreate = async (type) => {
     assert(type);
     setNewItemCreationMenuOpen(false);
-    const itemId = createItem(type);
+    const itemId = await party.database.createItem({
+      model: ObjectModel,
+      type: pads[0].type,
+      props: {}
+    });
     handleSelect(itemId);
   };
 
   return (
     <div className={classes.root}>
       <TreeView>
-        {model.getAllItems().map(item => (
+        {items.map(item => (
           <PartyTreeItem
-            key={item.itemId}
-            id={item.itemId}
-            label={item.displayName}
+            key={item.id}
+            id={item.id}
+            label={item._model.getProperty('title') || 'Untitled'}
             icon={pads.find(pad => pad.type === item.type)?.icon}
-            isSelected={active === item.itemId}
-            onSelect={() => handleSelect(item.itemId)}
+            isSelected={active === item.id}
+            onSelect={() => handleSelect(item.id)}
           />
         ))}
 
@@ -76,7 +82,7 @@ const DefaultItemList = () => {
         <NewItemCreationMenu anchorEl={anchor.current} open={newItemCreationMenuOpen} onSelect={handleCreate} onClose={() => setNewItemCreationMenuOpen(false)} pads={pads} />
       </TreeView>
       <Divider />
-      <MemberListWithStatuses party={party} />
+      <MemberList party={party} />
     </div>
   );
 };

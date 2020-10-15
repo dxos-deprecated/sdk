@@ -32,7 +32,6 @@ export const WithClientAndIdentity = (story) => {
       // TODO(rzadp,rburdon): Replace with actual client SDK for creating a profile
       const client = new Client({ storage, keyring, registry });
       await client.initialize();
-      await client.partyManager.identityManager.initializeForNewIdentity();
       setClient(client);
     }
     runEffect();

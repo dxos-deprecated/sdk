@@ -9,15 +9,28 @@ import ram from 'random-access-memory';
 import path from 'path';
 import EventEmitter from 'events';
 
-import { randomBytes, keyToBuffer, keyToString } from '@dxos/crypto';
-import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
-import { createClient } from '@dxos/client';
+import { promiseTimeout } from '@dxos/async';
+import { randomBytes, keyToBuffer, keyToString, createKeyPair } from '@dxos/crypto';
+import { Keyring, KeyStore } from '@dxos/credentials';
+import { Client } from '@dxos/client';
+import { transportProtocolProvider } from '@dxos/network-manager';
+
+import {
+  COMMAND_BOT_INVITE,
+  BOT_COMMAND,
+  BotPlugin,
+  createSignCommand,
+  createConnectConfirmMessage,
+  createBotCommandResponse,
+  createEvent
+} from '@dxos/protocol-plugin-bot';
 
 import { InvitationDescriptor } from '@dxos/party-manager';
 import { createStorage, STORAGE_NODE } from '@dxos/random-access-multi-storage';
 
 import { getClientConfig } from './config';
-import { COMMAND_INVITE, startIPCClient, createSignCommand } from './ipc';
+
+const CONNECT_TIMEOUT = 30000;
 
 const log = debug('dxos:botkit');
 
@@ -40,13 +53,17 @@ export class Bot extends EventEmitter {
   constructor (config, options = {}) {
     super();
 
-    const { uid, persistent = true, restarted = false, cwd, name } = config.get('bot');
+    const { uid, persistent = true, restarted = false, cwd, name, controlTopic } = config.get('bot');
 
     this._uid = uid;
     this._persistent = persistent;
     this._restarted = restarted;
     this._cwd = cwd;
     this._name = name;
+
+    this._controlTopic = keyToBuffer(controlTopic);
+    this._controlPeerKey = keyToBuffer(this._uid);
+    this._botFactoryPeerKey = this._controlTopic;
 
     this._options = options;
     this._config = config;
@@ -56,7 +73,7 @@ export class Bot extends EventEmitter {
    * Start the bot.
    */
   async start () {
-    this._ipcClient = await startIPCClient(this._config, this._botMessageHandler.bind(this));
+    this._plugin = new BotPlugin(this._controlPeerKey, (...args) => this._botMessageHandler(...args));
 
     let feedStorage;
     if (this._persistent) {
@@ -71,61 +88,76 @@ export class Bot extends EventEmitter {
       this._keyRing = new Keyring();
     }
 
-    if (!this._restarted || !this._persistent) {
-      await this._keyRing.createKeyRecord({ type: KeyType.IDENTITY });
-    }
-
     log('Starting.');
-    this._client = await createClient(feedStorage, this._keyRing, getClientConfig(this._config));
+
+    this._client = new Client({
+      storage: feedStorage,
+      swarm: getClientConfig(this._config).swarm,
+      keyring: this._keyRing
+    });
+    await this._client.initialize();
 
     if (!this._restarted || !this._persistent) {
-      await this._client.partyManager.identityManager.initializeForNewIdentity({
-        identityDisplayName: this._name,
-        deviceDisplayName: this._name
-      });
-      log(`Identity initialized: ${this._client.partyManager.identityManager.publicKey}`);
+      const { publicKey, secretKey } = createKeyPair();
+      await this._client.createProfile({ publicKey, secretKey, username: this._name });
+      log(`Identity initialized: ${keyToString(publicKey)}`);
     }
+
+    // Join control swarm.
+    log('Joining control topic.');
+    await this._connectToControlTopic();
 
     // Parties joined during current session.
-    this._client.partyManager.on('party', topic => {
-      const partyKey = keyToString(topic);
-      if (!this._parties.has(partyKey)) {
-        this._parties.add(partyKey);
-        this.emit('party', partyKey);
-      }
-    });
+    // this._client.partyManager.on('party', topic => {
+    //   const partyKey = keyToString(topic);
+    //   if (!this._parties.has(partyKey)) {
+    //     this._parties.add(partyKey);
+    //     this.emit('party', partyKey);
+    //   }
+    // });
 
-    this._ipcClient.confirmConnection();
+    await this._plugin.sendCommand(this._botFactoryPeerKey, createConnectConfirmMessage(this._uid));
 
-    const parties = this._client.partyManager._parties;
+    // const parties = this._client.partyManager._parties;
 
-    // Parties restored after restart.
-    if (parties.size > 1) {
-      await Promise.all([...parties.keys()].map(async topic => {
-        if (!this._parties.has(topic)) {
-          this._parties.add(topic);
-          await this._client.partyManager.openParty(keyToBuffer(topic));
-          this.emit('party', topic);
-        }
-      }));
-    }
+    // // Parties restored after restart.
+    // if (parties.size > 1) {
+    //   await Promise.all([...parties.keys()].map(async topic => {
+    //     if (!this._parties.has(topic)) {
+    //       this._parties.add(topic);
+    //       await this._client.partyManager.openParty(keyToBuffer(topic));
+    //       this.emit('party', topic);
+    //     }
+    //   }));
+    // }
   }
 
   /**
    * Handle incoming messages from bot factory process.
-   * @param {Object} command
+   * @param {Protocol} protocol
+   * @param {{ message }} command.
    */
-  async _botMessageHandler (command) {
+  async _botMessageHandler (protocol, { message }) {
     let result;
-    switch (command.__type_url) {
-      case COMMAND_INVITE: {
-        const { topic, invitation } = command;
+    switch (message.__type_url) {
+      case COMMAND_BOT_INVITE: {
+        const { topic, invitation } = message;
         await this._joinParty(topic, invitation);
         break;
       }
 
+      case BOT_COMMAND: {
+        const { command } = message;
+        try {
+          const data = await this.botCommandHandler(command);
+          return createBotCommandResponse(data);
+        } catch (error) {
+          return createBotCommandResponse(null, error.message);
+        }
+      }
+
       default: {
-        log('Unknown command:', command);
+        log('Unknown command:', message);
       }
     }
 
@@ -137,7 +169,7 @@ export class Bot extends EventEmitter {
       const secretProvider = async () => {
         log('secretProvider begin.');
         const message = randomBytes(32);
-        const { signature } = await this._ipcClient.sendMessage(createSignCommand(message), { waitForResponse: true });
+        const { message: { signature } } = await this._plugin.sendCommand(this._botFactoryPeerKey, createSignCommand(message));
         const secret = Buffer.alloc(signature.length + message.length);
         signature.copy(secret);
         message.copy(secret, signature.length);
@@ -146,11 +178,38 @@ export class Bot extends EventEmitter {
       };
 
       log(`Joining party with invitation: ${JSON.stringify(invitation)}`);
-      await this._client.partyManager.joinParty(InvitationDescriptor.fromQueryParameters(invitation),
-        secretProvider);
-    }
 
-    // TODO(dboreham): This probably isn't necessary/doesn't work.
-    await this._client.partyManager.openParty(keyToBuffer(topic));
+      const party = await this._client.echo.joinParty(InvitationDescriptor.fromQueryParameters(invitation), secretProvider);
+      await party.open();
+    }
+  }
+
+  async stop () {
+    await this._leaveControlSwarm();
+  }
+
+  async botCommandHandler () {
+
+  }
+
+  async emitBotEvent (type, data) {
+    await this._plugin.sendCommand(this._botFactoryPeerKey, createEvent(this._uid, type, data));
+  }
+
+  async _connectToControlTopic () {
+    const connect = new Promise(resolve => {
+      // TODO(egorgripasov): Factor out.
+      this._plugin.on('peer:joined', peerId => {
+        if (peerId.equals(this._botFactoryPeerKey)) {
+          log('Bot factory peer connected');
+          resolve();
+        }
+      });
+    });
+
+    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
+      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin));
+
+    return promiseTimeout(connect, CONNECT_TIMEOUT);
   }
 }

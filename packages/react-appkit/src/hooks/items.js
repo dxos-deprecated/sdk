@@ -18,6 +18,7 @@ const chance = new Chance();
  * @returns {ItemModel}
  */
 export const useItems = (topic) => {
+  console.warn('New useItems from react-client should be used');
   const [items, setItems] = useState([]);
   const [pads] = usePads();
   const model = useModel({ model: ItemModel, options: { type: pads.map(pad => pad.type), topic } });

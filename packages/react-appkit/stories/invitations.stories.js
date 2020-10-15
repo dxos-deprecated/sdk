@@ -16,6 +16,7 @@ import { AppKitContextProvider, BotDialog, AuthenticatorDialog, PartySharingDial
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads, NoPartyComponent } from './common';
 import { useAppRouter } from '../src/hooks';
+import { keyToBuffer } from '@dxos/crypto';
 
 const errorHandler = new ErrorHandler();
 
@@ -132,7 +133,7 @@ export const withAuthenticatorDialogError = () => {
 const PartySharingComponent = () => {
   const [open, setOpen] = useState(true);
   const { topic } = useParams();
-  const party = useParty(topic);
+  const party = useParty(keyToBuffer(topic));
   const client = useClient();
   const router = useAppRouter();
 
