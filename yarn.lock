@@ -1097,20 +1097,6 @@
   resolved "https://registry.yarnpkg.com/@dxos/async/-/async-1.0.0-beta.8.tgz#051a47259d17a18e1a77c0ef8056fa0377d95207"
   integrity sha512-sAak4G0ufz2a/SBs28Kgu4TiwyGODPnVxTOYdojdAset7CEM1SpvEci0D7MPU0eCqlB2IMniveIp5paas6i8Vw==
 
-"@dxos/botkit-client@^2.0.0":
-  version "2.1.1"
-  resolved "http://npm.dev.dxos.network:5736/@dxos%2fbotkit-client/-/botkit-client-2.1.1.tgz#c1353812cc7eacfdd2d3798e2562e693d38b1858"
-  integrity sha512-mAtR/C62qkrG4G/ccEROSyrAtzPCBksVAe3SLIXv6jt2esO2oXdlLcETUp9zS/oAIBqH7NgyDGe2wC48W/Udqg==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.1"
-    "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/debug" "^1.0.0-beta.73"
-    "@dxos/network-manager" "^1.0.0-beta.108"
-    "@dxos/protocol-plugin-bot" "^1.1.0-beta.18"
-    assert "^2.0.0"
-    debug "^4.1.1"
-    hypercore-crypto "^1.0.0"
-
 "@dxos/broadcast@^1.0.0-beta.6":
   version "1.0.0-beta.10"
   resolved "https://registry.yarnpkg.com/@dxos/broadcast/-/broadcast-1.0.0-beta.10.tgz#a4590aacd36f3e91bfd1b4aee5f964bb68206e32"
