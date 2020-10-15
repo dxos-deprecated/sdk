@@ -23,14 +23,20 @@ const PartyCardContainer = ({ party, ipfs }) => {
   const [itemSettingsOpen, setItemSettingsOpen] = useState(false);
 
   const handleSavedSettings = async ({ name }, metadata = {}, callback) => {
-    const item = await party.database.createItem({
-      model: ObjectModel,
-      type: newItemType,
-      props: { title: name || 'random-name' }
-    });
+    const pad = pads.find(p => p.type === newItemType);
+    if (pad && pad.create) {
+      const itemId = await pad.create({ party, client }, { name });
+      router.push({ topic, item: itemId });
+    } else {
+      const item = await party.database.createItem({
+        model: ObjectModel,
+        type: newItemType,
+        props: { title: name || 'random-name' }
+      });
+      callback && callback(item.id);
+      router.push({ topic, item: item.id });
+    }
     handleCanceledSettings();
-    callback && callback(item.id);
-    router.push({ topic, item: item.id });
   };
 
   const handleCanceledSettings = () => {
