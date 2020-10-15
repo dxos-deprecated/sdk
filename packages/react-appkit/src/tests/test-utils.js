@@ -1,5 +1,5 @@
 import React from 'react';
-import Theme from '../src/components/Theme';
+import Theme from '../components/Theme';
 import { render } from '@testing-library/react';
 
 const themeBase = {

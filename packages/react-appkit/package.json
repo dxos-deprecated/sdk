@@ -13,8 +13,8 @@
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir ./src --verbose --passWithNoTests",
-    "test:components": "jest tests/*.test.js --coverage"
+    "test": "jest --verbose --passWithNoTests",
+    "test:components": "jest"
   },
   "dependencies": {
     "@dxos/botkit-client": "^2.1.2-alpha.0",

@@ -1,7 +1,7 @@
 
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import React from 'react';
-import AuthenticatorDialog from '../src/components/AuthenticatorDialog';
+import AuthenticatorDialog from '../components/AuthenticatorDialog';
 import { renderWithTheme } from './test-utils';
 
 describe('AuthenticatorDialog', () => {
