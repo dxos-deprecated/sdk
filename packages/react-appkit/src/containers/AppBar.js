@@ -22,7 +22,7 @@ import ShareIcon from '@material-ui/icons/Share';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
-import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH, humanize } from '@dxos/crypto';
 import { useClient, useConfig, useProfile } from '@dxos/react-client';
 
 import BotDialog from '../components/BotDialog';
@@ -433,7 +433,7 @@ const AppBar = ({
         ))}
 
         <div>
-          <Tooltip title={profile.username}>
+          <Tooltip title={humanize(profile.username)}>
             <IconButton color='inherit'>
               <ProfileIcon />
             </IconButton>
