@@ -41,7 +41,7 @@ const PartyMemberList = ({ party, onShare }) => {
         ))}
       </AvatarGroup>
 
-      <Tooltip title='Share' placement='top'>
+      <Tooltip title='Share' name='share' placement='top'>
         <Avatar style={getAvatarStyle(theme)} onClick={onShare}>
           <ShareIcon />
         </Avatar>
