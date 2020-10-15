@@ -24,7 +24,7 @@ jobs:
       uses: ziishaned/jest-reporter-action@v0.0.1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        test-command: "yarn test:components"
+        test-command: "cd packages/react-appkit && yarn test:components && cd ../.."
     - run: |
         yarn
         yarn lint
