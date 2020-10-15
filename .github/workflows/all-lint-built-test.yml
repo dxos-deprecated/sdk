@@ -25,8 +25,8 @@ jobs:
         yarn lint
         yarn build
         yarn test
-    - name: Jest Code Coverage Report
-      uses: ziishaned/jest-reporter-action@v0.0.1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        test-command: "cd packages/react-appkit && yarn test:components"
+        yarn test:components
+    uses: romeovs/lcov-reporter-action@v0.2.16
+    with:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      lcov-file: ./coverage/lcov.info
