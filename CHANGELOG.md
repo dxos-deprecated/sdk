@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/dxos/sdk/compare/v2.1.2...v2.2.0) (2020-10-15)
+
+
+### Features
+
+* Required changes for implementing new Echo in Teamwork ([#210](https://www.github.com/dxos/sdk/issues/210)) ([781369c](https://www.github.com/dxos/sdk/commit/781369c10a539a57f6f8eeba3bb40410e72ccbb7))
+
 ### [2.1.2](https://www.github.com/dxos/sdk/compare/v2.1.1...v2.1.2) (2020-10-14)
 
 
