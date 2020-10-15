@@ -47,6 +47,12 @@ describe('AuthenticatorDialog', () => {
   });
 
   test('Cancel click is handled', async () => {
+    // let cancelled = false;
+    // const props = {
+    //   ...defaultProps,
+    //   onCancel: () => { cancelled = true; }
+    // };
 
+    // renderWithTheme(<AuthenticatorDialog {...props} />);
   });
 });
