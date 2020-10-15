@@ -20,13 +20,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Jest Code Coverage Report
-      uses: ziishaned/jest-reporter-action@v0.0.1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        test-command: "cd packages/react-appkit && yarn test:components && cd ../.."
     - run: |
         yarn
         yarn lint
         yarn build
         yarn test
+    - name: Jest Code Coverage Report
+      uses: ziishaned/jest-reporter-action@v0.0.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        test-command: "cd packages/react-appkit && yarn test:components && cd ../.."
