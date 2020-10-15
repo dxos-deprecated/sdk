@@ -18,7 +18,7 @@ import { renderWithTheme } from './test-utils';
 // import Adapter from 'enzyme-adapter-react-16';
 // enzyme.configure({ adapter: new Adapter() });
 
-describe.only('PartyMemberList', () => {
+describe.skip('Party Member List', () => {
   // const client = new Client({
   //   storage: ram,
   //   swarm: {

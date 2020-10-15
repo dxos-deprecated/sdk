@@ -20,8 +20,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Jest Code Coverage Report
+      uses: ziishaned/jest-reporter-action@0.1.1
     - run: |
         yarn
         yarn lint
         yarn build
         yarn test
+        yarn test:components
