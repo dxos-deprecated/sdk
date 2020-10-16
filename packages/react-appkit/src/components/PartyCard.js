@@ -181,6 +181,7 @@ const PartyCard = ({
               edge='end'
               aria-label='settings'
               onClick={() => setSettingsDialogOpen(true)}
+              disabled // Not implemented yet for new ECHO/HALO
             >
               <SettingsIcon />
             </IconButton>
