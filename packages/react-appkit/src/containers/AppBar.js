@@ -22,7 +22,7 @@ import ShareIcon from '@material-ui/icons/Share';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
-import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH, humanize } from '@dxos/crypto';
 import { useClient, useConfig, useProfile } from '@dxos/react-client';
 
 import BotDialog from '../components/BotDialog';
@@ -292,32 +292,33 @@ const AppBar = ({
 
   //
   // Menu items
+  // Disabled as not yet implemented for the new ECHO/HALO
   //
 
   const menuItems = [
-    action(ACTION_DEVICE_INVITATION)
+    // action(ACTION_DEVICE_INVITATION)
   ];
 
-  if (topic) {
-    menuItems.push(action(ACTION_EXPORT_KEYRING));
-    menuItems.push(action(ACTION_IMPORT_KEYRING));
-  }
+  // if (topic) {
+  //   menuItems.push(action(ACTION_EXPORT_KEYRING));
+  //   menuItems.push(action(ACTION_IMPORT_KEYRING));
+  // }
 
-  if (onSettingsOpened) {
-    menuItems.push(action(ACTION_OPEN_SETTINGS));
-  }
+  // if (onSettingsOpened) {
+  //   menuItems.push(action(ACTION_OPEN_SETTINGS));
+  // }
 
-  if (onPartyHomeNavigation) {
-    menuItems.push(action(ACTION_OPEN_PARTY_HOME));
-  }
+  // if (onPartyHomeNavigation) {
+  //   menuItems.push(action(ACTION_OPEN_PARTY_HOME));
+  // }
 
-  if (onPartyFromFile) {
-    menuItems.push(action(ACTION_PARTY_FROM_FILE));
-  }
+  // if (onPartyFromFile) {
+  //   menuItems.push(action(ACTION_PARTY_FROM_FILE));
+  // }
 
-  if (onPartyFromIpfs) {
-    menuItems.push(action(ACTION_PARTY_FROM_IPFS));
-  }
+  // if (onPartyFromIpfs) {
+  //   menuItems.push(action(ACTION_PARTY_FROM_IPFS));
+  // }
 
   if (onRedeemOpen) {
     menuItems.push(action(ACTION_OPEN_REDEEM));
@@ -433,7 +434,7 @@ const AppBar = ({
         ))}
 
         <div>
-          <Tooltip title={profile.username}>
+          <Tooltip title={humanize(profile.username)}>
             <IconButton color='inherit'>
               <ProfileIcon />
             </IconButton>

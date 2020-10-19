@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/dxos/sdk/compare/v2.2.1...v2.3.0) (2020-10-19)
+
+
+### Features
+
+* Trigger publish ([65eb87e](https://www.github.com/dxos/sdk/commit/65eb87e6c4b736ec3041e9a6607396b84acf1259))
+
+### [2.2.1](https://www.github.com/dxos/sdk/compare/v2.2.0...v2.2.1) (2020-10-15)
+
+
+### Bug Fixes
+
+* Add lockfile linting. ([2b2f111](https://www.github.com/dxos/sdk/commit/2b2f1112d9072f86d80c1d27c69e97c93a430440))
+* lockfile-lint, add github ([dfe5f2c](https://www.github.com/dxos/sdk/commit/dfe5f2c03a8a10dab5d511d1b2667692be3896f8))
+
+## [2.2.0](https://www.github.com/dxos/sdk/compare/v2.1.2...v2.2.0) (2020-10-15)
+
+
+### Features
+
+* Required changes for implementing new Echo in Teamwork ([#210](https://www.github.com/dxos/sdk/issues/210)) ([781369c](https://www.github.com/dxos/sdk/commit/781369c10a539a57f6f8eeba3bb40410e72ccbb7))
+
 ### [2.1.2](https://www.github.com/dxos/sdk/compare/v2.1.1...v2.1.2) (2020-10-14)
 
 

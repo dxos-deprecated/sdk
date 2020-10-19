@@ -1,6 +1,6 @@
 {
   "name": "@dxos/sdk",
-  "version": "2.1.2",
+  "version": "2.3.0",
   "private": true,
   "description": "DXOS SDK monorepo.",
   "homepage": "https://github.com/dxos/sdk#readme",
@@ -21,15 +21,18 @@
   "scripts": {
     "build": "lerna run build",
     "clean": "lerna run clean",
-    "lint": "lerna run lint",
+    "lint": "lerna run lint && npm run lint:lockfile",
     "lint:fix": "lerna run lint -- --fix",
     "test": "lerna run test",
     "test:components": "lerna run test:components",
-    "posttest": "npm run lint"
+    "posttest": "npm run lint",
+    "lint:staged": "lint-staged",
+    "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https",
+    "precommit": "npm run lint:staged && npm run lint:lockfile"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm run lint:staged && npm run lint:lockfile"
     }
   },
   "lint-staged": {
@@ -40,6 +43,7 @@
     "husky": "^3.1.0",
     "lerna": "^3.19.0",
     "lint-staged": "^9.5.0",
+    "lockfile-lint": "^4.3.7",
     "semistandard": "14.2.0"
   },
   "semistandard": {

@@ -45,7 +45,7 @@ const DefaultItemList = () => {
   const party = useParty(keyToBuffer(topic));
   const classes = useStyles();
   const [pads] = usePads();
-  const items = useItems({ partyKey: keyToBuffer(topic), type: pads[0].type });
+  const items = useItems({ partyKey: keyToBuffer(topic), type: pads.map(pad => pad.type) });
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const anchor = useRef();
 
@@ -58,7 +58,7 @@ const DefaultItemList = () => {
     setNewItemCreationMenuOpen(false);
     const itemId = await party.database.createItem({
       model: ObjectModel,
-      type: pads[0].type,
+      type: type,
       props: {}
     });
     handleSelect(itemId);

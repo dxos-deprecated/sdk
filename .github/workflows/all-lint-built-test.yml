@@ -20,13 +20,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: |
-        yarn
-        yarn lint
-        yarn build
-        yarn test
-        yarn test:components
+    - run: yarn install --frozen-lockfile
+    - run: yarn lint
+    - run: yarn build
+    - run: yarn test
+    - run: yarn test:components
     - uses: romeovs/lcov-reporter-action@v0.2.16
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         lcov-file: ./coverage/lcov.info
+    
