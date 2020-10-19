@@ -8,33 +8,88 @@ import memdown from 'memdown';
 
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
-import { keyToString } from '@dxos/crypto';
+import { humanize, keyToString } from '@dxos/crypto';
 import { FeedStore } from '@dxos/feed-store';
-import metrics from '@dxos/metrics';
-import { ModelFactory } from '@dxos/model-factory';
+import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
+import { raise } from '@dxos/util';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import {
-  codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager
+  codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager, SecretProvider, InvitationOptions, InvitationDescriptor
 } from '@dxos/echo-db';
 import { ObjectModel } from '@dxos/object-model';
 
 import { defaultClientConfig } from './config';
 
+export interface ClientConfig {
+  /**
+   * A random access storage instance.
+   */
+  storage?: any,
+
+  /**
+   * Swarm config.
+   */
+  swarm?: any
+
+  /**
+   * Keyring.
+   */
+  keyring?: Keyring
+
+  /**
+   * Optional. If provided, config.storage is ignored.
+   */
+  feedStore?: FeedStore
+
+  /**
+   * Optional. If provided, config.swarm is ignored.
+   */
+  networkManager?: NetworkManager
+
+  /**
+   * Optional.
+   */
+  partyManager?: PartyManager
+
+  /**
+   * Optional.
+   */
+  registry?: any
+}
+
+export interface CreateProfileOptions {
+  publicKey?: Buffer
+  secretKey?: Buffer
+  username?: string
+}
+
 /**
  * Data client.
  */
 export class Client {
-  /**
-   * @param {Object} config
-   * @param {RandomAccessAbstract} config.storage a random access storage instance.
-   * @param {Object} config.swarm
-   * @param {Keyring} config.keyring
-   * @param {FeedStore} config.feedStore Optional. If provided, config.storage is ignored.
-   * @param {NetworkManager} config.networkManager Optional. If provided, config.swarm is ignored.
-   * @param {PartyManager} config.partyManager Optional.
-   * @param {Registry} config.registry Optional.
-   */
-  constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }) {
+  private readonly _feedStore: FeedStore;
+
+  private readonly _keyring: Keyring;
+
+  private readonly _swarmConfig?: any;
+
+  private readonly _modelFactory: ModelFactory;
+
+  private readonly _identityManager: IdentityManager;
+
+  private readonly _networkManager: NetworkManager;
+
+  private readonly _partyFactory: PartyFactory;
+
+  private readonly _partyManager: PartyManager;
+
+  private readonly _echo: ECHO;
+
+  private readonly _registry?: any;
+
+  private _initialized = false;
+ 
+  constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }: ClientConfig) {
     this._feedStore = feedStore || new FeedStore(
       storage || createStorage('dxos-storage-db', 'ram'),
       { feedOptions: { valueEncoding: codec } });
@@ -45,7 +100,7 @@ export class Client {
     this._modelFactory = new ModelFactory()
       .registerModel(ObjectModel);
 
-    this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig, metrics));
+    this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig));
 
     const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
 
@@ -54,9 +109,6 @@ export class Client {
 
     this._echo = new ECHO(this._partyManager);
     this._registry = registry;
-
-    this._partyWriters = {};
-    this._feedOwnershipCache = new Map();
   }
 
   /**
@@ -83,7 +135,7 @@ export class Client {
    * Cleanup, release resources.
    */
   async destroy () {
-    await this._partyManager.destroy();
+    await this._echo.close();
     await this._networkManager.close();
   }
 
@@ -102,13 +154,8 @@ export class Client {
   /**
    * Create Profile. Add Identity key if public and secret key are provided. Then initializes profile with given username.
    * If not public and secret key are provided it relies on keyring to contain an identity key.
-   *
-   * @param {Object} options
-   * @param {Buffer} options.publicKey
-   * @param {Buffer} options.secretKey
-   * @param {String} options.username
    */
-  async createProfile ({ publicKey, secretKey, username } = {}) {
+  async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
     if (publicKey && secretKey) {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
     }
@@ -119,11 +166,6 @@ export class Client {
     await this._partyManager.createHalo({
       identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
     });
-
-    // await this._identityManager.initializeForNewIdentity({
-    //   identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
-    //   // deviceDisplayName: keyToString(this._identityManager.deviceManager.identityKey)
-    // });
   }
 
   /**
@@ -157,13 +199,12 @@ export class Client {
   }
 
   /**
-   * @param {Buffer} partyKey Party publicKey
-   * @param {SecretProvider} secretProvider
+   * @param partyKey Party publicKey
    */
-  async createInvitation (partyKey, secretProvider, options) {
-    const party = await this.echo.getParty(partyKey);
+  async createInvitation (partyKey: Uint8Array, secretProvider: SecretProvider, options?: InvitationOptions) {
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found ${humanize(partyKey)}`));
     return party.createInvitation({
-      secretValidator: (invitation, secret) => secret && secret.equals(invitation.secret),
+      secretValidator: async (invitation, secret) => secret && secret.equals((invitation as any).secret), // TODO(marik-d): Probably an error here.
       secretProvider
     },
     options);
@@ -174,13 +215,8 @@ export class Client {
    * @param {Buffer} publicKey Party publicKey
    * @param {Buffer} recipient Recipient publicKey
    */
-  async createOfflineInvitation (partyKey, recipientKey) {
+  async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Buffer) {
     console.warn('createOfflineInvitation deprecated. check Database');
-
-    // return this.database._partyManager.inviteToParty(
-    //   partyKey,
-    //   new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: recipientKey })
-    // );
   }
 
   /**
@@ -190,22 +226,8 @@ export class Client {
    * @param {SecretProvider} secretProvider
    * @returns {Promise<Party>} The now open Party.
    */
-  async joinParty (invitation, secretProvider) {
+  async joinParty (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
     console.warn('deprecated. Use client.echo');
-    // // An invitation where we can use our Identity key for auth.
-    // if (InviteType.OFFLINE_KEY === invitation.type) {
-    //   // Connect to inviting peer.
-    //   return this._partyManager.joinParty(invitation, (info) =>
-    //     codec.encode(createAuthMessage(this._keyring, info.id.value,
-    //       this._partyManager.identityManager.keyRecord,
-    //       this._partyManager.identityManager.deviceManager.keyChain,
-    //       null, info.authNonce.value))
-    //   );
-    // } else if (!invitation.identityKey) {
-    //   // An invitation for this Identity to join a Party.
-    //   // Connect to inviting peer.
-    //   return this._partyManager.joinParty(invitation, secretProvider);
-    // }
   }
 
   /**
@@ -214,12 +236,8 @@ export class Client {
    * @param {SecretProvider} secretProvider
    * @returns {Promise<DeviceInfo>}
    */
-  async admitDevice (invitation, secretProvider) {
-    if (invitation.identityKey) {
-      // An invitation for this device to join an existing Identity.
-      // Join the Identity
-      return this._partyManager.identityManager.deviceManager.admitDevice(invitation, secretProvider);
-    }
+  async admitDevice (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
+    console.log('client.admitDevice: Device management is not implemented.');
   }
 
   /**
@@ -227,15 +245,13 @@ export class Client {
    */
   getParties () {
     console.warn('deprecated. Use client.echo');
-    // return this._partyManager.getPartyInfoList();
   }
 
   /**
    * @deprecated
    */
-  getParty (partyKey) {
+  getParty (partyKey: Uint8Array) {
     console.warn('deprecated. Use client.echo');
-    // return this._partyManager.getPartyInfo(partyKey);
   }
 
   /**
@@ -250,14 +266,18 @@ export class Client {
 
   /**
    * @deprecated
-   * @param {Object} config
-   * @param {} config.modelType
-   * @param {} config.options
-   * @return {model}
    */
-  async createSubscription ({ modelType, options } = {}) {
+  async createSubscription () {
     console.warn('deprecated');
-    // return this._modelFactory.createModel(modelType, options);
+  }
+
+  /**
+   * Registers a new model.
+   */
+  registerModel (constructor: ModelConstructor<any>): this {
+    this._modelFactory.registerModel(constructor);
+
+    return this;
   }
 
   get keyring () {
@@ -274,17 +294,26 @@ export class Client {
   }
 
   // TODO(burdon): Remove.
+  /**
+   * @deprecated
+   */
   get modelFactory () {
     console.warn('client.modelFactory is deprecated.');
     return this._modelFactory;
   }
 
   // TODO(burdon): Remove.
+  /**
+   * @deprecated
+   */
   get networkManager () {
     return this._networkManager;
   }
 
   // TODO(burdon): Remove.
+  /**
+   * @deprecated
+   */
   get partyManager () {
     console.warn('deprecated. Use client.database');
     return this._partyManager;
@@ -303,7 +332,7 @@ export class Client {
  * @param {Object} config
  * @return {Promise<Client>}
  */
-export const createClient = async (feedStorage, keyring, config = {}) => {
+export const createClient = async (feedStorage?: any, keyring?: Keyring, config: { swarm?: any } = {}) => {
   config = defaultsDeep({}, config, defaultClientConfig);
 
   console.warn('createClient is being deprecated. Please use new Client() instead.');
