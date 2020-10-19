@@ -23,14 +23,13 @@ const ClientProvider = ({ client, config = {}, children }) => {
 
     (async () => {
       if (mounted) {
+        // Console access.
+        if (config.devtools) {
+          window.__DXOS__ = { client, metrics };
+        }
+
         try {
           await client.initialize();
-
-          // Console access.
-          if (config.devtools) {
-            window.__DXOS__ = { client, metrics };
-          }
-
           setClientReady(true);
         } catch (err) {
           error(err);
