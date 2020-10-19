@@ -3,7 +3,8 @@
   "version": "2.2.1-alpha.0",
   "license": "AGPLv3",
   "author": "DXOS.org",
-  "main": "dist/es/index.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "lint": "eslint",
@@ -23,6 +24,7 @@
     "@dxos/object-model": "^2.0.0",
     "@dxos/protocol": "^1.1.0-alpha.4",
     "@dxos/protocol-plugin-replicator": "^1.1.0-alpha.4",
+    "@dxos/util": "^2.1.1",
     "@geut/discovery-swarm-webrtc": "^3.0.0-beta.3",
     "assert": "^2.0.0",
     "buffer-json-encoding": "^1.0.2",
@@ -50,6 +52,8 @@
   },
   "devDependencies": {
     "@dxos/eslint-plugin": "^1.0.5",
+    "@types/lodash.defaultsdeep": "^4.6.6",
+    "@types/memdown": "^3.0.0",
     "@wirelineio/discovery-swarm-memory": "^0.2.17",
     "eslint": "^7.11.0",
     "jest": "^25.1.0",
