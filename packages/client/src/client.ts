@@ -221,11 +221,6 @@ export class Client {
    */
   async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Buffer) {
     console.warn('createOfflineInvitation deprecated. check Database');
-
-    // return this.database._partyManager.inviteToParty(
-    //   partyKey,
-    //   new InviteDetails(InviteType.OFFLINE_KEY, { publicKey: recipientKey })
-    // );
   }
 
   /**
@@ -237,20 +232,6 @@ export class Client {
    */
   async joinParty (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
     console.warn('deprecated. Use client.echo');
-    // // An invitation where we can use our Identity key for auth.
-    // if (InviteType.OFFLINE_KEY === invitation.type) {
-    //   // Connect to inviting peer.
-    //   return this._partyManager.joinParty(invitation, (info) =>
-    //     codec.encode(createAuthMessage(this._keyring, info.id.value,
-    //       this._partyManager.identityManager.keyRecord,
-    //       this._partyManager.identityManager.deviceManager.keyChain,
-    //       null, info.authNonce.value))
-    //   );
-    // } else if (!invitation.identityKey) {
-    //   // An invitation for this Identity to join a Party.
-    //   // Connect to inviting peer.
-    //   return this._partyManager.joinParty(invitation, secretProvider);
-    // }
   }
 
   /**
@@ -261,11 +242,6 @@ export class Client {
    */
   async admitDevice (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
     console.log('client.admitDevice: Device management is not implemented.');
-    // if (invitation.identityKey) {
-    //   // An invitation for this device to join an existing Identity.
-    //   // Join the Identity
-    //   // return this._partyManager.identityManager.deviceManager.admitDevice(invitation, secretProvider);
-    // }
   }
 
   /**
@@ -273,7 +249,6 @@ export class Client {
    */
   getParties () {
     console.warn('deprecated. Use client.echo');
-    // return this._partyManager.getPartyInfoList();
   }
 
   /**
@@ -281,7 +256,6 @@ export class Client {
    */
   getParty (partyKey: Uint8Array) {
     console.warn('deprecated. Use client.echo');
-    // return this._partyManager.getPartyInfo(partyKey);
   }
 
   /**
@@ -299,7 +273,6 @@ export class Client {
    */
   async createSubscription () {
     console.warn('deprecated');
-    // return this._modelFactory.createModel(modelType, options);
   }
 
   /**
@@ -334,6 +307,9 @@ export class Client {
   }
 
   // TODO(burdon): Remove.
+  /**
+   * @deprecated
+   */
   get networkManager () {
     return this._networkManager;
   }
