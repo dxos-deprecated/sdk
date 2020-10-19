@@ -108,10 +108,10 @@ export class Bot extends EventEmitter {
     await this._connectToControlTopic();
 
     const parties = this._client.echo.queryParties();
-    this._onJoin(parties);
+    this._onJoin(parties.value);
 
     parties.subscribe(() => {
-      this._onJoin(parties);
+      this._onJoin(parties.value);
     });
 
     await this._plugin.sendCommand(this._botFactoryPeerKey, createConnectConfirmMessage(this._uid));
@@ -182,11 +182,11 @@ export class Bot extends EventEmitter {
   }
 
   _onJoin (parties = []) {
-    parties.value.map(party => {
+    parties.map(party => {
       const topic = keyToString(party.key);
       if (!this._parties.has(topic)) {
         this._parties.add(topic);
-        this.emit('party', topic);
+        this.emit('party', party.key);
       }
     });
   }
