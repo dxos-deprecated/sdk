@@ -17,15 +17,22 @@ yarn build
 yarn test
 ```
 
-### Publishing to npm
+### Publishing a release
 
-To publish new versions of all public packages to the beta channel:
+We use release-please and a CI job to perform version bumps and NPM releases.
+
+TODO: link a page with more detailed explanation.
+
+To publish new versions merge the `main` branch into `beta` branch:
 
 ```bash
-yarn build
-yarn test
-yarn lerna publish prerelease --dist-tag="beta" --force-publish
+git checkout beta
+git reset —hard
+git merge -X theirs main
+git push
 ```
+
+The CI will do the rest of the work.
 
 ## Contributing
 
