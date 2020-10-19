@@ -11,7 +11,7 @@ import ItemSettings from '../components/ItemSettings';
 
 const chance = new Chance();
 
-const DefaultSettingsDialog = ({ open, onClose, onCancel, item, itemModel, Icon }) => {
+const DefaultSettingsDialog = ({ open, onClose, onCancel, item, itemModel }) => {
   const handleClose = ({ name }) => {
     if (item) {
       itemModel.renameItem(item.itemId, name);
@@ -26,7 +26,7 @@ const DefaultSettingsDialog = ({ open, onClose, onCancel, item, itemModel, Icon 
       onCancel={onCancel}
       item={item}
       closingDisabled={false}
-      icon={Icon ? <Icon /> : <SettingsIcon />}
+      icon={<SettingsIcon />}
     />
   );
 };

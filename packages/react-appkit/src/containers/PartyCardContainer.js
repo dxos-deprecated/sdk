@@ -71,7 +71,6 @@ const PartyCardContainer = ({ party, ipfs }) => {
         onCancel={handleCanceledSettings}
         item={undefined} // no item!
         // itemModel={model}
-        Icon={pad && pad.icon}
       />
     </>
   );
