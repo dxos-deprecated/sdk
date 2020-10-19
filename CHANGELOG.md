@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/dxos/sdk/compare/v2.2.1...v2.3.0) (2020-10-19)
+
+
+### Features
+
+* Trigger publish ([65eb87e](https://www.github.com/dxos/sdk/commit/65eb87e6c4b736ec3041e9a6607396b84acf1259))
+
 ### [2.2.1](https://www.github.com/dxos/sdk/compare/v2.2.0...v2.2.1) (2020-10-15)
 
 
