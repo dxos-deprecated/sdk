@@ -107,29 +107,26 @@ export class Bot extends EventEmitter {
     log('Joining control topic.');
     await this._connectToControlTopic();
 
-    // Parties joined during current session.
-    // this._client.partyManager.on('party', topic => {
-    //   const partyKey = keyToString(topic);
-    //   if (!this._parties.has(partyKey)) {
-    //     this._parties.add(partyKey);
-    //     this.emit('party', partyKey);
-    //   }
-    // });
+    const parties = this._client.echo.queryParties();
+    this._onJoin(parties.value);
+
+    parties.subscribe(() => {
+      this._onJoin(parties.value);
+    });
 
     await this._plugin.sendCommand(this._botFactoryPeerKey, createConnectConfirmMessage(this._uid));
+  }
 
-    // const parties = this._client.partyManager._parties;
+  async stop () {
+    await this._leaveControlSwarm();
+  }
 
-    // // Parties restored after restart.
-    // if (parties.size > 1) {
-    //   await Promise.all([...parties.keys()].map(async topic => {
-    //     if (!this._parties.has(topic)) {
-    //       this._parties.add(topic);
-    //       await this._client.partyManager.openParty(keyToBuffer(topic));
-    //       this.emit('party', topic);
-    //     }
-    //   }));
-    // }
+  async botCommandHandler () {
+
+  }
+
+  async emitBotEvent (type, data) {
+    await this._plugin.sendCommand(this._botFactoryPeerKey, createEvent(this._uid, type, data));
   }
 
   /**
@@ -184,16 +181,14 @@ export class Bot extends EventEmitter {
     }
   }
 
-  async stop () {
-    await this._leaveControlSwarm();
-  }
-
-  async botCommandHandler () {
-
-  }
-
-  async emitBotEvent (type, data) {
-    await this._plugin.sendCommand(this._botFactoryPeerKey, createEvent(this._uid, type, data));
+  _onJoin (parties = []) {
+    parties.map(party => {
+      const topic = keyToString(party.key);
+      if (!this._parties.has(topic)) {
+        this._parties.add(topic);
+        this.emit('party', party.key);
+      }
+    });
   }
 
   async _connectToControlTopic () {
