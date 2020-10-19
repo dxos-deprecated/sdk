@@ -87,10 +87,6 @@ export class Client {
 
   private readonly _registry?: any;
 
-  private readonly _partyWriters = {};
-
-  private readonly _feedOwnershipCache = new Map();
-
   private _initialized = false;
  
   constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }: ClientConfig) {
