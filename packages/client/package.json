@@ -63,6 +63,10 @@
     "typescript": "^4.0.3",
     "wait-for-expect": "^3.0.2"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "browserslist": [
     "> 5%"
   ],
