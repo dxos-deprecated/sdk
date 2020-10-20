@@ -23,7 +23,7 @@ export default {
 }
 
 export const ClientStory = () => {
-  const [client, setClient] = useState();
+  const [client, setClient] = useState<Client | undefined>();
 
   useEffect(() => {
     setImmediate(async () => {

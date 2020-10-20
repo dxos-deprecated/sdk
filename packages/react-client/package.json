@@ -5,12 +5,11 @@
   "keywords": [],
   "license": "AGPLv3",
   "author": "DXOS.org",
-  "main": "dist/es/index.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
-    "build": "npm run clean && babel ./src --out-dir ./dist/es --ignore \"**/*.test.js\" --source-maps inline",
-    "build:watch": "yarn run build --watch",
-    "clean": "rm -rf dist",
-    "lint": "semistandard",
+    "build": "tsc",
+    "lint": "eslint '{src,stories}/**/*.{ts,tsx,js}'",
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
@@ -38,6 +37,7 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "@dxos/eslint-plugin": "^1.0.5",
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",
     "@storybook/react": "^6.0.21",
@@ -46,11 +46,11 @@
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "^1.0.0",
-    "react-docgen-typescript-loader": "^3.7.2",
+    "eslint": "^7.11.0",
     "jest": "^25.1.0",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "semistandard": "14.2.0"
+    "react-docgen-typescript-loader": "^3.7.2",
+    "react-dom": "^16.12.0"
   },
   "peerDependencies": {
     "react": "16.12.0"
@@ -58,16 +58,8 @@
   "browserslist": [
     "> 5%"
   ],
-  "semistandard": {
-    "parser": "babel-eslint",
-    "env": [
-      "jest",
-      "node",
-      "browser"
-    ],
-    "ignore": [
-      "dist"
-    ]
+  "eslintConfig": {
+    "extends": "plugin:@dxos/recomended"
   },
   "publishConfig": {
     "access": "public"
