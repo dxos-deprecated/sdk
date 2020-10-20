@@ -9,7 +9,7 @@ import PartyMemberList from '../components/PartyMemberList';
 import { renderWithTheme } from './test-utils';
 // import ram from 'random-access-memory';
 
-// import { Client } from '@dxos/client';
+import { Client } from '@dxos/client';
 // import { createStorage } from '@dxos/random-access-multi-storage';
 // import { Keyring, KeyStore } from '@dxos/credentials';
 // import { ClientProvider } from '@dxos/react-client';
@@ -18,22 +18,32 @@ import { renderWithTheme } from './test-utils';
 // import Adapter from 'enzyme-adapter-react-16';
 // enzyme.configure({ adapter: new Adapter() });
 
-describe.skip('Party Member List', () => {
+describe.only('Party Member List', () => {
   // const client = new Client({
-  //   storage: ram,
+  //   storage: ram
+  // });
+  // const client = new Client({
+  //   storage: createStorage('tasks-db'),
+  //   keyring: new Keyring(new KeyStore(leveljs('tasks-keys'))),
   //   swarm: {
   //     signal: 'wss://signal2.dxos.network/dxos/signal'
   //   }
   // });
+  const client = new Client({});
 
   test('Avatars displays first letter of name or face icon', async () => {
-    const party = {
-      members: [
-        { publicKey: '456583c43cea8ad2903d360349a7d421f513e230ab481f26c9febc5f89ecd379', displayName: 'John' },
-        { publicKey: 'a6c80b20e60ad2fcaefbfa79065e834e375f2c68be907f1956348dfd1de404ea', displayName: '' }
-      ]
-    };
-    // const party = await client.partyManager.createParty()
+    // const party = {
+    //   members: [
+    //     { publicKey: '456583c43cea8ad2903d360349a7d421f513e230ab481f26c9febc5f89ecd379', displayName: 'John' },
+    //     { publicKey: 'a6c80b20e60ad2fcaefbfa79065e834e375f2c68be907f1956348dfd1de404ea', displayName: '' }
+    //   ]
+    // };
+
+    await client.initialize();
+    // await client.createProfile();
+    await client.echo.open();
+    const party = await client.echo.createParty();
+    console.log(party);
 
     const props = {
       party: party,
