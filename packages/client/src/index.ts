@@ -11,9 +11,9 @@ if (typeof window !== 'undefined') {
     const cb = args.length === 1
       ? args[0]
       : () => args[0](...args.slice(1));
-      
+
     if (args.length === 1) {
-      if(!!window.queueMicrotask) {
+      if (window.queueMicrotask) {
         window.queueMicrotask(cb);
       } else {
         queueMicrotask(cb);

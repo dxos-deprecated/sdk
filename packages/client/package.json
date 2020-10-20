@@ -7,7 +7,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint",
+    "lint": "eslint 'src/**/*.ts'",
     "prepublishOnly": "npm run build && npm run test",
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
