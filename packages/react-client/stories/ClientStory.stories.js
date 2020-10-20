@@ -7,11 +7,6 @@ import React, { useState, useEffect } from 'react';
 
 import { ClientProvider, useClient } from '../src';
 
-const clientConfig = {
-  storage: {
-    ram: true
-  }
-};
 
 const Test = () => {
   const client = useClient();
@@ -23,12 +18,16 @@ const Test = () => {
   );
 };
 
-const ClientStory = () => {
+export default {
+    title: 'ClientStory',
+}
+
+export const ClientStory = () => {
   const [client, setClient] = useState();
 
   useEffect(() => {
     setImmediate(async () => {
-      const client = new Client(clientConfig);
+      const client = new Client();
       await client.initialize();
       setClient(client);
     })
@@ -36,12 +35,10 @@ const ClientStory = () => {
 
   return client 
     ? (
-      <ClientProvider config={clientConfig}>
+      <ClientProvider client={client}>
         <Test />
       </ClientProvider>
     ) : (
       <div>Loading...</div>
     );
 };
-
-export default ClientStory;
