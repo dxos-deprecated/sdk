@@ -2,9 +2,10 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
+import { Client } from '@dxos/client';
+import React, { useState, useEffect } from 'react';
 
-import { ClientContextProvider, useClient } from '../src';
+import { ClientProvider, useClient } from '../src';
 
 const clientConfig = {
   storage: {
@@ -23,11 +24,24 @@ const Test = () => {
 };
 
 const ClientStory = () => {
-  return (
-    <ClientContextProvider config={clientConfig}>
-      <Test />
-    </ClientContextProvider>
-  );
+  const [client, setClient] = useState();
+
+  useEffect(() => {
+    setImmediate(async () => {
+      const client = new Client(clientConfig);
+      await client.initialize();
+      setClient(client);
+    })
+  })
+
+  return client 
+    ? (
+      <ClientProvider config={clientConfig}>
+        <Test />
+      </ClientProvider>
+    ) : (
+      <div>Loading...</div>
+    );
 };
 
 export default ClientStory;
