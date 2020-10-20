@@ -118,6 +118,10 @@ export class Client {
       return;
     }
 
+    const timeoutId = setTimeout(() => {
+      console.error('Client.initialize is taking more then 3 seconds to complete. Something probably went wrong.')
+    }, 3000)
+
     await this._keyring.load();
 
     // If this has to be done, it should be done thru database.
@@ -128,6 +132,7 @@ export class Client {
       await this._partyManager.createHalo();
     }
     this._initialized = true;
+    clearInterval(timeoutId);
   }
 
   /**
