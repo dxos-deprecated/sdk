@@ -8,11 +8,17 @@ import queueMicrotask from 'queue-microtask';
 // This hack fix that problem for now until we find a better solution and improve the latency.
 if (typeof window !== 'undefined') {
   process.nextTick = (...args: any[]) => {
+    const cb = args.length === 1
+      ? args[0]
+      : () => args[0](...args.slice(1));
+      
     if (args.length === 1) {
-      return queueMicrotask(args[0]);
+      if(!!window.queueMicrotask) {
+        window.queueMicrotask(cb);
+      } else {
+        queueMicrotask(cb);
+      }
     }
-
-    queueMicrotask(() => args[0](...args.slice(1, args.length)));
   };
 }
 
