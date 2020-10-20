@@ -304,9 +304,9 @@ const AppBar = ({
   //   menuItems.push(action(ACTION_IMPORT_KEYRING));
   // }
 
-  // if (onSettingsOpened) {
-  //   menuItems.push(action(ACTION_OPEN_SETTINGS));
-  // }
+  if (onSettingsOpened) {
+    menuItems.push(action(ACTION_OPEN_SETTINGS));
+  }
 
   // if (onPartyHomeNavigation) {
   //   menuItems.push(action(ACTION_OPEN_PARTY_HOME));
