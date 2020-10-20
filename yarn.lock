@@ -1366,6 +1366,22 @@
     eslint-plugin-promise "^4.2.1"
     eslint-plugin-standard "^4.0.1"
 
+"@dxos/eslint-plugin@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.npmjs.org/@dxos/eslint-plugin/-/eslint-plugin-1.0.6.tgz#93b117ddfcfad7927569212aa8c926dcd55880ba"
+  integrity sha512-7bi26uVN9hqXst4qXyfKJU3BshIe6hKnXAR0YFpXp2WH24rRTSRpNvOuYGt83itVqixfC2CP3LWmvE3wxBcj0w==
+  dependencies:
+    "@rushstack/eslint-patch" "^1.0.3"
+    "@typescript-eslint/eslint-plugin" "^3.10.1"
+    "@typescript-eslint/parser" "^3.10.1"
+    eslint-config-semistandard "^15.0.1"
+    eslint-config-standard "^14.1.1"
+    eslint-plugin-import "^2.22.0"
+    eslint-plugin-jest "^23.20.0"
+    eslint-plugin-node "^11.1.0"
+    eslint-plugin-promise "^4.2.1"
+    eslint-plugin-standard "^4.0.1"
+
 "@dxos/feed-level-indexer@^1.1.0-alpha.9":
   version "1.1.0-beta.0"
   resolved "https://registry.yarnpkg.com/@dxos/feed-level-indexer/-/feed-level-indexer-1.1.0-beta.0.tgz#8b39f88bbfdb906b21884195f581dbc281aec55c"
