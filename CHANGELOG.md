@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.3.1](https://www.github.com/dxos/sdk/compare/v2.3.0...v2.3.1) (2020-10-20)
+
+
+### Bug Fixes
+
+* bot to emit events on party join. ([#222](https://www.github.com/dxos/sdk/issues/222)) ([02fde00](https://www.github.com/dxos/sdk/commit/02fde00612e2068849cdb3a57b16d051793b5235))
+
 ## [2.3.0](https://www.github.com/dxos/sdk/compare/v2.2.1...v2.3.0) (2020-10-19)
 
 
