@@ -25,8 +25,8 @@ const PartyCardContainer = ({ party, ipfs }) => {
   const handleSavedSettings = async ({ name }, metadata = {}, callback) => {
     const pad = pads.find(p => p.type === newItemType);
     if (pad && pad.create) {
-      const itemId = await pad.create({ party, client }, { name });
-      router.push({ topic, item: itemId });
+      const item = await pad.create({ party, client }, { name });
+      router.push({ topic, item: item.id });
     } else {
       const item = await party.database.createItem({
         model: ObjectModel,
