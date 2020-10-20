@@ -3,7 +3,9 @@
 //
 
 import React, { ReactNode } from 'react';
+
 import { Client } from '@dxos/client';
+
 import { ClientContext } from '../hooks/context';
 
 export interface ClientProviderProps {

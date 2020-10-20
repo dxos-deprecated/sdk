@@ -2,11 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
-import { Client } from '@dxos/client';
 import React, { useState, useEffect } from 'react';
 
-import { ClientProvider, useClient } from '../src';
+import { Client } from '@dxos/client';
 
+import { ClientProvider, useClient } from '../src';
 
 const Test = () => {
   const client = useClient();
@@ -19,8 +19,8 @@ const Test = () => {
 };
 
 export default {
-    title: 'ClientStory',
-}
+  title: 'ClientStory'
+};
 
 export const ClientStory = () => {
   const [client, setClient] = useState<Client | undefined>();
@@ -30,10 +30,10 @@ export const ClientStory = () => {
       const client = new Client();
       await client.initialize();
       setClient(client);
-    })
-  })
+    });
+  });
 
-  return client 
+  return client
     ? (
       <ClientProvider client={client}>
         <Test />
