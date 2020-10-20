@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.3.2](https://www.github.com/dxos/sdk/compare/v2.3.1...v2.3.2) (2020-10-20)
+
+
+### Bug Fixes
+
+* Fix queue microtask shim ([36f0b8d](https://www.github.com/dxos/sdk/commit/36f0b8d436dd194d3d0858774ed9cbf34b9e3cfa))
+
 ### [2.3.1](https://www.github.com/dxos/sdk/compare/v2.3.0...v2.3.1) (2020-10-20)
 
 
