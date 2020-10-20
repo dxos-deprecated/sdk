@@ -159,7 +159,6 @@ export class BotFactory {
       case COMMAND_STOP: {
         const { errorCode = 0 } = message;
         process.exit(Number(errorCode));
-        break;
       }
 
       case COMMAND_STATUS: {
