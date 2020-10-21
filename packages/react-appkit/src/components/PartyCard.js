@@ -132,7 +132,6 @@ const PartyCard = ({
   useEffect(() => {
     if (!party) return;
     if (partyOpen) {
-      console.log('getting party properties..');
       setDisplayName(party.getProperty('displayName'));
     } else {
       setDisplayName(humanize(party.key));
