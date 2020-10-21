@@ -181,7 +181,6 @@ const PartyCard = ({
               edge='end'
               aria-label='settings'
               onClick={() => setSettingsDialogOpen(true)}
-              disabled // Not implemented yet for new ECHO/HALO
             >
               <SettingsIcon />
             </IconButton>
@@ -249,7 +248,7 @@ const PartyCard = ({
             subscribed: true
           }}
           onExport={onExport}
-          onClose={({ showDeleted, subscribed }) => {
+          onClose={({ showDeleted, subscribed, displayName }) => {
             setShowDeleted(showDeleted);
             if (subscribed && !party.subscribed) {
               handleSubscribe();
@@ -257,6 +256,7 @@ const PartyCard = ({
             if (!subscribed && party.subscribed) {
               handleUnsubscribe();
             }
+            party.setProperty('displayName', displayName);
             setSettingsDialogOpen(false);
           }}
         />

@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { makeStyles } from '@material-ui/core';
@@ -48,20 +48,40 @@ const useStyles = makeStyles(theme => ({
 // TODO(burdon): Separate storybook.
 const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onExport }) => {
   const classes = useStyles();
+  const [partyOpen, setPartyOpen] = useState(false);
+
   const [subscribed, setSubscribed] = useState(properties.subscribed);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
+  const [displayName, setDisplayName] = useState(party.displayName);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
   const [exportedCid, setExportedCid] = useState(undefined);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
+  useEffect(() => {
+    if (partyOpen) {
+      console.log('getting party properties..');
+      setDisplayName(party.getProperty('displayName'));
+    } else {
+      setDisplayName(party.displayName);
+    }
+  }, [partyOpen]);
+
+  useEffect(() => {
+    (async function () {
+      console.log('opening party...');
+      await party.open();
+      console.log('party opened');
+      setPartyOpen(true);
+    })();
+  }, [party]);
+
   const handleClose = () => {
-    onClose({ subscribed, showDeleted });
+    onClose({ subscribed, showDeleted, displayName });
   };
 
-  // TODO(burdon): Extract client (pass in callback).
   const handleSetTitle = (displayName) => {
-    client.partyManager.setPartyProperty(party.key, { displayName });
+    setDisplayName(displayName);
   };
 
   const handleExportToIPFS = async () => {
@@ -93,8 +113,7 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
         {party && (
           <EditableText
             label='Name'
-            disabled={!party.subscribed}
-            value={party.displayName}
+            value={displayName}
             onUpdate={handleSetTitle}
           />
         )}
