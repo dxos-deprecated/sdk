@@ -16,9 +16,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import ListItemText from '@material-ui/core/ListItemText';
+import { ListItemSecondaryAction } from '@material-ui/core';
 
 import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/MoreVert';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { humanize, keyToString } from '@dxos/crypto';
 
@@ -105,7 +107,7 @@ const PartyCard = ({
   client,
   router,
   pads,
-  itemModel,
+  items,
   onNewItemRequested,
   onNewParty = undefined,
   onExport = undefined
@@ -203,7 +205,7 @@ const PartyCard = ({
 
         <div className={classes.listContainer}>
           <List dense disablePadding>
-            {itemModel.map(item => (
+            {items.filter(item => !item.model.getProperty('deleted')).map(item => (
               <ListItem
                 key={item.id}
                 button
@@ -213,8 +215,13 @@ const PartyCard = ({
                   <PadIcon type={item.type} />
                 </ListItemIcon>
                 <ListItemText>
-                  {item._model.getProperty('title') || 'Untitled'}
+                  {item.model.getProperty('title') || 'Untitled'}
                 </ListItemText>
+                <ListItemSecondaryAction>
+                  <IconButton size='small' edge='end' aria-label='delete' onClick={() => item.model.setProperty('deleted', true)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>
