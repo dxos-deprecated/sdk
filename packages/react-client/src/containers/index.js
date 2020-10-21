@@ -1,6 +1,0 @@
-//
-// Copyright 2020 DXOS.org
-//
-
-export ClientContextProvider from './ClientContextProvider';
-export ClientProvider from './ClientProvider';

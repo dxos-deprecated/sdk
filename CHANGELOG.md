@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.4.0](https://www.github.com/dxos/sdk/compare/v2.3.1...v2.4.0) (2020-10-21)
+
+
+### Features
+
+* react-client refactoring & stability improvements ([#227](https://www.github.com/dxos/sdk/issues/227)) ([9bf0e67](https://www.github.com/dxos/sdk/commit/9bf0e6789b107eb1f0065cfe8219243fd0755637))
+
+
+### Bug Fixes
+
+* Fix queue microtask shim ([36f0b8d](https://www.github.com/dxos/sdk/commit/36f0b8d436dd194d3d0858774ed9cbf34b9e3cfa))
+
 ### [2.3.1](https://www.github.com/dxos/sdk/compare/v2.3.0...v2.3.1) (2020-10-20)
 
 

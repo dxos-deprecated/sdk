@@ -3,20 +3,19 @@
 //
 
 import defaultsDeep from 'lodash.defaultsdeep';
-
 import memdown from 'memdown';
 
-import { createStorage } from '@dxos/random-access-multi-storage';
 import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
 import { humanize, keyToString } from '@dxos/crypto';
-import { FeedStore } from '@dxos/feed-store';
-import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
-import { raise } from '@dxos/util';
-import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import {
   codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager, SecretProvider, InvitationOptions, InvitationDescriptor
 } from '@dxos/echo-db';
+import { FeedStore } from '@dxos/feed-store';
+import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
+import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { ObjectModel } from '@dxos/object-model';
+import { createStorage } from '@dxos/random-access-multi-storage';
+import { raise } from '@dxos/util';
 
 import { defaultClientConfig } from './config';
 
@@ -67,6 +66,8 @@ export interface CreateProfileOptions {
  * Data client.
  */
 export class Client {
+  private readonly _config: ClientConfig;
+
   private readonly _feedStore: FeedStore;
 
   private readonly _keyring: Keyring;
@@ -88,8 +89,10 @@ export class Client {
   private readonly _registry?: any;
 
   private _initialized = false;
- 
-  constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }: ClientConfig) {
+
+  constructor (config: ClientConfig = {}) {
+    this._config = config;
+    const { storage, swarm, keyring, feedStore, networkManager, partyManager, registry } = config;
     this._feedStore = feedStore || new FeedStore(
       storage || createStorage('dxos-storage-db', 'ram'),
       { feedOptions: { valueEncoding: codec } });
@@ -111,6 +114,10 @@ export class Client {
     this._registry = registry;
   }
 
+  get config (): ClientConfig {
+    return this._config;
+  }
+
   /**
    * Initializes internal resources.
    */
@@ -118,6 +125,10 @@ export class Client {
     if (this._initialized) {
       return;
     }
+
+    const timeoutId = setTimeout(() => {
+      console.error('Client.initialize is taking more then 3 seconds to complete. Something probably went wrong.');
+    }, 3000);
 
     await this._keyring.load();
 
@@ -129,6 +140,7 @@ export class Client {
       await this._partyManager.createHalo();
     }
     this._initialized = true;
+    clearInterval(timeoutId);
   }
 
   /**
@@ -215,6 +227,7 @@ export class Client {
    * @param {Buffer} publicKey Party publicKey
    * @param {Buffer} recipient Recipient publicKey
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Buffer) {
     console.warn('createOfflineInvitation deprecated. check Database');
   }
@@ -226,6 +239,7 @@ export class Client {
    * @param {SecretProvider} secretProvider
    * @returns {Promise<Party>} The now open Party.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async joinParty (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
     console.warn('deprecated. Use client.echo');
   }
@@ -236,6 +250,7 @@ export class Client {
    * @param {SecretProvider} secretProvider
    * @returns {Promise<DeviceInfo>}
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async admitDevice (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
     console.log('client.admitDevice: Device management is not implemented.');
   }
@@ -250,6 +265,7 @@ export class Client {
   /**
    * @deprecated
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getParty (partyKey: Uint8Array) {
     console.warn('deprecated. Use client.echo');
   }
