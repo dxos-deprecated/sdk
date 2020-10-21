@@ -46,7 +46,7 @@ const PartyCardContainer = ({ party }) => {
       <PartyCard
         client={client}
         party={party}
-        itemModel={items}
+        items={items}
         router={router}
         pads={pads}
         onNewItemRequested={handleNewItemRequested}
