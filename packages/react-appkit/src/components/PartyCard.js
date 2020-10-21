@@ -195,6 +195,7 @@ const PartyCard = ({
               edge='end'
               aria-label='settings'
               onClick={() => setSettingsDialogOpen(true)}
+              disabled // disabled until https://github.com/dxos/echo/issues/246 and are resolved https://github.com/dxos/echo/issues/248
             >
               <SettingsIcon />
             </IconButton>
