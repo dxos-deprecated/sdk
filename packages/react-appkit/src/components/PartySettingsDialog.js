@@ -2,19 +2,19 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
+// import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import FormControl from '@material-ui/core/FormControl';
+// import FormGroup from '@material-ui/core/FormGroup';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -46,42 +46,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // TODO(burdon): Separate storybook.
-const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onExport }) => {
+const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onExport, displayName, onDisplayNameChange }) => {
   const classes = useStyles();
-  const [partyOpen, setPartyOpen] = useState(false);
 
-  const [subscribed, setSubscribed] = useState(properties.subscribed);
-  const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
-  const [displayName, setDisplayName] = useState(party.displayName);
+  const [subscribed] = useState(properties.subscribed);
+  const [showDeleted] = useState(properties.showDeleted);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
   const [exportedCid, setExportedCid] = useState(undefined);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
-  useEffect(() => {
-    if (partyOpen) {
-      console.log('getting party properties..');
-      setDisplayName(party.getProperty('displayName'));
-    } else {
-      setDisplayName(party.displayName);
-    }
-  }, [partyOpen]);
-
-  useEffect(() => {
-    (async function () {
-      console.log('opening party...');
-      await party.open();
-      console.log('party opened');
-      setPartyOpen(true);
-    })();
-  }, [party]);
-
   const handleClose = () => {
     onClose({ subscribed, showDeleted, displayName });
-  };
-
-  const handleSetTitle = (displayName) => {
-    setDisplayName(displayName);
   };
 
   const handleExportToIPFS = async () => {
@@ -114,12 +90,13 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
           <EditableText
             label='Name'
             value={displayName}
-            onUpdate={handleSetTitle}
+            onUpdate={onDisplayNameChange}
           />
         )}
 
         {/* TODO(burdon): Implement state and handlers. */}
-        <FormControl className={classes.form}>
+        {/* Not implemented for the new echo */}
+        {/* <FormControl className={classes.form}>
           <FormGroup>
             <FormControlLabel
               control={
@@ -142,7 +119,7 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
               label='Show deleted items'
             />
           </FormGroup>
-        </FormControl>
+        </FormControl> */}
 
         {inProgress && <LinearProgress />}
         {!!error && <Typography variant='body2' color='error'>Export unsuccessful</Typography>}
