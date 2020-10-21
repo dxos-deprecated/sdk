@@ -3,8 +3,8 @@
 //
 
 import React, { useState } from 'react';
-import useDeepCompareEffect from 'use-deep-compare-effect';
 import getDisplayName from 'react-display-name';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 import { logs } from '@dxos/debug';
 
