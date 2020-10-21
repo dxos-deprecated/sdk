@@ -66,6 +66,8 @@ export interface CreateProfileOptions {
  * Data client.
  */
 export class Client {
+  private readonly _config: ClientConfig;
+
   private readonly _feedStore: FeedStore;
 
   private readonly _keyring: Keyring;
@@ -88,7 +90,9 @@ export class Client {
 
   private _initialized = false;
 
-  constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }: ClientConfig = {}) {
+  constructor (config: ClientConfig = {}) {
+    this._config = config;
+    const { storage, swarm, keyring, feedStore, networkManager, partyManager, registry } = config;
     this._feedStore = feedStore || new FeedStore(
       storage || createStorage('dxos-storage-db', 'ram'),
       { feedOptions: { valueEncoding: codec } });
@@ -108,6 +112,10 @@ export class Client {
 
     this._echo = new ECHO(this._partyManager);
     this._registry = registry;
+  }
+
+  get config (): ClientConfig {
+    return this._config;
   }
 
   /**

@@ -18,7 +18,7 @@ export interface ClientProviderProps {
  */
 export const ClientProvider = ({ client, children }: ClientProviderProps) => {
   return (
-    <ClientContext.Provider value={{ config: {}, client, reset: () => client.reset() }}>
+    <ClientContext.Provider value={{ config: client.config, client, reset: () => client.reset() }}>
       {children}
     </ClientContext.Provider>
   );
