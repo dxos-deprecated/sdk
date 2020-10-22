@@ -26,6 +26,7 @@
     "@dxos/credentials": "^2.0.0",
     "@dxos/crypto": "^1.0.0-beta.3",
     "@dxos/network-manager": "^1.0.0-beta.108",
+    "@dxos/party-manager": "^0.2.8",
     "@dxos/protocol-plugin-bot": "^1.1.0-beta.18",
     "@dxos/random-access-multi-storage": "^1.1.0-beta.2",
     "@wirelineio/registry-client": "^1.1.0-beta.2",
