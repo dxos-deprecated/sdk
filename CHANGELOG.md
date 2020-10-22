@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.5.0](https://www.github.com/dxos/sdk/compare/v2.4.0...v2.5.0) (2020-10-22)
+
+
+### Features
+
+* Bring back generic pad settings ([#231](https://www.github.com/dxos/sdk/issues/231)) ([0ea5a36](https://www.github.com/dxos/sdk/commit/0ea5a3694e969563c1de0c195a3ab7dab2f3a522))
+
+
+### Bug Fixes
+
+* Default party display name ([#247](https://www.github.com/dxos/sdk/issues/247)) ([2dac75a](https://www.github.com/dxos/sdk/commit/2dac75a85c7721f07324b67b0a71f99b3bee3783))
+* Disable broken party settings ([#246](https://www.github.com/dxos/sdk/issues/246)) ([8c7874a](https://www.github.com/dxos/sdk/commit/8c7874a763c5593be9a5291c43fd924e18dac381))
+* Fix effects firing on every render ([239c720](https://www.github.com/dxos/sdk/commit/239c7200a55facaceddc2f731a85d8c02cb91b70))
+* Pass pad metadata to pad creation function. Remove generic pad creation function. ([#234](https://www.github.com/dxos/sdk/issues/234)) ([25d905d](https://www.github.com/dxos/sdk/commit/25d905d44f2bd0480da46c8add3c3b052e581a80))
+* Set devtools hook in client provider & add persistent storage story ([#237](https://www.github.com/dxos/sdk/issues/237)) ([53a1180](https://www.github.com/dxos/sdk/commit/53a11800868face50451d795b0a89649be40d272))
+* update botkit deps. ([#249](https://www.github.com/dxos/sdk/issues/249)) ([cff72c6](https://www.github.com/dxos/sdk/commit/cff72c62ce0d39210e2f39a649dfa08edfccb2b1))
+
 ## [2.4.0](https://www.github.com/dxos/sdk/compare/v2.3.1...v2.4.0) (2020-10-21)
 
 
