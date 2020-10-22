@@ -34,7 +34,7 @@ export const InMemory = () => {
       await client.initialize();
       setClient(client);
     });
-  });
+  }, []);
 
   return client
     ? (
@@ -58,7 +58,7 @@ export const Persistent = () => {
       await client.initialize();
       setClient(client);
     });
-  });
+  }, []);
 
   return client
     ? (
