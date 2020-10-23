@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -29,7 +29,11 @@ const useStyles = makeStyles(theme => ({
 
 const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, children, icon }) => {
   const classes = useStyles();
-  const [name, setName] = useState(item ? item.displayName : '');
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    setName(item ? item.model.getProperty('title') : '');
+  }, [item]);
 
   const handleClose = () => {
     if (closingDisabled) {
