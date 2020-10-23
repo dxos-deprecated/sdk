@@ -1,5 +1,18 @@
 # Changelog
 
+### [2.5.1](https://www.github.com/dxos/sdk/compare/v2.5.0...v2.5.1) (2020-10-23)
+
+
+### Features
+
+* Restore party item restore functionality ([#253](https://www.github.com/dxos/sdk/issues/253)) ([4ea6819](https://www.github.com/dxos/sdk/commit/4ea6819c51ed723f3e4bd63a24e8871f4cb29583))
+
+
+### Bug Fixes
+
+* automatically close redeem dialog and restore state to initial ([#255](https://www.github.com/dxos/sdk/issues/255)) ([662a493](https://www.github.com/dxos/sdk/commit/662a493f63365310389cc2541d5db06bf87a6836))
+* Increate client initialization warning timeout  ([#252](https://www.github.com/dxos/sdk/issues/252)) ([1920095](https://www.github.com/dxos/sdk/commit/1920095f6675a76d916baa81269ca9f974c35f4a))
+
 ## [2.5.0](https://www.github.com/dxos/sdk/compare/v2.4.0...v2.5.0) (2020-10-22)
 
 
