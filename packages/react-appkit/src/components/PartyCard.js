@@ -21,6 +21,7 @@ import { ListItemSecondaryAction } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
+import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 
 import { humanize, keyToString } from '@dxos/crypto';
 
@@ -197,7 +198,6 @@ const PartyCard = ({
               edge='end'
               aria-label='settings'
               onClick={() => setSettingsDialogOpen(true)}
-              disabled // disabled until https://github.com/dxos/echo/issues/246 and are resolved https://github.com/dxos/echo/issues/248
             >
               <SettingsIcon />
             </IconButton>
@@ -206,7 +206,7 @@ const PartyCard = ({
 
         <div className={classes.listContainer}>
           <List dense disablePadding>
-            {items.filter(item => !item.model.getProperty('deleted')).map(item => (
+            {items.filter(item => showDeleted || !item.model.getProperty('deleted')).map(item => (
               <ListItem
                 key={item.id}
                 button
@@ -218,11 +218,19 @@ const PartyCard = ({
                 <ListItemText>
                   {item.model.getProperty('title') || 'Untitled'}
                 </ListItemText>
-                <ListItemSecondaryAction>
-                  <IconButton size='small' edge='end' aria-label='delete' onClick={() => item.model.setProperty('deleted', true)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                {item.model.getProperty('deleted') ? (
+                  <ListItemSecondaryAction>
+                    <IconButton edge='end' aria-label='restore' onClick={() => item.model.setProperty('deleted', false)}>
+                      <RestoreIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                ) : (
+                  <ListItemSecondaryAction>
+                    <IconButton size='small' edge='end' aria-label='delete' onClick={() => item.model.setProperty('deleted', true)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
               </ListItem>
             ))}
           </List>
