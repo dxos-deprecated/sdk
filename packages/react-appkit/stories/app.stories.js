@@ -27,6 +27,10 @@ const NoPartyComponent = () => {
 
   const keys = client.keyring.keys;
 
+  const handleCreate = async () => {
+    await client.partyManager.createParty();
+  }
+
   return (
     <Box m={2}>
       <p>Create and select a party using the knobs.</p>
@@ -39,6 +43,7 @@ const NoPartyComponent = () => {
         const publicKey = keyToString(party.key);
         return (<div key={publicKey}>{publicKey}</div>);
       })}
+      <button onClick={handleCreate}>Add Party</button>
     </Box>
   );
 };
