@@ -7,8 +7,8 @@
   "author": "DXOS.org",
   "main": "dist/es/index.js",
   "scripts": {
-    "build": "npm run clean && babel --copy-files ./src --out-dir ./dist/es --ignore \\\"**/*.test.js\\\" --source-maps inline",
-    "build:watch": "npm run build --watch",
+    "build": "tsc && copyfiles './src/components/util/images/*.jpg' './dist/'",
+    "build:watch": "tsc --watch",
     "clean": "rm -rf dist",
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
@@ -57,14 +57,15 @@
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",
     "@storybook/react": "^6.0.4",
-    "@wirelineio/registry-client": "^1.1.0-beta.2",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "^1.0.0",
+    "copyfiles": "^2.4.0",
     "jest": "^25.1.0",
     "semistandard": "14.2.0",
-    "storybook-react-router": "^1.0.8"
+    "storybook-react-router": "^1.0.8",
+    "typescript": "^4.0.3"
   },
   "peerDependencies": {
     "react": "16.12.0",

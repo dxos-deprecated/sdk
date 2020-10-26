@@ -2,12 +2,9 @@
 // Copyright 2020 DXOS.org
 //
 
-import leveljs from 'level-js';
 import React, { useState, useEffect } from 'react';
 
 import { Client } from '@dxos/client';
-import { Keyring, KeyStore } from '@dxos/credentials';
-import { createStorage } from '@dxos/random-access-multi-storage';
 
 import { ClientProvider, useClient } from '../src';
 
@@ -52,8 +49,8 @@ export const Persistent = () => {
   useEffect(() => {
     setImmediate(async () => {
       const client = new Client({
-        storage: createStorage('react-client/storybook'),
-        keyring: new Keyring(new KeyStore(leveljs('react-client/storybook/keystore')))
+        storagePath: 'react-client/storybook',
+        storageType: 'chrome'
       });
       await client.initialize();
       setClient(client);
