@@ -19,7 +19,7 @@ import { keyToBuffer } from '@dxos/crypto';
 
 export default {
   title: 'Party Contents',
-  decorators: [WithPartyKnobs, WithClientAndIdentity, StoryRouter(), withKnobs]
+  decorators: [WithPartyKnobs, StoryRouter(), withKnobs]
 };
 
 // TODO(burdon): Consistency with dialogs as either components or containers (with hooks).

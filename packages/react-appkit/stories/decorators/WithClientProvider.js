@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { Client } from '@dxos/client';
 import { ClientProvider } from '@dxos/react-client';
 import { createStorage } from '@dxos/random-access-multi-storage';
+import { createKeyPair } from '@dxos/crypto';
 import { Keyring, KeyType } from '@dxos/credentials';
 import { createSchema, Registry, DEFAULT_CHAIN_ID } from '@wirelineio/registry-client';
 import { config, registryData } from '../common';
@@ -25,14 +26,18 @@ export const WithClientAndIdentity = (story) => {
 
   useEffect(() => {
     async function runEffect () {
-      const keyring = new Keyring();
-      await keyring.createKeyRecord({ type: KeyType.IDENTITY });
-      const schema = await createSchema(registryData);
-      const registry = new Registry(undefined, DEFAULT_CHAIN_ID, { schema });
-      // TODO(rzadp,rburdon): Replace with actual client SDK for creating a profile
-      const client = new Client({ storage, keyring, registry });
-      await client.initialize();
-      setClient(client);
+      try {
+        const client = new Client({ storageType: 'ram' });
+        await client.initialize();
+        const keypair = createKeyPair();
+        console.log(keypair)
+        await client.createProfile({ ...keypair, username: 'foo' });
+        setClient(client);
+      } catch (e) {
+        console.error(e)
+        throw e;
+      }
+      
     }
     runEffect();
   }, []);

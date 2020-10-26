@@ -27,7 +27,6 @@ const useStyles = makeStyles(() => ({
  * @param {boolean} open
  * @param {function} onClose
  * @param {function} decrypter
- * @constructor
  */
 const ImportKeyringDialog = ({ open, onClose, decrypter }) => {
   const classes = useStyles();

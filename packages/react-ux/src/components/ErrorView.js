@@ -12,8 +12,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 
-const ErrorView = ({error}) => {
-  const { onRestart, onReset, error } = this.props;
+const ErrorView = ({ onRestart, onReset, error }) => {
   if (!error) return null;
 
   return (

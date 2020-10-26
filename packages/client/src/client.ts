@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import leveljs from 'level-js';
 import defaultsDeep from 'lodash.defaultsdeep';
 import memdown from 'memdown';
 
@@ -16,44 +17,25 @@ import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { ObjectModel } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
+import { Registry } from '@wirelineio/registry-client';
 
 import { defaultClientConfig } from './config';
 
 export interface ClientConfig {
-  /**
-   * A random access storage instance.
-   */
-  storage?: any,
-
-  /**
-   * Swarm config.
-   */
-  swarm?: any
-
-  /**
-   * Keyring.
-   */
-  keyring?: Keyring
-
-  /**
-   * Optional. If provided, config.storage is ignored.
-   */
-  feedStore?: FeedStore
-
-  /**
-   * Optional. If provided, config.swarm is ignored.
-   */
-  networkManager?: NetworkManager
-
-  /**
-   * Optional.
-   */
-  partyManager?: PartyManager
-
-  /**
-   * Optional.
-   */
-  registry?: any
+  storageType?: 'ram' | 'idb' | 'chrome' | 'firefox' | 'node',
+  storagePath?: string,
+  swarm?: {
+    signal?: string,
+    ice?: {
+      urls: string,
+      username?: string,
+      credential?: string,
+    }[],
+  },
+  wns?: {
+    server: string,
+    chainId: string,
+  },
 }
 
 export interface CreateProfileOptions {
@@ -92,26 +74,25 @@ export class Client {
 
   constructor (config: ClientConfig = {}) {
     this._config = config;
-    const { storage, swarm, keyring, feedStore, networkManager, partyManager, registry } = config;
-    this._feedStore = feedStore || new FeedStore(
-      storage || createStorage('dxos-storage-db', 'ram'),
+    const { storageType = 'ram', swarm, storagePath = 'dxos/storage', wns } = config;
+    this._feedStore = new FeedStore(createStorage(`${storagePath}/feeds`, storageType),
       { feedOptions: { valueEncoding: codec } });
-    this._keyring = keyring || new Keyring(new KeyStore(memdown()));
+    this._keyring = new Keyring(new KeyStore(storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`)));
     this._swarmConfig = swarm;
 
     this._identityManager = new IdentityManager(this._keyring);
     this._modelFactory = new ModelFactory()
       .registerModel(ObjectModel);
 
-    this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig));
+    this._networkManager = new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig));
 
     const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
 
     this._partyFactory = new PartyFactory(this._identityManager, feedStoreAdapter, this._modelFactory, this._networkManager);
-    this._partyManager = partyManager || new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
+    this._partyManager = new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
 
     this._echo = new ECHO(this._partyManager);
-    this._registry = registry;
+    this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
   }
 
   get config (): ClientConfig {
@@ -168,6 +149,8 @@ export class Client {
    * If not public and secret key are provided it relies on keyring to contain an identity key.
    */
   async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
+    console.log({ publicKey, secretKey, username })
+
     if (publicKey && secretKey) {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
     }
@@ -349,17 +332,5 @@ export class Client {
  * @return {Promise<Client>}
  */
 export const createClient = async (feedStorage?: any, keyring?: Keyring, config: { swarm?: any } = {}) => {
-  config = defaultsDeep({}, config, defaultClientConfig);
-
-  console.warn('createClient is being deprecated. Please use new Client() instead.');
-
-  const client = new Client({
-    storage: feedStorage,
-    swarm: config.swarm,
-    keyring // remove this later but it is required by cli, bots, and tests.
-  });
-
-  await client.initialize();
-
-  return client;
+  throw new Error('createClient is being deprecated. Please use new Client() instead.');
 };

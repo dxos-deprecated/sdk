@@ -7,8 +7,8 @@
   "author": "DXOS.org",
   "main": "dist/es/index.js",
   "scripts": {
-    "build": "tsc",
-    "build:watch": "npm run build --watch",
+    "build": "tsc && copyfiles './src/components/util/images/*.jpg' './dist/'",
+    "build:watch": "tsc --watch",
     "clean": "rm -rf dist",
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
@@ -62,6 +62,7 @@
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "^1.0.0",
+    "copyfiles": "^2.4.0",
     "jest": "^25.1.0",
     "semistandard": "14.2.0",
     "storybook-react-router": "^1.0.8",
