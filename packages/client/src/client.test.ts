@@ -15,4 +15,6 @@ test('client initialize', async () => {
   await client.createProfile({ ...keypair, username: 'foo' });
 
   expect(client.getProfile()).toBeDefined();
+
+  client.destroy();
 });

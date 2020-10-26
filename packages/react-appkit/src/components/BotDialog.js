@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
  * @param open
  * @param onSubmit
  * @param onClose
- * @constructor
  */
 const BotDialog = ({ open, onSubmit, onClose }) => {
   const classes = useStyles();

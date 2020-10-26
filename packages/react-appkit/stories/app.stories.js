@@ -29,7 +29,7 @@ const NoPartyComponent = () => {
 
   const handleCreate = async () => {
     await client.partyManager.createParty();
-  }
+  };
 
   return (
     <Box m={2}>
