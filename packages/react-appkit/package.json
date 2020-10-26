@@ -5,7 +5,8 @@
   "keywords": [],
   "license": "AGPLv3",
   "author": "DXOS.org",
-  "main": "dist/es/index.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc && copyfiles './src/components/util/images/*.jpg' './dist/'",
     "build:watch": "tsc --watch",
