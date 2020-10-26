@@ -12,7 +12,7 @@ import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParty } from '@dxos/react-client';
 import { ObjectModel } from '@dxos/object-model';
 
-import { AppKitContextProvider, DefaultItemList, PartySettingsDialog } from '../src';
+import { AppKitProvider, DefaultItemList, PartySettingsDialog } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads, NoPartyComponent } from './common';
 import { keyToBuffer } from '@dxos/crypto';
@@ -43,12 +43,12 @@ const PartySettingsComponent = () => {
 
 export const withPartySettingsDialog = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
+    <AppKitProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={PartySettingsComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
   );
 };
 
@@ -77,11 +77,11 @@ const SidebarComponent = () => {
 
 export const withSidebarItems = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
+    <AppKitProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={SidebarComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
   );
 };

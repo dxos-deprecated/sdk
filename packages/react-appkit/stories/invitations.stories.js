@@ -12,7 +12,7 @@ import { useClient, useParty } from '@dxos/react-client';
 import { sleep } from '@dxos/async';
 import { ErrorHandler } from '@dxos/debug';
 
-import { AppKitContextProvider, BotDialog, AuthenticatorDialog, PartySharingDialog } from '../src';
+import { AppKitProvider, BotDialog, AuthenticatorDialog, PartySharingDialog } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads, NoPartyComponent } from './common';
 import { useAppRouter } from '../src/hooks';
@@ -52,12 +52,12 @@ const BotDialogComponent = () => {
 // TODO(burdon): Fix useRegistry to use Registry object created in context.
 export const withBotDialog = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
+    <AppKitProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={BotDialogComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
   );
 };
 
@@ -121,12 +121,12 @@ const AuthenticatorDialogErrorComponent = () => {
 
 export const withAuthenticatorDialogError = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={errorHandler} pads={pads} issuesLink='https://github.com/dxos/sdk/issues/new'>
+    <AppKitProvider initialState={{}} errorHandler={errorHandler} pads={pads} issuesLink='https://github.com/dxos/sdk/issues/new'>
       <Switch>
         <Route path='/:topic' exact component={AuthenticatorDialogErrorComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
   );
 };
 
@@ -152,11 +152,11 @@ const PartySharingComponent = () => {
 
 export const withPartySharing = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
+    <AppKitProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={PartySharingComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
   );
 };

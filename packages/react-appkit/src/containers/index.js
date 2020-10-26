@@ -20,7 +20,7 @@ import SystemRoutes from './SystemRoutes';
 export {
   AppBar,
   AppContainer,
-  AppKitProvider as AppKitContextProvider,
+  AppKitProvider,
   Authenticator,
   CheckForErrors,
   DebugPanel,
