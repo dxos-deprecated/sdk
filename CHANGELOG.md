@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.6.1](https://www.github.com/dxos/sdk/compare/v2.6.0...v2.6.1) (2020-10-26)
+
+
+### Bug Fixes
+
+* Fix 'main' & 'types' fileds in appkit ([218e92a](https://www.github.com/dxos/sdk/commit/218e92a44426badf70749469351b65aa25c82c1c))
+
 ## [2.6.0](https://www.github.com/dxos/sdk/compare/v2.5.2...v2.6.0) (2020-10-26)
 
 
