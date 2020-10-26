@@ -7,6 +7,7 @@ import AppContainer from './AppContainer';
 import AppKitProvider from './AppKitProvider';
 import Authenticator from './Authenticator';
 import CheckForErrors from './CheckForErrors';
+import ClientInitializer from './ClientInitializer';
 import DebugPanel from './DebugPanel';
 import DefaultSidebar from './DefaultSidebar';
 import DefaultSettingsDialog from './DefaultSettingsDialog';
@@ -23,6 +24,7 @@ export {
   AppKitProvider,
   Authenticator,
   CheckForErrors,
+  ClientInitializer,
   DebugPanel,
   DefaultSidebar,
   DefaultSettingsDialog,
