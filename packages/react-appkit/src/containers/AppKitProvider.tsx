@@ -5,8 +5,6 @@
 import React, { ReactNode, useEffect, useReducer } from 'react';
 import defaultsDeep from 'lodash.defaultsdeep';
 
-import { ErrorBoundary, ErrorView } from '@dxos/react-ux';
-
 import errorsReducer, { SET_ERRORS } from '../hooks/errors';
 import filterReducer, { SET_FILTER } from '../hooks/filter';
 import layoutReducer, { SET_LAYOUT } from '../hooks/layout';
@@ -55,10 +53,6 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
 
   const { errors: { exceptions = [] } = {} } = state[SET_ERRORS] || {};
 
-  const handleRestart = () => {
-    window.location.reload();
-  };
-
   // Bind the error handler.
   useEffect(() => {
     if (!errorHandler) {
@@ -76,9 +70,7 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
 
   return (
     <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink }}>
-      <ErrorBoundary onError={console.error} onRestart={handleRestart}>
-        {children}
-      </ErrorBoundary>
+      {children}
     </AppKitContext.Provider>
   );
 };
