@@ -5,55 +5,39 @@
 import React, { useState, useEffect } from 'react';
 
 import { Client } from '@dxos/client';
-import { ClientProvider } from '@dxos/react-client';
+import { ClientProvider, useClient } from '@dxos/react-client';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { createKeyPair } from '@dxos/crypto';
 import { Keyring, KeyType } from '@dxos/credentials';
 import { createSchema, Registry, DEFAULT_CHAIN_ID } from '@wirelineio/registry-client';
 import { config, registryData } from '../common';
-
-const storage = createStorage('./db/stories', 'ram');
-
-export const WithClient = (story) => {
-  const client = new Client({ storage });
-  return (
-    <RenderProvider story={story} client={client} config={config} />
-  );
-};
+import { ClientInitializer } from '../../src/containers/ClientInitializer';
 
 export const WithClientAndIdentity = (story) => {
-  const [client, setClient] = useState(false);
-
-  useEffect(() => {
-    async function runEffect () {
-      try {
-        const client = new Client({ storageType: 'ram' });
-        await client.initialize();
-        const keypair = createKeyPair();
-        console.log(keypair)
-        await client.createProfile({ ...keypair, username: 'foo' });
-        setClient(client);
-      } catch (e) {
-        console.error(e)
-        throw e;
-      }
-      
-    }
-    runEffect();
-  }, []);
   return (
-    <>
-      {client && (
-        <RenderProvider story={story} client={client} config={config} />
-      )}
-    </>
+    <ClientInitializer config={config}>
+      <RenderProvider story={story} />
+    </ClientInitializer>
   );
 };
 
-function RenderProvider ({ story, ...props }) {
+
+function RenderProvider ({ story, }) {
+  const [ready, setReady] = useState(false);
+  const client = useClient();
+
+  useEffect(() => {
+    (async () => {
+      await client.createProfile({ ...createKeyPair(), username: 'foo' })
+      setReady(true);
+    })();
+  }, [])
+
+  if(!ready) {
+    return null
+  }
+
   return (
-    <ClientProvider {...props}>
-      <div className='WithClientDecorator'>{story()}</div>
-    </ClientProvider>
+    <div className='WithClientDecorator'>{story()}</div>
   );
 }

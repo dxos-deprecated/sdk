@@ -4,7 +4,7 @@
 
 import AppBar from './AppBar';
 import AppContainer from './AppContainer';
-import AppKitContextProvider from './AppKitContextProvider';
+import AppKitProvider from './AppKitProvider';
 import Authenticator from './Authenticator';
 import CheckForErrors from './CheckForErrors';
 import DebugPanel from './DebugPanel';
@@ -20,7 +20,7 @@ import SystemRoutes from './SystemRoutes';
 export {
   AppBar,
   AppContainer,
-  AppKitContextProvider,
+  AppKitProvider as AppKitContextProvider,
   Authenticator,
   CheckForErrors,
   DebugPanel,
