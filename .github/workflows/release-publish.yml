@@ -17,6 +17,7 @@ jobs:
           git config --global user.email "npm@dxos.network"
           git config --global user.name "DXOS"
           yarn
+          yarn lint:lockfile
           yarn lint
           yarn build
           yarn test

@@ -4,15 +4,15 @@
 
 import React, { useContext } from 'react';
 import getDisplayName from 'react-display-name';
-import { raise } from '../util';
 
+import { raise } from '../util';
 import { ClientContext } from './context';
 
 /**
  * @deprecated Use `client.reset()`
  */
 export const useReset = () => {
-  console.warn('useReset is deprecated, use `client.reset()`')
+  console.warn('useReset is deprecated, use `client.reset()`');
   const { reset } = useContext(ClientContext) ?? raise(new Error('`useReset` hook is called outside of ClientContext. Wrap the component with `ClientProvider` or `ClientInitializer`'));
   return reset ? reset.reset : reset;
 };
@@ -26,7 +26,7 @@ export const useClient = () => {
  * @deprecated
  */
 export const useInitError = () => {
-  console.warn('useInitError is deprecated')
+  console.warn('useInitError is deprecated');
   const { initError } = useContext(ClientContext) ?? raise(new Error('`useInitError` hook is called outside of ClientContext. Wrap the component with `ClientProvider` or `ClientInitializer`'));
   return initError;
 };

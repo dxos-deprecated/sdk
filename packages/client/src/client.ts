@@ -3,7 +3,6 @@
 //
 
 import leveljs from 'level-js';
-import defaultsDeep from 'lodash.defaultsdeep';
 import memdown from 'memdown';
 
 import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
@@ -18,8 +17,6 @@ import { ObjectModel } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
-
-import { defaultClientConfig } from './config';
 
 export interface ClientConfig {
   storageType?: 'ram' | 'idb' | 'chrome' | 'firefox' | 'node',
@@ -74,7 +71,13 @@ export class Client {
 
   constructor (config: ClientConfig = {}) {
     this._config = config;
-    const { storageType = 'ram', swarm, storagePath = 'dxos/storage', wns } = config;
+    const {
+      storageType = 'ram',
+      swarm = DEFAULT_SWARM_CONFIG,
+      storagePath = 'dxos/storage',
+      wns
+    } = config;
+
     this._feedStore = new FeedStore(createStorage(`${storagePath}/feeds`, storageType),
       { feedOptions: { valueEncoding: codec } });
     this._keyring = new Keyring(new KeyStore(storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`)));
@@ -149,7 +152,7 @@ export class Client {
    * If not public and secret key are provided it relies on keyring to contain an identity key.
    */
   async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
-    console.log({ publicKey, secretKey, username })
+    console.log({ publicKey, secretKey, username });
 
     if (publicKey && secretKey) {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
@@ -323,14 +326,15 @@ export class Client {
   }
 }
 
+const DEFAULT_SWARM_CONFIG: ClientConfig['swarm'] = {
+  signal: 'ws://localhost:4000',
+  ice: [{ urls: 'stun:stun.wireline.ninja:3478' }]
+};
+
 /**
  * Client factory.
  * @deprecated
- * @param {RandomAccessAbstract} feedStorage
- * @param {Keyring} keyring
- * @param {Object} config
- * @return {Promise<Client>}
  */
-export const createClient = async (feedStorage?: any, keyring?: Keyring, config: { swarm?: any } = {}) => {
+export const createClient = async () => {
   throw new Error('createClient is being deprecated. Please use new Client() instead.');
 };

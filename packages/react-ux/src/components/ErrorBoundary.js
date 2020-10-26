@@ -34,7 +34,7 @@ class ErrorBoundary extends Component {
     const { error } = this.state;
 
     if (error) {
-      return <ErrorView onRestart={onRestart} onReset={onReset} error={error} />
+      return <ErrorView onRestart={onRestart} onReset={onReset} error={error} />;
     }
 
     return children;

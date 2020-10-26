@@ -10,7 +10,7 @@ import InvitationDialog from './InvitationDialog';
 import ItemSettings from './ItemSettings';
 import KeyMap from './KeyMap';
 import Layout from './Layout';
-import MemberAvatar, {getAvatarStyle } from './MemberAvatar';
+import MemberAvatar from './MemberAvatar';
 import MemberList from './MemberList';
 import MemberTable from './MemberTable';
 import NewItemCreationMenu from './NewItemCreationMenu';
@@ -58,5 +58,5 @@ export {
   PartyTreeAddItemButton,
   PartyTreeItem,
   createTheme,
-  defaultThemeProperties,
-}
+  defaultThemeProperties
+};
