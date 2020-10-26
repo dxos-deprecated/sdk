@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.6.4](https://www.github.com/dxos/sdk/compare/v2.6.3...v2.6.4) (2020-10-26)
+
+
+### Bug Fixes
+
+* Fix broken export ([7867dca](https://www.github.com/dxos/sdk/commit/7867dca9a1e16fe978ce5092cff0239c681e07a8))
+
 ### [2.6.3](https://www.github.com/dxos/sdk/compare/v2.6.2...v2.6.3) (2020-10-26)
 
 
