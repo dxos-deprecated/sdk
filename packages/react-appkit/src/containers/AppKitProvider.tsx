@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { ReactNode, useEffect, useReducer } from 'react';
+import React, { ReactNode, useEffect, useReducer, useState } from 'react';
 import defaultsDeep from 'lodash.defaultsdeep';
 
 import errorsReducer, { SET_ERRORS } from '../hooks/errors';
@@ -10,6 +10,7 @@ import filterReducer, { SET_FILTER } from '../hooks/filter';
 import layoutReducer, { SET_LAYOUT } from '../hooks/layout';
 
 import { AppKitContext, DefaultRouter } from '../hooks';
+import { useClient } from '@dxos/react-client';
 
 const defaultState = {
   [SET_LAYOUT]: {
@@ -49,7 +50,10 @@ export interface AppKitProviderProps {
  * Wraps children with a React ErrorBoundary component, which catches runtime errors and enables reset.
  */
 const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined }: AppKitProviderProps) => {
+  const client = useClient();
+
   const [state, dispatch] = useReducer(appReducer, defaultsDeep({}, initialState, defaultState));
+  const [padsRegistered, setPadsRegistered] = useState(false);
 
   const { errors: { exceptions = [] } = {} } = state[SET_ERRORS] || {};
 
@@ -68,9 +72,19 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
     });
   }, []);
 
+  useEffect(() => {
+    const registerPadModels = async () => {
+      for (const pad of pads) {
+        await pad.register?.(client);
+      }
+      setPadsRegistered(true);
+    };
+    registerPadModels();
+  }, []);
+ 
   return (
     <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink }}>
-      {children}
+      {padsRegistered && children}
     </AppKitContext.Provider>
   );
 };
