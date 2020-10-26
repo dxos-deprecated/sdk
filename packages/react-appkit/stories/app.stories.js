@@ -12,7 +12,7 @@ import { keyToBuffer, keyToString } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParties, useParty } from '@dxos/react-client';
 
-import { AppKitContextProvider } from '../src';
+import { AppKitProvider } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads } from './common';
 
@@ -62,10 +62,10 @@ const PartyComponent = () => {
 };
 
 export const withAppKitProvider = () => (
-  <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
+  <AppKitProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
     <Switch>
       <Route path='/:topic' exact component={PartyComponent} />
       <Route path='/' exact component={NoPartyComponent} />
     </Switch>
-  </AppKitContextProvider>
+  </AppKitProvider>
 );

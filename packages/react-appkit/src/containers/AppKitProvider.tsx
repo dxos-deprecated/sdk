@@ -31,7 +31,7 @@ const appReducer = (state: any, action: any) => ({
   [SET_LAYOUT]: layoutReducer(state[SET_LAYOUT], action)
 });
 
-export interface AppKitContextProviderProps {
+export interface AppKitProviderProps {
   children?: ReactNode,
   initialState?: {
     [SET_ERRORS]?: any,
@@ -48,7 +48,7 @@ export interface AppKitContextProviderProps {
  * Creates the AppKit framework context, which provides the global UX state.
  * Wraps children with a React ErrorBoundary component, which catches runtime errors and enables reset.
  */
-const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined }: AppKitContextProviderProps) => {
+const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined }: AppKitProviderProps) => {
   const [state, dispatch] = useReducer(appReducer, defaultsDeep({}, initialState, defaultState));
 
   const { errors: { exceptions = [] } = {} } = state[SET_ERRORS] || {};
