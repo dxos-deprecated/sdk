@@ -25,8 +25,8 @@ const ErrorView = ({ onRestart, onReset, error }) => {
         Runtime Error
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
-          {String(error)}
+        <DialogContentText id='alert-dialog-description' style={{ whiteSpace: 'pre', fontFamily: 'monospace' }}>
+          {error?.stack ?? String(error)}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
