@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.5.3](https://www.github.com/dxos/sdk/compare/v2.5.2...v2.5.3) (2020-10-26)
+
+
+### Bug Fixes
+
+* Add 'persistent' storage type that selects the default driver for the platform ([be3fc2d](https://www.github.com/dxos/sdk/commit/be3fc2d7910d221a5782a71d5a35772cc91d24e0))
+
 ### [2.5.2](https://www.github.com/dxos/sdk/compare/v2.5.1...v2.5.2) (2020-10-26)
 
 
