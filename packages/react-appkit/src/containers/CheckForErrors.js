@@ -7,6 +7,9 @@ import React from 'react';
 
 import { useClient, useInitError } from '@dxos/react-client';
 
+/**
+ * @deprecated No longer required.
+ */
 const CheckForErrors = ({ children }) => {
   const initError = useInitError();
   if (initError) {
