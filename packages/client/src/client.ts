@@ -19,7 +19,7 @@ import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
 export interface ClientConfig {
-  storageType?: 'ram' | 'idb' | 'chrome' | 'firefox' | 'node',
+  storageType?: 'ram' | 'persistent' | 'idb' | 'chrome' | 'firefox' | 'node',
   storagePath?: string,
   swarm?: {
     signal?: string,
@@ -78,7 +78,7 @@ export class Client {
       wns
     } = config;
 
-    this._feedStore = new FeedStore(createStorage(`${storagePath}/feeds`, storageType),
+    this._feedStore = new FeedStore(createStorage(`${storagePath}/feeds`, storageType === 'persistent' ? undefined : storageType),
       { feedOptions: { valueEncoding: codec } });
     this._keyring = new Keyring(new KeyStore(storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`)));
     this._swarmConfig = swarm;
