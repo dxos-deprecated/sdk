@@ -12,8 +12,6 @@ import { useClient, useParties } from '@dxos/react-client';
 export const NoPartyComponent = () => {
   const client = useClient();
   const parties = useParties();
-  console.log('client', client);
-  console.log('parties', parties);
 
   const keys = client.keyring.keys;
 

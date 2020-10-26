@@ -152,8 +152,6 @@ export class Client {
    * If not public and secret key are provided it relies on keyring to contain an identity key.
    */
   async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
-    console.log({ publicKey, secretKey, username });
-
     if (publicKey && secretKey) {
       await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
     }
