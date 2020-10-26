@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.6.0](https://www.github.com/dxos/sdk/compare/v2.5.2...v2.6.0) (2020-10-26)
+
+
+### Features
+
+* Add pad registration to AppKitProvider ([16de2dc](https://www.github.com/dxos/sdk/commit/16de2dc489c760739eaec79be196a610ef4e8c2f))
+* Rename AppKitContextProvider -> AppKitProvider ([3879765](https://www.github.com/dxos/sdk/commit/38797653686e57702912c24ee60acf294f804e50))
+
+
+### Bug Fixes
+
+* Add 'persistent' storage type that selects the default driver for the platform ([be3fc2d](https://www.github.com/dxos/sdk/commit/be3fc2d7910d221a5782a71d5a35772cc91d24e0))
+* Deprecate check for errors ([35e0a40](https://www.github.com/dxos/sdk/commit/35e0a40140b1b72792694940c1effa43b9a11e38))
+
 ### [2.5.2](https://www.github.com/dxos/sdk/compare/v2.5.1...v2.5.2) (2020-10-26)
 
 
