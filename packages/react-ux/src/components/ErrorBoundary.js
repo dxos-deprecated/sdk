@@ -40,34 +40,7 @@ class ErrorBoundary extends Component {
     const { error } = this.state;
 
     if (error) {
-      return (
-        <Dialog
-          open
-          onClose={onRestart}
-          aria-labelledby='alert-dialog-title'
-          aria-describedby='alert-dialog-description'
-        >
-          <DialogTitle id='alert-dialog-title'>
-            Runtime Error
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id='alert-dialog-description'>
-              {String(error)}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onRestart} variant='contained' color='primary'>
-              Restart
-            </Button>
-            {/* TODO(burdon): Add "Are you sure?" dialog. */}
-            {onReset && (
-              <Button onClick={onReset} variant='contained' color='secondary'>
-                Reset
-              </Button>
-            )}
-          </DialogActions>
-        </Dialog>
-      );
+      return <ErrorView onRestart={onRestart} onReset={onReset} error={error} />
     }
 
     return children;
