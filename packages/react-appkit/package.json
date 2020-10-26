@@ -7,7 +7,7 @@
   "author": "DXOS.org",
   "main": "dist/es/index.js",
   "scripts": {
-    "build": "npm run clean && babel --copy-files ./src --out-dir ./dist/es --ignore \\\"**/*.test.js\\\" --source-maps inline",
+    "build": "tsc",
     "build:watch": "npm run build --watch",
     "clean": "rm -rf dist",
     "lint": "semistandard",
@@ -64,7 +64,8 @@
     "babel-plugin-add-module-exports": "^1.0.0",
     "jest": "^25.1.0",
     "semistandard": "14.2.0",
-    "storybook-react-router": "^1.0.8"
+    "storybook-react-router": "^1.0.8",
+    "typescript": "^4.0.3"
   },
   "peerDependencies": {
     "react": "16.12.0",

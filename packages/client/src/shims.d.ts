@@ -4,3 +4,4 @@
 
 declare module '@dxos/random-access-multi-storage';
 declare module '@dxos/metrics';
+declare module '@wirelineio/registry-client';
