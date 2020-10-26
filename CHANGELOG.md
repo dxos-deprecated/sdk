@@ -1,5 +1,17 @@
 # Changelog
 
+### [2.5.2](https://www.github.com/dxos/sdk/compare/v2.5.1...v2.5.2) (2020-10-26)
+
+
+### Features
+
+* Rewrite client config ([#258](https://www.github.com/dxos/sdk/issues/258)) ([d52d8e9](https://www.github.com/dxos/sdk/commit/d52d8e9f0937d37d4d9c4e586c48e8966ba60fd5))
+
+
+### Bug Fixes
+
+* Preserve done invitation state ([#256](https://www.github.com/dxos/sdk/issues/256)) ([945fe0f](https://www.github.com/dxos/sdk/commit/945fe0fb7b619cb2a2dcd6813ec0c9afe552aef2))
+
 ### [2.5.1](https://www.github.com/dxos/sdk/compare/v2.5.0...v2.5.1) (2020-10-23)
 
 
