@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.6.2](https://www.github.com/dxos/sdk/compare/v2.6.1...v2.6.2) (2020-10-26)
+
+
+### Bug Fixes
+
+* Transpile nullish coalescing and optional chaining ([e1456a2](https://www.github.com/dxos/sdk/commit/e1456a2c0cb530bfd7849ac4b1810dc0db8d8f3c))
+
 ### [2.6.1](https://www.github.com/dxos/sdk/compare/v2.6.0...v2.6.1) (2020-10-26)
 
 
