@@ -46,3 +46,5 @@ export const ClientInitializer = ({ config, children }: ClientInitializerProps) 
     </ErrorBoundary>
   );
 }
+
+export default ClientInitializer;
