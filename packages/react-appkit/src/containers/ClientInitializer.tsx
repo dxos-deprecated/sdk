@@ -39,7 +39,7 @@ export const ClientInitializer = ({ config, children }: ClientInitializerProps) 
   }
   
   return (
-    <ErrorBoundary onError={console.error} onRestart={handleRestart} onReset={handleReset}>
+    <ErrorBoundary onError={console.error} onRestart={handleRestart} onReset={handleReset} config={config}>
       <ClientProvider client={client}>
         {clientReady ? children : null}
       </ClientProvider>
