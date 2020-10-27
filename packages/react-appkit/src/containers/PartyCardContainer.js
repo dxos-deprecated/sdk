@@ -24,8 +24,8 @@ const PartyCardContainer = ({ party }) => {
     const pad = pads.find(p => p.type === newItemType);
     const item = await pad.create({ party, client }, { name }, metadata);
     callback && callback(item);
-    router.push({ topic, item: item.id });
     handleCanceledSettings();
+    router.push({ topic, item: item.id });
   };
 
   const handleCanceledSettings = () => {
