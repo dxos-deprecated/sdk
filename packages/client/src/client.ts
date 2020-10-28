@@ -173,7 +173,7 @@ export class Client {
     const publicKey = keyToString(this._identityManager.identityKey.publicKey);
 
     return {
-      username: publicKey,
+      username: this._identityManager.displayName,
       publicKey
     };
   }
