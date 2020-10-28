@@ -434,7 +434,7 @@ const AppBar = ({
         ))}
 
         <div>
-          <Tooltip title={humanize(profile.username)}>
+          <Tooltip title={profile.username || humanize(profile.publicKey)}>
             <IconButton color='inherit'>
               <ProfileIcon />
             </IconButton>
