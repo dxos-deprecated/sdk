@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.6.5](https://www.github.com/dxos/sdk/compare/v2.6.4...v2.6.5) (2020-10-28)
+
+
+### Bug Fixes
+
+* Fix react state leak ([#269](https://www.github.com/dxos/sdk/issues/269)) ([15a4e80](https://www.github.com/dxos/sdk/commit/15a4e80d3cf9b8427b6a36780760bc7d415b700d))
+* Replace error view ([#266](https://www.github.com/dxos/sdk/issues/266)) ([d2f1b83](https://www.github.com/dxos/sdk/commit/d2f1b83579b07bfcd9596b4796c9b5c8a8bb6c29))
+
 ### [2.6.4](https://www.github.com/dxos/sdk/compare/v2.6.3...v2.6.4) (2020-10-26)
 
 
