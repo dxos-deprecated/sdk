@@ -8,8 +8,6 @@ import queryString from 'query-string';
 
 /**
  * Wraps react-router Route with condition checks that may cuase a runtime redirect.
- * @returns {Object} React component.
- * @constructor
  */
 export const CheckRoute = ({ children, preconditions = [] }) => {
   const { pathname: path, search } = useLocation();

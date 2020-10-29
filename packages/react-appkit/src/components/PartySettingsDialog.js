@@ -13,17 +13,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import CopyIcon from '@material-ui/icons/FileCopyOutlined';
 import Check from '@material-ui/icons/CheckCircleOutline';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-
+import CopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
+import Alert from '@material-ui/lab/Alert';
 
 import { EditableText } from '@dxos/react-ux';
 
@@ -45,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onExport, displayName, onDisplayNameChange }) => {
+const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, displayName, onDisplayNameChange }) => {
   const classes = useStyles();
   const [subscribed] = useState(properties.subscribed);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);

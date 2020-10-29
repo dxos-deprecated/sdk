@@ -5,16 +5,16 @@
 import clsx from 'clsx';
 import React, { useState, useEffect, useCallback, forwardRef } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { grey, green } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import TreeView from '@material-ui/lab/TreeView';
-import TreeItem from '@material-ui/lab/TreeItem';
-import AddIcon from '@material-ui/icons/Add';
-import FolderIcon from '@material-ui/icons/FolderOpen';
-import ItemIcon from '@material-ui/icons/DescriptionOutlined';
 import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
+import { grey, green } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import ItemIcon from '@material-ui/icons/DescriptionOutlined';
+import FolderIcon from '@material-ui/icons/FolderOpen';
+import TreeItem from '@material-ui/lab/TreeItem';
+import TreeView from '@material-ui/lab/TreeView';
 
 import { keyToString } from '@dxos/crypto';
 import { EditableText } from '@dxos/react-ux';

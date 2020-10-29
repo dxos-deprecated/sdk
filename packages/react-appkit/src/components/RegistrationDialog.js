@@ -2,29 +2,28 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useRef, useState } from 'react';
 import MobileDetect from 'mobile-detect';
+import React, { useRef, useState } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-
+import { makeStyles } from '@material-ui/core/styles';
 import CreateIcon from '@material-ui/icons/AddCircleOutline';
 import RestoreIcon from '@material-ui/icons/Restore';
 
 import { generateSeedPhrase } from '@dxos/credentials';
-import { withStyles } from '@material-ui/core';
 
 const STAGE_PENDING = -1;
 const STAGE_START = 0;
@@ -203,6 +202,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
               icon={<Avatar className={classes.seedNumber}>{i + 1}</Avatar>}
               classes={{ root: classes.seedChip, label: classes.seedLabel }}
               label={word}
+              data-testid='chip'
             />
           </Grid>
         ))}

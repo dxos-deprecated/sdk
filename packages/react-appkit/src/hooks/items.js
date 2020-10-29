@@ -2,9 +2,9 @@
 // Copyright 2020 DXOS.org
 //
 
-import { useEffect, useState, useCallback } from 'react';
-import { Chance } from 'chance';
 import assert from 'assert';
+import { Chance } from 'chance';
+import { useEffect, useState, useCallback } from 'react';
 
 import { useModel } from '@dxos/react-client';
 import { ItemModel } from '@dxos/view-model';
