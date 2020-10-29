@@ -11,7 +11,7 @@ import { renderWithTheme } from './test-utils';
 import { Client } from '@dxos/client';
 import { createKeyPair } from '@dxos/crypto';
 
-describe.only('Party Member List', () => {
+describe('Party Member List', () => {
   const client = new Client();
 
   test('Avatars displays first letter of name', async () => {
