@@ -5,7 +5,7 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 // import leveljs from 'level-js';
-import PartyMemberList from '../components/PartyMemberList';
+import PartyMemberList from '../src/components/PartyMemberList';
 import { renderWithTheme } from './test-utils';
 // import ram from 'random-access-memory';
 

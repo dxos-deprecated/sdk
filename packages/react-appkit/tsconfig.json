@@ -9,7 +9,7 @@
   },
   "include": [
     "src",
-    "stories"
+    "stories", "tests"
   ],
   "references": [
     { "path": "../client" }

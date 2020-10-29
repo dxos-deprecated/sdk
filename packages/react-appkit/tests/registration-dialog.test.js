@@ -1,6 +1,6 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import React from 'react';
-import RegistrationDialog from '../components/RegistrationDialog';
+import RegistrationDialog from '../src/components/RegistrationDialog';
 import { renderWithTheme } from './test-utils';
 
 describe('RegistrationDialog', () => {

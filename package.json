@@ -23,7 +23,7 @@
     "clean": "wsrun clean",
     "lint": "wsrun lint",
     "test": "wsrun test",
-    "test:components": "wsrun test:components",
+    "test:components": "wsrun --exclude-missing test:components",
     "lint:staged": "lint-staged",
     "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https",
     "precommit": "npm run lint:staged && npm run lint:lockfile"
