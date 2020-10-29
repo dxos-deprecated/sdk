@@ -31,8 +31,11 @@ export const useInitError = () => {
   return initError;
 };
 
-export const withClient = WrappedComponent => {
-  const Component = props => {
+/**
+ * @deprecated
+ */
+export const withClient = (WrappedComponent: any) => {
+  const Component = (props: any) => {
     const { client } = useContext(ClientContext);
 
     return <WrappedComponent {...props} client={client} />;
