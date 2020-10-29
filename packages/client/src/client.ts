@@ -17,6 +17,7 @@ import { ObjectModel } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
+import { SnapshotStore } from '@dxos/echo-db/dist/src/snapshot-store';
 
 export interface ClientConfig {
   storageType?: 'ram' | 'persistent' | 'idb' | 'chrome' | 'firefox' | 'node',
@@ -33,6 +34,8 @@ export interface ClientConfig {
     server: string,
     chainId: string,
   },
+  snapshots?: boolean
+  snapshotInterval?: number
 }
 
 export interface CreateProfileOptions {
@@ -67,6 +70,8 @@ export class Client {
 
   private readonly _registry?: any;
 
+  private readonly _snapshotStore: SnapshotStore;
+
   private _initialized = false;
 
   constructor (config: ClientConfig = {}) {
@@ -75,7 +80,9 @@ export class Client {
       storageType = 'ram',
       swarm = DEFAULT_SWARM_CONFIG,
       storagePath = 'dxos/storage',
-      wns
+      wns,
+      snapshots = false,
+      snapshotInterval
     } = config;
 
     this._feedStore = new FeedStore(createStorage(`${storagePath}/feeds`, storageType === 'persistent' ? undefined : storageType),
@@ -91,8 +98,20 @@ export class Client {
 
     const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
 
-    this._partyFactory = new PartyFactory(this._identityManager, feedStoreAdapter, this._modelFactory, this._networkManager);
-    this._partyManager = new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
+    this._snapshotStore = new SnapshotStore(snapshots
+      ? createStorage(`${storagePath}/snapshots`, storageType === 'persistent' ? undefined : storageType)
+      : createStorage('fake', 'ram'),
+    );
+
+    this._partyFactory = new PartyFactory(
+      this._identityManager,
+      feedStoreAdapter,
+      this._modelFactory,
+      this._networkManager,
+      this._snapshotStore,
+      { snapshots, snapshotInterval }
+    );
+    this._partyManager = new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory, this._snapshotStore);
 
     this._echo = new ECHO(this._partyManager);
     this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
