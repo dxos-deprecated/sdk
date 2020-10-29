@@ -5,11 +5,13 @@
 import assert from 'assert';
 import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import TreeView from '@material-ui/lab/TreeView';
+
 import { Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ObjectModel } from '@dxos/object-model';
+import TreeView from '@material-ui/lab/TreeView';
 
+import { keyToBuffer } from '@dxos/crypto';
+import { ObjectModel } from '@dxos/object-model';
 import { useParty, useItems } from '@dxos/react-client';
 
 import {
@@ -17,10 +19,8 @@ import {
   // PartyTreeAddItemButton,
   PartyTreeItem
 } from '../components';
-
 import MemberList from '../components/MemberList';
 import { usePads, useAppRouter } from '../hooks';
-import { keyToBuffer } from '@dxos/crypto';
 
 const useStyles = makeStyles(theme => ({
   root: {

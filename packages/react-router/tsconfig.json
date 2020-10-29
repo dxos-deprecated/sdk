@@ -5,7 +5,7 @@
     "jsx": "react",
     "lib": [
       "DOM"
-    ]
+    ],
   },
   "include": [
     "src",

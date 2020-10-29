@@ -16,5 +16,5 @@ test('client initialize', async () => {
 
   expect(client.getProfile()).toBeDefined();
 
-  client.destroy();
+  await client.destroy();
 });

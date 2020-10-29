@@ -22,7 +22,8 @@
     "build": "wsrun -t build",
     "clean": "wsrun clean",
     "lint": "wsrun lint",
-    "test": "wsrun test",
+    "test": "wsrun -s test",
+    "coverage": "istanbul-combine -d coverage -p summary -r lcov packages/**/coverage/coverage-final.json",
     "lint:staged": "lint-staged",
     "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https",
     "precommit": "npm run lint:staged && npm run lint:lockfile"
@@ -38,6 +39,7 @@
   "devDependencies": {
     "babel-eslint": "^10.0.2",
     "husky": "^3.1.0",
+    "istanbul-combine": "^0.3.0",
     "lerna": "^3.19.0",
     "lint-staged": "^9.5.0",
     "lockfile-lint": "^4.3.7",

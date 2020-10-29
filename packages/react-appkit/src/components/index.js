@@ -8,6 +8,7 @@ import ExportKeyringDialog from './ExportKeyringDialog';
 import ImportKeyringDialog from './ImportKeyringDialog';
 import InvitationDialog from './InvitationDialog';
 import ItemSettings from './ItemSettings';
+import ItemSettingsDialog from './ItemSettingsDialog';
 import KeyMap from './KeyMap';
 import Layout from './Layout';
 import MemberAvatar from './MemberAvatar';
@@ -15,18 +16,17 @@ import MemberList from './MemberList';
 import MemberTable from './MemberTable';
 import NewItemCreationMenu from './NewItemCreationMenu';
 import PartyCard from './PartyCard';
+import PartyFromFileDialog from './PartyFromFileDialog';
+import PartyFromIpfsDialog from './PartyFromIpfsDialog';
 import PartyList from './PartyList';
 import PartyMemberList from './PartyMemberList';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
-import PartyFromFileDialog from './PartyFromFileDialog';
-import PartyFromIpfsDialog from './PartyFromIpfsDialog';
 import PartyTree, { PartyTreeAddItemButton, PartyTreeItem } from './PartyTree';
 import RegistrationDialog from './RegistrationDialog';
 import Sidebar from './Sidebar';
 import StatusBar from './StatusBar';
 import Theme, { createTheme, defaultThemeProperties } from './Theme';
-import ItemSettingsDialog from './ItemSettingsDialog';
 
 export * from './util';
 export {
