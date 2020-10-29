@@ -15,7 +15,7 @@
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
     "test": "jest --verbose --passWithNoTests",
-    "test:components": "jest --rootDir ./tests --coverage --verbose"
+    "test:components": "jest --rootDir ./ --coverage --verbose"
   },
   "dependencies": {
     "@dxos/botkit-client": "^2.6.5-alpha.0",
