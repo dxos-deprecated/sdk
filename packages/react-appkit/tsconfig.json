@@ -9,8 +9,10 @@
   },
   "include": [
     "src",
-    "stories", "tests"
+    "stories",
+    "tests"
   ],
+  "ignore": "/node_modules/",
   "references": [
     { "path": "../client" }
   ]
