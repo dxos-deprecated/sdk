@@ -14,7 +14,7 @@
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir ./tests --verbose --coverage"
+    "test": "jest --rootDir . --verbose --coverage"
   },
   "dependencies": {
     "@dxos/botkit-client": "^2.6.5-alpha.0",

@@ -9,8 +9,6 @@
   },
   "include": [
     "src",
-    "stories",
-    "tests"
   ],
   "ignore": "/node_modules/",
   "references": [
