@@ -2,8 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
-import { useEffect, useState } from 'react';
 import assert from 'assert';
+import { useEffect, useState } from 'react';
 
 import { useModel } from '@dxos/react-client';
 

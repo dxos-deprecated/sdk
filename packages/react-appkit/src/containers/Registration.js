@@ -5,8 +5,8 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useClient, useConfig } from '@dxos/react-client';
 import { keyPairFromSeedPhrase } from '@dxos/credentials';
+import { useClient, useConfig } from '@dxos/react-client';
 import { useQuery, createUrl } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';
 

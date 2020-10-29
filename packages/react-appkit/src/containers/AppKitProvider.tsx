@@ -2,15 +2,15 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { ReactNode, useEffect, useReducer, useState } from 'react';
 import defaultsDeep from 'lodash.defaultsdeep';
+import React, { ReactNode, useEffect, useReducer, useState } from 'react';
 
+import { useClient } from '@dxos/react-client';
+
+import { AppKitContext, DefaultRouter } from '../hooks';
 import errorsReducer, { SET_ERRORS } from '../hooks/errors';
 import filterReducer, { SET_FILTER } from '../hooks/filter';
 import layoutReducer, { SET_LAYOUT } from '../hooks/layout';
-
-import { AppKitContext, DefaultRouter } from '../hooks';
-import { useClient } from '@dxos/react-client';
 
 const defaultState = {
   [SET_LAYOUT]: {
@@ -81,7 +81,7 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
     };
     registerPadModels();
   }, []);
- 
+
   return (
     <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink }}>
       {padsRegistered && children}

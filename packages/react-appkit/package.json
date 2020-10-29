@@ -68,7 +68,11 @@
     "> 5%"
   ],
   "eslintConfig": {
-    "extends": "plugin:@dxos/recomended"
+    "extends": "plugin:@dxos/react",
+    "rules": {
+      "react/prop-types": "off",
+      "react/display-name": "off"
+    }
   },
   "publishConfig": {
     "access": "public"

@@ -1,7 +1,12 @@
-import { Client, ClientConfig } from "@dxos/client";
+//
+// Copyright 2020 DXOS.org
+//
+
 import React, { ReactNode, useEffect, useState } from 'react';
+
+import { Client, ClientConfig } from '@dxos/client';
+import { ClientProvider } from '@dxos/react-client';
 import { ErrorBoundary, ErrorView } from '@dxos/react-ux';
-import { ClientProvider } from "@dxos/react-client";
 
 export interface ClientInitializerProps {
   config?: ClientConfig
@@ -18,15 +23,14 @@ export const ClientInitializer = ({ config, children }: ClientInitializerProps) 
       try {
         await client.initialize();
         setClientReady(true);
-      } catch(e) {
-        setError(e)
+      } catch (e) {
+        setError(e);
       }
-    })()
+    })();
   }, []);
 
-
   const handleRestart = () => {
-    window.location.reload()
+    window.location.reload();
   };
 
   const handleReset = async () => {
@@ -37,7 +41,7 @@ export const ClientInitializer = ({ config, children }: ClientInitializerProps) 
   if (error) {
     return <ErrorView onRestart={handleRestart} onReset={handleReset} error={error} />;
   }
-  
+
   return (
     <ErrorBoundary onError={console.error} onRestart={handleRestart} onReset={handleReset} config={config}>
       <ClientProvider client={client}>
@@ -45,6 +49,6 @@ export const ClientInitializer = ({ config, children }: ClientInitializerProps) 
       </ClientProvider>
     </ErrorBoundary>
   );
-}
+};
 
 export default ClientInitializer;

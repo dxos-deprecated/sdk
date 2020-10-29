@@ -2,8 +2,9 @@
 // Copyright 2020 DXOS.org
 //
 
-import { keyToString } from '@dxos/crypto';
 import { useEffect, useState } from 'react';
+
+import { keyToString } from '@dxos/crypto';
 
 export const useMembers = (party) => {
   const [members, setMembers] = useState([]);
