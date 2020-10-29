@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "jsx": "react",
+    "lib": [
+      "DOM"
+    ],
+    "allowJs": true
+  },
+  "include": [
+    "src",
+    "stories",
+    "tests"
+  ],
+  "ignore": "/node_modules/",
+  "references": [
+    { "path": "../client" }
+  ]
+}
