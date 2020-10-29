@@ -4,14 +4,14 @@
 
 import clsx from 'clsx';
 import isPlainObject from 'lodash.isplainobject';
-
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+
 import Typography from '@material-ui/core/Typography';
-import MuiTreeView from '@material-ui/lab/TreeView';
-import MuiTreeItem from '@material-ui/lab/TreeItem';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { makeStyles } from '@material-ui/core/styles';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MuiTreeItem from '@material-ui/lab/TreeItem';
+import MuiTreeView from '@material-ui/lab/TreeView';
 
 import { keyToString } from '@dxos/crypto';
 import { truncateString } from '@dxos/debug';

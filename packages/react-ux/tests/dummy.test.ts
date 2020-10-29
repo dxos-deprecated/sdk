@@ -1,3 +1,7 @@
+//
+// Copyright 2020 DXOS.org
+//
+
 describe('Dummy test', () => {
   it('2+2=4', () => {
     expect(2 + 2).toEqual(4);

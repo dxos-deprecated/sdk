@@ -2,13 +2,13 @@
 // Copyright 2020 DXOS.org
 //
 
+import DeleteConfirmation from './DeleteConfirmation';
 import EditableText from './EditableText';
 import ErrorBoundary from './ErrorBoundary';
-import JsonTreeView from './JsonTreeView';
-import FullScreen from './FullScreen';
-import Passcode from './Passcode';
-import DeleteConfirmation from './DeleteConfirmation';
 import ErrorView from './ErrorView';
+import FullScreen from './FullScreen';
+import JsonTreeView from './JsonTreeView';
+import Passcode from './Passcode';
 export * from './Drawer';
 
 export {
