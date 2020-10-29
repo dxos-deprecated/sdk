@@ -6,7 +6,6 @@
     "lib": [
       "DOM"
     ],
-    "allowJs": true
   },
   "include": [
     "src",
