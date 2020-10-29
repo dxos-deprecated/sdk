@@ -10,6 +10,7 @@ import { humanize, keyToString } from '@dxos/crypto';
 import {
   codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager, SecretProvider, InvitationOptions, InvitationDescriptor
 } from '@dxos/echo-db';
+import { SnapshotStore } from '@dxos/echo-db/dist/src/snapshot-store';
 import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
@@ -17,7 +18,6 @@ import { ObjectModel } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
-import { SnapshotStore } from '@dxos/echo-db/dist/src/snapshot-store';
 
 export interface ClientConfig {
   storageType?: 'ram' | 'persistent' | 'idb' | 'chrome' | 'firefox' | 'node',
@@ -100,7 +100,7 @@ export class Client {
 
     this._snapshotStore = new SnapshotStore(snapshots
       ? createStorage(`${storagePath}/snapshots`, storageType === 'persistent' ? undefined : storageType)
-      : createStorage('fake', 'ram'),
+      : createStorage('fake', 'ram')
     );
 
     this._partyFactory = new PartyFactory(
