@@ -3,5 +3,6 @@ module.exports = {
   coverageDirectory: 'coverage',
   transformIgnorePatterns: [
     'node_modules'
-  ]
+  ],
+  testTimeout: 10000
 };

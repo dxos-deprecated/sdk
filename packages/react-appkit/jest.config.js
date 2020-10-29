@@ -7,5 +7,6 @@ module.exports = {
   coverageDirectory: 'coverage',
   transformIgnorePatterns: [
     'node_modules/(?!(@dxos)/)'
-  ]
+  ],
+  testTimeout: 10000
 };
