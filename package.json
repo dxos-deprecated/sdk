@@ -23,7 +23,6 @@
     "clean": "wsrun clean",
     "lint": "wsrun lint",
     "test": "wsrun test",
-    "test:components": "wsrun --exclude-missing test:components",
     "coverage": "istanbul-combine -d coverage -p summary -r lcov packages/**/coverage/coverage-final.json",
     "lint:staged": "lint-staged",
     "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https",

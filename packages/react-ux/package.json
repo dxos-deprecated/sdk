@@ -12,8 +12,7 @@
     "clean": "rm -rf dist",
     "lint": "semistandard",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir ./src --verbose --passWithNoTests",
-    "test:components": "jest ./tests --coverage"
+    "test": "jest --rootDir ./ --verbose --coverage"
   },
   "dependencies": {
     "@dxos/crypto": "^1.0.0-beta.1",
