@@ -12,7 +12,7 @@
     "clean": "rm -rf dist",
     "lint": "semistandard",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir ./src --verbose --passWithNoTests"
+    "test": "jest --rootDir . --verbose --passWithNoTests --coverage"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.0",
