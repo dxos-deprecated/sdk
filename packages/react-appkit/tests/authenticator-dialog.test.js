@@ -1,6 +1,11 @@
 
+//
+// Copyright 2020 DXOS.org
+//
+
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import React from 'react';
+
 import AuthenticatorDialog from '../src/components/AuthenticatorDialog';
 import { renderWithTheme } from './test-utils';
 
@@ -46,13 +51,13 @@ describe('AuthenticatorDialog', () => {
     expect(() => screen.getByRole('textbox')).toThrow();
   });
 
-  test('Cancel click is handled', async () => {
-    // let cancelled = false;
-    // const props = {
-    //   ...defaultProps,
-    //   onCancel: () => { cancelled = true; }
-    // };
+  // test('Cancel click is handled', async () => {
+  // let cancelled = false;
+  // const props = {
+  //   ...defaultProps,
+  //   onCancel: () => { cancelled = true; }
+  // };
 
-    // renderWithTheme(<AuthenticatorDialog {...props} />);
-  });
+  // renderWithTheme(<AuthenticatorDialog {...props} />);
+  // });
 });

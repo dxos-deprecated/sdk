@@ -4,12 +4,13 @@
 
 import { screen } from '@testing-library/react';
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
-import PartyMemberList from '../src/components/PartyMemberList';
-import { renderWithTheme } from './test-utils';
 
+import '@testing-library/jest-dom/extend-expect';
 import { Client } from '@dxos/client';
 import { createKeyPair } from '@dxos/crypto';
+
+import PartyMemberList from '../src/components/PartyMemberList';
+import { renderWithTheme } from './test-utils';
 
 describe('Party Member List', () => {
   const client = new Client();

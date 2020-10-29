@@ -1,5 +1,10 @@
+//
+// Copyright 2020 DXOS.org
+//
+
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 import React from 'react';
+
 import RegistrationDialog from '../src/components/RegistrationDialog';
 import { renderWithTheme } from './test-utils';
 
@@ -105,12 +110,12 @@ describe('RegistrationDialog', () => {
     test('Clicking "Back" leads to Create Identitity stage', async () => {
       fireEvent.click(screen.getByText('Back'));
       expect(() => screen.getByText('Seed Phrase')).toThrow();
-      expect(() => screen.getByText('Create your Identity').not.toThrow());
+      expect(() => screen.getByText('Create your Identity')).not.toThrow();
     });
 
-    test('Clicking "Download" fires seed phrases download', async () => {
-      // TODO
-    });
+    // test('Clicking "Download" fires seed phrases download', async () => {
+    // TODO
+    // });
 
     test('Clicking "Next" leads to Verify Seed Phrase stage', async () => {
 

@@ -1,6 +1,11 @@
-import React from 'react';
-import Theme from '../src/components/Theme';
+//
+// Copyright 2020 DXOS.org
+//
+
 import { render } from '@testing-library/react';
+import React from 'react';
+
+import Theme from '../src/components/Theme';
 
 const themeBase = {
   // https://material-ui.com/customization/breakpoints/
