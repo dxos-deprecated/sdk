@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.7.0](https://www.github.com/dxos/sdk/compare/v2.6.5...v2.7.0) (2020-10-29)
+
+
+### Features
+
+* Party snapshots ([#275](https://www.github.com/dxos/sdk/issues/275)) ([ebbde8e](https://www.github.com/dxos/sdk/commit/ebbde8eb255dff63304b5bfea0d4284b8dcd5db1))
+
+
+### Bug Fixes
+
+* Allow the user to not specify WNS ([#273](https://www.github.com/dxos/sdk/issues/273)) ([2e2e228](https://www.github.com/dxos/sdk/commit/2e2e228e9f62ced477d46a69acf85e843efef417))
+* Disable broken members link. ([#271](https://www.github.com/dxos/sdk/issues/271)) ([ad588d0](https://www.github.com/dxos/sdk/commit/ad588d0bf61714f52c9d14cc683f000263d5c375))
+
 ### [2.6.5](https://www.github.com/dxos/sdk/compare/v2.6.4...v2.6.5) (2020-10-28)
 
 
