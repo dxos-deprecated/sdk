@@ -3,13 +3,7 @@
 //
 
 import React, { Component } from 'react';
-
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import ErrorView from './ErrorView';
 
 /**
  * Root-level error boundary.
@@ -40,34 +34,7 @@ class ErrorBoundary extends Component {
     const { error } = this.state;
 
     if (error) {
-      return (
-        <Dialog
-          open
-          onClose={onRestart}
-          aria-labelledby='alert-dialog-title'
-          aria-describedby='alert-dialog-description'
-        >
-          <DialogTitle id='alert-dialog-title'>
-            Runtime Error
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id='alert-dialog-description'>
-              {String(error)}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onRestart} variant='contained' color='primary'>
-              Restart
-            </Button>
-            {/* TODO(burdon): Add "Are you sure?" dialog. */}
-            {onReset && (
-              <Button onClick={onReset} variant='contained' color='secondary'>
-                Reset
-              </Button>
-            )}
-          </DialogActions>
-        </Dialog>
-      );
+      return <ErrorView onRestart={onRestart} onReset={onReset} error={error} />;
     }
 
     return children;

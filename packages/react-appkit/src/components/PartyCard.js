@@ -3,7 +3,7 @@
 //
 
 import clsx from 'clsx';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
@@ -16,9 +16,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import ListItemText from '@material-ui/core/ListItemText';
+import { ListItemSecondaryAction } from '@material-ui/core';
 
 import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/MoreVert';
+import DeleteIcon from '@material-ui/icons/Delete';
+import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 
 import { humanize, keyToString } from '@dxos/crypto';
 
@@ -105,16 +108,38 @@ const PartyCard = ({
   client,
   router,
   pads,
-  itemModel,
+  items,
   onNewItemRequested,
   onNewParty = undefined,
   onExport = undefined
 }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
+  const [partyOpen, setPartyOpen] = useState(false);
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [displayName, setDisplayName] = useState('');
+
+  useEffect(() => {
+    if (!party) return;
+    (async function () {
+      await party.open();
+      const PARTY_ITEM_TYPE = 'wrn://dxos.org/item/party'; // not exported by echo cause it's internal
+      // hack until https://github.com/dxos/echo/issues/246 is resolved
+      await party.database.queryItems({ type: PARTY_ITEM_TYPE }).update.waitFor(value => value.length > 0);
+      setPartyOpen(true);
+    })();
+  }, [party]);
+
+  useEffect(() => {
+    if (!party) return;
+    if (partyOpen) {
+      setDisplayName(party.getProperty('displayName') || humanize(party.key));
+    } else {
+      setDisplayName(humanize(party.key));
+    }
+  }, [partyOpen]);
 
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
@@ -129,14 +154,6 @@ const PartyCard = ({
 
   const handleSelect = (itemId) => {
     router.push({ topic, item: itemId });
-  };
-
-  const handleSubscribe = async () => {
-    await client.partyManager.subscribe(party.key);
-  };
-
-  const handleUnsubscribe = async () => {
-    await client.partyManager.unsubscribe(party.key);
   };
 
   if (onNewParty) {
@@ -172,7 +189,7 @@ const PartyCard = ({
               variant='h5'
               className='party-header-title'
             >
-              {party.displayName || humanize(party.key)}
+              {displayName}
             </Typography>
           }
           action={(
@@ -181,7 +198,6 @@ const PartyCard = ({
               edge='end'
               aria-label='settings'
               onClick={() => setSettingsDialogOpen(true)}
-              disabled // Not implemented yet for new ECHO/HALO
             >
               <SettingsIcon />
             </IconButton>
@@ -190,7 +206,7 @@ const PartyCard = ({
 
         <div className={classes.listContainer}>
           <List dense disablePadding>
-            {itemModel.map(item => (
+            {items.filter(item => showDeleted || !item.model.getProperty('deleted')).map(item => (
               <ListItem
                 key={item.id}
                 button
@@ -200,8 +216,21 @@ const PartyCard = ({
                   <PadIcon type={item.type} />
                 </ListItemIcon>
                 <ListItemText>
-                  {item._model.getProperty('title') || 'Untitled'}
+                  {item.model.getProperty('title') || 'Untitled'}
                 </ListItemText>
+                {item.model.getProperty('deleted') ? (
+                  <ListItemSecondaryAction>
+                    <IconButton edge='end' aria-label='restore' onClick={() => item.model.setProperty('deleted', false)}>
+                      <RestoreIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                ) : (
+                  <ListItemSecondaryAction>
+                    <IconButton size='small' edge='end' aria-label='delete' onClick={() => item.model.setProperty('deleted', true)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
               </ListItem>
             ))}
           </List>
@@ -249,14 +278,20 @@ const PartyCard = ({
             subscribed: true
           }}
           onExport={onExport}
+          displayName={displayName}
+          onDisplayNameChange={(displayName) => {
+            party.setProperty('displayName', displayName);
+            setDisplayName(displayName);
+          }}
           onClose={({ showDeleted, subscribed }) => {
             setShowDeleted(showDeleted);
-            if (subscribed && !party.subscribed) {
-              handleSubscribe();
-            }
-            if (!subscribed && party.subscribed) {
-              handleUnsubscribe();
-            }
+            // Not yet implemented for the new ECHO
+            // if (subscribed && !party.subscribed) {
+            //   handleSubscribe();
+            // }
+            // if (!subscribed && party.subscribed) {
+            //   handleUnsubscribe();
+            // }
             setSettingsDialogOpen(false);
           }}
         />

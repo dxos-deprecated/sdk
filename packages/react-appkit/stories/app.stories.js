@@ -12,7 +12,7 @@ import { keyToBuffer, keyToString } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParties, useParty } from '@dxos/react-client';
 
-import { AppKitContextProvider } from '../src';
+import { AppKitProvider } from '../src';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 import { pads } from './common';
 
@@ -27,6 +27,10 @@ const NoPartyComponent = () => {
 
   const keys = client.keyring.keys;
 
+  const handleCreate = async () => {
+    await client.partyManager.createParty();
+  };
+
   return (
     <Box m={2}>
       <p>Create and select a party using the knobs.</p>
@@ -39,6 +43,7 @@ const NoPartyComponent = () => {
         const publicKey = keyToString(party.key);
         return (<div key={publicKey}>{publicKey}</div>);
       })}
+      <button onClick={handleCreate}>Add Party</button>
     </Box>
   );
 };
@@ -57,10 +62,10 @@ const PartyComponent = () => {
 };
 
 export const withAppKitProvider = () => (
-  <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
+  <AppKitProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
     <Switch>
       <Route path='/:topic' exact component={PartyComponent} />
       <Route path='/' exact component={NoPartyComponent} />
     </Switch>
-  </AppKitContextProvider>
+  </AppKitProvider>
 );

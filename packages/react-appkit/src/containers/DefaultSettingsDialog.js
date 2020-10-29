@@ -11,10 +11,10 @@ import ItemSettings from '../components/ItemSettings';
 
 const chance = new Chance();
 
-const DefaultSettingsDialog = ({ open, onClose, onCancel, item, itemModel }) => {
+const DefaultSettingsDialog = ({ open, onClose, onCancel, item }) => {
   const handleClose = ({ name }) => {
     if (item) {
-      itemModel.renameItem(item.itemId, name);
+      item.model.setProperty('title', name);
     }
     onClose({ name: name || `item-${chance.word()}` });
   };

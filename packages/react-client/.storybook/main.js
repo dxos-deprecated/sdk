@@ -2,12 +2,10 @@
 // Copyright 2020 DXOS.org
 //
 
-// https://storybook.js.org/docs/configurations/custom-webpack-config
-
 const path = require('path');
 
 module.exports = {
-  stories: ['../**/*.stories.{js,jsx,ts,tsx}'],
+  stories: ['../stories/**/*.{jsx,js,tsx}'],
   addons: ['@storybook/addon-actions', '@storybook/addon-knobs'],
   webpackFinal: async config => {
     config.module.rules.push({

@@ -85,10 +85,9 @@ const TableCell = withStyles(theme => ({
   }
 }))(MuiTableCell);
 
-function PendingInvitation ({ party, pending, handleCopy }) {
+function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
   const classes = useStyles();
-  const [done, setDone] = useState(false);
-  const [inviteCode, pin] = useInvitation(party.key, { onDone: () => { setDone(true); } });
+  const [inviteCode, pin] = useInvitation(party.key, { onDone: () => onInvitationDone(pending.id) });
 
   return (
     <TableRow>
@@ -107,7 +106,7 @@ function PendingInvitation ({ party, pending, handleCopy }) {
         )}
       </TableCell>
       <TableCell classes={{ root: classes.colStatus }}>
-        <span className={classes.label}>{done ? 'Done' : 'Pending'}</span>
+        <span className={classes.label}>{pending.done ? 'Done' : 'Pending'}</span>
       </TableCell>
       <TableCell classes={{ root: classes.colActions }}>
         {pin ? null : (
@@ -147,6 +146,13 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
   const handleCopy = (value) => {
     setCopiedSnackBarOpen(true);
     console.log(value);
+  };
+
+  const handleInvitationDone = (invitationId) => {
+    setInvitations(old => ([
+      ...old.filter(invite => invite.id !== invitationId),
+      ...old.filter(invite => invite.id === invitationId).map(invite => ({ ...invite, done: true }))
+    ]));
   };
 
   // TODO(burdon): Columns in EACH section should have same content:
@@ -199,7 +205,7 @@ const PartySharingDialog = ({ party, open, onClose, client, router }) => {
         <TableContainer className={classes.tableContainer}>
           <Table className={classes.table} size='small' padding='none' aria-label='contacts'>
             <TableBody>
-              {invitations.map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} />)}
+              {invitations.map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} onInvitationDone={handleInvitationDone} />)}
             </TableBody>
             <TableBody>
               {members.map((member) => (

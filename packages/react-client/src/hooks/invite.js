@@ -2,13 +2,12 @@
 // Copyright 2020 DXOS.org
 //
 
-import { useEffect, useState, useMemo } from 'react';
 import assert from 'assert';
+import { useEffect, useState, useMemo } from 'react';
 
 import { trigger } from '@dxos/async';
 import { generatePasscode } from '@dxos/credentials';
 import { keyToString } from '@dxos/crypto';
-
 import { InvitationDescriptor } from '@dxos/echo-db';
 
 import { useClient } from './client';
@@ -100,6 +99,7 @@ export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {})
  * @param {() => void} options.onError called if the invite flow produces an error.
  * @returns {[invitationCode: String ]}
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useOfflineInvitation (party, recipient, { onDone = noOp, onError = noOp } = {}) {
   // TODO
   // assert(party);

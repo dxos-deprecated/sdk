@@ -22,7 +22,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
-import { useRegistryBots, useRegistryBotFactories } from '../hooks/registry';
+import { useRegistryBots, useRegistryBotFactories } from '@dxos/react-client';
 
 // TODO(egorgripasov): Factor out to config/client.
 const BOT_FACTORY_DOMAIN = 'dxos.network';
@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
  * @param open
  * @param onSubmit
  * @param onClose
- * @constructor
  */
 const BotDialog = ({ open, onSubmit, onClose }) => {
   const classes = useStyles();

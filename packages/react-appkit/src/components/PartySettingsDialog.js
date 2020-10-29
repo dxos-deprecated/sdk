@@ -45,10 +45,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// TODO(burdon): Separate storybook.
-const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onExport }) => {
+const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, onExport, displayName, onDisplayNameChange }) => {
   const classes = useStyles();
-  const [subscribed, setSubscribed] = useState(properties.subscribed);
+  const [subscribed] = useState(properties.subscribed);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
@@ -56,12 +55,7 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
   const handleClose = () => {
-    onClose({ subscribed, showDeleted });
-  };
-
-  // TODO(burdon): Extract client (pass in callback).
-  const handleSetTitle = (displayName) => {
-    client.partyManager.setPartyProperty(party.key, { displayName });
+    onClose({ subscribed, showDeleted, displayName });
   };
 
   const handleExportToIPFS = async () => {
@@ -90,19 +84,19 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
       </DialogTitle>
 
       <DialogContent>
-        {party && (
+        {false && ( // disabled until https://github.com/dxos/echo/issues/246 and are resolved https://github.com/dxos/echo/issues/248
           <EditableText
             label='Name'
-            disabled={!party.subscribed}
-            value={party.displayName}
-            onUpdate={handleSetTitle}
+            value={displayName}
+            onUpdate={onDisplayNameChange}
           />
         )}
 
         {/* TODO(burdon): Implement state and handlers. */}
         <FormControl className={classes.form}>
           <FormGroup>
-            <FormControlLabel
+            {/* Not implemented for the new echo */}
+            {/* <FormControlLabel
               control={
                 <Checkbox
                   checked={subscribed}
@@ -111,7 +105,7 @@ const PartySettingsDialog = ({ party, client, open, onClose, properties = {}, on
                 />
               }
               label='Active'
-            />
+            /> */}
             <FormControlLabel
               control={
                 <Checkbox

@@ -7,9 +7,9 @@ import memdown from 'memdown';
 import pify from 'pify';
 import React, { useEffect, useState } from 'react';
 
-import { logs } from '@dxos/debug';
-import { Keyring, KeyStore } from '@dxos/credentials';
 import { createClient } from '@dxos/client';
+import { Keyring, KeyStore } from '@dxos/credentials';
+import { logs } from '@dxos/debug';
 import metrics from '@dxos/metrics';
 import { createStorage } from '@dxos/random-access-multi-storage';
 
@@ -18,11 +18,11 @@ import { ClientContext } from '../hooks/context';
 const { error } = logs('react-client:Provider');
 
 /**
- * @deprecated
+ * @deprecated Use `ClientProvider` or `ClientInitializer` from @dxos/react-appkit.
  * Feed provider container.
  */
 const ClientContextProvider = ({ config, children }) => {
-  console.warn('ClientContextProvider is being deprecated. Use ClientProvider.');
+  console.warn('ClientContextProvider is being deprecated. Use `ClientProvider` or `ClientInitializer` from @dxos/react-appkit.');
 
   const { client: clientConfig } = config;
 

@@ -4,6 +4,7 @@
 
 import { useState } from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
+
 import { keyToString } from '@dxos/crypto';
 
 import { useClient } from './client';

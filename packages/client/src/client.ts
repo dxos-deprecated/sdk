@@ -2,59 +2,37 @@
 // Copyright 2020 DXOS.org
 //
 
-import defaultsDeep from 'lodash.defaultsdeep';
-
+import leveljs from 'level-js';
 import memdown from 'memdown';
 
-import { createStorage } from '@dxos/random-access-multi-storage';
 import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
 import { humanize, keyToString } from '@dxos/crypto';
-import { FeedStore } from '@dxos/feed-store';
-import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
-import { raise } from '@dxos/util';
-import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import {
   codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager, SecretProvider, InvitationOptions, InvitationDescriptor
 } from '@dxos/echo-db';
+import { FeedStore } from '@dxos/feed-store';
+import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
+import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { ObjectModel } from '@dxos/object-model';
-
-import { defaultClientConfig } from './config';
+import { createStorage } from '@dxos/random-access-multi-storage';
+import { raise } from '@dxos/util';
+import { Registry } from '@wirelineio/registry-client';
 
 export interface ClientConfig {
-  /**
-   * A random access storage instance.
-   */
-  storage?: any,
-
-  /**
-   * Swarm config.
-   */
-  swarm?: any
-
-  /**
-   * Keyring.
-   */
-  keyring?: Keyring
-
-  /**
-   * Optional. If provided, config.storage is ignored.
-   */
-  feedStore?: FeedStore
-
-  /**
-   * Optional. If provided, config.swarm is ignored.
-   */
-  networkManager?: NetworkManager
-
-  /**
-   * Optional.
-   */
-  partyManager?: PartyManager
-
-  /**
-   * Optional.
-   */
-  registry?: any
+  storageType?: 'ram' | 'persistent' | 'idb' | 'chrome' | 'firefox' | 'node',
+  storagePath?: string,
+  swarm?: {
+    signal?: string,
+    ice?: {
+      urls: string,
+      username?: string,
+      credential?: string,
+    }[],
+  },
+  wns?: {
+    server: string,
+    chainId: string,
+  },
 }
 
 export interface CreateProfileOptions {
@@ -67,6 +45,8 @@ export interface CreateProfileOptions {
  * Data client.
  */
 export class Client {
+  private readonly _config: ClientConfig;
+
   private readonly _feedStore: FeedStore;
 
   private readonly _keyring: Keyring;
@@ -88,27 +68,38 @@ export class Client {
   private readonly _registry?: any;
 
   private _initialized = false;
- 
-  constructor ({ storage, swarm, keyring, feedStore, networkManager, partyManager, registry }: ClientConfig) {
-    this._feedStore = feedStore || new FeedStore(
-      storage || createStorage('dxos-storage-db', 'ram'),
+
+  constructor (config: ClientConfig = {}) {
+    this._config = config;
+    const {
+      storageType = 'ram',
+      swarm = DEFAULT_SWARM_CONFIG,
+      storagePath = 'dxos/storage',
+      wns
+    } = config;
+
+    this._feedStore = new FeedStore(createStorage(`${storagePath}/feeds`, storageType === 'persistent' ? undefined : storageType),
       { feedOptions: { valueEncoding: codec } });
-    this._keyring = keyring || new Keyring(new KeyStore(memdown()));
+    this._keyring = new Keyring(new KeyStore(storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`)));
     this._swarmConfig = swarm;
 
     this._identityManager = new IdentityManager(this._keyring);
     this._modelFactory = new ModelFactory()
       .registerModel(ObjectModel);
 
-    this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig));
+    this._networkManager = new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig));
 
     const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
 
     this._partyFactory = new PartyFactory(this._identityManager, feedStoreAdapter, this._modelFactory, this._networkManager);
-    this._partyManager = partyManager || new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
+    this._partyManager = new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
 
     this._echo = new ECHO(this._partyManager);
-    this._registry = registry;
+    this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
+  }
+
+  get config (): ClientConfig {
+    return this._config;
   }
 
   /**
@@ -118,6 +109,10 @@ export class Client {
     if (this._initialized) {
       return;
     }
+
+    const timeoutId = setTimeout(() => {
+      console.error('Client.initialize is taking more then 10 seconds to complete. Something probably went wrong.');
+    }, 10000);
 
     await this._keyring.load();
 
@@ -129,6 +124,7 @@ export class Client {
       await this._partyManager.createHalo();
     }
     this._initialized = true;
+    clearInterval(timeoutId);
   }
 
   /**
@@ -177,7 +173,7 @@ export class Client {
     const publicKey = keyToString(this._identityManager.identityKey.publicKey);
 
     return {
-      username: publicKey,
+      username: this._identityManager.displayName,
       publicKey
     };
   }
@@ -215,6 +211,7 @@ export class Client {
    * @param {Buffer} publicKey Party publicKey
    * @param {Buffer} recipient Recipient publicKey
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Buffer) {
     console.warn('createOfflineInvitation deprecated. check Database');
   }
@@ -226,6 +223,7 @@ export class Client {
    * @param {SecretProvider} secretProvider
    * @returns {Promise<Party>} The now open Party.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async joinParty (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
     console.warn('deprecated. Use client.echo');
   }
@@ -236,6 +234,7 @@ export class Client {
    * @param {SecretProvider} secretProvider
    * @returns {Promise<DeviceInfo>}
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async admitDevice (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
     console.log('client.admitDevice: Device management is not implemented.');
   }
@@ -250,6 +249,7 @@ export class Client {
   /**
    * @deprecated
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getParty (partyKey: Uint8Array) {
     console.warn('deprecated. Use client.echo');
   }
@@ -324,26 +324,15 @@ export class Client {
   }
 }
 
+const DEFAULT_SWARM_CONFIG: ClientConfig['swarm'] = {
+  signal: 'ws://localhost:4000',
+  ice: [{ urls: 'stun:stun.wireline.ninja:3478' }]
+};
+
 /**
  * Client factory.
  * @deprecated
- * @param {RandomAccessAbstract} feedStorage
- * @param {Keyring} keyring
- * @param {Object} config
- * @return {Promise<Client>}
  */
-export const createClient = async (feedStorage?: any, keyring?: Keyring, config: { swarm?: any } = {}) => {
-  config = defaultsDeep({}, config, defaultClientConfig);
-
-  console.warn('createClient is being deprecated. Please use new Client() instead.');
-
-  const client = new Client({
-    storage: feedStorage,
-    swarm: config.swarm,
-    keyring // remove this later but it is required by cli, bots, and tests.
-  });
-
-  await client.initialize();
-
-  return client;
+export const createClient = async () => {
+  throw new Error('createClient is being deprecated. Please use new Client() instead.');
 };
