@@ -9,7 +9,7 @@
     "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
     "prepublishOnly": "npm run build && npm run test",
-    "test": "jest --rootDir ./src --verbose --forceExit"
+    "test": "jest --rootDir ./src --verbose --forceExit --coverage"
   },
   "dependencies": {
     "@dxos/async": "^1.0.0-beta.1",
