@@ -17,7 +17,7 @@ const mockItem = {
   model: {
     getProperty: (propertyName) => propertyName
   }
-}
+};
 
 export const withItemSettingsDialog = () => {
   return (

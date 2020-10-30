@@ -1,3 +1,7 @@
+//
+// Copyright 2020 DXOS.org
+//
+
 export const registryData = [
   {
     type: 'wrn:bot-factory',
