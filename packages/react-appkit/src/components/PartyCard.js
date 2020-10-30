@@ -221,7 +221,7 @@ const PartyCard = ({
                 <ListItemIcon>
                   <PadIcon type={item.type} />
                 </ListItemIcon>
-                <ListItemText primaryTypographyProps={{className: classes.listItemText}}>
+                <ListItemText primaryTypographyProps={{ className: classes.listItemText }}>
                   {item.model.getProperty('title') || 'Untitled'}
                 </ListItemText>
                 {item.model.getProperty('deleted') ? (
