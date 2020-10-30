@@ -1,3 +1,7 @@
+//
+// Copyright 2020 DXOS.org
+//
+
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,8 +22,8 @@ export default function RedeemDialog ({ onClose, ...props }) {
     setPinCode('');
     onClose();
   };
-  const [redeemCode, setPin] = useInvitationRedeemer({ onDone, onError: (e) => { throw e; } });
-  const [step, setStep] = useState(0);
+  const [redeemCode, setPin] = useInvitationRedeemer({ onDone, onError: (ex) => { throw ex; } });
+  const [step, setStep] = useState(0); // TODO(burdon): Const.
   const [invitationCode, setInvitationCode] = useState('');
   const [pinCode, setPinCode] = useState('');
 
@@ -32,26 +36,29 @@ export default function RedeemDialog ({ onClose, ...props }) {
     setPin(pinCode);
   };
 
+  // TODO(burdon): Standardize dialogs.
+  // TODO(burdon): Hit enter to proceed.
   return (
     <Dialog open onClose={onDone} {...props}>
-      <DialogTitle>Redeem Invitation Code</DialogTitle>
+      <DialogTitle>Redeem Invitation</DialogTitle>
       {step === 0 && (
         <>
           <DialogContent>
             <Typography variant='body1' gutterBottom>
-                Paste your Invitation Code Below
+              Paste the invitation code below.
             </Typography>
             <Divider />
             <TextareaAutosize
               autoFocus
               value={invitationCode}
               onChange={(event) => setInvitationCode(event.target.value)}
-              rowsMin={3}
+              rowsMin={6}
               style={{ minWidth: '100%' }}
             />
           </DialogContent>
           <DialogActions>
-            <Button color='primary' onClick={handleEnterInvitationCode}>Send</Button>
+            <Button autoFocus color='secondary' onClick={onDone}>Cancel</Button>
+            <Button color='primary' onClick={handleEnterInvitationCode}>Submit</Button>
           </DialogActions>
         </>
       )}
@@ -59,11 +66,11 @@ export default function RedeemDialog ({ onClose, ...props }) {
         <>
           <DialogContent>
             <Typography variant='body1' gutterBottom>
-                Enter the PIN number
+              Enter the PIN number.
             </Typography>
             <TextField
               value={pinCode}
-              onChange={(e) => setPinCode(e.target.value)}
+              onChange={(event) => setPinCode(event.target.value)}
               variant='outlined'
               margin='normal'
               required
@@ -74,14 +81,14 @@ export default function RedeemDialog ({ onClose, ...props }) {
           </DialogContent>
           <DialogActions>
             <Button autoFocus color='secondary' onClick={onDone}>Cancel</Button>
-            <Button autoFocus color='primary' onClick={handleEnterPinCode}>Send</Button>
+            <Button autoFocus color='primary' onClick={handleEnterPinCode}>Submit</Button>
           </DialogActions>
         </>
       )}
       {step === 1 && !setPin && (
         <DialogContent>
           <Typography variant='body1' gutterBottom>
-              Finishing process. Hold on.
+            Processing invitation...
           </Typography>
         </DialogContent>
       )}

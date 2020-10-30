@@ -238,7 +238,7 @@ const AppBar = ({
     },
 
     [ACTION_RESET_STORAGE]: {
-      label: 'Reset Storage',
+      label: 'Reset storage',
       handler: async () => {
         localStorage.clear();
         await client.reset();
@@ -275,7 +275,7 @@ const AppBar = ({
     },
 
     [ACTION_OPEN_REDEEM]: {
-      label: 'Redeem party',
+      label: 'Redeem invitation',
       handler: async () => {
         onRedeemOpen && onRedeemOpen();
       }
