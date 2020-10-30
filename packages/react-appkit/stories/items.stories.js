@@ -13,6 +13,12 @@ export default {
   title: 'Items'
 };
 
+const mockItem = {
+  model: {
+    getProperty: (propertyName) => propertyName
+  }
+};
+
 export const withItemSettingsDialog = () => {
   return (
     <Box m={2}>
@@ -20,7 +26,7 @@ export const withItemSettingsDialog = () => {
         open
         onClose={() => {}}
         onCancel={() => {}}
-        item={{ displayName: 'an item' }}
+        item={mockItem}
         closingDisabled
         icon={<Icon />}
       />
@@ -35,7 +41,7 @@ export const withPadSpecificItemSettingsDialog = () => {
         open
         onClose={() => {}}
         onCancel={() => {}}
-        item={{ displayName: 'an item' }}
+        item={mockItem}
         closingDisabled
         icon={<Icon />}
       >
