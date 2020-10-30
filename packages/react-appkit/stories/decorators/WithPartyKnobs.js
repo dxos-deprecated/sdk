@@ -31,7 +31,9 @@ function RenderPartyKnobs ({ story }) {
     };
   }, { None: undefined });
 
-  button('Create Party', () => { client.partyManager.createParty(); });
+  button('Create Party', () => {
+    client.echo.createParty();
+  });
   const partyKey = select('Select Party', options, undefined);
 
   return (
