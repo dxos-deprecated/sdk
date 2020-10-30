@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.3](https://www.github.com/dxos/sdk/compare/v2.7.2...v2.7.3) (2020-10-30)
+
+
+### Bug Fixes
+
+* Add a function to pre-initialize client ([#292](https://www.github.com/dxos/sdk/issues/292)) ([c23d40b](https://www.github.com/dxos/sdk/commit/c23d40bfce8744f3290a4fe8d8b06de5590e11c5))
+* Trim item names ([#287](https://www.github.com/dxos/sdk/issues/287)) ([4a2f1d9](https://www.github.com/dxos/sdk/commit/4a2f1d9a23bba65c3d4e41eea3906a91b3c411ae))
+
 ### [2.7.2](https://www.github.com/dxos/sdk/compare/v2.7.1...v2.7.2) (2020-10-30)
 
 
