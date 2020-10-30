@@ -2,8 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 
 import TestContainer from './TestContainer';
 
