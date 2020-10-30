@@ -10,7 +10,9 @@ export const useMembers = (party) => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    if (!party) return;
+    if (!party) {
+      return;
+    }
     const result = party.queryMembers();
     setMembers(result.value);
 

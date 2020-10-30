@@ -44,7 +44,9 @@ class ErrorBoundary extends Component {
 
 ErrorBoundary.defaultProps = {
   onError: console.warn,
-  onRestart: () => { window.location.href = '/'; },
+  onRestart: () => {
+    window.location.href = '/';
+  },
   onReset: undefined
 };
 

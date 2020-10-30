@@ -55,7 +55,9 @@ const AuthenticatorDialog = ({ error, onSubmit, onCancel, isOfflineKeyInvitation
 
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    if (error) console.error(`Authentication failed: ${error}`);
+    if (error) {
+      console.error(`Authentication failed: ${error}`);
+    }
     setAttempt(attempt + 1);
   }, [error]);
 
@@ -78,13 +80,12 @@ const AuthenticatorDialog = ({ error, onSubmit, onCancel, isOfflineKeyInvitation
         <DialogContent>
           {isOfflineKeyInvitation ? (
             <>
-              <Typography className={classes.comment}>Please wait until the authentication process is completed.</Typography>
+              <Typography className={classes.comment}>Processing...</Typography>
               {!error && <LinearProgress />}
             </>
           ) : (
             <>
               <Typography className={classes.comment}>Enter the passcode.</Typography>
-
               <Passcode
                 editable
                 attempt={attempt}
@@ -95,7 +96,7 @@ const AuthenticatorDialog = ({ error, onSubmit, onCancel, isOfflineKeyInvitation
 
           {error && (
             <>
-              <Typography color='error' className={classes.error}>{recognisedError || 'Something went wrong. Please try again later.'}</Typography>
+              <Typography color='error' className={classes.error}>{recognisedError || 'System error.'}</Typography>
               <br />
               <details>
                 <summary className={classes.summary}>Details</summary>
@@ -108,7 +109,7 @@ const AuthenticatorDialog = ({ error, onSubmit, onCancel, isOfflineKeyInvitation
                       target='_blank'
                       rel='noopener'
                     >
-                      File an issue
+                      Please submit an issue.
                     </Link>
                   )}
                 </div>

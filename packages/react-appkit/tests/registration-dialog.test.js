@@ -12,7 +12,9 @@ describe('RegistrationDialog', () => {
   let finished;
 
   const defaultProps = {
-    onFinish: () => { finished = true; }
+    onFinish: () => {
+      finished = true;
+    }
   };
 
   const createInputValue = (val) => {

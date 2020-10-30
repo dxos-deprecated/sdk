@@ -119,7 +119,9 @@ const PartyCard = ({
   const [displayName, setDisplayName] = useState('');
 
   useEffect(() => {
-    if (!party) return;
+    if (!party) {
+      return;
+    }
     (async function () {
       await party.open();
       const PARTY_ITEM_TYPE = 'wrn://dxos.org/item/party'; // not exported by echo cause it's internal
@@ -130,7 +132,9 @@ const PartyCard = ({
   }, [party]);
 
   useEffect(() => {
-    if (!party) return;
+    if (!party) {
+      return;
+    }
     if (partyOpen) {
       setDisplayName(party.getProperty('displayName') || humanize(party.key));
     } else {

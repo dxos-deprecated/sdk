@@ -162,7 +162,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
           <PeopleIcon />
-          <Typography variant='h5' className={classes.title}>Share with People and Bots</Typography>
+          <Typography variant='h5' className={classes.title}>Access permissions</Typography>
         </Toolbar>
       </DialogTitle>
 

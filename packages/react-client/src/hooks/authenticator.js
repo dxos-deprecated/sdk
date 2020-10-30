@@ -23,7 +23,9 @@ export const useAuthenticator = (invitation) => {
   const [secretProvider, secretResolver] = useMemo(() => trigger(), [hash]);
 
   useEffect(() => {
-    if (!invitation) return;
+    if (!invitation) {
+      return;
+    }
     // Use an AbortController to avoid "calling setState on unmounted component" errors.
     const controller = new AbortController();
     const signal = controller.signal;
