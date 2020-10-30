@@ -215,7 +215,6 @@ const PartyCard = ({
             {items.filter(item => showDeleted || !item.model.getProperty('deleted')).map(item => (
               <ListItem
                 key={item.id}
-                className={classes.listItem}
                 button
                 onClick={() => handleSelect(item.id)}
               >
