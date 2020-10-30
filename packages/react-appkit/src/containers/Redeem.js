@@ -23,7 +23,12 @@ export default function RedeemDialog ({ onClose, ...props }) {
     setPinCode('');
     onClose();
   };
-  const [redeemCode, setPin] = useInvitationRedeemer({ onDone, onError: (ex) => { throw ex; } });
+  const [redeemCode, setPin] = useInvitationRedeemer({
+    onDone,
+    onError: (ex) => {
+      throw ex;
+    }
+  });
   const [step, setStep] = useState(0); // TODO(burdon): Const.
   const [invitationCode, setInvitationCode] = useState('');
   const [pinCode, setPinCode] = useState('');
