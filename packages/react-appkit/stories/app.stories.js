@@ -29,7 +29,7 @@ const NoPartyComponent = () => {
   const keys = client.keyring.keys;
 
   const handleCreate = async () => {
-    await client.partyManager.createParty();
+    await client.echo.createParty();
   };
 
   return (
