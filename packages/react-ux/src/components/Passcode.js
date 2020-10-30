@@ -105,7 +105,11 @@ const Passcode = (props) => {
   }
 
   return (
-    <div onClick={() => { if (input.current) { input.current.focus(); } }}>
+    <div onClick={() => {
+      if (input.current) {
+        input.current.focus();
+      }
+    }}>
       {editable && (
         <input
           ref={input}

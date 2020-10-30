@@ -43,7 +43,9 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp } = {}) {
       // }
 
       client.echo.joinParty(invitation, secretProvider)
-        .then(party => { party.open().then(() => onDone(party)); })
+        .then(party => {
+          party.open().then(() => onDone(party));
+        })
         .catch(error => onError(error));
     } catch (error) {
       onError(error);

@@ -68,7 +68,7 @@ export const ErrorView = ({ onRestart, onReset, error, config }) => {
         </CardContent>
         <CardActions className={classes.actions}>
           {(isDev && onReset)
-            ? <Button variant='text' color='secondary' onClick={onReset}>Reset Storage</Button>
+            ? <Button variant='text' color='secondary' onClick={onReset}>Reset storage</Button>
             : <span />}
           <Button variant='contained' color='primary' onClick={onRestart}>Try again</Button>
         </CardActions>
