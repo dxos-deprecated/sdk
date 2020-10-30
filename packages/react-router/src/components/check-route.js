@@ -2,15 +2,14 @@
 // Copyright 2020 DXOS.org
 //
 
+import queryString from 'query-string';
 import React from 'react';
 import { Redirect, useLocation, useParams } from 'react-router-dom';
-import queryString from 'query-string';
 
 /**
  * Wraps react-router Route with condition checks that may cuase a runtime redirect.
- * @returns {Object} React component.
- * @constructor
  */
+// eslint-disable-next-line jest/no-export
 export const CheckRoute = ({ children, preconditions = [] }) => {
   const { pathname: path, search } = useLocation();
   const params = useParams();

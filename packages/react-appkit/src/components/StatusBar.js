@@ -2,18 +2,17 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
 
-import grey from '@material-ui/core/colors/grey';
-
-import { makeStyles } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import Slide from '@material-ui/core/Slide';
 import Snackbar from '@material-ui/core/Snackbar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import grey from '@material-ui/core/colors/grey';
+import { makeStyles } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles(theme => ({
   root: {

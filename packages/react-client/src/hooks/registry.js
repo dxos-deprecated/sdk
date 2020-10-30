@@ -13,7 +13,7 @@ const WRN_TYPE_BOT_FACTORY = 'wrn:bot-factory';
 export const useRegistry = () => {
   const { registry } = useClient();
   if (!registry) {
-    throw new Error('No registry. Configure registry in Client constructor.');
+    console.warn('No registry. Configure WNS in your Client config in order to gain access to WNS registry.');
   }
 
   return registry;
@@ -24,6 +24,8 @@ export const useRegistryBots = () => {
   const [registryBots, setRegistryBots] = useState([]);
 
   useEffect(() => {
+    if (!registry) return;
+
     const queryRegistry = async () => {
       const botsResult = await registry.queryRecords({ type: WRN_TYPE_BOT });
       setRegistryBots(botsResult.map(({ attributes: { version, name }, names }) => ({
@@ -44,6 +46,8 @@ export const useRegistryBotFactories = () => {
   const [factories, setFactories] = useState([]);
 
   useEffect(() => {
+    if (!registry) return;
+
     const queryRegistry = async () => {
       const factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY });
       setFactories(factoriesResult.map(({ attributes: { topic, name }, names }) => ({

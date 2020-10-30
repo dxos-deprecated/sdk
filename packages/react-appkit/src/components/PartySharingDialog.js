@@ -5,7 +5,6 @@
 import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { useTheme } from '@material-ui/styles';
 import { makeStyles, withStyles } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,6 +13,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import MuiTableCell from '@material-ui/core/TableCell';
@@ -21,21 +21,20 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-
 import DeleteIcon from '@material-ui/icons/Clear';
 import FaceIcon from '@material-ui/icons/Face';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import LinkIcon from '@material-ui/icons/Link';
 import PeopleIcon from '@material-ui/icons/People';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Alert from '@material-ui/lab/Alert';
+import { useTheme } from '@material-ui/styles';
 
 import { humanize } from '@dxos/crypto';
 import { useInvitation } from '@dxos/react-client';
 
-import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
-import BotDialog from './BotDialog';
 import { useMembers } from '../hooks';
+import BotDialog from './BotDialog';
+import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -131,7 +130,7 @@ function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
   );
 }
 
-const PartySharingDialog = ({ party, open, onClose, client, router }) => {
+const PartySharingDialog = ({ party, open, onClose }) => {
   const classes = useStyles();
   const [invitations, setInvitations] = useState([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);

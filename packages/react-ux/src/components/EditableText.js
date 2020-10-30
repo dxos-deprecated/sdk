@@ -3,8 +3,9 @@
 //
 
 import React, { useEffect, useState } from 'react';
-import TextField from '@material-ui/core/TextField';
+
 import InputBase from '@material-ui/core/InputBase';
+import TextField from '@material-ui/core/TextField';
 
 /**
  * Editable text field.

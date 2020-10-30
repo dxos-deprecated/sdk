@@ -2,8 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
 import { Chance } from 'chance';
+import React from 'react';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 

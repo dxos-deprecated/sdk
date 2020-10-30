@@ -2,8 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
-import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { useLocation } from 'react-router-dom';
 
 /**
  * Returns the parsed URL query params.
