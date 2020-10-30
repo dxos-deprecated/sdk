@@ -55,7 +55,9 @@ const AuthenticatorDialog = ({ error, onSubmit, onCancel, isOfflineKeyInvitation
 
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    if (error) console.error(`Authentication failed: ${error}`);
+    if (error) {
+      console.error(`Authentication failed: ${error}`);
+    }
     setAttempt(attempt + 1);
   }, [error]);
 

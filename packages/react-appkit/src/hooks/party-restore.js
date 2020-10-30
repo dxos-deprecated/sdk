@@ -22,7 +22,9 @@ export const usePartyRestore = (topic, pads) => {
   const model = useModel({ model: undefined, options: { type, topic } });
 
   useEffect(() => {
-    if (!model) return;
+    if (!model) {
+      return;
+    }
     setItems(model.messages);
   }, [model]);
 

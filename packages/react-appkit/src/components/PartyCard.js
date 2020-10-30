@@ -73,6 +73,11 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'scroll'
   }),
 
+  listItemText: {
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
+  },
+
   title: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -119,7 +124,9 @@ const PartyCard = ({
   const [displayName, setDisplayName] = useState('');
 
   useEffect(() => {
-    if (!party) return;
+    if (!party) {
+      return;
+    }
     (async function () {
       await party.open();
       const PARTY_ITEM_TYPE = 'wrn://dxos.org/item/party'; // not exported by echo cause it's internal
@@ -130,7 +137,9 @@ const PartyCard = ({
   }, [party]);
 
   useEffect(() => {
-    if (!party) return;
+    if (!party) {
+      return;
+    }
     if (partyOpen) {
       setDisplayName(party.getProperty('displayName') || humanize(party.key));
     } else {
@@ -212,7 +221,7 @@ const PartyCard = ({
                 <ListItemIcon>
                   <PadIcon type={item.type} />
                 </ListItemIcon>
-                <ListItemText>
+                <ListItemText primaryTypographyProps={{ className: classes.listItemText }}>
                   {item.model.getProperty('title') || 'Untitled'}
                 </ListItemText>
                 {item.model.getProperty('deleted') ? (

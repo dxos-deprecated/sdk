@@ -81,7 +81,9 @@ const getConfig = (config, key = '') => {
 };
 
 const updateConfig = (configObject, keys = [], value) => {
-  if (keys.length === 0) return value;
+  if (keys.length === 0) {
+    return value;
+  }
 
   const currentKey = keys[0];
   configObject[currentKey] = updateConfig(configObject[currentKey] || {}, [...keys.slice(1)], value);
@@ -91,7 +93,9 @@ const updateConfig = (configObject, keys = [], value) => {
 
 const canEditKey = (config = {}, key = '') => {
   const loop = (config = {}, keys = []) => {
-    if (!config || keys.length === 0) return false;
+    if (!config || keys.length === 0) {
+      return false;
+    }
 
     const firstKey = keys.shift();
     const editableConfig = getConfig(config, firstKey);
@@ -165,7 +169,9 @@ const DebugPanel = () => {
 
     const value = getConfig(config, key);
 
-    if (typeof value === 'object') return;
+    if (typeof value === 'object') {
+      return;
+    }
 
     setEditConfigKey(key);
     setEditConfigValue(value);

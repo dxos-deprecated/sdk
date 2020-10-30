@@ -2,9 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
+import React, { useEffect, useState } from 'react';
+
 import { createKeyPair } from '@dxos/crypto';
 import { useClient } from '@dxos/react-client';
-import React, { useEffect, useState } from 'react';
+
 import { ClientInitializer } from '../../src/containers/ClientInitializer';
 import { config } from '../common';
 

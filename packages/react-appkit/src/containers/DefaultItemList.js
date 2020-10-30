@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'grid',
     gridTemplateRows: '1fr auto',
+    gridTemplateColumns: '100%',
     flex: 1
   },
   homeButtonLabel: {
@@ -36,6 +37,9 @@ const useStyles = makeStyles(theme => ({
   },
   homeButtonIcon: {
     marginRight: 8
+  },
+  item: {
+    textOverflow: 'ellipsis'
   }
 }));
 
@@ -69,6 +73,7 @@ const DefaultItemList = () => {
       <TreeView>
         {items.map(item => (
           <PartyTreeItem
+            className={classes.item}
             key={item.id}
             id={item.id}
             label={item._model.getProperty('title') || 'Untitled'}

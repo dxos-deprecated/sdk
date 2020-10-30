@@ -187,7 +187,9 @@ export class Client {
    * @returns {ProfileInfo} User profile info.
    */
   getProfile () {
-    if (!this._identityManager.identityKey) return;
+    if (!this._identityManager.identityKey) {
+      return;
+    }
 
     const publicKey = keyToString(this._identityManager.identityKey.publicKey);
 

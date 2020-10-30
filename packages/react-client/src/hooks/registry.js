@@ -24,7 +24,9 @@ export const useRegistryBots = () => {
   const [registryBots, setRegistryBots] = useState([]);
 
   useEffect(() => {
-    if (!registry) return;
+    if (!registry) {
+      return;
+    }
 
     const queryRegistry = async () => {
       const botsResult = await registry.queryRecords({ type: WRN_TYPE_BOT });
@@ -46,7 +48,9 @@ export const useRegistryBotFactories = () => {
   const [factories, setFactories] = useState([]);
 
   useEffect(() => {
-    if (!registry) return;
+    if (!registry) {
+      return;
+    }
 
     const queryRegistry = async () => {
       const factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY });

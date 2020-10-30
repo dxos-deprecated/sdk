@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, children, icon }) => {
+const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, icon, children = null }) => {
   const classes = useStyles();
   const [name, setName] = useState('');
 

@@ -2,21 +2,22 @@
 // Copyright 2020 DXOS.org
 //
 
+import { withKnobs } from '@storybook/addon-knobs';
 import React, { useState } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
-import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
-import { withKnobs } from '@storybook/addon-knobs';
 
-import { useClient, useParty } from '@dxos/react-client';
+import Box from '@material-ui/core/Box';
+
 import { sleep } from '@dxos/async';
+import { keyToBuffer } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
+import { useClient, useParty } from '@dxos/react-client';
 
 import { AppKitProvider, BotDialog, AuthenticatorDialog, PartySharingDialog } from '../src';
-import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
-import { pads, NoPartyComponent } from './common';
 import { useAppRouter } from '../src/hooks';
-import { keyToBuffer } from '@dxos/crypto';
+import { pads, NoPartyComponent } from './common';
+import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 
 const errorHandler = new ErrorHandler();
 
@@ -31,8 +32,12 @@ const BotDialogComponent = () => {
 
   const handleSubmit = async ({ bot }) => {
     await sleep(1000);
-    if (bot.includes('will-hang')) return new Promise(() => {});
-    if (bot.includes('will-fail')) throw new Error('Failed deploy');
+    if (bot.includes('will-hang')) {
+      return new Promise(() => {});
+    }
+    if (bot.includes('will-fail')) {
+      throw new Error('Failed deploy');
+    }
     setDeployed(true);
     setOpen(false);
   };

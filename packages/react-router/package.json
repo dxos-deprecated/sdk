@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-router",
-  "version": "2.7.0-alpha.0",
+  "version": "2.7.2-alpha.0",
   "description": "React router utils.",
   "keywords": [],
   "license": "AGPLv3",
@@ -10,7 +10,7 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "clean": "rm -rf dist",
-    "lint": "eslint '{src,tests}/**/*.{ts,js,tsx,jsx}'",
+    "lint": "eslint '{src,tests,stories}/**/*.{ts,js,tsx,jsx}'",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
     "test": "jest --rootDir ./src --verbose --passWithNoTests --coverage"
   },

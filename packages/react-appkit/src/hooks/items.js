@@ -24,7 +24,9 @@ export const useItems = (topic) => {
   const model = useModel({ model: ItemModel, options: { type: pads.map(pad => pad.type), topic } });
 
   useEffect(() => {
-    if (!model) return;
+    if (!model) {
+      return;
+    }
     setItems(model.messages);
   }, [model]);
 

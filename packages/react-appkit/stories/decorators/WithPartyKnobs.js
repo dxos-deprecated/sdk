@@ -2,12 +2,12 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
 import { button, select } from '@storybook/addon-knobs';
-
-import { useClient, useParties } from '@dxos/react-client';
-import { keyToString } from '@dxos/crypto';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
+
+import { keyToString } from '@dxos/crypto';
+import { useClient, useParties } from '@dxos/react-client';
 
 /**
  * This decorator requires:
@@ -31,7 +31,9 @@ function RenderPartyKnobs ({ story }) {
     };
   }, { None: undefined });
 
-  button('Create Party', () => { client.partyManager.createParty(); });
+  button('Create Party', () => {
+    client.echo.createParty();
+  });
   const partyKey = select('Select Party', options, undefined);
 
   return (
