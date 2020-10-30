@@ -10,16 +10,18 @@ import { ErrorBoundary, ErrorView } from '@dxos/react-ux';
 
 export interface ClientInitializerProps {
   config?: ClientConfig
-  children?: ReactNode
+  children?: ReactNode,
+  preInitialize?: (client: Client) => Promise<void> | void,
 }
 
-export const ClientInitializer = ({ config, children }: ClientInitializerProps) => {
+export const ClientInitializer = ({ config, children, preInitialize }: ClientInitializerProps) => {
   const [client] = useState(() => new Client(config));
   const [clientReady, setClientReady] = useState(false);
   const [error, setError] = useState<undefined | Error | string>(undefined);
 
   useEffect(() => {
     (async () => {
+      await preInitialize?.(client);
       try {
         await client.initialize();
         setClientReady(true);
