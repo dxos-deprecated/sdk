@@ -73,6 +73,11 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'scroll'
   }),
 
+  listItemText: {
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
+  },
+
   title: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -216,7 +221,7 @@ const PartyCard = ({
                 <ListItemIcon>
                   <PadIcon type={item.type} />
                 </ListItemIcon>
-                <ListItemText>
+                <ListItemText primaryTypographyProps={{ className: classes.listItemText }}>
                   {item.model.getProperty('title') || 'Untitled'}
                 </ListItemText>
                 {item.model.getProperty('deleted') ? (
