@@ -204,7 +204,9 @@ const PartySharingDialog = ({ party, open, onClose }) => {
         <TableContainer className={classes.tableContainer}>
           <Table className={classes.table} size='small' padding='none' aria-label='contacts'>
             <TableBody>
-              {invitations.map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} onInvitationDone={handleInvitationDone} />)}
+              {invitations
+                .filter((invitation) => !invitation.done)
+                .map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} onInvitationDone={handleInvitationDone} />)}
             </TableBody>
             <TableBody>
               {members.map((member) => (
