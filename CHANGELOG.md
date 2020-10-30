@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.2](https://www.github.com/dxos/sdk/compare/v2.7.1...v2.7.2) (2020-10-30)
+
+
+### Bug Fixes
+
+* Update ECHO to latest ([#285](https://www.github.com/dxos/sdk/issues/285)) ([f086bc2](https://www.github.com/dxos/sdk/commit/f086bc2210cc59f36feff6601c5414349aaf6431))
+
 ### [2.7.1](https://www.github.com/dxos/sdk/compare/v2.7.0...v2.7.1) (2020-10-30)
 
 
