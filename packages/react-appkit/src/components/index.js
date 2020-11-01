@@ -4,6 +4,8 @@
 
 import AuthenticatorDialog from './AuthenticatorDialog';
 import BotDialog from './BotDialog';
+import DebugPanel from './DebugPanel';
+import DefaultSettingsDialog from './DefaultSettingsDialog';
 import ExportKeyringDialog from './ExportKeyringDialog';
 import ImportKeyringDialog from './ImportKeyringDialog';
 import InvitationDialog from './InvitationDialog';
@@ -23,6 +25,7 @@ import PartyMemberList from './PartyMemberList';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import PartyTree, { PartyTreeAddItemButton, PartyTreeItem } from './PartyTree';
+import RedeemDialog from './RedeemDialog';
 import RegistrationDialog from './RegistrationDialog';
 import Sidebar from './Sidebar';
 import StatusBar from './StatusBar';
@@ -32,6 +35,8 @@ export * from './util';
 export {
   AuthenticatorDialog,
   BotDialog,
+  DebugPanel,
+  DefaultSettingsDialog,
   ExportKeyringDialog,
   ImportKeyringDialog,
   InvitationDialog,
@@ -50,6 +55,7 @@ export {
   PartyFromFileDialog,
   PartyFromIpfsDialog,
   PartyTree,
+  RedeemDialog,
   RegistrationDialog,
   Sidebar,
   StatusBar,

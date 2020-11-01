@@ -23,8 +23,8 @@ export const ClientInitializer = ({ config, children }: ClientInitializerProps) 
       try {
         await client.initialize();
         setClientReady(true);
-      } catch (e) {
-        setError(e);
+      } catch (ex) {
+        setError(ex);
       }
     })();
   }, []);
@@ -43,7 +43,12 @@ export const ClientInitializer = ({ config, children }: ClientInitializerProps) 
   }
 
   return (
-    <ErrorBoundary onError={console.error} onRestart={handleRestart} onReset={handleReset} config={config}>
+    <ErrorBoundary
+      config={config}
+      onError={console.error}
+      onRestart={handleRestart}
+      onReset={handleReset}
+    >
       <ClientProvider client={client}>
         {clientReady ? children : null}
       </ClientProvider>

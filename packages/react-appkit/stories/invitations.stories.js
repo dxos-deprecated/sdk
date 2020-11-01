@@ -14,8 +14,15 @@ import { keyToBuffer } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParty } from '@dxos/react-client';
 
-import { AppKitProvider, BotDialog, AuthenticatorDialog, PartySharingDialog } from '../src';
-import { useAppRouter } from '../src/hooks';
+import {
+  useAppRouter,
+  AppKitProvider,
+  AuthenticatorDialog,
+  BotDialog,
+  PartySharingDialog,
+  RedeemDialog
+} from '../src';
+
 import { pads, NoPartyComponent } from './common';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 
@@ -54,7 +61,6 @@ const BotDialogComponent = () => {
   );
 };
 
-// TODO(burdon): Fix useRegistry to use Registry object created in context.
 export const withBotDialog = () => {
   return (
     <AppKitProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
@@ -163,5 +169,11 @@ export const withPartySharing = () => {
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
     </AppKitProvider>
+  );
+};
+
+export const withRedeemInvitation = () => {
+  return (
+    <RedeemDialog onClose={() => {}} />
   );
 };
