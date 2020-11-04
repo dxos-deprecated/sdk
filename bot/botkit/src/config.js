@@ -2,7 +2,6 @@
 // Copyright 2020 DXOS.org
 //
 
-import yaml from 'js-yaml';
 import defaultsDeep from 'lodash.defaultsdeep';
 
 import { Config, mapFromKeyValues } from '@dxos/config';

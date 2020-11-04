@@ -8,7 +8,7 @@ test('bot test', async () => {
 
   await orchestrator.start();
 
-  await orchestrator.party.database.createItem({ model: ObjectModel, type: 'dxos.org/type/testing/object', props: { count: 0 } })
+  await orchestrator.party.database.createItem({ model: ObjectModel, type: 'dxos.org/type/testing/object', props: { count: 0 } });
 
   const agent = await orchestrator.startAgent();
 

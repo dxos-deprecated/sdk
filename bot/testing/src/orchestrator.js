@@ -51,7 +51,7 @@ export class Orchestrator {
     this._factoryClient = new BotFactoryClient(this._client.networkManager, this._factory.topic);
   }
 
-  get party() {
+  get party () {
     return this._party;
   }
 

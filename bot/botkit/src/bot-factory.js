@@ -5,6 +5,7 @@
 import assert from 'assert';
 import crypto from 'hypercore-crypto';
 import ram from 'random-access-memory';
+import { sync as readPackageJson } from 'read-pkg-up';
 
 import { waitForCondition } from '@dxos/async';
 import { Client } from '@dxos/client';
@@ -26,7 +27,6 @@ import {
   createEvent
 } from '@dxos/protocol-plugin-bot';
 
-import { sync as readPackageJson } from 'read-pkg-up';
 import { BotManager } from './bot-manager';
 import { getClientConfig } from './config';
 import { getPlatformInfo } from './env';
@@ -158,7 +158,6 @@ export class BotFactory {
       case COMMAND_STOP: {
         const { errorCode = 0 } = message;
         process.exit(Number(errorCode));
-        return;
       }
 
       case COMMAND_STATUS: {
