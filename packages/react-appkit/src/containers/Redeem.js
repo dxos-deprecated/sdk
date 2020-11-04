@@ -15,8 +15,10 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 
 import { useInvitationRedeemer } from '@dxos/react-client';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 export default function RedeemDialog ({ onClose, ...props }) {
+  const [isOffline, setIsOffline] = useState(false);
   const onDone = () => {
     setStep(0);
     setInvitationCode('');
@@ -27,7 +29,8 @@ export default function RedeemDialog ({ onClose, ...props }) {
     onDone,
     onError: (ex) => {
       throw ex;
-    }
+    },
+    isOffline
   });
   const [step, setStep] = useState(0); // TODO(burdon): Const.
   const [invitationCode, setInvitationCode] = useState('');
@@ -50,6 +53,10 @@ export default function RedeemDialog ({ onClose, ...props }) {
       {step === 0 && (
         <>
           <DialogContent>
+            <FormControlLabel
+              control={<Checkbox checked={isOffline} onChange={event => setIsOffline(event.target.checked)}/>}
+              label="Offline"
+            />
             <Typography variant='body1' gutterBottom>
               Paste the invitation code below.
             </Typography>
