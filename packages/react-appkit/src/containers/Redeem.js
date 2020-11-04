@@ -4,6 +4,7 @@
 
 import React, { useState } from 'react';
 
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,7 +16,6 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 
 import { useInvitationRedeemer } from '@dxos/react-client';
-import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 export default function RedeemDialog ({ onClose, ...props }) {
   const [isOffline, setIsOffline] = useState(false);
