@@ -62,6 +62,7 @@ export class Orchestrator {
 
   async destroy () {
     kill(this._factory.process.pid, 'SIGKILL');
+    await this._factoryClient.close();
     // TODO(egorgripasov): Produced feed store errors.
     // await this._client.destroy();
   }
