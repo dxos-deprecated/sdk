@@ -25,8 +25,6 @@ const ORCHESTRATOR_NAME = 'Test';
 const FACTORY_START_TIMEOUT = 5 * 1000;
 
 export class Orchestrator {
-  constructor () {}
-
   async start () {
     this._client = new Client({
       storage: ram,
@@ -85,9 +83,9 @@ export class Orchestrator {
       };
 
       const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
-      
+
       factory.stderr.on('data', data => {
-        if (/\"started\"\:true/.test(data.toString())) {
+        if (/"started":true/.test(data.toString())) {
           log('Bot Factory started.');
 
           resolve({
@@ -108,8 +106,7 @@ export class Orchestrator {
       // ipfsCID,
       // ipfsEndpoint,
       id: AGENT_BOT_NAME,
-      name: AGENT_BOT_NAME,
-      botExecPath: path.join(__dirname, 'agent.js')
+      name: AGENT_BOT_NAME
     });
 
     log(`Test Bot ${botId} spawned.`);
