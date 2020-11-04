@@ -21,6 +21,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import InviteIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Clear';
 import FaceIcon from '@material-ui/icons/Face';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -30,7 +31,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useTheme } from '@material-ui/styles';
 
 import { humanize } from '@dxos/crypto';
-import { useInvitation } from '@dxos/react-client';
+import { useContacts, useInvitation, useOfflineInvitation } from '@dxos/react-client';
 
 import { useMembers } from '../hooks';
 import BotDialog from './BotDialog';
@@ -86,7 +87,12 @@ const TableCell = withStyles(theme => ({
 
 function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
   const classes = useStyles();
-  const [inviteCode, pin] = useInvitation(party.key, { onDone: () => onInvitationDone(pending.id) });
+  const [inviteCode, pin] = useInvitation(party.key, {
+    onDone: () => onInvitationDone(pending.id),
+    onError: e => {
+      throw e;
+    }
+  });
 
   return (
     <TableRow>
@@ -130,15 +136,44 @@ function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
   );
 }
 
+function PendingOfflineInvitation ({ party, invitation, handleCopy }) {
+  const [inviteCode] = useOfflineInvitation(party.key, invitation.contact, {
+    onError: e => {
+      throw e;
+    }
+  });
+
+  return (
+    <CopyToClipboard
+      text={inviteCode}
+      onCopy={handleCopy}
+    >
+      <IconButton
+        size='small'
+        color='inherit'
+        aria-label='copy to clipboard'
+        title='Copy to clipboard'
+        edge='start'
+      >
+        <LinkIcon />
+      </IconButton>
+    </CopyToClipboard>
+  );
+}
+
 const PartySharingDialog = ({ party, open, onClose }) => {
   const classes = useStyles();
+  const [contactsInvitations, setContactsInvitations] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
   const members = useMembers(party);
+  const [contacts] = useContacts();
+  const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toString('hex') === c.publicKey.toString('hex'))); // contacts not already in this party
 
   const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
+  const createOfflineInvitation = (contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
 
   const handleBotInvite = () => console.warn('Bot invitation not yet ported to the new echo');
 
@@ -208,27 +243,66 @@ const PartySharingDialog = ({ party, open, onClose }) => {
                 .filter((invitation) => !invitation.done)
                 .map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} onInvitationDone={handleInvitationDone} />)}
             </TableBody>
-            <TableBody>
-              {members.map((member) => (
-                <TableRow key={member.publicKey}>
-                  <TableCell classes={{ root: classes.colAvatar }}>
-                    <MemberAvatar member={member} />
-                  </TableCell>
-                  <TableCell>
-                    {member.displayName || humanize(member.publicKey)}
-                  </TableCell>
-                  <TableCell />
-                  <TableCell classes={{ root: classes.colStatus }}>
-                    <span className={classes.label}>{member.displayName?.startsWith('bot:') ? 'Bot' : 'Member'}</span>
-                  </TableCell>
-                  <TableCell classes={{ root: classes.colActions }}>
-                    <IconButton size='small'>
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+
+            {members.length > 0 && (
+              <TableBody>
+                {members.map((member) => (
+                  <TableRow key={member.publicKey}>
+                    <TableCell classes={{ root: classes.colAvatar }}>
+                      <MemberAvatar member={member} />
+                    </TableCell>
+                    <TableCell>
+                      {member.displayName || humanize(member.publicKey)}
+                    </TableCell>
+                    <TableCell />
+                    <TableCell classes={{ root: classes.colStatus }}>
+                      <span className={classes.label}>{member.displayName?.startsWith('bot:') ? 'Bot' : 'Member'}</span>
+                    </TableCell>
+                    <TableCell classes={{ root: classes.colActions }}>
+                      <IconButton size='small'>
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            )}
+
+            {invitableContacts.length > 0 && (
+              <TableBody>
+                {invitableContacts.map(contact => (
+                  <TableRow key={contact.publicKey}>
+                    <TableCell classes={{ root: classes.colAvatar }}>
+                      <MemberAvatar member={contact} />
+                    </TableCell>
+                    <TableCell>
+                      {contact.displayName || humanize(contact.publicKey)}
+                    </TableCell>
+                    <TableCell />
+                    <TableCell classes={{ root: classes.colStatus }}>
+                      <span className={classes.label}>Contact</span>
+                    </TableCell>
+                    <TableCell classes={{ root: classes.colActions }}>
+                      {contactsInvitations.find(p => p.contact === contact) === undefined ? (
+                        <IconButton size='small'>
+                          <InviteIcon
+                            onClick={() => createOfflineInvitation(contact)}
+                          />
+                        </IconButton>
+                      ) : (
+                        <PendingOfflineInvitation
+                          handleCopy={handleCopy}
+                          party={party}
+                          invitation={contactsInvitations.find(p => p.contact === contact)}
+                          onInvitationDone={() => console.warn('not impl')}
+                        />
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            )}
+
           </Table>
         </TableContainer>
       </DialogContent>

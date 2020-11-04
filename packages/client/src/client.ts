@@ -228,13 +228,12 @@ export class Client {
   }
 
   /**
-   * @deprecated
    * @param {Buffer} publicKey Party publicKey
    * @param {Buffer} recipient Recipient publicKey
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Buffer) {
-    console.warn('createOfflineInvitation deprecated. check Database');
+  async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Uint8Array) {
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found ${humanize(partyKey)}`));
+    return party.createOfflineInvitation(recipientKey);
   }
 
   /**
