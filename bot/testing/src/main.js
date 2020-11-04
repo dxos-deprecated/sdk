@@ -21,9 +21,7 @@ class TestAgent extends Bot {
     })
   }
 
-  async botCommandHandler (message) {
-    const command = JSON.parse(message.toString()) || {};
-    let result = {};
+  async botCommandHandler (command) {
     switch (command.type) {
       case 'append': {
         await waitForCondition(() => !!this._item)
@@ -33,14 +31,11 @@ class TestAgent extends Bot {
       }
       case 'get-all': {
         await waitForCondition(() => !!this._item)
-        result = { count: this._item.model.getProperty('count') };
-        break;
+        return { count: this._item.model.getProperty('count') };
       }
       default:
         break;
     }
-
-    return Buffer.from(JSON.stringify(result));
   }
 }
 

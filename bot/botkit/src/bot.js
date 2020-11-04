@@ -144,7 +144,10 @@ export class Bot extends EventEmitter {
       case BOT_COMMAND: {
         const { command } = message;
         try {
-          const data = await this.botCommandHandler(command);
+          // TODO(marik-d): Support custom codecs.
+          const decodedCommand = JSON.parse(command.toString()) || {};
+          const result = await this.botCommandHandler(decodedCommand);
+          const data = Buffer.from(JSON.stringify(result || {}))
           return createBotCommandResponse(data);
         } catch (error) {
           return createBotCommandResponse(null, error.message);
