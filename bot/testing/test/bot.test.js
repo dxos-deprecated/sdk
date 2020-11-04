@@ -14,7 +14,9 @@ test('bot test', async () => {
 
   const result = await agent.sendCommand({ type: 'get-all' });
 
-  console.log(result);
+  const { count } = JSON.parse(result);
+
+  expect(count).toBe(2);
 
   await orchestrator.destroy();
 });

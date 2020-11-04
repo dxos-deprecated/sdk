@@ -14,7 +14,7 @@
     "dist": "babel ./src --out-dir ./dist --ignore \"**/*.test.js\"",
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
-    "test": "jest --rootDir ./test --verbose --passWithNoTests"
+    "test": "jest --rootDir ./test --verbose --passWithNoTests --forceExit"
   },
   "jest": {
     "testEnvironment": "node"
