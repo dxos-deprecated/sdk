@@ -26,12 +26,14 @@ import {
   createEvent
 } from '@dxos/protocol-plugin-bot';
 
-// TODO(egorgripasov): Proper version from corresponding .yml file.
-import { version } from '../package'; // eslint-disable-line import/extensions
+import { sync as readPackageJson } from 'read-pkg-up';
 import { BotManager } from './bot-manager';
 import { getClientConfig } from './config';
 import { getPlatformInfo } from './env';
 import { log } from './log';
+
+// TODO(egorgripasov): Proper version from corresponding .yml file.
+const { version } = readPackageJson();
 
 const BOT_SPAWN_TIMEOUT = 50000;
 const BOT_SPAWN_CHECK_INTERVAL = 50;

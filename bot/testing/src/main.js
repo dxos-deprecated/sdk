@@ -2,21 +2,38 @@
 // Copyright 2020 DXOS.org
 //
 
+import { waitForCondition } from '@dxos/async';
 import { Bot, getConfig } from '@dxos/botkit';
+import { keyToString } from '@dxos/crypto';
+
+export const ITEM_TYPE = 'dxos.org/type/testing/object'
 
 class TestAgent extends Bot {
-  _count = 0;
+  constructor(config, options) {
+    super(config, options);
+
+    this.on('party', partyKey => {
+      console.log('new party', keyToString(partyKey))
+      this._client.echo.getParty(partyKey).database.queryItems({ type: ITEM_TYPE }).subscribe(items => {
+        console.log('got item')  
+        this._item = items[0];
+      })
+    })
+  }
 
   async botCommandHandler (message) {
     const command = JSON.parse(message.toString()) || {};
     let result = {};
     switch (command.type) {
       case 'append': {
-        this._count++;
+        await waitForCondition(() => !!this._item)
+        const count = this._item.model.getProperty('count');
+        await this._item.model.setProperty('count', count + 1)
         break;
       }
       case 'get-all': {
-        result = { count: this._count };
+        await waitForCondition(() => !!this._item)
+        result = { count: this._item.model.getProperty('count') };
         break;
       }
       default:

@@ -22,8 +22,8 @@ export const getConfig = () => {
   const keyPair = createKeyPair();
 
   const config = new Config(
-    mapFromKeyValues(yaml.load(envmap), process.env),
-    yaml.load(defaults),
+    mapFromKeyValues(envmap, process.env),
+    defaults,
     {
       bot: {
         peerId: createId(),
