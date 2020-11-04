@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.4](https://www.github.com/dxos/sdk/compare/v2.7.3...v2.7.4) (2020-11-04)
+
+
+### Bug Fixes
+
+* Reimplement offline invitations ([#299](https://www.github.com/dxos/sdk/issues/299)) ([d73e7ec](https://www.github.com/dxos/sdk/commit/d73e7ec342e04c0becbde2fc7381b8361d7e079d))
+
 ### [2.7.3](https://www.github.com/dxos/sdk/compare/v2.7.2...v2.7.3) (2020-10-30)
 
 
