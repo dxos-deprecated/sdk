@@ -317,10 +317,16 @@ export class BotManager {
 
   async _getBotRecord (botName) {
     if (this._localDev) {
-      const botInfo = yaml.load(
-        await fs.readFile(path.join(process.cwd(), BOT_CONFIG_FILENAME))
-      );
-      return { attributes: { name: botInfo.name }, id: sha256(botInfo.name) };
+      let name;
+      try {
+        const botInfo = yaml.load(
+          await fs.readFile(path.join(process.cwd(), BOT_CONFIG_FILENAME))
+        );
+        name = botInfo.name;
+      } catch (err) {
+        name = chance.animal();
+      }
+      return { attributes: { name }, id: sha256(name) };
     }
     const { records } = await this._registry.resolveNames([botName]);
     if (!records.length) {
