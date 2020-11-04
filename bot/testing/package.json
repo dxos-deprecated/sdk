@@ -20,7 +20,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@dxos/async": "^1.0.0-beta.2",
+    "@dxos/async": "1.0.0-beta.10",
     "@dxos/botkit": "^2.7.3-alpha.0",
     "@dxos/botkit-client": "^2.7.3-alpha.0",
     "@dxos/client": "^2.7.3-alpha.0",
