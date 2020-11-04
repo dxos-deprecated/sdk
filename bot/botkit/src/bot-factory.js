@@ -3,12 +3,13 @@
 //
 
 import assert from 'assert';
-import ram from 'random-access-memory';
 import crypto from 'hypercore-crypto';
+import ram from 'random-access-memory';
 
 import { waitForCondition } from '@dxos/async';
+import { Client } from '@dxos/client';
 import { keyToBuffer, keyToString } from '@dxos/crypto';
-
+import { transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SPAWN,
   COMMAND_STATUS,
@@ -25,15 +26,11 @@ import {
   createEvent
 } from '@dxos/protocol-plugin-bot';
 
-import { Client } from '@dxos/client';
-import { transportProtocolProvider } from '@dxos/network-manager';
-
 // TODO(egorgripasov): Proper version from corresponding .yml file.
 import { version } from '../package'; // eslint-disable-line import/extensions
-import { getClientConfig } from './config';
 import { BotManager } from './bot-manager';
+import { getClientConfig } from './config';
 import { getPlatformInfo } from './env';
-
 import { log } from './log';
 
 const BOT_SPAWN_TIMEOUT = 50000;
