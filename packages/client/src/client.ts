@@ -50,8 +50,6 @@ export interface CreateProfileOptions {
 export class Client {
   private readonly _config: ClientConfig;
 
-  private readonly _swarmConfig?: any;
-
   private readonly _echo: ECHO;
 
   private readonly _registry?: any;
@@ -75,7 +73,7 @@ export class Client {
       snapshotStorage: snapshots
         ? createStorage(`${storagePath}/snapshots`, storageType === 'persistent' ? undefined : storageType)
         : createStorage(`${storagePath}/snapshots`, 'ram'),
-      swarmProvider: new SwarmProvider(this._swarmConfig),
+      swarmProvider: new SwarmProvider(swarm),
       snapshots,
       snapshotInterval
     });
@@ -185,44 +183,6 @@ export class Client {
   }
 
   /**
-   * @deprecated
-   * Join a Party by redeeming an Invitation.
-   * @param {InvitationDescriptor} invitation
-   * @param {SecretProvider} secretProvider
-   * @returns {Promise<Party>} The now open Party.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async joinParty (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
-    console.warn('deprecated. Use client.echo');
-  }
-
-  /**
-   * Redeems an invitation for this Device to be admitted to an Identity.
-   * @param {InvitationDescriptor} invitation
-   * @param {SecretProvider} secretProvider
-   * @returns {Promise<DeviceInfo>}
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async admitDevice (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
-    console.log('client.admitDevice: Device management is not implemented.');
-  }
-
-  /**
-   * @deprecated
-   */
-  getParties () {
-    console.warn('deprecated. Use client.echo');
-  }
-
-  /**
-   * @deprecated
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getParty (partyKey: Uint8Array) {
-    console.warn('deprecated. Use client.echo');
-  }
-
-  /**
    * Returns an Array of all known Contacts across all Parties.
    * @returns {Contact[]}
    */
@@ -230,13 +190,6 @@ export class Client {
     console.warn('client.getContacts not impl. Returning []');
     // return this._partyManager.getContacts();
     return [];
-  }
-
-  /**
-   * @deprecated
-   */
-  async createSubscription () {
-    console.warn('deprecated');
   }
 
   /**
@@ -286,7 +239,7 @@ export class Client {
   /**
    * @deprecated
    */
-  get modelFactory () {
+  get modelFactory (): ModelFactory {
     console.warn('client.modelFactory is deprecated.');
     return this._echo.modelFactory;
   }
@@ -295,12 +248,4 @@ export class Client {
 const DEFAULT_SWARM_CONFIG: ClientConfig['swarm'] = {
   signal: 'ws://localhost:4000',
   ice: [{ urls: 'stun:stun.wireline.ninja:3478' }]
-};
-
-/**
- * Client factory.
- * @deprecated
- */
-export const createClient = async () => {
-  throw new Error('createClient is being deprecated. Please use new Client() instead.');
 };
