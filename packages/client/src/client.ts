@@ -50,27 +50,11 @@ export interface CreateProfileOptions {
 export class Client {
   private readonly _config: ClientConfig;
 
-  private readonly _feedStore: FeedStore;
-
-  private readonly _keyring: Keyring;
-
   private readonly _swarmConfig?: any;
-
-  private readonly _modelFactory: ModelFactory;
-
-  private readonly _identityManager: IdentityManager;
-
-  private readonly _networkManager: NetworkManager;
-
-  private readonly _partyFactory: PartyFactory;
-
-  private readonly _partyManager: PartyManager;
 
   private readonly _echo: ECHO;
 
   private readonly _registry?: any;
-
-  private readonly _snapshotStore: SnapshotStore;
 
   private _initialized = false;
 
@@ -85,35 +69,16 @@ export class Client {
       snapshotInterval
     } = config;
 
-    this._feedStore = new FeedStore(createStorage(`${storagePath}/feeds`, storageType === 'persistent' ? undefined : storageType),
-      { feedOptions: { valueEncoding: codec } });
-    this._keyring = new Keyring(new KeyStore(storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`)));
-    this._swarmConfig = swarm;
-
-    this._identityManager = new IdentityManager(this._keyring);
-    this._modelFactory = new ModelFactory()
-      .registerModel(ObjectModel);
-
-    this._networkManager = new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig));
-
-    const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
-
-    this._snapshotStore = new SnapshotStore(snapshots
-      ? createStorage(`${storagePath}/snapshots`, storageType === 'persistent' ? undefined : storageType)
-      : createStorage('fake', 'ram')
-    );
-
-    this._partyFactory = new PartyFactory(
-      this._identityManager,
-      feedStoreAdapter,
-      this._modelFactory,
-      this._networkManager,
-      this._snapshotStore,
-      { snapshots, snapshotInterval }
-    );
-    this._partyManager = new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory, this._snapshotStore);
-
-    this._echo = new ECHO(this._partyManager);
+    this._echo = new ECHO({
+      feedStorage: createStorage(`${storagePath}/feeds`, storageType === 'persistent' ? undefined : storageType),
+      keyStorage: storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`),
+      snapshotStorage: snapshots
+        ? createStorage(`${storagePath}/snapshots`, storageType === 'persistent' ? undefined : storageType)
+        : createStorage(`${storagePath}/snapshots`, 'ram'),
+      swarmProvider: new SwarmProvider(this._swarmConfig),
+      snapshots,
+      snapshotInterval
+    });
     this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
   }
 
@@ -133,15 +98,8 @@ export class Client {
       console.error('Client.initialize is taking more then 10 seconds to complete. Something probably went wrong.');
     }, 10000);
 
-    await this._keyring.load();
+    await this._echo.open();
 
-    // If this has to be done, it should be done thru database.
-    // Actually, the we should move all initialze into database.
-    await this._partyManager.open();
-
-    if (!this._identityManager.halo && this._identityManager.identityKey) {
-      await this._partyManager.createHalo();
-    }
     this._initialized = true;
     clearInterval(timeoutId);
   }
@@ -151,7 +109,6 @@ export class Client {
    */
   async destroy () {
     await this._echo.close();
-    await this._networkManager.close();
   }
 
   /**
@@ -159,11 +116,7 @@ export class Client {
    * Warning: Inconsistent state after reset, do not continue to use this client instance.
    */
   async reset () {
-    if (this._feedStore.storage.destroy) {
-      await this._feedStore.storage.destroy();
-    }
-
-    await this._keyring.deleteAllKeyRecords();
+    await this._echo.reset();
   }
 
   /**
@@ -172,29 +125,24 @@ export class Client {
    */
   async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
     if (publicKey && secretKey) {
-      await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
+      await this._echo.createIdentity({ publicKey, secretKey });
     }
-
-    if (!this._identityManager.identityKey) {
-      throw new Error('Cannot create profile. Either no keyPair (public and secret key) was provided or cannot read Identity from keyring.');
-    }
-    await this._partyManager.createHalo({
-      identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
-    });
+  
+    await this._echo.createHalo(username);
   }
 
   /**
    * @returns {ProfileInfo} User profile info.
    */
   getProfile () {
-    if (!this._identityManager.identityKey) {
+    if (!this._echo.identityKey) {
       return;
     }
 
-    const publicKey = keyToString(this._identityManager.identityKey.publicKey);
+    const publicKey = keyToString(this._echo.identityKey.publicKey); 
 
     return {
-      username: this._identityManager.displayName,
+      username: this._echo.identityDisplayName,
       publicKey
     };
   }
@@ -295,52 +243,52 @@ export class Client {
    * Registers a new model.
    */
   registerModel (constructor: ModelConstructor<any>): this {
-    this._modelFactory.registerModel(constructor);
+    this._echo.registerModel(constructor);
 
     return this;
-  }
-
-  get keyring () {
-    return this._keyring;
   }
 
   get echo () {
     return this._echo;
   }
 
-  // keep this for devtools ???
-  get feedStore () {
-    return this._feedStore;
+  get registry () {
+    return this._registry;
   }
 
-  // TODO(burdon): Remove.
+  /**
+   * For devtools.
+   * 
+   * @deprecated Use echo.keyring
+   */
+  get keyring () {
+    return this._echo.keyring;
+  }
+
+  /**
+   * For devtools.
+   * 
+   * @deprecated Use echo.feedStore
+   */
+  get feedStore () {
+    return this._echo.feedStore;
+  }
+
+  /**
+   * For devtools.
+   * 
+   * @deprecated Use echo.networkManager.
+   */
+  get networkManager () {
+    return this._echo.networkManager;
+  }
+
   /**
    * @deprecated
    */
   get modelFactory () {
     console.warn('client.modelFactory is deprecated.');
-    return this._modelFactory;
-  }
-
-  // TODO(burdon): Remove.
-  /**
-   * @deprecated
-   */
-  get networkManager () {
-    return this._networkManager;
-  }
-
-  // TODO(burdon): Remove.
-  /**
-   * @deprecated
-   */
-  get partyManager () {
-    console.warn('deprecated. Use client.database');
-    return this._partyManager;
-  }
-
-  get registry () {
-    return this._registry;
+    return this._echo.modelFactory;
   }
 }
 
