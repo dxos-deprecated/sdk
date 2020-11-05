@@ -5,16 +5,10 @@
 import leveljs from 'level-js';
 import memdown from 'memdown';
 
-import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
 import { humanize, keyToString } from '@dxos/crypto';
-import {
-  codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager, SecretProvider, InvitationOptions, InvitationDescriptor
-} from '@dxos/echo-db';
-import { SnapshotStore } from '@dxos/echo-db/dist/src/snapshot-store';
-import { FeedStore } from '@dxos/feed-store';
+import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
 import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
-import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { ObjectModel } from '@dxos/object-model';
+import { SwarmProvider } from '@dxos/network-manager';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
@@ -125,7 +119,7 @@ export class Client {
     if (publicKey && secretKey) {
       await this._echo.createIdentity({ publicKey, secretKey });
     }
-  
+
     await this._echo.createHalo(username);
   }
 
@@ -137,7 +131,7 @@ export class Client {
       return;
     }
 
-    const publicKey = keyToString(this._echo.identityKey.publicKey); 
+    const publicKey = keyToString(this._echo.identityKey.publicKey);
 
     return {
       username: this._echo.identityDisplayName,
@@ -211,7 +205,7 @@ export class Client {
 
   /**
    * For devtools.
-   * 
+   *
    * @deprecated Use echo.keyring
    */
   get keyring () {
@@ -220,7 +214,7 @@ export class Client {
 
   /**
    * For devtools.
-   * 
+   *
    * @deprecated Use echo.feedStore
    */
   get feedStore () {
@@ -229,7 +223,7 @@ export class Client {
 
   /**
    * For devtools.
-   * 
+   *
    * @deprecated Use echo.networkManager.
    */
   get networkManager () {
