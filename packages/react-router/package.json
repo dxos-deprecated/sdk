@@ -3,7 +3,7 @@
   "version": "2.7.4-alpha.0",
   "description": "React router utils.",
   "keywords": [],
-  "license": "AGPLv3",
+  "license": "AGPL-3.0",
   "author": "DXOS.org",
   "main": "dist/src/index.js",
   "scripts": {
