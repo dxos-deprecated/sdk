@@ -3,18 +3,18 @@
 //
 
 import debug from 'debug';
+import EventEmitter from 'events';
 import fs from 'fs-extra';
 import jsondown from 'jsondown';
-import ram from 'random-access-memory';
 import path from 'path';
-import EventEmitter from 'events';
+import ram from 'random-access-memory';
 
 import { promiseTimeout } from '@dxos/async';
-import { randomBytes, keyToBuffer, keyToString, createKeyPair } from '@dxos/crypto';
-import { Keyring, KeyStore } from '@dxos/credentials';
 import { Client } from '@dxos/client';
+import { Keyring, KeyStore } from '@dxos/credentials';
+import { randomBytes, keyToBuffer, keyToString, createKeyPair } from '@dxos/crypto';
+import { InvitationDescriptor } from '@dxos/echo-db';
 import { transportProtocolProvider } from '@dxos/network-manager';
-
 import {
   COMMAND_BOT_INVITE,
   BOT_COMMAND,
@@ -24,8 +24,6 @@ import {
   createBotCommandResponse,
   createEvent
 } from '@dxos/protocol-plugin-bot';
-
-import { InvitationDescriptor } from '@dxos/party-manager';
 import { createStorage, STORAGE_NODE } from '@dxos/random-access-multi-storage';
 
 import { getClientConfig } from './config';
@@ -146,7 +144,10 @@ export class Bot extends EventEmitter {
       case BOT_COMMAND: {
         const { command } = message;
         try {
-          const data = await this.botCommandHandler(command);
+          // TODO(marik-d): Support custom codecs.
+          const decodedCommand = JSON.parse(command.toString()) || {};
+          const result = await this.botCommandHandler(decodedCommand);
+          const data = Buffer.from(JSON.stringify(result || {}));
           return createBotCommandResponse(data);
         } catch (error) {
           return createBotCommandResponse(null, error.message);
