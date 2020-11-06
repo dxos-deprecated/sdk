@@ -3,18 +3,18 @@
 //
 
 import assert from 'assert';
-import path from 'path';
 import { spawn } from 'child_process';
 import { EventEmitter } from 'events';
 import fs from 'fs-extra';
-import kill from 'tree-kill';
-import watch from 'node-watch';
 import moment from 'moment';
+import watch from 'node-watch';
+import path from 'path';
+import kill from 'tree-kill';
 
 import { keyToString } from '@dxos/crypto';
 
-import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
 import { log, logBot } from './log';
+import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
 
 // Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
 export const SPAWNED_BOTS_DIR = '.bots';

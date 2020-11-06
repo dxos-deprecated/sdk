@@ -3,9 +3,9 @@
 //
 
 import assert from 'assert';
+import download from 'download';
 import fs from 'fs-extra';
 import path from 'path';
-import download from 'download';
 import url from 'url';
 
 import { log } from './log';
