@@ -7,7 +7,7 @@
     "gatsby",
     "docs"
   ],
-  "license": "AGPLv3",
+  "license": "AGPL-3.0",
   "author": "info@dxos.org",
   "private": true,
   "scripts": {
