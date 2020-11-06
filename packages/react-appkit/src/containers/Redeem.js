@@ -86,7 +86,7 @@ export default function RedeemDialog ({ onClose, ...props }) {
             />
           </DialogContent>
           <DialogActions>
-            <Button autoFocus color='secondary' onClick={onDone}>Cancel</Button>
+            <Button color='secondary' onClick={onDone}>Cancel</Button>
             <Button autoFocus color='primary' onClick={handleEnterPinCode}>Submit</Button>
           </DialogActions>
         </>
