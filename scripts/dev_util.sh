@@ -1,9 +1,12 @@
 #!/bin/sh
 
 #
-# Set-up and tear down yarn links from SDK monorepo packages to target.
+# Sets-up and tears down yarn links from SDK monorepo packages to target.
+#
 # NOTE: Linking react libraries is not straightforward, because you have to make sure there is only one
 # instance of the react module (otherwise hooks and other things do not work properly.)
+#
+# NOTE: Linked packages have symlinks to ~/.config/yarn/link/<PACKAGE>
 #
 
 DEFAULT_TARGET_DIR="../teamwork"
@@ -66,7 +69,7 @@ function unlink
 
   pushd ${TARGET_DIR} > /dev/null
 
-  rm yarn.lock
+  rm -rf node_modules
   yarn install
   yarn build
 
@@ -83,5 +86,9 @@ case $1 in
   unlink)
     shift
     unlink $1
+    ;;
+
+  *)
+    echo "$0 link|unlink [${DEFAULT_TARGET_DIR}]"
     ;;
 esac
