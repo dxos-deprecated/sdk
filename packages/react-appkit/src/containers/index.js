@@ -6,11 +6,12 @@ import AppBar from './AppBar';
 import AppContainer from './AppContainer';
 import AppKitProvider from './AppKitProvider';
 import Authenticator from './Authenticator';
-import CheckForErrors from './CheckForErrors'; // TODO(burdon): Deprecated.
+import CheckForErrors from './CheckForErrors';
 import ClientInitializer from './ClientInitializer';
 import DefaultItemList from './DefaultItemList';
 import DefaultSidebar from './DefaultSidebar';
 import PartyCardContainer from './PartyCardContainer';
+import RedeemDialog from './RedeemDialog';
 import Registration from './Registration';
 import RequireWallet from './RequireWallet';
 import SystemRoutes from './SystemRoutes';
@@ -25,6 +26,7 @@ export {
   DefaultSidebar,
   DefaultItemList,
   PartyCardContainer,
+  RedeemDialog,
   Registration,
   RequireWallet,
   SystemRoutes

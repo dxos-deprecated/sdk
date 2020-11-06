@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 import Box from '@material-ui/core/Box';
 
-import { RegistrationDialog } from '../src/components';
+import { RegistrationDialog } from '../src';
 
 export default {
   title: 'Identity'

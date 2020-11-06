@@ -13,11 +13,10 @@ import ConnectedIcon from '@material-ui/icons/Wifi';
 import { useConfig } from '@dxos/react-client';
 import { FullScreen } from '@dxos/react-ux';
 
-import { KeyMap, Layout, Sidebar, StatusBar } from '../components';
+import { DebugPanel, KeyMap, Layout, Sidebar, StatusBar } from '../components';
 import { useErrorReducer, useLayoutReducer } from '../hooks';
 import AppBar from './AppBar';
-import DebugPanel from '../components/DebugPanel';
-import RedeemDialog from '../components/RedeemDialog';
+import RedeemDialog from './RedeemDialog';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -47,8 +46,8 @@ const AppContainer = ({
   const [{ exceptions: errors }, setErrors] = useErrorReducer();
   const [{ showSidebar, showDebug }, setLayout] = useLayoutReducer();
   const [showKeyMap, setShowKeyMap] = useState(false);
-  const [redeemOpen, setRedeemOpen] = useState(false);
   const hotKeys = createRef();
+  const [redeemOpen, setRedeemOpen] = useState(false);
 
   useEffect(() => {
     hotKeys.current.focus();

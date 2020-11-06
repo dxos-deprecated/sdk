@@ -2,8 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
-import { storiesOf } from '@storybook/react';
 import React from 'react';
+import { storiesOf } from '@storybook/react';
 
 import MuiAppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { FullScreen } from '@dxos/react-ux';
 
-import { Theme } from '../src/components';
+import { Theme } from '../src';
 
 // TODO(burdon): Cannot use Layout/AppBar without context.
 storiesOf('Layout', module)

@@ -25,13 +25,13 @@ import PartyMemberList from './PartyMemberList';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import PartyTree, { PartyTreeAddItemButton, PartyTreeItem } from './PartyTree';
-import RedeemDialog from './RedeemDialog';
 import RegistrationDialog from './RegistrationDialog';
 import Sidebar from './Sidebar';
 import StatusBar from './StatusBar';
 import Theme, { createTheme, defaultThemeProperties } from './Theme';
 
 export * from './util';
+
 export {
   AuthenticatorDialog,
   BotDialog,
@@ -55,7 +55,6 @@ export {
   PartyFromFileDialog,
   PartyFromIpfsDialog,
   PartyTree,
-  RedeemDialog,
   RegistrationDialog,
   Sidebar,
   StatusBar,
