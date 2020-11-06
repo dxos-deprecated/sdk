@@ -40,13 +40,10 @@ export class GitHubBot extends Bot {
     });
   }
 
-  async botCommandHandler (message) {
-    const command = JSON.parse(message.toString()) || {};
-    let result = {};
+  async botCommandHandler (command) {
     switch (command.type) {
       case 'status': {
-        result = [...this._botParties.values()];
-        break;
+        return [...this._botParties.values()];
       }
       case 'assign': {
         const { topic, repo, username, token } = command;
@@ -55,14 +52,11 @@ export class GitHubBot extends Bot {
           await this._assignRepo(topic, repo, username, token);
           success = true;
         }
-        result = { success };
-        break;
+        return { success };
       }
       default:
         break;
     }
-
-    return Buffer.from(JSON.stringify(result));
   }
 
   /**

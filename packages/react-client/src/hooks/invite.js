@@ -24,13 +24,14 @@ const noOp = () => {};
  * @param {() => void} options.onError called if the invite flow produces an error.
  * @returns {[redeemCode: (code: String) => void, setPin: (pin: String) => void ]}
  */
-export function useInvitationRedeemer ({ onDone = noOp, onError = noOp } = {}) {
+export function useInvitationRedeemer ({ onDone = noOp, onError = noOp, isOffline = false } = {}) {
   const client = useClient();
   const [code, setCode] = useState();
   const [resolver, setResolver] = useState();
   const [secretProvider, secretResolver] = useMemo(() => trigger(), [code]);
 
   useEffect(() => {
+    setResolver(!isOffline);
     if (!code) {
       return;
     }
@@ -38,11 +39,7 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp } = {}) {
     try {
       const invitation = decodeInvitation(code);
 
-      // if (InviteType.INTERACTIVE === invitation.type) {
-      setResolver(true);
-      // }
-
-      client.echo.joinParty(invitation, secretProvider)
+      client.echo.joinParty(invitation, !isOffline ? secretProvider : undefined)
         .then(party => {
           party.open().then(() => onDone(party));
         })
@@ -50,7 +47,7 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp } = {}) {
     } catch (error) {
       onError(error);
     }
-  }, [code]);
+  }, [code, isOffline]);
 
   return [
     setCode, // redeemCode
@@ -94,7 +91,7 @@ export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {})
 
 /**
  * Hook to create an Offline Invitation for recipient to a given party
- * @param {Party} party the party to create invite for. Required.
+ * @param {Buffer} partyKey the Party to create invite for. Required.
  * @param {Contact|{ publicKey: {Buffer} }} recipient the recipient for the invitation. Required.
  * @param {Object} options
  * @param {() => void} options.onDone called once the invite flow finishes successfully.
@@ -102,25 +99,23 @@ export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {})
  * @returns {[invitationCode: String ]}
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function useOfflineInvitation (party, recipient, { onDone = noOp, onError = noOp } = {}) {
-  // TODO
-  // assert(party);
-  // assert(recipient);
-  // const client = useClient();
-  // const [invitationCode, setInvitationCode] = useState();
-  // const partyKey = keyToString(party.publicKey);
-  // const recipientKey = keyToString(recipient.publicKey);
+export function useOfflineInvitation (partyKey, recipient, { onDone = noOp, onError = noOp } = {}) {
+  assert(partyKey);
+  assert(recipient);
+  const client = useClient();
+  const [invitationCode, setInvitationCode] = useState();
+  const key = keyToString(partyKey);
+  const recipientKey = keyToString(recipient.publicKey);
 
-  // useEffect(() => {
-  //   client.createOfflineInvitation(party.publicKey, recipient.publicKey)
-  //     .then(invitation => {
-  //       setInvitationCode(encodeInvitation(invitation));
-  //       onDone();
-  //     })
-  //     .catch(error => onError(error));
-  // }, [partyKey, recipientKey]);
+  useEffect(() => {
+    client.createOfflineInvitation(partyKey, recipient.publicKey)
+      .then(invitation => {
+        setInvitationCode(encodeInvitation(invitation));
+      })
+      .catch(error => onError(error));
+  }, [key, recipientKey]);
 
-  // return [
-  //   invitationCode
-  // ];
+  return [
+    invitationCode
+  ];
 }

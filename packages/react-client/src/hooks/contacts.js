@@ -15,7 +15,18 @@ export function useContacts () {
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
-    client.getContacts().then(contacts => setContacts(contacts));
+    const result = client.echo.queryContacts();
+    setContacts(result.value);
+
+    const unsubscribe = result.subscribe(() => {
+      setContacts(result.value);
+    });
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   return [contacts];

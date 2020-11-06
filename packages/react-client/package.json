@@ -1,9 +1,9 @@
 {
   "name": "@dxos/react-client",
-  "version": "2.7.3-alpha.0",
+  "version": "2.7.4-alpha.0",
   "description": "React client API",
   "keywords": [],
-  "license": "AGPLv3",
+  "license": "AGPL-3.0",
   "author": "DXOS.org",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -15,11 +15,12 @@
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
   "dependencies": {
-    "@dxos/async": "^1.0.0-beta.1",
-    "@dxos/client": "^2.7.3-alpha.0",
+    "@dxos/async": "1.0.0-beta.10",
+    "@dxos/client": "^2.7.4-alpha.0",
     "@dxos/credentials": "^2.0.0",
     "@dxos/crypto": "^1.0.0-beta.0",
     "@dxos/debug": "^1.0.0-beta.73",
+    "@dxos/echo-db": "^2.6.2-alpha.0",
     "@dxos/metrics": "^1.0.0-beta.6",
     "@dxos/random-access-multi-storage": "^1.1.0-beta.4",
     "level-js": "^5.0.1",
