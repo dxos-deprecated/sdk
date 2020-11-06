@@ -1,9 +1,9 @@
 {
   "name": "@dxos/react-ux",
-  "version": "2.7.2-alpha.0",
+  "version": "2.7.4-alpha.0",
   "description": "React components",
   "keywords": [],
-  "license": "AGPLv3",
+  "license": "AGPL-3.0",
   "author": "DXOS.org",
   "main": "dist/src/index.js",
   "scripts": {

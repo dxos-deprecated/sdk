@@ -6,10 +6,12 @@ import React, { useState } from 'react';
 
 import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
@@ -17,6 +19,8 @@ import Typography from '@material-ui/core/Typography';
 import { useInvitationRedeemer } from '@dxos/react-client';
 
 export default function RedeemDialog ({ onClose, ...props }) {
+  const [isOffline, setIsOffline] = useState(false);
+
   const onDone = () => {
     setStep(0);
     setInvitationCode('');
@@ -29,7 +33,8 @@ export default function RedeemDialog ({ onClose, ...props }) {
     onError: (ex) => {
       setStep(2);
       setError(String(ex));
-    }
+    },
+    isOffline
   });
 
   const [error, setError] = useState(undefined);
@@ -52,6 +57,10 @@ export default function RedeemDialog ({ onClose, ...props }) {
       {step === 0 && (
         <>
           <DialogContent>
+            <FormControlLabel
+              control={<Checkbox checked={isOffline} onChange={event => setIsOffline(event.target.checked)}/>}
+              label="Offline"
+            />
             <Typography variant='body1' gutterBottom>
               Paste the invitation code below.
             </Typography>
@@ -69,6 +78,7 @@ export default function RedeemDialog ({ onClose, ...props }) {
           </DialogActions>
         </>
       )}
+
       {step === 1 && setPin && (
         <>
           <DialogContent>
@@ -92,6 +102,7 @@ export default function RedeemDialog ({ onClose, ...props }) {
           </DialogActions>
         </>
       )}
+
       {step === 1 && !setPin && (
         <DialogContent>
           <Typography variant='body1' gutterBottom>
@@ -99,6 +110,7 @@ export default function RedeemDialog ({ onClose, ...props }) {
           </Typography>
         </DialogContent>
       )}
+
       {step === 2 && error && (
         <DialogContent>
           <Alert severity="error">{error}</Alert>

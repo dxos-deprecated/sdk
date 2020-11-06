@@ -1,6 +1,6 @@
 {
   "name": "@dxos/sdk",
-  "version": "2.7.2",
+  "version": "2.7.4",
   "private": true,
   "description": "DXOS SDK monorepo.",
   "homepage": "https://github.com/dxos/sdk#readme",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/dxos/sdk.git"
   },
-  "license": "AGPLv3",
+  "license": "AGPL-3.0",
   "workspaces": {
     "packages": [
       "packages/*",
