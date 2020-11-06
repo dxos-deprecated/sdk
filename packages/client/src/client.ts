@@ -5,10 +5,12 @@
 import leveljs from 'level-js';
 import memdown from 'memdown';
 
+import { Keyring } from '@dxos/credentials';
 import { humanize, keyToString } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
-import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
-import { SwarmProvider } from '@dxos/network-manager';
+import { FeedStore } from '@dxos/feed-store';
+import { ModelConstructor } from '@dxos/model-factory';
+import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
@@ -190,7 +192,7 @@ export class Client {
    * Registers a new model.
    */
   registerModel (constructor: ModelConstructor<any>): this {
-    this._echo.registerModel(constructor);
+    this._echo.modelFactory.registerModel(constructor);
 
     return this;
   }
@@ -208,7 +210,7 @@ export class Client {
    *
    * @deprecated Use echo.keyring
    */
-  get keyring () {
+  get keyring (): Keyring {
     return this._echo.keyring;
   }
 
@@ -217,7 +219,7 @@ export class Client {
    *
    * @deprecated Use echo.feedStore
    */
-  get feedStore () {
+  get feedStore (): FeedStore {
     return this._echo.feedStore;
   }
 
@@ -226,14 +228,14 @@ export class Client {
    *
    * @deprecated Use echo.networkManager.
    */
-  get networkManager () {
+  get networkManager (): NetworkManager {
     return this._echo.networkManager;
   }
 
   /**
    * @deprecated
    */
-  get modelFactory (): ModelFactory {
+  get modelFactory () {
     console.warn('client.modelFactory is deprecated.');
     return this._echo.modelFactory;
   }
