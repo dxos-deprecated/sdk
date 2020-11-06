@@ -3,8 +3,8 @@
 //
 
 import assert from 'assert';
-import os from 'os';
 import get from 'lodash.get';
+import os from 'os';
 
 // Supported environments.
 export const NATIVE_ENV = 'native';

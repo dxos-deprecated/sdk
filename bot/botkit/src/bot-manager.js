@@ -2,13 +2,13 @@
 // Copyright 2020 DXOS.org
 //
 
-import debug from 'debug';
 import assert from 'assert';
-import fs, { ensureFileSync } from 'fs-extra';
-import path from 'path';
-import yaml from 'js-yaml';
 import { Chance } from 'chance';
+import debug from 'debug';
+import fs, { ensureFileSync } from 'fs-extra';
+import yaml from 'js-yaml';
 import get from 'lodash.get';
+import path from 'path';
 
 import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
 import { transportProtocolProvider } from '@dxos/network-manager';
@@ -21,12 +21,11 @@ import {
   createSignResponse,
   createBotCommand
 } from '@dxos/protocol-plugin-bot';
-
 import { Registry } from '@wirelineio/registry-client';
 
-import { log } from './log';
-import { NATIVE_ENV, getBotCID } from './env';
 import { BOT_CONFIG_FILENAME } from './config';
+import { NATIVE_ENV, getBotCID } from './env';
+import { log } from './log';
 
 const chance = new Chance();
 
