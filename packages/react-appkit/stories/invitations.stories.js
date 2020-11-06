@@ -14,8 +14,7 @@ import { keyToBuffer } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParty } from '@dxos/react-client';
 
-import { AppKitProvider, BotDialog, AuthenticatorDialog, PartySharingDialog } from '../src';
-import { useAppRouter } from '../src/hooks';
+import { AppKitProvider, BotDialog, AuthenticatorDialog, PartySharingDialog, useAppRouter } from '../src';
 import { pads, NoPartyComponent } from './common';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 

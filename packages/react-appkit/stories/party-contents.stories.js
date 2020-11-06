@@ -2,12 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
+import Box from '@material-ui/core/Box';
 import { withKnobs } from '@storybook/addon-knobs';
 import React, { useState } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 import StoryRouter from 'storybook-react-router';
-
-import Box from '@material-ui/core/Box';
 
 import { keyToBuffer } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
@@ -15,7 +14,7 @@ import { ObjectModel } from '@dxos/object-model';
 import { useClient, useParty } from '@dxos/react-client';
 
 import { AppKitProvider, DefaultItemList, PartySettingsDialog } from '../src';
-import { pads, NoPartyComponent } from './common';
+import { NoPartyComponent, pads } from './common';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 
 export default {
