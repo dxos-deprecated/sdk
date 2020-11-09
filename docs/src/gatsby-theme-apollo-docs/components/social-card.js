@@ -4,6 +4,8 @@
 
 /* global preval */
 import React from 'react';
+
+// TODO(burdon): ???
 import SharedSocialCard from '@dxos/docs-theme/src/components/SocialCard';
 
 const { fonts, image } = preval`
@@ -29,8 +31,10 @@ const { fonts, image } = preval`
   };
 `;
 
-export default function SocialCard (props) {
+const SocialCard = (props) => {
   return (
     <SharedSocialCard {...props} fonts={fonts} image={image} />
   );
-}
+};
+
+export default SocialCard;

@@ -13,7 +13,7 @@ import DefaultItemList from './DefaultItemList';
 import DefaultSettingsDialog from './DefaultSettingsDialog';
 import DefaultSidebar from './DefaultSidebar';
 import PartyCardContainer from './PartyCardContainer';
-import Redeem from './Redeem';
+import RedeemDialog from './RedeemDialog';
 import Registration from './Registration';
 import RequireWallet from './RequireWallet';
 import SystemRoutes from './SystemRoutes';
@@ -30,7 +30,7 @@ export {
   DefaultSettingsDialog,
   DefaultItemList,
   PartyCardContainer,
-  Redeem,
+  RedeemDialog,
   Registration,
   RequireWallet,
   SystemRoutes

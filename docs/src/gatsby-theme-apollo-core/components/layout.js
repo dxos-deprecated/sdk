@@ -3,10 +3,11 @@
 //
 
 import React from 'react';
-import { Layout as SharedLayout } from '@dxos/docs-theme';
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function Layout ({ children }) {
+import { Layout as SharedLayout } from '@dxos/docs-theme';
+
+const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
     query {
       site {
@@ -25,4 +26,6 @@ export default function Layout ({ children }) {
       {children}
     </SharedLayout>
   );
-}
+};
+
+export default Layout;
