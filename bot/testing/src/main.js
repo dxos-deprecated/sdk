@@ -4,11 +4,18 @@
 
 import { waitForCondition } from '@dxos/async';
 import { Bot, getConfig } from '@dxos/botkit';
-import { keyToString } from '@dxos/crypto';
+import { createId, keyToString } from '@dxos/crypto';
+import { Item } from '@dxos/echo-db';
+import { MessengerModel } from '@dxos/messenger-model';
 
 export const ITEM_TYPE = 'dxos.org/type/testing/object';
 
 class TestAgent extends Bot {
+
+
+  /** @type {Item<MessengerModel>} */
+  _item;
+
   constructor (config, options) {
     super(config, options);
 
@@ -22,16 +29,14 @@ class TestAgent extends Bot {
   }
 
   async botCommandHandler (command) {
+    await waitForCondition(() => !!this._item);
     switch (command.type) {
       case 'append': {
-        await waitForCondition(() => !!this._item);
-        const count = this._item.model.getProperty('count');
-        await this._item.model.setProperty('count', count + 1);
+        this._item.model.sendMessage({ id: createId(), text: 'Hello world!', sender: 'Sender', timestamp: Date.now() });
         break;
       }
       case 'get-all': {
-        await waitForCondition(() => !!this._item);
-        return { count: this._item.model.getProperty('count') };
+        return this._item.model.messages;
       }
       default:
         break;
