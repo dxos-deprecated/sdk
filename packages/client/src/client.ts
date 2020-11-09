@@ -16,6 +16,7 @@ import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
 export interface ClientConfig {
+  // TODO(burdon): "persistent" and "chrome" do not fit together.
   storageType?: 'ram' | 'persistent' | 'idb' | 'chrome' | 'firefox' | 'node',
   storagePath?: string,
   swarm?: {
@@ -73,6 +74,7 @@ export class Client {
       snapshots,
       snapshotInterval
     });
+
     this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
   }
 

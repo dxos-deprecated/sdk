@@ -14,6 +14,8 @@ export interface ClientInitializerProps {
   preInitialize?: (client: Client) => Promise<void> | void,
 }
 
+// TODO(burdon): Bad abstraction -- hides client construction. Replace with ErrorWrapper.
+// TODO(burdon): Document. E.g., "preInitialize?"
 export const ClientInitializer = ({ config, children, preInitialize }: ClientInitializerProps) => {
   const [client] = useState(() => new Client(config));
   const [clientReady, setClientReady] = useState(false);

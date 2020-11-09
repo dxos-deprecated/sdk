@@ -50,7 +50,7 @@ const PartyList = ({ parties = [], selected, onSelect }) => {
             classes={{
               secondary: classes.ellipsis
             }}
-            secondary={humanize(topic)}
+            secondary={humanize(topic)} // TODO(burdon): Humanize makes no sense in the UX.
           />
         </ListItem>
       ))}
