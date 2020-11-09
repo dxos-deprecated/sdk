@@ -15,6 +15,6 @@ export class Agent {
       throw new Error(error);
     }
 
-    return result.toString();
+    return JSON.parse(result.toString());
   }
 }
