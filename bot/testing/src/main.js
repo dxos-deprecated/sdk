@@ -11,8 +11,6 @@ import { MessengerModel } from '@dxos/messenger-model';
 export const ITEM_TYPE = 'dxos.org/type/testing/object';
 
 class TestAgent extends Bot {
-
-
   /** @type {Item<MessengerModel>} */
   _item;
 
@@ -20,19 +18,22 @@ class TestAgent extends Bot {
     super(config, options);
 
     this.on('party', partyKey => {
-      console.log('new party', keyToString(partyKey));
+      this._item = this._client.echo.getParty(partyKey).database.queryItems({ type: ITEM_TYPE }).value[0];
       this._client.echo.getParty(partyKey).database.queryItems({ type: ITEM_TYPE }).subscribe(items => {
-        console.log('got item');
         this._item = items[0];
       });
     });
+  }
+
+  async _preInit() {
+    this._client.registerModel(MessengerModel);
   }
 
   async botCommandHandler (command) {
     await waitForCondition(() => !!this._item);
     switch (command.type) {
       case 'append': {
-        this._item.model.sendMessage({ id: createId(), text: 'Hello world!', sender: 'Sender', timestamp: Date.now() });
+        await this._item.model.sendMessage({ id: createId(), text: 'Hello world!', sender: 'Sender', timestamp: new Date().toString() });
         break;
       }
       case 'get-all': {

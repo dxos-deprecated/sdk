@@ -25,7 +25,7 @@ const ORCHESTRATOR_NAME = 'Test';
 const FACTORY_START_TIMEOUT = 5 * 1000;
 
 export class Orchestrator {
-  async start () {
+  constructor() {
     this._client = new Client({
       storage: ram,
       // TODO(egorgripasov): Factor out (use main config).
@@ -34,6 +34,9 @@ export class Orchestrator {
         ice: JSON.parse(CONFIG.WIRE_ICE_ENDPOINTS)
       }
     });
+  }
+
+  async start () {
     await this._client.initialize();
 
     const { publicKey, secretKey } = createKeyPair();
@@ -49,6 +52,10 @@ export class Orchestrator {
     // This could be turned into the list as well;
     this._factory = await this._startBotFactory();
     this._factoryClient = new BotFactoryClient(this._client.networkManager, this._factory.topic);
+  }
+
+  get client() {
+    return this._client;
   }
 
   get party () {
@@ -96,7 +103,9 @@ export class Orchestrator {
             topic,
             process: factory
           });
-        }
+        } 
+
+        process.stderr.write(data);
       });
     });
 

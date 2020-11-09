@@ -6,11 +6,13 @@ jest.setTimeout(100 * 1000);
 test('bot test', async () => {
   const orchestrator = new Orchestrator();
 
+  orchestrator.client.registerModel(MessengerModel);
+
   await orchestrator.start();
 
-  await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object', props: { count: 0 } });
-
   const agent = await orchestrator.startAgent();
+
+  await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
 
   await agent.sendCommand({ type: 'append' });
   await agent.sendCommand({ type: 'append' });

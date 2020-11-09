@@ -68,6 +68,11 @@ export class Bot extends EventEmitter {
   }
 
   /**
+   * Called before `client.initialize()` useful to register custom models.
+   */
+  async _preInit() {}
+
+  /**
    * Start the bot.
    */
   async start () {
@@ -93,6 +98,7 @@ export class Bot extends EventEmitter {
       swarm: getClientConfig(this._config).swarm,
       keyring: this._keyRing
     });
+    await this._preInit();
     await this._client.initialize();
 
     if (!this._restarted || !this._persistent) {
