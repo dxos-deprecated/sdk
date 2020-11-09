@@ -25,7 +25,7 @@ const ORCHESTRATOR_NAME = 'Test';
 const FACTORY_START_TIMEOUT = 5 * 1000;
 
 export class Orchestrator {
-  constructor() {
+  constructor () {
     this._client = new Client({
       storage: ram,
       // TODO(egorgripasov): Factor out (use main config).
@@ -54,7 +54,7 @@ export class Orchestrator {
     this._factoryClient = new BotFactoryClient(this._client.networkManager, this._factory.topic);
   }
 
-  get client() {
+  get client () {
     return this._client;
   }
 
@@ -103,7 +103,7 @@ export class Orchestrator {
             topic,
             process: factory
           });
-        } 
+        }
 
         process.stderr.write(data);
       });

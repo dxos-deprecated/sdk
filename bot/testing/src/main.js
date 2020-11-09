@@ -4,8 +4,7 @@
 
 import { waitForCondition } from '@dxos/async';
 import { Bot, getConfig } from '@dxos/botkit';
-import { createId, keyToString } from '@dxos/crypto';
-import { Item } from '@dxos/echo-db';
+import { createId } from '@dxos/crypto';
 import { MessengerModel } from '@dxos/messenger-model';
 
 export const ITEM_TYPE = 'dxos.org/type/testing/object';
@@ -25,7 +24,7 @@ class TestAgent extends Bot {
     });
   }
 
-  async _preInit() {
+  async _preInit () {
     this._client.registerModel(MessengerModel);
   }
 

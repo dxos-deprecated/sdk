@@ -70,7 +70,7 @@ export class Bot extends EventEmitter {
   /**
    * Called before `client.initialize()` useful to register custom models.
    */
-  async _preInit() {}
+  async _preInit () {}
 
   /**
    * Start the bot.
