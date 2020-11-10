@@ -1532,15 +1532,15 @@
     pump "^3.0.0"
     source-map-support "^0.5.12"
 
-"@dxos/protocol-plugin-bot@^1.1.0-beta.18":
-  version "1.1.0-beta.18"
-  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.18.tgz#5bf141e9ff869594837af7c818fd93c873fc2f89"
-  integrity sha512-qOJYhWvam+EggHPb7m0zz5+MZdffjVd66PQ8JQL5nLC8xXVpOAabv5VDscT6t6f9j43qOnUXBXZFR9DecxWdmw==
+"@dxos/protocol-plugin-bot@beta":
+  version "1.1.0-beta.19"
+  resolved "https://registry.npmjs.org/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.19.tgz#e756cbaecbf5f5aae703c24be1bd21dd37ca224d"
+  integrity sha512-t0OpRTKAdbN2KBAPPhl4Sg0PKX5Nmswsy/sGr8J0otg9amIgj28QUNLA++VPtXy0I/9+qEQMRuOeBPHwapmBLw==
   dependencies:
     "@dxos/broadcast" "^1.0.0-beta.6"
     "@dxos/codec-protobuf" "^1.1.0-beta.7"
     "@dxos/crypto" "^1.0.0-beta.1"
-    "@dxos/protocol" "^1.1.0-beta.18"
+    "@dxos/protocol" "^1.1.0-beta.19"
     debug "^4.1.1"
     source-map-support "^0.5.12"
 
@@ -1559,6 +1559,24 @@
   version "1.1.0-beta.18"
   resolved "https://registry.yarnpkg.com/@dxos/protocol/-/protocol-1.1.0-beta.18.tgz#6b90cf448967996893c0f1858ed7cd474fd7686b"
   integrity sha512-UvAZOfzaWazjlzckTxKMVG5eLbFfKBBzfzrBgLgEX/LfYSUZSQb+IlkEvuN44dfuKo6MTT/RU6oRugagmY0ong==
+  dependencies:
+    "@dxos/codec-protobuf" "^1.1.0-beta.9"
+    assert "^2.0.0"
+    buffer-json-encoding "^1.0.2"
+    debug "^4.1.1"
+    end-of-stream "^1.4.1"
+    humanhash "^1.0.4"
+    hypercore-protocol "^6.11.1"
+    nanoerror "^1.2.1"
+    nanomessage "^5.4.0"
+    nanoresource-promise "^2.0.0"
+    signal-promise "^1.0.3"
+    source-map-support "^0.5.12"
+
+"@dxos/protocol@^1.1.0-beta.19":
+  version "1.1.0-beta.19"
+  resolved "https://registry.npmjs.org/@dxos/protocol/-/protocol-1.1.0-beta.19.tgz#6d25f989607b4c6d7292647b4b532ac80ae746d5"
+  integrity sha512-cB1DnDBIkNGCp/Q57Ms2kV9zyu5IPp6zP45zOqjdiTsKqPXlLPYork2QSVeqlqoy8/VMY0kCIQDCl6hagXGjyg==
   dependencies:
     "@dxos/codec-protobuf" "^1.1.0-beta.9"
     assert "^2.0.0"

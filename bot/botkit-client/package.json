@@ -23,7 +23,7 @@
     "@dxos/crypto": "^1.0.0-beta.10",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/network-manager": "^1.0.0-beta.108",
-    "@dxos/protocol-plugin-bot": "^1.1.0-beta.18",
+    "@dxos/protocol-plugin-bot": "beta",
     "assert": "^2.0.0",
     "debug": "^4.1.1",
     "hypercore-crypto": "^1.0.0"
