@@ -55,15 +55,17 @@ export class Client {
 
   constructor (config: ClientConfig = {}) {
     this._config = config;
+    // TODO(burdon): Make hierarchical (e.g., snapshot.[enabled, interval])
     const {
-      storageType = 'ram',
-      swarm = DEFAULT_SWARM_CONFIG,
-      storagePath = 'dxos/storage',
-      wns,
       snapshots = false,
-      snapshotInterval
+      snapshotInterval,
+      storageType = 'ram',
+      storagePath = 'dxos/storage',
+      swarm = DEFAULT_SWARM_CONFIG,
+      wns
     } = config;
 
+    // TODO(burdon): Extract constants.
     this._echo = new ECHO({
       feedStorage: createStorage(`${storagePath}/feeds`, storageType === 'persistent' ? undefined : storageType),
       keyStorage: storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`),
@@ -90,14 +92,14 @@ export class Client {
       return;
     }
 
-    const timeoutId = setTimeout(() => {
-      console.error('Client.initialize is taking more then 10 seconds to complete. Something probably went wrong.');
+    const timeout = setTimeout(() => {
+      console.error('Initialize is taking more then 10 seconds to complete. Something probably went wrong.');
     }, 10000);
 
     await this._echo.open();
 
     this._initialized = true;
-    clearInterval(timeoutId);
+    clearInterval(timeout);
   }
 
   /**
