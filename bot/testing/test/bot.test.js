@@ -1,5 +1,6 @@
-import { Orchestrator } from '../src/orchestrator';
 import { MessengerModel } from '@dxos/messenger-model';
+
+import { Orchestrator } from '../src/orchestrator';
 
 jest.setTimeout(100 * 1000);
 
@@ -10,7 +11,8 @@ test('bot test', async () => {
 
   await orchestrator.start();
 
-  const agent = await orchestrator.startAgent();
+  // Path related to cwd.
+  const agent = await orchestrator.startAgent('./test/test-agent.js');
 
   await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
 

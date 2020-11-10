@@ -54,12 +54,14 @@ export class SourceManager {
    * @param {object} options
    */
   async getBotPathInfo (id, ipfsCID, env, options) {
+    const { botPath } = options;
+
     // Local bot development mode, bypasses WNS/IPFS.
     if (this._localDev) {
       return {
         installDirectory: process.cwd(),
-        file: LOCAL_BOT_MAIN_FILE
-      };
+        file: botPath ? botPath : LOCAL_BOT_MAIN_FILE
+      }
     }
 
     const installDirectory = path.join(process.cwd(), BOT_PACKAGE_DOWNLOAD_DIR, id);

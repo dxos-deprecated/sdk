@@ -62,8 +62,11 @@ export class Orchestrator {
     return this._party;
   }
 
-  async startAgent () {
-    const botId = await this._spawnBot();
+  /**
+   * @param {string} botPath - Path from package cwd.
+   */
+  async startAgent (botPath) {
+    const botId = await this._spawnBot({ botPath });
     await this._inviteBot(botId);
 
     return new Agent(this._factoryClient, botId);
@@ -112,14 +115,15 @@ export class Orchestrator {
     return promiseTimeout(result, FACTORY_START_TIMEOUT);
   }
 
-  async _spawnBot () {
+  async _spawnBot (options) {
     const botId = await this._factoryClient.sendSpawnRequest(undefined, {
       // TODO(egorgripasov): Required for test / bot source code distribution.
       // env,
       // ipfsCID,
       // ipfsEndpoint,
       id: AGENT_BOT_NAME,
-      name: AGENT_BOT_NAME
+      name: AGENT_BOT_NAME,
+      ...options
     });
 
     log(`Test Bot ${botId} spawned.`);
