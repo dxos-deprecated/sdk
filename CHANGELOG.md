@@ -1,5 +1,14 @@
 # Changelog
 
+### [2.7.5](https://www.github.com/dxos/sdk/compare/v2.7.4...v2.7.5) (2020-11-10)
+
+
+### Bug Fixes
+
+* Bring back bot invites ([#310](https://www.github.com/dxos/sdk/issues/310)) ([b3e54df](https://www.github.com/dxos/sdk/commit/b3e54df6847f3f0d0de126d305316697fcc64bcd))
+* Update echo ([d2615a5](https://www.github.com/dxos/sdk/commit/d2615a55a8450bfd25bd9f47ffd9e8e5715c382f))
+* Update to new echo api ([#301](https://www.github.com/dxos/sdk/issues/301)) ([7303b81](https://www.github.com/dxos/sdk/commit/7303b8172bee1e6d2d90193c767417e815a47f48))
+
 ### [2.7.4](https://www.github.com/dxos/sdk/compare/v2.7.3...v2.7.4) (2020-11-04)
 
 
