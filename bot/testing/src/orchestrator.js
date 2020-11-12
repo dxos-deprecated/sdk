@@ -35,8 +35,8 @@ const getBotIdentifiers = botPath => {
   return {
     id,
     name
-  }
-}
+  };
+};
 
 export class Orchestrator {
   _builds = new Map();
@@ -89,7 +89,7 @@ export class Orchestrator {
       options = {
         ...rest,
         botPath
-      }
+      };
     } else {
       // TODO(egorgripasov): Browser support.
       let ipfsCID = this._builds.get(botPath);
@@ -99,10 +99,10 @@ export class Orchestrator {
       }
       options = {
         ...rest,
-        env: NODE_ENV,
+        env,
         ipfsCID,
         ipfsEndpoint: CONFIG.WIRE_IPFS_GATEWAY
-      }
+      };
     }
 
     const botId = await this._spawnBot(botPath, options);

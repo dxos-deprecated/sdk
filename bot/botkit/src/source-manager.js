@@ -60,8 +60,8 @@ export class SourceManager {
     if (this._localDev) {
       return {
         installDirectory: process.cwd(),
-        file: botPath ? botPath : LOCAL_BOT_MAIN_FILE
-      }
+        file: botPath || LOCAL_BOT_MAIN_FILE
+      };
     }
 
     const installDirectory = path.join(process.cwd(), BOT_PACKAGE_DOWNLOAD_DIR, id);
