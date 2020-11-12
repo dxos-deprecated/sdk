@@ -5,16 +5,16 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { IconButton, Toolbar, TextField } from '@material-ui/core';
-import { XGrid, LicenseInfo } from '@material-ui/x-grid';
+import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import AddColumnIcon from '@material-ui/icons/PlaylistAdd';
-import { makeStyles } from '@material-ui/core/styles';
+import { XGrid, LicenseInfo } from '@material-ui/x-grid';
 
 import { createTestInstance } from '@dxos/echo-db';
 import { ObjectModel } from '@dxos/object-model';
 
 LicenseInfo.setLicenseKey(
-  '8e409f224dbe0bc80df0fa59e719666fT1JERVI6MTg0NDIsRVhQSVJZPTE2MzU4NjkyOTYwMDAsS0VZVkVSU0lPTj0x',
+  '8e409f224dbe0bc80df0fa59e719666fT1JERVI6MTg0NDIsRVhQSVJZPTE2MzU4NjkyOTYwMDAsS0VZVkVSU0lPTj0x'
 );
 
 export default {
@@ -63,7 +63,7 @@ const useColumns = ({ active = {} } = {}, handleCancel) => {
       field: 'firstName',
       headerName: 'First name',
       width: 130,
-      renderCell: textRenderer(active, 'firstName', handleCancel),
+      renderCell: textRenderer(active, 'firstName', handleCancel)
       // TODO(burdon): Menu button.
       // renderHeader: ({ colDef: { headerName } }) => {
       //   return (
@@ -109,7 +109,7 @@ const data = [
   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 }
 ];
 
 const useStyles = makeStyles(() => ({
@@ -192,7 +192,7 @@ const Test = () => {
   const columns = useColumns({ active }, () => setActive(undefined));
 
   // TODO(burdon): Use ECHO to get data.
-  const [rows, setRows] = useState(data);
+  const [rows] = useState(data);
   const items = withItems('wrn://dxos.org/item/record');
   const mutator = withItemMutator();
 
@@ -200,7 +200,7 @@ const Test = () => {
   console.log('Items:', JSON.stringify({ items: items.map(item => item.model.getProperty('title')) }));
 
   const handleAddRow = async () => {
-    const item = await mutator.createItem('wrn://dxos.org/item/record', { title: 'Test' });
+    await mutator.createItem('wrn://dxos.org/item/record', { title: 'Test' });
     // rows.push({ id: rows.length + 1 });
     // setRows(JSON.parse(JSON.stringify(rows)));
   };

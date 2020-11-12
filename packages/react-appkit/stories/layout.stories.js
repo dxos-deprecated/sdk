@@ -2,8 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 
 import MuiAppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
