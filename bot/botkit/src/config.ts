@@ -14,8 +14,6 @@ export const BOT_CONFIG_FILENAME = 'bot.yml';
 
 /**
  * Get config from default or specified .yml file.
- * @param {string} configFilePath
- * @param {Object} argvConf
  */
 export const getConfig = () => {
   const keyPair = createKeyPair();
@@ -35,7 +33,7 @@ export const getConfig = () => {
   return config;
 };
 
-export const getClientConfig = (config) => {
+export const getClientConfig = (config: any) => {
   const { client = {}, services: { signal: { server }, ice } } = config.values;
   const clientConf = {
     swarm: {
