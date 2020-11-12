@@ -2,21 +2,18 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import getDisplayName from 'react-display-name';
 
 import { useClient } from './client';
 
 export const useProfile = () => {
   const client = useClient();
-  const [profile] = useState(client.getProfile());
+  const [profile, setProfile] = useState(client.getProfile());
 
-  // TODO: FIX THIS
-  // useEffect(() => onEvent(
-  //   client.partyManager.identityManager,
-  //   'update',
-  //   () => setProfile(client.getProfile())
-  // ), [client]);
+  useEffect(() =>
+    client.subscribeToProfile(() => setProfile(client.getProfile())),
+  [client]);
 
   return profile;
 };

@@ -141,6 +141,10 @@ export class Client {
     };
   }
 
+  subscribeToProfile (cb: () => void): () => void {
+    return this._echo.identityReady.on(cb);
+  }
+
   /**
    * @returns true if the profile exists.
    */
