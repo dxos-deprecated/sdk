@@ -48,6 +48,7 @@
   "devDependencies": {
     "@dxos/eslint-plugin": "^1.0.8",
     "@types/chance": "^1.1.0",
+    "@types/download": "^6.2.4",
     "@types/fs-extra": "^9.0.4",
     "@types/js-yaml": "^3.12.5",
     "@types/lodash.get": "^4.4.6",

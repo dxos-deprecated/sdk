@@ -22,7 +22,7 @@ export const SPAWNED_BOTS_DIR = '.bots';
 export class BotContainer extends EventEmitter {
 
   private readonly _config: any;
-  private readonly _sourceManager: any /* SourceManager */;
+  private readonly _sourceManager: SourceManager;
 
   private _controlTopic?: any;
 

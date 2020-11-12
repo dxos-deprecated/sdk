@@ -3981,6 +3981,22 @@
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
   integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
 
+"@types/decompress@*":
+  version "4.2.3"
+  resolved "https://registry.npmjs.org/@types/decompress/-/decompress-4.2.3.tgz#98eed48af80001038aa05690b2094915f296fe65"
+  integrity sha512-W24e3Ycz1UZPgr1ZEDHlK4XnvOr+CpJH3qNsFeqXwwlW/9END9gxn3oJSsp7gYdiQxrXUHwUUd3xuzVz37MrZQ==
+  dependencies:
+    "@types/node" "*"
+
+"@types/download@^6.2.4":
+  version "6.2.4"
+  resolved "https://registry.npmjs.org/@types/download/-/download-6.2.4.tgz#d9fb74defe20d75f59a38a9b5b0eb5037d37161a"
+  integrity sha512-Lo5dy3ai6LNnbL663sgdzqL1eib11u1yKH6w3v3IXEOO4kRfQpMn1qWUTaumcHLACjFp1RcBx9tUXEvJoR3vcA==
+  dependencies:
+    "@types/decompress" "*"
+    "@types/got" "^8"
+    "@types/node" "*"
+
 "@types/end-of-stream@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@types/end-of-stream/-/end-of-stream-1.4.0.tgz#4e73ac87d15b6cc89cdaf2d26a59f617c778cb07"
@@ -4011,6 +4027,13 @@
   integrity sha512-SEYeGAIQIQX8NN6LDKprLjbrd5dARM5EXsd8GI/A5l0apYI1fGMWgPHSe4ZKL4eozlAyI+doUE9XbYS4xCkQ1w==
   dependencies:
     "@types/minimatch" "*"
+    "@types/node" "*"
+
+"@types/got@^8":
+  version "8.3.5"
+  resolved "https://registry.npmjs.org/@types/got/-/got-8.3.5.tgz#d8a0e8fa7598681b332a4d27779b022b2e55fb7f"
+  integrity sha512-AaXSrIF99SjjtPVNmCmYb388HML+PKEJb/xmj4SbL2ZO0hHuETZZzyDIKfOqaEoAHZEuX4sC+FRFrHYJoIby6A==
+  dependencies:
     "@types/node" "*"
 
 "@types/graceful-fs@^4.1.2":
