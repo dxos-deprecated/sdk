@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.6](https://www.github.com/dxos/sdk/compare/v2.7.5...v2.7.6) (2020-11-12)
+
+
+### Bug Fixes
+
+* Make profile reactive ([#311](https://www.github.com/dxos/sdk/issues/311)) ([343f0fc](https://www.github.com/dxos/sdk/commit/343f0fc3944244801a3c7fc997dcacddfaf53d14))
+
 ### [2.7.5](https://www.github.com/dxos/sdk/compare/v2.7.4...v2.7.5) (2020-11-10)
 
 
