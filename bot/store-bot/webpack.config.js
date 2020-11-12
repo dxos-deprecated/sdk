@@ -9,9 +9,9 @@ const webpack = require('webpack');
 // @ts-ignore
 const packageJSON = require('./package.json');
 
-const excludeDependencies = ['node_modules\/(?!(simple-websocket)\/).*'].concat(
+const excludeDependencies = ['../../node_modules\/(?!(simple-websocket)\/).*'].concat(
   Object.keys(packageJSON.dependencies)
-    .filter(d => d.includes('@wirelineio') || d.includes('@dxos'))
+    .filter(d => d.includes('@dxos'))
     .map(d => d + '/')
 );
 

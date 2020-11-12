@@ -11,21 +11,38 @@ import kill from 'tree-kill';
 import { promiseTimeout } from '@dxos/async';
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { Client } from '@dxos/client';
-import { SIGNATURE_LENGTH, keyToBuffer, createKeyPair, keyToString, verify } from '@dxos/crypto';
+import { SIGNATURE_LENGTH, keyToBuffer, createKeyPair, keyToString, verify, sha256 } from '@dxos/crypto';
 
 import { Agent } from './agent';
 import { CONFIG } from './config';
+import { buildAndPublishBot } from './distributor';
 
 const log = debug('dxos:testing');
-
-const AGENT_BOT_NAME = 'wrn://dxos/bot/test-agent';
 
 const ORCHESTRATOR_NAME = 'Test';
 
 const FACTORY_START_TIMEOUT = 5 * 1000;
 
+export const NODE_ENV = 'node';
+export const BROWSER_ENV = 'browser';
+
+// Get Id information of bot.
+// Important: this regulates how often bot gets downloaded from ipfs.
+const testTime = Date.now();
+const getBotIdentifiers = botPath => {
+  const name = `wrn://dxos/bot/${path.basename(botPath)}`;
+  const id = sha256(`${name}${testTime}`);
+  return {
+    id,
+    name
+  }
+}
+
 export class Orchestrator {
-  constructor () {
+  _builds = new Map();
+
+  constructor (options) {
+    const { local = true } = options;
     this._client = new Client({
       storage: ram,
       // TODO(egorgripasov): Factor out (use main config).
@@ -34,6 +51,7 @@ export class Orchestrator {
         ice: JSON.parse(CONFIG.WIRE_ICE_ENDPOINTS)
       }
     });
+    this._localRun = local;
   }
 
   async start () {
@@ -63,10 +81,31 @@ export class Orchestrator {
   }
 
   /**
-   * @param {string} botPath - Path from package cwd.
+   * @param {{ botPath, env }} command.
    */
-  async startAgent (botPath) {
-    const botId = await this._spawnBot({ botPath });
+  async startAgent (options) {
+    const { env = NODE_ENV, botPath, ...rest } = options;
+    if (this._localRun) {
+      options = {
+        ...rest,
+        botPath
+      }
+    } else {
+      // TODO(egorgripasov): Browser support.
+      let ipfsCID = this._builds.get(botPath);
+      if (!ipfsCID) {
+        ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath);
+        this._builds.set(botPath, ipfsCID);
+      }
+      options = {
+        ...rest,
+        env: NODE_ENV,
+        ipfsCID,
+        ipfsEndpoint: CONFIG.WIRE_IPFS_GATEWAY
+      }
+    }
+
+    const botId = await this._spawnBot(botPath, options);
     await this._inviteBot(botId);
 
     return new Agent(this._factoryClient, botId);
@@ -93,7 +132,7 @@ export class Orchestrator {
         WIRE_BOT_RESET: true,
         WIRE_BOT_TOPIC: topic,
         WIRE_BOT_SECRET_KEY: keyToString(secretKey),
-        WIRE_BOT_LOCAL_DEV: true
+        WIRE_BOT_LOCAL_DEV: this._localRun
       };
 
       const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
@@ -115,14 +154,9 @@ export class Orchestrator {
     return promiseTimeout(result, FACTORY_START_TIMEOUT);
   }
 
-  async _spawnBot (options) {
+  async _spawnBot (botPath, options) {
     const botId = await this._factoryClient.sendSpawnRequest(undefined, {
-      // TODO(egorgripasov): Required for test / bot source code distribution.
-      // env,
-      // ipfsCID,
-      // ipfsEndpoint,
-      id: AGENT_BOT_NAME,
-      name: AGENT_BOT_NAME,
+      ...getBotIdentifiers(botPath),
       ...options
     });
 

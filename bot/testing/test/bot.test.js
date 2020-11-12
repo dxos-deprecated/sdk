@@ -1,18 +1,17 @@
 import { MessengerModel } from '@dxos/messenger-model';
 
-import { Orchestrator } from '../src/orchestrator';
+import { NODE_ENV, Orchestrator } from '../src/orchestrator';
 
 jest.setTimeout(100 * 1000);
 
-test('bot test', async () => {
-  const orchestrator = new Orchestrator();
+test.skip('bot test - local source', async () => {
+  const orchestrator = new Orchestrator({ local: true });
 
   orchestrator.client.registerModel(MessengerModel);
 
   await orchestrator.start();
 
-  // Path related to cwd.
-  const agent = await orchestrator.startAgent('./test/test-agent.js');
+  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.js' });
 
   await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
 
@@ -24,6 +23,18 @@ test('bot test', async () => {
   expect(messages).toHaveLength(2);
 
   console.log(messages);
+
+  await orchestrator.destroy();
+});
+
+test.skip('bot test - remote source', async () => {
+  const orchestrator = new Orchestrator({ local: false });
+
+  orchestrator.client.registerModel(MessengerModel);
+
+  await orchestrator.start();
+
+  await orchestrator.startAgent({ botPath: './src/test-agent.js', env: NODE_ENV });
 
   await orchestrator.destroy();
 });
