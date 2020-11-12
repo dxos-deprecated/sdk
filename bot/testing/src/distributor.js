@@ -67,7 +67,7 @@ const getWebpackConfig = botPath => {
               // TODO(egorgripasov): Webpack does not see babel conf.
               ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc')))
             }
-          } 
+          }
         }
       ]
     }
