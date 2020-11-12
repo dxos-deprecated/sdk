@@ -26,6 +26,7 @@ import { Registry } from '@wirelineio/registry-client';
 import { BOT_CONFIG_FILENAME } from './config';
 import { NATIVE_ENV, getBotCID } from './env';
 import { log } from './log';
+import { BotContainer } from './bot-container';
 
 const chance = new Chance();
 
@@ -51,7 +52,7 @@ export class BotManager {
   private readonly _connectedBots: Record<string, boolean> = {};
 
   private readonly _config: any;
-  private readonly _botContainer: any;
+  private readonly _botContainer: BotContainer;
   private readonly _client: any;
   private readonly _signChallenge: (message: any) => any;
   private readonly _emitBotEvent: (event: any) => Promise<void>;
@@ -65,7 +66,7 @@ export class BotManager {
   private _plugin?: any;
   private _leaveControlSwarm?: () => void;
 
-  constructor (config: any, botContainer: any, client: any, options: any) {
+  constructor (config: any, botContainer: BotContainer, client: any, options: any) {
     this._config = config;
     this._botContainer = botContainer;
     this._client = client;

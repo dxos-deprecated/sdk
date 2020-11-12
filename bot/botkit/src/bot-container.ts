@@ -3,7 +3,7 @@
 //
 
 import assert from 'assert';
-import { spawn } from 'child_process';
+import { spawn, SpawnOptions } from 'child_process';
 import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import moment from 'moment';
@@ -20,18 +20,20 @@ import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
 export const SPAWNED_BOTS_DIR = '.bots';
 
 export class BotContainer extends EventEmitter {
-  /**
-   * @constructor
-   * @param {object} config
-   */
-  constructor (config) {
+
+  private readonly _config: any;
+  private readonly _sourceManager: any /* SourceManager */;
+
+  private _controlTopic?: any;
+
+  constructor (config: any) {
     super();
 
     this._config = config;
     this._sourceManager = new SourceManager(config);
   }
 
-  async start (options) {
+  async start (options: any) {
     const { controlTopic } = options;
     this._controlTopic = controlTopic;
   }
@@ -40,7 +42,7 @@ export class BotContainer extends EventEmitter {
 
   }
 
-  async getBotAttributes (botName, botId, uniqId, ipfsCID, env, options) {
+  async getBotAttributes (botName: string, botId: string, uniqId: any, ipfsCID: any, env: any, options: any) {
     const botPathInfo = await this._sourceManager.getBotPathInfo(uniqId, ipfsCID, env, options);
     assert(botPathInfo, `Invalid bot: ${botName || ipfsCID}`);
 
@@ -53,10 +55,8 @@ export class BotContainer extends EventEmitter {
 
   /**
    * Start bot instance.
-   * @param {String} botId
-   * @param {Object} options
    */
-  async startBot (botId, botInfo, options = {}) {
+  async startBot (botId: string, botInfo: any, options: any = {}) {
     const { name, env, childDir, command, args } = botInfo || options;
 
     const wireEnv = {
@@ -64,12 +64,12 @@ export class BotContainer extends EventEmitter {
       WIRE_BOT_UID: botId,
       WIRE_BOT_NAME: name,
       WIRE_BOT_CWD: childDir,
-      WIRE_BOT_RESTARTED: !!botInfo
+      WIRE_BOT_RESTARTED: (!!botInfo).toString()
     };
 
     const nodePath = (env !== NATIVE_ENV) ? this._config.get('cli.nodePath') : undefined;
 
-    const childOptions = {
+    const childOptions: SpawnOptions = {
       env: {
         ...process.env,
         NODE_OPTIONS: '',
@@ -122,11 +122,11 @@ export class BotContainer extends EventEmitter {
 
     log(`Spawned bot: ${JSON.stringify({ pid: botProcess.pid, command, args, wireEnv, cwd: childDir })}`);
 
-    botProcess.stdout.on('data', (data) => {
+    botProcess.stdout!.on('data', (data) => {
       logBot[botProcess.pid](`${data}`);
     });
 
-    botProcess.stderr.on('data', (data) => {
+    botProcess.stderr!.on('data', (data) => {
       logBot[botProcess.pid](`${data}`);
     });
 
@@ -142,7 +142,7 @@ export class BotContainer extends EventEmitter {
     return botInfo;
   }
 
-  async stopBot (botInfo) {
+  async stopBot (botInfo: any) {
     const { process, watcher } = botInfo;
 
     if (process && process.pid) {
@@ -153,7 +153,7 @@ export class BotContainer extends EventEmitter {
     }
   }
 
-  async killBot (botInfo) {
+  async killBot (botInfo: any) {
     await this.stopBot(botInfo);
 
     const { childDir } = botInfo;
@@ -166,7 +166,7 @@ export class BotContainer extends EventEmitter {
     await removeSourceFiles();
   }
 
-  serializeBot ({ id, botId, type, childDir, parties, command, args, stopped, name, env }) {
+  serializeBot ({ id, botId, type, childDir, parties, command, args, stopped, name, env }: any) {
     return {
       id,
       botId,
