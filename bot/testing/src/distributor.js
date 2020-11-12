@@ -57,7 +57,7 @@ const getWebpackConfig = botPath => {
       rules: [
         {
           test: /\.js$/,
-          exclude: new RegExp(`(${excludeDependencies.join('|')})`), // Don't transpile deps.
+          exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
             options: {
@@ -66,13 +66,24 @@ const getWebpackConfig = botPath => {
               ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc')))
             }
           }
+        },
+        {
+          test: /simple-websocket\/.*\.js$/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: './dist/babel-cache/',
+              // TODO(egorgripasov): Webpack does not see babel conf.
+              ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc')))
+            }
+          } 
         }
       ]
     }
   };
 };
 
-const buildBot = async (botPath) => {
+export const buildBot = async (botPath) => {
   const webpackConf = getWebpackConfig(botPath);
 
   return new Promise((resolve, reject) => {
