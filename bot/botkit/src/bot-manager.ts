@@ -10,6 +10,7 @@ import yaml from 'js-yaml';
 import get from 'lodash.get';
 import path from 'path';
 
+import { Client } from '@dxos/client';
 import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
 import { transportProtocolProvider } from '@dxos/network-manager';
 import {
@@ -23,10 +24,10 @@ import {
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
 
+import { BotContainer } from './bot-container';
 import { BOT_CONFIG_FILENAME } from './config';
 import { NATIVE_ENV, getBotCID } from './env';
 import { log } from './log';
-import { BotContainer } from './bot-container';
 
 const chance = new Chance();
 
@@ -35,7 +36,7 @@ const logInfo = debug('dxos:botkit');
 // File where information about running bots is stored.
 export const BOTS_DUMP_FILE = 'out/factory-state';
 
-interface BotEntry {
+export interface BotInfo {
   botId: string
   id: string
   parties: any[]
@@ -43,17 +44,29 @@ interface BotEntry {
   lastActive: any
   stopped: boolean
   name: string
+  type?: any
+  childDir: string
+  command: string
+  args: string[]
+  env: string
+  process: any
+  watcher: any
+}
+
+interface Options {
+  signChallenge: (message: any) => any
+  emitBotEvent: (event: any) => Promise<void>
 }
 
 export class BotManager {
-  private readonly _bots = new Map<string, BotEntry>();
+  private readonly _bots = new Map<string, BotInfo>();
 
   // TODO(egorgripasov): Merge to _bots.
   private readonly _connectedBots: Record<string, boolean> = {};
 
   private readonly _config: any;
   private readonly _botContainer: BotContainer;
-  private readonly _client: any;
+  private readonly _client: Client;
   private readonly _signChallenge: (message: any) => any;
   private readonly _emitBotEvent: (event: any) => Promise<void>;
   private readonly _localDev: boolean;
@@ -66,7 +79,7 @@ export class BotManager {
   private _plugin?: any;
   private _leaveControlSwarm?: () => void;
 
-  constructor (config: any, botContainer: BotContainer, client: any, options: any) {
+  constructor (config: any, botContainer: BotContainer, client: Client, options: Options) {
     this._config = config;
     this._botContainer = botContainer;
     this._client = client;
@@ -102,7 +115,7 @@ export class BotManager {
     this._plugin = new BotPlugin(this._controlPeerKey, (protocol: any, message: any) => this._botMessageHandler(protocol, message));
     // Join control swarm.
     this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
-      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin));
+      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
 
     await this._readBotsFromFile();
 
@@ -338,7 +351,7 @@ export class BotManager {
       let name;
       try {
         const botInfo = yaml.load(
-          await fs.readFile(path.join(process.cwd(), BOT_CONFIG_FILENAME)) as any, // TODO(marik-d): Specify file encoding.
+          await fs.readFile(path.join(process.cwd(), BOT_CONFIG_FILENAME)) as any // TODO(marik-d): Specify file encoding.
         );
         name = botInfo.name;
       } catch (err) {

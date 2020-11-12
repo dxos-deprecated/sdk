@@ -4,12 +4,11 @@
 
 import debug from 'debug';
 import { EventEmitter } from 'events';
-import path from 'path';
 
 import { promiseTimeout } from '@dxos/async';
 import { Client } from '@dxos/client';
 import { randomBytes, keyToBuffer, keyToString, createKeyPair } from '@dxos/crypto';
-import { InvitationDescriptor } from '@dxos/echo-db';
+import { InvitationDescriptor, Party } from '@dxos/echo-db';
 import { transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_BOT_INVITE,
@@ -20,7 +19,6 @@ import {
   createBotCommandResponse,
   createEvent
 } from '@dxos/protocol-plugin-bot';
-import { Party } from '@dxos/echo-db';
 
 import { getClientConfig } from './config';
 
@@ -35,7 +33,7 @@ export const BOT_STORAGE = '/data';
  */
 export class Bot extends EventEmitter {
   private readonly _parties = new Set();
-  
+
   private readonly _uid: string;
   private readonly _persistent: boolean;
   private readonly _restarted: boolean;
@@ -48,7 +46,7 @@ export class Bot extends EventEmitter {
   private readonly _options: any;
   private readonly _config: any;
 
-  private _plugin?: any /*BotPlugin */;
+  private _plugin?: any /* BotPlugin */;
   private _client?: Client;
 
   private _leaveControlSwarm?: () => void;
@@ -88,7 +86,7 @@ export class Bot extends EventEmitter {
       // TODO(marik-d): ReferenceError: indexedDB is not defined.
       // storagePath: this._persistent ? path.join(this._cwd, BOT_STORAGE) : undefined,
       // storageType: this._persistent ? 'node' : 'ram',
-      swarm: getClientConfig(this._config).swarm,
+      swarm: getClientConfig(this._config).swarm
     });
     await this._preInit();
     await this._client.initialize();
@@ -117,6 +115,7 @@ export class Bot extends EventEmitter {
     await this._leaveControlSwarm?.();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async botCommandHandler (command: any): Promise<any | void> {
 
   }

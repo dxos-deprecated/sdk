@@ -13,6 +13,7 @@ import kill from 'tree-kill';
 
 import { keyToString } from '@dxos/crypto';
 
+import { BotInfo } from './bot-manager';
 import { log, logBot } from './log';
 import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
 
@@ -20,7 +21,6 @@ import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
 export const SPAWNED_BOTS_DIR = '.bots';
 
 export class BotContainer extends EventEmitter {
-
   private readonly _config: any;
   private readonly _sourceManager: SourceManager;
 
@@ -42,7 +42,7 @@ export class BotContainer extends EventEmitter {
 
   }
 
-  async getBotAttributes (botName: string, botId: string, uniqId: any, ipfsCID: any, env: any, options: any) {
+  async getBotAttributes (botName: string, botId: string, uniqId: string, ipfsCID: string, env: string, options: any) {
     const botPathInfo = await this._sourceManager.getBotPathInfo(uniqId, ipfsCID, env, options);
     assert(botPathInfo, `Invalid bot: ${botName || ipfsCID}`);
 
@@ -56,7 +56,7 @@ export class BotContainer extends EventEmitter {
   /**
    * Start bot instance.
    */
-  async startBot (botId: string, botInfo: any, options: any = {}) {
+  async startBot (botId: string, botInfo: BotInfo | undefined, options: any = {}) {
     const { name, env, childDir, command, args } = botInfo || options;
 
     const wireEnv = {
@@ -142,7 +142,7 @@ export class BotContainer extends EventEmitter {
     return botInfo;
   }
 
-  async stopBot (botInfo: any) {
+  async stopBot (botInfo: BotInfo) {
     const { process, watcher } = botInfo;
 
     if (process && process.pid) {
@@ -153,7 +153,7 @@ export class BotContainer extends EventEmitter {
     }
   }
 
-  async killBot (botInfo: any) {
+  async killBot (botInfo: BotInfo) {
     await this.stopBot(botInfo);
 
     const { childDir } = botInfo;
@@ -166,7 +166,7 @@ export class BotContainer extends EventEmitter {
     await removeSourceFiles();
   }
 
-  serializeBot ({ id, botId, type, childDir, parties, command, args, stopped, name, env }: any) {
+  serializeBot ({ id, botId, type, childDir, parties, command, args, stopped, name, env }: BotInfo) {
     return {
       id,
       botId,

@@ -25,11 +25,11 @@ import {
   createEvent
 } from '@dxos/protocol-plugin-bot';
 
+import { BotContainer } from './bot-container';
 import { BotManager } from './bot-manager';
 import { getClientConfig } from './config';
 import { getPlatformInfo } from './env';
 import { log } from './log';
-import { BotContainer } from './bot-container';
 
 // TODO(egorgripasov): Proper version from corresponding .yml file.
 const { version } = readPackageJson() as any;
@@ -41,7 +41,6 @@ const BOT_SPAWN_CHECK_INTERVAL = 50;
  * Bot factory.
  */
 export class BotFactory {
-
   private readonly _config: any;
   private readonly _topic: Buffer;
   private readonly _peerKey: Buffer;
