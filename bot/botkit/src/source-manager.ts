@@ -39,7 +39,10 @@ export const removeSourceFiles = async () => {
 };
 
 export class SourceManager {
-  constructor (config) {
+  private readonly _config: any;
+  private readonly _localDev: any;
+
+  constructor (config: any) {
     this._config = config;
 
     this._localDev = this._config.get('bot.localDev');
@@ -48,12 +51,8 @@ export class SourceManager {
   /**
    * Get the install directory and executable file paths for the bot.
    * Downloads the bot to the expected path/directory if required.
-   * @param {string} id
-   * @param {string} ipfsCID
-   * @param {string} env
-   * @param {object} options
    */
-  async getBotPathInfo (id, ipfsCID, env, options) {
+  async getBotPathInfo (id: string, ipfsCID: string, env: string, options: any) {
     const { botPath } = options;
 
     // Local bot development mode, bypasses WNS/IPFS.
@@ -92,11 +91,8 @@ export class SourceManager {
 
   /**
    * Download the bot package from IPFS.
-   * @param {string} baseDirectory
-   * @param {string} ipfsCID
-   * @param {object} options
    */
-  async _downloadBot (baseDirectory, ipfsCID, { ipfsEndpoint }) {
+  async _downloadBot (baseDirectory: string, ipfsCID: string, { ipfsEndpoint }: any) {
     assert(baseDirectory);
     assert(ipfsCID);
 
@@ -123,14 +119,12 @@ export class SourceManager {
 
   /**
    * Get process command (to spawn).
-   * @param {object} botPathInfo
-   * @param {string} env
    */
-  getCommand (botPathInfo, env) {
+  getCommand (botPathInfo: any, env: string) {
     const { file } = botPathInfo;
 
     let command;
-    let args = [];
+    let args: string[] = [];
 
     if (this._localDev) {
       command = LOCAL_BOT_RUN_COMMAND;
