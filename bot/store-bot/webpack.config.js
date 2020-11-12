@@ -6,15 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 
-// @ts-ignore
-const packageJSON = require('./package.json');
-
-const excludeDependencies = ['../../node_modules\/(?!(simple-websocket)\/).*'].concat(
-  Object.keys(packageJSON.dependencies)
-    .filter(d => d.includes('@dxos'))
-    .map(d => d + '/')
-);
-
 module.exports = {
   target: 'node',
 
@@ -52,7 +43,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: new RegExp(`(${excludeDependencies.join('|')})`), // Don't transpile deps.
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -61,6 +52,17 @@ module.exports = {
             ...JSON.parse(fs.readFileSync(path.resolve(__dirname, './.babelrc'))),
           }
         }
+      },
+      {
+        test: /simple-websocket\/.*\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: './dist/babel-cache/',
+            // TODO(egorgripasov): Webpack does not see babel conf.
+            ...JSON.parse(fs.readFileSync(path.resolve(__dirname, './.babelrc')))
+          }
+        } 
       }
     ]
   }
