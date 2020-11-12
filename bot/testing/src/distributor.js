@@ -5,19 +5,10 @@
 import fs from 'fs-extra';
 import path from 'path';
 import webpack from 'webpack';
-import { sync as readPackageJson } from 'read-pkg-up';
 import tar from 'tar';
 import fetch from 'node-fetch';
 
 const BUILD_PATH = './out/builds/node';
-
-const { packageJson: { dependencies } } = readPackageJson();
-
-const excludeDependencies = ['../../node_modules/(?!(simple-websocket)/).*'].concat(
-  Object.keys(dependencies)
-    .filter(d => d.includes('@dxos'))
-    .map(d => d + '/')
-);
 
 const getWebpackConfig = botPath => {
   return {
