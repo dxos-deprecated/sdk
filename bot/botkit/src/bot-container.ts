@@ -15,10 +15,16 @@ import { keyToString } from '@dxos/crypto';
 
 import { BotInfo } from './bot-manager';
 import { log, logBot } from './log';
-import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
+import { NATIVE_ENV, NODE_ENV, SourceManager, removeSourceFiles } from './source-manager';
 
 // Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
 export const SPAWNED_BOTS_DIR = '.bots';
+
+// Command to spawn to run a bot in local development mode.
+export const LOCAL_BOT_RUN_COMMAND = 'yarn';
+
+// Fixed arguments to pass to LOCAL_BOT_RUN_COMMAND.
+export const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
 
 /**
  * Bot Container; Used for running bot instanced inside specific compute service.
@@ -26,6 +32,7 @@ export const SPAWNED_BOTS_DIR = '.bots';
 export class BotContainer extends EventEmitter {
   private readonly _config: any;
   private readonly _sourceManager: SourceManager;
+  private readonly _localDev: boolean;
 
   private _controlTopic?: any;
 
@@ -33,6 +40,7 @@ export class BotContainer extends EventEmitter {
     super();
 
     this._config = config;
+    this._localDev = this._config.get('bot.localDev');
     this._sourceManager = new SourceManager(config);
   }
 
@@ -52,8 +60,41 @@ export class BotContainer extends EventEmitter {
     const childDir = path.join(botPathInfo.installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
 
-    const { command, args } = this._sourceManager.getCommand(botPathInfo, env);
+    const { command, args } = this._getCommand(botPathInfo, env);
     return { childDir, command, args };
+  }
+
+
+  /**
+   * Get process command (to spawn).
+   */
+  private _getCommand (botPathInfo: any, env: string) {
+    const { file } = botPathInfo;
+
+    let command;
+    let args: string[] = [];
+
+    if (this._localDev) {
+      command = LOCAL_BOT_RUN_COMMAND;
+      args = LOCAL_BOT_RUN_ARGS.concat([file]);
+    } else {
+      switch (env) {
+        case NATIVE_ENV: {
+          command = file;
+          break;
+        }
+        case NODE_ENV: {
+          command = 'node';
+          args = [file];
+          break;
+        }
+        default: {
+          throw new Error(`Environment '${env}' not supported.`);
+        }
+      }
+    }
+
+    return { command, args };
   }
 
   /**

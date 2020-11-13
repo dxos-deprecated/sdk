@@ -26,11 +26,7 @@ export const NODE_BOT_MAIN_FILE = 'main.js';
 export const NATIVE_ENV = 'native';
 export const NODE_ENV = 'node';
 
-// Command to spawn to run a bot in local development mode.
-export const LOCAL_BOT_RUN_COMMAND = 'yarn';
 
-// Fixed arguments to pass to LOCAL_BOT_RUN_COMMAND.
-export const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
 
 const DOWNLOAD_TIMEOUT = 40000;
 
@@ -115,37 +111,5 @@ export class SourceManager {
       await fs.remove(baseDirectory);
       throw err;
     }
-  }
-
-  /**
-   * Get process command (to spawn).
-   */
-  getCommand (botPathInfo: any, env: string) {
-    const { file } = botPathInfo;
-
-    let command;
-    let args: string[] = [];
-
-    if (this._localDev) {
-      command = LOCAL_BOT_RUN_COMMAND;
-      args = LOCAL_BOT_RUN_ARGS.concat([file]);
-    } else {
-      switch (env) {
-        case NATIVE_ENV: {
-          command = file;
-          break;
-        }
-        case NODE_ENV: {
-          command = 'node';
-          args = [file];
-          break;
-        }
-        default: {
-          throw new Error(`Environment '${env}' not supported.`);
-        }
-      }
-    }
-
-    return { command, args };
   }
 }
