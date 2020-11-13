@@ -131,7 +131,6 @@ export class Client {
     }
 
     await this._echo.createHalo(username);
-
     return this.getProfile();
   }
 
@@ -148,6 +147,10 @@ export class Client {
       // TODO(burdon): Why convert to string?
       publicKey: keyToString(this._echo.identityKey.publicKey)
     };
+  }
+
+  subscribeToProfile (cb: () => void): () => void {
+    return this._echo.identityReady.on(cb);
   }
 
   /**

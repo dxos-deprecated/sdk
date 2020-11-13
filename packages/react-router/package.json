@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-router",
-  "version": "2.7.4-alpha.0",
+  "version": "2.7.6-alpha.0",
   "description": "React router utils.",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -24,13 +24,13 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@dxos/eslint-plugin": "^1.0.5",
+    "@dxos/eslint-plugin": "^1.0.8",
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",
-    "@storybook/react": "^6.0.4",
+    "@storybook/react": "^6.0.21",
     "@types/jest": "^26.0.15",
     "eslint": "^7.11.0",
-    "jest": "^26.6.1",
+    "jest": "^26.6.3",
     "semistandard": "14.2.0",
     "storybook-react-router": "^1.0.8",
     "ts-jest": "^26.4.3"

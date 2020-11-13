@@ -30,8 +30,9 @@ import PeopleIcon from '@material-ui/icons/People';
 import Alert from '@material-ui/lab/Alert';
 import { useTheme } from '@material-ui/styles';
 
-import { humanize } from '@dxos/crypto';
-import { useContacts, useInvitation, useOfflineInvitation } from '@dxos/react-client';
+import { BotFactoryClient } from '@dxos/botkit-client';
+import { humanize, keyToBuffer, keyToString, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { useClient, useContacts, useInvitation, useOfflineInvitation } from '@dxos/react-client';
 
 import { useMembers } from '../hooks';
 import BotDialog from './BotDialog';
@@ -163,10 +164,12 @@ function PendingOfflineInvitation ({ party, invitation, handleCopy }) {
 
 const PartySharingDialog = ({ party, open, onClose }) => {
   const classes = useStyles();
+  const client = useClient();
   const [contactsInvitations, setContactsInvitations] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
+  const topic = keyToString(party.key);
 
   const members = useMembers(party);
   const [contacts] = useContacts();
@@ -175,7 +178,24 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
   const createOfflineInvitation = (contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
 
-  const handleBotInvite = () => console.warn('Bot invitation not yet ported to the new echo');
+  const handleBotInvite = async (botFactoryTopic, botId, spec = {}) => {
+    const botFactoryClient = new BotFactoryClient(client.networkManager, botFactoryTopic);
+
+    const secretProvider = () => {};
+
+    // Provided by inviter node.
+    const secretValidator = async (invitation, secret) => {
+      const signature = secret.slice(0, SIGNATURE_LENGTH);
+      const message = secret.slice(SIGNATURE_LENGTH);
+      return verify(message, signature, keyToBuffer(botFactoryTopic));
+    };
+
+    const invitation = await party.createInvitation({ secretValidator, secretProvider });
+
+    const botUID = await botFactoryClient.sendSpawnRequest(botId);
+    await botFactoryClient.sendInvitationRequest(botUID, topic, spec, invitation.toQueryParameters());
+    setBotDialogVisible(false);
+  };
 
   const handleCopy = (value) => {
     setCopiedSnackBarOpen(true);
@@ -213,7 +233,6 @@ const PartySharingDialog = ({ party, open, onClose }) => {
             <Button
               size='small'
               onClick={() => setBotDialogVisible(true)}
-              disabled
             >
               Invite Bot
             </Button>

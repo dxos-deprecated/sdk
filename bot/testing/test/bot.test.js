@@ -1,25 +1,40 @@
-import { Orchestrator } from '../src/orchestrator';
-import { ObjectModel } from '@dxos/object-model';
+import { MessengerModel } from '@dxos/messenger-model';
+
+import { NODE_ENV, Orchestrator } from '../src/orchestrator';
 
 jest.setTimeout(100 * 1000);
 
-test('bot test', async () => {
-  const orchestrator = new Orchestrator();
+test('bot test - local source', async () => {
+  const orchestrator = new Orchestrator({ local: true });
+
+  orchestrator.client.registerModel(MessengerModel);
 
   await orchestrator.start();
 
-  await orchestrator.party.database.createItem({ model: ObjectModel, type: 'dxos.org/type/testing/object', props: { count: 0 } });
+  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.js' });
 
-  const agent = await orchestrator.startAgent();
+  await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
 
   await agent.sendCommand({ type: 'append' });
   await agent.sendCommand({ type: 'append' });
 
-  const result = await agent.sendCommand({ type: 'get-all' });
+  const messages = await agent.sendCommand({ type: 'get-all' });
 
-  const { count } = JSON.parse(result);
+  expect(messages).toHaveLength(2);
 
-  expect(count).toBe(2);
+  console.log(messages);
+
+  await orchestrator.destroy();
+});
+
+test('bot test - remote source', async () => {
+  const orchestrator = new Orchestrator({ local: false });
+
+  orchestrator.client.registerModel(MessengerModel);
+
+  await orchestrator.start();
+
+  await orchestrator.startAgent({ botPath: './src/test-agent.js', env: NODE_ENV });
 
   await orchestrator.destroy();
 });
