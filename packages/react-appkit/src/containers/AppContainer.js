@@ -13,13 +13,10 @@ import ConnectedIcon from '@material-ui/icons/Wifi';
 import { useConfig } from '@dxos/react-client';
 import { FullScreen } from '@dxos/react-ux';
 
-import { KeyMap, Layout, StatusBar } from '../components';
-import Sidebar from '../components/Sidebar';
+import { DebugPanel, KeyMap, Layout, Sidebar, StatusBar } from '../components';
 import { useErrorReducer, useLayoutReducer } from '../hooks';
 import AppBar from './AppBar';
-import DebugPanel from './DebugPanel';
-// import Redeem from './Redeem';
-import RedeemDialog from './Redeem';
+import RedeemDialog from './RedeemDialog';
 
 const useStyles = makeStyles(() => ({
   root: {

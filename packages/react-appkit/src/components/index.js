@@ -4,6 +4,8 @@
 
 import AuthenticatorDialog from './AuthenticatorDialog';
 import BotDialog from './BotDialog';
+import DebugPanel from './DebugPanel';
+import DefaultSettingsDialog from './DefaultSettingsDialog';
 import ExportKeyringDialog from './ExportKeyringDialog';
 import ImportKeyringDialog from './ImportKeyringDialog';
 import InvitationDialog from './InvitationDialog';
@@ -29,9 +31,12 @@ import StatusBar from './StatusBar';
 import Theme, { createTheme, defaultThemeProperties } from './Theme';
 
 export * from './util';
+
 export {
   AuthenticatorDialog,
   BotDialog,
+  DebugPanel,
+  DefaultSettingsDialog,
   ExportKeyringDialog,
   ImportKeyringDialog,
   InvitationDialog,

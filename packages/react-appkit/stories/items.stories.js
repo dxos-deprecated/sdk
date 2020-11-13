@@ -7,7 +7,7 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import Icon from '@material-ui/icons/Settings';
 
-import { ItemSettings } from '../src/components';
+import { ItemSettings } from '../src';
 
 export default {
   title: 'Items'

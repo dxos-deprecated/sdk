@@ -4,7 +4,7 @@
   "private": true,
   "description": "Store Bot",
   "keywords": [],
-  "license": "GPL-3.0",
+  "license": "AGPL-3.0",
   "author": "DxOS.org",
   "main": "dist/index.js",
   "scripts": {

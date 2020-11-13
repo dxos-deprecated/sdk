@@ -63,6 +63,7 @@ export class Client {
 
   constructor (config: ClientConfig = {}) {
     this._config = config;
+    // TODO(burdon): Make hierarchical (e.g., snapshot.[enabled, interval])
     const {
       storage = {},
       swarm = DEFAULT_SWARM_CONFIG,
@@ -73,6 +74,7 @@ export class Client {
 
     const { feedStorage, keyStorage, snapshotStorage } = createStorages(storage, snapshots);
 
+    // TODO(burdon): Extract constants.
     this._echo = new ECHO({
       feedStorage,
       keyStorage,
@@ -81,6 +83,7 @@ export class Client {
       snapshots,
       snapshotInterval
     });
+
     this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
   }
 
@@ -96,14 +99,14 @@ export class Client {
       return;
     }
 
-    const timeoutId = setTimeout(() => {
-      console.error('Client.initialize is taking more then 10 seconds to complete. Something probably went wrong.');
+    const timeout = setTimeout(() => {
+      console.error('Initialize is taking more then 10 seconds to complete. Something probably went wrong.');
     }, 10000);
 
     await this._echo.open();
 
     this._initialized = true;
-    clearInterval(timeoutId);
+    clearInterval(timeout);
   }
 
   /**
@@ -124,13 +127,18 @@ export class Client {
   /**
    * Create Profile. Add Identity key if public and secret key are provided. Then initializes profile with given username.
    * If not public and secret key are provided it relies on keyring to contain an identity key.
+   * @returns {ProfileInfo} User profile info.
    */
+  // TODO(burdon): Breaks if profile already exists.
+  // TODO(burdon): ProfileInfo is not imported or defined.
   async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
+    // TODO(burdon): What if not set?
     if (publicKey && secretKey) {
       await this._echo.createIdentity({ publicKey, secretKey });
     }
 
     await this._echo.createHalo(username);
+
     return this.getProfile();
   }
 
@@ -142,11 +150,10 @@ export class Client {
       return;
     }
 
-    const publicKey = keyToString(this._echo.identityKey.publicKey);
-
     return {
       username: this._echo.identityDisplayName,
-      publicKey
+      // TODO(burdon): Why convert to string?
+      publicKey: keyToString(this._echo.identityKey.publicKey)
     };
   }
 
@@ -157,8 +164,9 @@ export class Client {
   /**
    * @returns true if the profile exists.
    */
+  // TODO(burdon): Remove?
   hasProfile () {
-    return !!this.getProfile();
+    return this._echo.identityKey;
   }
 
   /**

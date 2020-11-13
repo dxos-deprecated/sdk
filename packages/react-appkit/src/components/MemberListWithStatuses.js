@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';
 
-import { MemberList } from '../components';
+import { MemberList } from './index';
 
 const useStyles = makeStyles(() => ({
   onlineSummary: {
@@ -14,6 +14,8 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+// This will be used for party activity indicators
+// ISSUE: https://github.com/dxos/teamwork/issues/424
 export const MemberListWithStatuses = ({ party }) => {
   const [online, setOnline] = useState((party.presence.peers ?? []).length);
   const classes = useStyles();
@@ -22,6 +24,7 @@ export const MemberListWithStatuses = ({ party }) => {
     const graphUpdatedHandler = () => {
       setOnline((party.presence.peers ?? []).length);
     };
+
     party.presence.on('graph-updated', graphUpdatedHandler);
     return () => party.presence.off('graph-updated', graphUpdatedHandler);
   }, []);

@@ -51,7 +51,6 @@ export interface AppKitProviderProps {
  */
 const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined }: AppKitProviderProps) => {
   const client = useClient();
-
   const [state, dispatch] = useReducer(appReducer, defaultsDeep({}, initialState, defaultState));
   const [padsRegistered, setPadsRegistered] = useState(false);
 
@@ -79,6 +78,7 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
       }
       setPadsRegistered(true);
     };
+
     registerPadModels();
   }, []);
 

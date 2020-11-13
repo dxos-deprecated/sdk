@@ -4,34 +4,48 @@
 
 import React, { useState } from 'react';
 
-import { Checkbox, FormControlLabel } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Divider from '@material-ui/core/Divider';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
 
 import { useInvitationRedeemer } from '@dxos/react-client';
 
-export default function RedeemDialog ({ onClose, ...props }) {
+const useStyles = makeStyles(theme => ({
+  marginTop: {
+    marginTop: theme.spacing(2)
+  }
+}));
+
+const RedeemDialog = ({ onClose, ...props }) => {
+  const classes = useStyles();
   const [isOffline, setIsOffline] = useState(false);
-  const onDone = () => {
+
+  const handleDone = () => {
     setStep(0);
     setInvitationCode('');
     setPinCode('');
     onClose();
   };
+
   const [redeemCode, setPin] = useInvitationRedeemer({
-    onDone,
+    onDone: handleDone,
     onError: (ex) => {
-      throw ex;
+      setStep(2);
+      setError(String(ex));
     },
     isOffline
   });
+
+  const [error, setError] = useState(undefined);
   const [step, setStep] = useState(0); // TODO(burdon): Const.
   const [invitationCode, setInvitationCode] = useState('');
   const [pinCode, setPinCode] = useState('');
@@ -45,36 +59,36 @@ export default function RedeemDialog ({ onClose, ...props }) {
     setPin(pinCode);
   };
 
-  // TODO(burdon): Standardize dialogs.
-  // TODO(burdon): Hit enter to proceed.
   return (
-    <Dialog open onClose={onDone} {...props}>
+    <Dialog fullWidth maxWidth='xs' open onClose={handleDone} {...props}>
       <DialogTitle>Redeem Invitation</DialogTitle>
+
       {step === 0 && (
         <>
           <DialogContent>
+            <TextField
+              autoFocus
+              fullWidth
+              multiline
+              placeholder="Paste invitation code."
+              spellCheck={false}
+              value={invitationCode}
+              onChange={(event) => setInvitationCode(event.target.value)}
+              rows={6}
+            />
             <FormControlLabel
+              className={classes.marginTop}
               control={<Checkbox checked={isOffline} onChange={event => setIsOffline(event.target.checked)}/>}
               label="Offline"
             />
-            <Typography variant='body1' gutterBottom>
-              Paste the invitation code below.
-            </Typography>
-            <Divider />
-            <TextareaAutosize
-              autoFocus
-              value={invitationCode}
-              onChange={(event) => setInvitationCode(event.target.value)}
-              rowsMin={6}
-              style={{ minWidth: '100%' }}
-            />
           </DialogContent>
           <DialogActions>
-            <Button autoFocus color='secondary' onClick={onDone}>Cancel</Button>
+            <Button color='secondary' onClick={handleDone}>Cancel</Button>
             <Button color='primary' onClick={handleEnterInvitationCode}>Submit</Button>
           </DialogActions>
         </>
       )}
+
       {step === 1 && setPin && (
         <>
           <DialogContent>
@@ -93,18 +107,31 @@ export default function RedeemDialog ({ onClose, ...props }) {
             />
           </DialogContent>
           <DialogActions>
-            <Button autoFocus color='secondary' onClick={onDone}>Cancel</Button>
-            <Button autoFocus color='primary' onClick={handleEnterPinCode}>Submit</Button>
+            <Button color='secondary' onClick={handleDone}>Cancel</Button>
+            <Button color='primary' onClick={handleEnterPinCode}>Submit</Button>
           </DialogActions>
         </>
       )}
+
       {step === 1 && !setPin && (
         <DialogContent>
-          <Typography variant='body1' gutterBottom>
-            Processing invitation...
+          <LinearProgress />
+          <Typography className={classes.marginTop} variant='body1' gutterBottom>
+            Processing...
           </Typography>
+        </DialogContent>
+      )}
+
+      {step === 2 && error && (
+        <DialogContent>
+          <Alert severity="error">{error}</Alert>
+          <DialogActions>
+            <Button autoFocus color='secondary' onClick={handleDone}>Cancel</Button>
+          </DialogActions>
         </DialogContent>
       )}
     </Dialog>
   );
-}
+};
+
+export default RedeemDialog;

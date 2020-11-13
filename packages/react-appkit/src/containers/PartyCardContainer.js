@@ -7,9 +7,8 @@ import React, { useState } from 'react';
 import { keyToBuffer, keyToString } from '@dxos/crypto';
 import { useClient, useItems } from '@dxos/react-client';
 
-import PartyCard from '../components/PartyCard';
+import { DefaultSettingsDialog, PartyCard } from '../components';
 import { useAppRouter, usePads } from '../hooks';
-import DefaultSettingsDialog from './DefaultSettingsDialog';
 
 const PartyCardContainer = ({ party }) => {
   const client = useClient();
