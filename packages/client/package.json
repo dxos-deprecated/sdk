@@ -34,6 +34,7 @@
     "del": "^5.1.0",
     "end-of-stream": "^1.4.4",
     "hypertrie": "^3.8.0",
+    "jsondown": "^1.0.0",
     "level-js": "^5.0.2",
     "lodash.debounce": "^4.0.8",
     "lodash.defaults": "^4.2.0",
