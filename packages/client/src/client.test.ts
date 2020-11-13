@@ -32,3 +32,21 @@ test('creating profile returns the profile', async () => {
 
   await client.destroy();
 });
+
+test('persistent storage', async () => {
+  const client = new Client({
+    storage: {
+      persistent: true,
+      path: `/tmp/dxos-${Date.now()}`
+    }
+  });
+
+  await client.initialize();
+
+  const keypair = createKeyPair();
+  await client.createProfile({ ...keypair, username: 'foo' });
+
+  expect(client.getProfile()).toBeDefined();
+
+  await client.destroy();
+});

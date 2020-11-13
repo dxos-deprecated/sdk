@@ -16,6 +16,8 @@ import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
+import { isNode } from './platform';
+
 export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown'
 
 export interface ClientConfig {
@@ -286,8 +288,7 @@ function createStorages (config: ClientConfig['storage'], snapshotsEnabled: bool
 }
 
 function createKeyStorage (path: string, type?: KeyStorageType) {
-  const inBrowser = typeof window !== 'undefined';
-  const defaultedType = type ?? (inBrowser ? 'leveljs' : 'jsondown');
+  const defaultedType = type ?? (isNode() ? 'jsondown' : 'leveljs');
 
   switch (defaultedType) {
     case 'leveljs': return leveljs(path);
