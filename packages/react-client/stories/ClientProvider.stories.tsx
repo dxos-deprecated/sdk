@@ -72,8 +72,9 @@ export const Persistent = () => {
   useEffect(() => {
     setImmediate(async () => {
       const client = new Client({
-        storagePath: 'react-client/storybook',
-        storageType: 'chrome',
+        storage: {
+          persistent: true,
+        },
         snapshots: true,
         snapshotInterval: 10
       });
