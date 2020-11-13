@@ -11949,6 +11949,14 @@ jsondown@1.0.0:
     memdown "1.4.1"
     mkdirp "0.5.1"
 
+jsondown@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/jsondown/-/jsondown-1.0.0.tgz#c5cc5cda65f515d2376136a104b5f535534f26e3"
+  integrity sha512-p6XxPaq59aXwcdDQV3ISMA5xk+1z6fJuctcwwSdR9iQgbYOcIrnknNrhcMGG+0FaUfKHGkdDpQNaZrovfBoyOw==
+  dependencies:
+    memdown "1.4.1"
+    mkdirp "0.5.1"
+
 jsonfile@^2.1.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-2.4.0.tgz#3736a2b428b87bbda0cc83b53fa3d633a35c2ae8"
