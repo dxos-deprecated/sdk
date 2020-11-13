@@ -27,12 +27,15 @@
     "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https"
   },
   "devDependencies": {
+    "@types/chalk": "^2.2.0",
     "babel-eslint": "^10.0.2",
+    "chalk": "^4.1.0",
     "istanbul-combine": "^0.3.0",
     "lerna": "^3.19.0",
     "lint-staged": "^9.5.0",
     "lockfile-lint": "^4.3.7",
     "semistandard": "14.2.0",
+    "ts-node": "^9.0.0",
     "wsrun": "^5.2.4"
   },
   "semistandard": {
