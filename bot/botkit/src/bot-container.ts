@@ -15,7 +15,7 @@ import { keyToString } from '@dxos/crypto';
 
 import { BotInfo } from './bot-manager';
 import { log, logBot } from './log';
-import { NATIVE_ENV, NODE_ENV, SourceManager, removeSourceFiles } from './source-manager';
+import { NATIVE_ENV, NODE_ENV, SourceManager, removeSourceFiles, LOCAL_BOT_MAIN_FILE } from './source-manager';
 
 // Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
 export const SPAWNED_BOTS_DIR = '.bots';
@@ -25,6 +25,12 @@ export const LOCAL_BOT_RUN_COMMAND = 'yarn';
 
 // Fixed arguments to pass to LOCAL_BOT_RUN_COMMAND.
 export const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
+
+// Binary file inside downloaded bot package to run.
+export const NATIVE_BOT_MAIN_FILE = 'main.bin';
+
+// Js file inside Node.js bot package.
+export const NODE_BOT_MAIN_FILE = 'main.js';
 
 /**
  * Bot Container; Used for running bot instanced inside specific compute service.
@@ -54,47 +60,41 @@ export class BotContainer extends EventEmitter {
   }
 
   async getBotAttributes (botName: string, botId: string, uniqId: string, ipfsCID: string, env: string, options: any) {
-    const botPathInfo = await this._sourceManager.getBotPathInfo(uniqId, ipfsCID, env, options);
-    assert(botPathInfo, `Invalid bot: ${botName || ipfsCID}`);
+    const installDirectory = await this._sourceManager.downloadAndInstallBot(uniqId, ipfsCID, options);
+    assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
 
-    const childDir = path.join(botPathInfo.installDirectory, SPAWNED_BOTS_DIR, botId);
+    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
 
-    const { command, args } = this._getCommand(botPathInfo, env);
+    const { command, args } = this._getCommand(installDirectory, env, options);
     return { childDir, command, args };
   }
-
 
   /**
    * Get process command (to spawn).
    */
-  private _getCommand (botPathInfo: any, env: string) {
-    const { file } = botPathInfo;
-
-    let command;
-    let args: string[] = [];
-
+  private _getCommand (installDirectory: string, env: string, options: any) {
+    const { botPath } = options;
     if (this._localDev) {
-      command = LOCAL_BOT_RUN_COMMAND;
-      args = LOCAL_BOT_RUN_ARGS.concat([file]);
+      return {
+        command: LOCAL_BOT_RUN_COMMAND,
+        args: LOCAL_BOT_RUN_ARGS.concat([botPath || LOCAL_BOT_MAIN_FILE])
+      };
     } else {
       switch (env) {
-        case NATIVE_ENV: {
-          command = file;
-          break;
-        }
-        case NODE_ENV: {
-          command = 'node';
-          args = [file];
-          break;
-        }
+        case NATIVE_ENV: return {
+          command: path.join(installDirectory, NATIVE_BOT_MAIN_FILE),
+          args: []
+        };
+        case NODE_ENV: return {
+          command: 'node',
+          args: [path.join(installDirectory, NODE_BOT_MAIN_FILE)]
+        };
         default: {
           throw new Error(`Environment '${env}' not supported.`);
         }
       }
     }
-
-    return { command, args };
   }
 
   /**
