@@ -20,6 +20,9 @@ import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
 // Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
 export const SPAWNED_BOTS_DIR = '.bots';
 
+/**
+ * Bot Container; Used for running bot instanced inside specific compute service.
+ */
 export class BotContainer extends EventEmitter {
   private readonly _config: any;
   private readonly _sourceManager: SourceManager;

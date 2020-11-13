@@ -39,7 +39,7 @@ export const BOTS_DUMP_FILE = 'out/factory-state';
 export interface BotInfo {
   botId: string
   id: string
-  parties: any[]
+  parties: string[]
   started: any
   lastActive: any
   stopped: boolean
@@ -58,6 +58,9 @@ interface Options {
   emitBotEvent: (event: any) => Promise<void>
 }
 
+/**
+ * Manages bot instances; provides bot lifecycle operations.
+ */
 export class BotManager {
   private readonly _bots = new Map<string, BotInfo>();
 
@@ -73,6 +76,9 @@ export class BotManager {
   private readonly _botsFile: string;
   private readonly _registry: any;
 
+  /**
+   * Topic for communications between bots and bot-manager.
+   */
   private readonly _controlTopic: Buffer;
   private readonly _controlPeerKey: Buffer;
 
@@ -269,7 +275,7 @@ export class BotManager {
    * @param botId
    * @param options
    */
-  async _startBot (botId: string, options: any = {}) {
+  private async _startBot (botId: string, options: any = {}) {
     let botInfo = this._bots.get(botId);
     botInfo = await this._botContainer.startBot(botId, botInfo, options);
 
@@ -283,7 +289,7 @@ export class BotManager {
    * @param {String} botId Unique Bot Id
    * @param {Boolean} stopped Whether bot should be marked as stopped
    */
-  async _stopBot (botId: string, stopped = false) {
+  private async _stopBot (botId: string, stopped = false) {
     const botInfo = this._bots.get(botId);
     assert(botInfo, 'Invalid Bot Id');
 
@@ -296,12 +302,12 @@ export class BotManager {
     log(`Bot '${botId}' stopped.`);
   }
 
-  async _saveBotsToFile () {
+  private async _saveBotsToFile () {
     const data = [...this._bots.values()].map(this._botContainer.serializeBot);
     await fs.writeJSON(this._botsFile, data);
   }
 
-  async _readBotsFromFile () {
+  private async _readBotsFromFile () {
     assert(this._bots.size === 0, 'Bots already initialized.');
 
     let data = [];
@@ -318,7 +324,7 @@ export class BotManager {
   /**
    * Handle incoming messages from bot processes.
    */
-  async _botMessageHandler (protocol: any, { message }: any) {
+  private async _botMessageHandler (protocol: any, { message }: any) {
     let result;
     switch (message.__type_url) {
       case COMMAND_SIGN: {
@@ -346,7 +352,7 @@ export class BotManager {
     return result;
   }
 
-  async _getBotRecord (botName: string) {
+  private async _getBotRecord (botName: string) {
     if (this._localDev) {
       let name;
       try {

@@ -38,10 +38,14 @@ const BOT_SPAWN_TIMEOUT = 50000;
 const BOT_SPAWN_CHECK_INTERVAL = 50;
 
 /**
- * Bot factory.
+ * Accepts bot control commands. Creates and manages bots using BotContainer.
  */
 export class BotFactory {
   private readonly _config: any;
+
+  /**
+   * Used for communication between bot-factory and clients.
+   */
   private readonly _topic: Buffer;
   private readonly _peerKey: Buffer;
   private readonly _plugin: any;
