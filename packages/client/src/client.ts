@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import jsondown from 'jsondown';
 import leveljs from 'level-js';
 import memdown from 'memdown';
 
@@ -15,10 +16,17 @@ import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
+import { isNode } from './platform';
+
+export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown'
+
 export interface ClientConfig {
-  // TODO(burdon): Hierarchical config (also "persistent" is not a storage type.)
-  storageType?: 'ram' | 'persistent' | 'idb' | 'chrome' | 'firefox' | 'node',
-  storagePath?: string,
+  storage?: {
+    persistent?: boolean,
+    type?: 'ram' | 'idb' | 'chrome' | 'firefox' | 'node',
+    keyStorage?: KeyStorageType,
+    path?: string
+  },
   swarm?: {
     signal?: string,
     ice?: {
@@ -57,21 +65,20 @@ export class Client {
     this._config = config;
     // TODO(burdon): Make hierarchical (e.g., snapshot.[enabled, interval])
     const {
-      snapshots = false,
-      snapshotInterval,
-      storageType = 'ram',
-      storagePath = 'dxos/storage',
+      storage = {},
       swarm = DEFAULT_SWARM_CONFIG,
-      wns
+      wns,
+      snapshots = false,
+      snapshotInterval
     } = config;
+
+    const { feedStorage, keyStorage, snapshotStorage } = createStorages(storage, snapshots);
 
     // TODO(burdon): Extract constants.
     this._echo = new ECHO({
-      feedStorage: createStorage(`${storagePath}/feeds`, storageType === 'persistent' ? undefined : storageType),
-      keyStorage: storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`),
-      snapshotStorage: snapshots
-        ? createStorage(`${storagePath}/snapshots`, storageType === 'persistent' ? undefined : storageType)
-        : createStorage(`${storagePath}/snapshots`, 'ram'),
+      feedStorage,
+      keyStorage,
+      snapshotStorage,
       swarmProvider: new SwarmProvider(swarm),
       snapshots,
       snapshotInterval
@@ -259,3 +266,41 @@ const DEFAULT_SWARM_CONFIG: ClientConfig['swarm'] = {
   signal: 'ws://localhost:4000',
   ice: [{ urls: 'stun:stun.wireline.ninja:3478' }]
 };
+
+function createStorages (config: ClientConfig['storage'], snapshotsEnabled: boolean) {
+  const {
+    path = 'dxos/storage',
+    type,
+    keyStorage,
+    persistent = false
+  } = config ?? {};
+
+  if (persistent && type === 'ram') {
+    throw new Error('RAM storage cannot be used in persistent mode.');
+  }
+  if (!persistent && (type !== undefined && type !== 'ram')) {
+    throw new Error('Cannot use a persistent storage in not persistent mode.');
+  }
+  if (persistent && keyStorage === 'ram') {
+    throw new Error('RAM key storage cannot be used in persistent mode.');
+  }
+  if (!persistent && (keyStorage !== 'ram' && keyStorage !== undefined)) {
+    throw new Error('Cannot use a persistent key storage in not persistent mode.');
+  }
+
+  return {
+    feedStorage: createStorage(`${path}/feeds`, persistent ? type : 'ram'),
+    keyStorage: createKeyStorage(`${path}/keystore`, persistent ? keyStorage : 'ram'),
+    snapshotStorage: createStorage(`${path}/snapshots`, persistent && snapshotsEnabled ? type : 'ram')
+  };
+}
+
+function createKeyStorage (path: string, type?: KeyStorageType) {
+  const defaultedType = type ?? (isNode() ? 'jsondown' : 'leveljs');
+
+  switch (defaultedType) {
+    case 'leveljs': return leveljs(path);
+    case 'jsondown': return jsondown(path);
+    case 'ram': return memdown();
+  }
+}
