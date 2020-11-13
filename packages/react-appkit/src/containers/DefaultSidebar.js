@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 import { useParties } from '@dxos/react-client';
 
-import PartyTree from '../components/PartyTree';
+import { PartyTree } from '../components';
 import { useAppRouter } from '../hooks';
 
 const DefaultSidebar = () => {

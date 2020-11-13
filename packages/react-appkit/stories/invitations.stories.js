@@ -7,15 +7,20 @@ import React, { useState } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 import StoryRouter from 'storybook-react-router';
 
-import Box from '@material-ui/core/Box';
-
 import { sleep } from '@dxos/async';
 import { keyToBuffer } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParty } from '@dxos/react-client';
 
-import { AppKitProvider, BotDialog, AuthenticatorDialog, PartySharingDialog } from '../src';
-import { useAppRouter } from '../src/hooks';
+import {
+  useAppRouter,
+  AppKitProvider,
+  AuthenticatorDialog,
+  BotDialog,
+  PartySharingDialog,
+  RedeemDialog,
+  Theme
+} from '../src';
 import { pads, NoPartyComponent } from './common';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 
@@ -43,18 +48,17 @@ const BotDialogComponent = () => {
   };
 
   return (
-    <Box m={2}>
+    <Theme>
       <BotDialog
         open={open}
         onClose={() => setOpen(false)}
         onSubmit={handleSubmit}
       />
       {deployed && (<p>Successfully deployed!</p>)}
-    </Box>
+    </Theme>
   );
 };
 
-// TODO(burdon): Fix useRegistry to use Registry object created in context.
 export const withBotDialog = () => {
   return (
     <AppKitProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
@@ -79,12 +83,12 @@ export const withAuthenticatorDialog = () => {
   }
 
   return (
-    <Box m={2}>
+    <Theme>
       <AuthenticatorDialog
         onCancel={() => setOpen(false)}
         onSubmit={() => setSubmitted(true)}
       />
-    </Box>
+    </Theme>
   );
 };
 
@@ -96,12 +100,12 @@ export const withAuthenticatorDialogKnownFlow = () => {
   }
 
   return (
-    <Box m={2}>
+    <Theme>
       <AuthenticatorDialog
         onCancel={() => setOpen(false)}
         isOfflineKeyInvitation
       />
-    </Box>
+    </Theme>
   );
 };
 
@@ -114,13 +118,13 @@ const AuthenticatorDialogErrorComponent = () => {
   }
 
   return (
-    <Box m={2}>
+    <Theme>
       <AuthenticatorDialog
         error={error}
         onCancel={() => setOpen(false)}
         onSubmit={() => {}}
       />
-    </Box>
+    </Theme>
   );
 };
 
@@ -143,7 +147,7 @@ const PartySharingComponent = () => {
   const router = useAppRouter();
 
   return (
-    <Box m={2}>
+    <Theme>
       <PartySharingDialog
         party={party}
         client={client}
@@ -151,7 +155,7 @@ const PartySharingComponent = () => {
         onClose={() => setOpen(false)}
         router={router}
       />
-    </Box>
+    </Theme>
   );
 };
 
@@ -163,5 +167,13 @@ export const withPartySharing = () => {
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
     </AppKitProvider>
+  );
+};
+
+export const withRedeemInvitation = () => {
+  return (
+    <Theme>
+      <RedeemDialog onClose={() => {}} />
+    </Theme>
   );
 };

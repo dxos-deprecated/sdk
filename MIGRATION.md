@@ -100,6 +100,7 @@ export default function Root ({ client, config }) {
 
 ```
 
-Notice that the `config` parameter now contains allmost all but the `client` configuration. For the `ClientProvider` the only required config is `config.devtools` which, when set to `true` it will add a `__DXOS__` object into global scope for devtools usage.
+Notice that the `config` parameter now contains allmost all but the `client` configuration. 
+For the `ClientProvider` the only required config is `config.devtools` which, when set to `true` it will add a `__DXOS__` object into global scope for devtools usage.
 
 When using the `ClientProvider` you are not required to call `client.initialize()` since it's been called in the Provider for you.

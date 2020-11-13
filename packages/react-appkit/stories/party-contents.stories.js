@@ -15,7 +15,7 @@ import { ObjectModel } from '@dxos/object-model';
 import { useClient, useParty } from '@dxos/react-client';
 
 import { AppKitProvider, DefaultItemList, PartySettingsDialog } from '../src';
-import { pads, NoPartyComponent } from './common';
+import { NoPartyComponent, pads } from './common';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 
 export default {

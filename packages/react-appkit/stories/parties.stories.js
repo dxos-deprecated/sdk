@@ -6,7 +6,7 @@ import React from 'react';
 
 import Box from '@material-ui/core/Box';
 
-import { PartyCard } from '../src/components';
+import { PartyCard } from '../src';
 
 export default {
   title: 'Parties'
