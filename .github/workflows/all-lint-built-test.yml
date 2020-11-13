@@ -26,7 +26,8 @@ jobs:
     - run: yarn lint
     - run: yarn build
     - run: yarn test:coverage
-    - uses: tintef/nyc-reporter-action
+    - name: NYC Coverage Report
+      uses: Tintef/nyc-reporter-action@0.1.0
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         REPORTER: 'text-summary'
