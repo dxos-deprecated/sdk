@@ -73,7 +73,7 @@ export const Persistent = () => {
     setImmediate(async () => {
       const client = new Client({
         storage: {
-          persistent: true,
+          persistent: true
         },
         snapshots: true,
         snapshotInterval: 10

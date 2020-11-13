@@ -86,9 +86,9 @@ export class Bot extends EventEmitter {
     this._client = new Client({
       storage: {
         persistent: this._persistent,
-        path: join(this._cwd, BOT_STORAGE),
+        path: join(this._cwd, BOT_STORAGE)
       },
-      swarm: getClientConfig(this._config).swarm,
+      swarm: getClientConfig(this._config).swarm
     });
     await this._preInit();
     await this._client.initialize();
