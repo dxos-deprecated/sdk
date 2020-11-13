@@ -12,7 +12,7 @@
     "clean": "rm -rf dist",
     "lint": "eslint '{src,tests,stories}/**/*.{ts,js,tsx,jsx}'",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir ./src --verbose --passWithNoTests --coverage"
+    "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.0",
