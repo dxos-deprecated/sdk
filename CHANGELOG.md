@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.7](https://www.github.com/dxos/sdk/compare/v2.7.6...v2.7.7) (2020-11-13)
+
+
+### Bug Fixes
+
+* Fix persistent storage on node ([#326](https://www.github.com/dxos/sdk/issues/326)) ([3f6d8e3](https://www.github.com/dxos/sdk/commit/3f6d8e36a20a14f6801963ce2e4531ea0ae5e3c2))
+* Return profile upon creation ([#318](https://www.github.com/dxos/sdk/issues/318)) ([3d9cda9](https://www.github.com/dxos/sdk/commit/3d9cda962213111b23e9ee311d6b18b0d4eda427))
+
 ### [2.7.6](https://www.github.com/dxos/sdk/compare/v2.7.5...v2.7.6) (2020-11-12)
 
 
