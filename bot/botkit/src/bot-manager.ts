@@ -24,10 +24,11 @@ import {
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
 
-import { BotContainer } from './bot-container';
+import { NodeBotContainer } from './containers/node-container';
 import { BOT_CONFIG_FILENAME } from './config';
 import { NATIVE_ENV, getBotCID } from './env';
 import { log } from './log';
+import { BotContainer } from './containers/intefrace';
 
 const chance = new Chance();
 
@@ -50,7 +51,7 @@ export interface BotInfo {
   args: string[]
   env: string
   process: any
-  watcher: any
+  watcher?: any
 }
 
 interface Options {
@@ -68,7 +69,7 @@ export class BotManager {
   private readonly _connectedBots: Record<string, boolean> = {};
 
   private readonly _config: any;
-  private readonly _botContainer: BotContainer;
+  private readonly _botContainers: Record<string, BotContainer>;
   private readonly _client: Client;
   private readonly _signChallenge: (message: any) => any;
   private readonly _emitBotEvent: (event: any) => Promise<void>;
@@ -85,9 +86,9 @@ export class BotManager {
   private _plugin?: any;
   private _leaveControlSwarm?: () => void;
 
-  constructor (config: any, botContainer: BotContainer, client: Client, options: Options) {
+  constructor (config: any, botContainers: Record<string, BotContainer>, client: Client, options: Options) {
     this._config = config;
-    this._botContainer = botContainer;
+    this._botContainers = botContainers;
     this._client = client;
 
     const { signChallenge, emitBotEvent } = options;
@@ -101,13 +102,16 @@ export class BotManager {
 
     ensureFileSync(this._botsFile);
 
-    this._botContainer.on('bot-close', async (botId: string, code: number) => {
-      const botInfo = this._bots.get(botId);
-      if (!code && botInfo) {
-        botInfo.stopped = true;
-        await this._saveBotsToFile();
-      }
-    });
+    for(const container of Object.values(this._botContainers)) {
+      container.on('bot-close', async (botId: string, code: number) => {
+        const botInfo = this._bots.get(botId);
+        if (!code && botInfo) {
+          botInfo.stopped = true;
+          await this._saveBotsToFile();
+        }
+      });
+    }
+
 
     this._controlTopic = createKeyPair().publicKey;
     this._controlPeerKey = this._controlTopic;
@@ -159,7 +163,7 @@ export class BotManager {
       }
     }
 
-    log(`Spawn bot request for ${botName || ipfsCID || displayName}`);
+    log(`Spawn bot request for ${botName || ipfsCID || displayName} env: ${env}`);
 
     assert(id, 'Invalid Bot Id.');
     assert(displayName, 'Invalid Bot Name.');
@@ -167,7 +171,7 @@ export class BotManager {
     const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;
 
-    const params = await this._botContainer.getBotAttributes(botName, botId, id, ipfsCID, env, options);
+    const params = await this._botContainers[env].getBotAttributes(botName, botId, id, ipfsCID, options);
 
     return this._startBot(botId, { botName, env, name, ...params });
   }
@@ -186,7 +190,7 @@ export class BotManager {
     const botInfo = this._bots.get(botId);
     assert(botInfo, 'Invalid Bot Id');
 
-    await this._botContainer.killBot(botInfo);
+    await this._botContainers[botInfo.env].killBot(botInfo);
     this._bots.delete(botId);
     await this._saveBotsToFile();
 
@@ -195,7 +199,7 @@ export class BotManager {
 
   async killAllBots () {
     for await (const botInfo of this._bots.values()) {
-      await this._botContainer.killBot(botInfo);
+      await this._botContainers[botInfo.env].killBot(botInfo);
     }
     this._bots.clear();
     await this._saveBotsToFile();
@@ -277,7 +281,7 @@ export class BotManager {
    */
   private async _startBot (botId: string, options: any = {}) {
     let botInfo = this._bots.get(botId);
-    botInfo = await this._botContainer.startBot(botId, botInfo, options);
+    botInfo = await this._botContainers[options.env].startBot(botId, botInfo, options);
 
     this._bots.set(botId, botInfo!);
     await this._saveBotsToFile();
@@ -293,7 +297,7 @@ export class BotManager {
     const botInfo = this._bots.get(botId);
     assert(botInfo, 'Invalid Bot Id');
 
-    await this._botContainer.stopBot(botInfo);
+    await this._botContainers[botInfo.env].stopBot(botInfo);
 
     if (stopped) {
       botInfo.stopped = true;
@@ -303,7 +307,7 @@ export class BotManager {
   }
 
   private async _saveBotsToFile () {
-    const data = [...this._bots.values()].map(this._botContainer.serializeBot);
+    const data = [...this._bots.values()].map(botInfo => this._botContainers[botInfo.env].serializeBot(botInfo));
     await fs.writeJSON(this._botsFile, data);
   }
 

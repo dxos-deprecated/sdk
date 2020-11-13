@@ -4,5 +4,5 @@
 
 export * from './bot';
 export * from './bot-factory';
-export * from './bot-container';
+export * from './containers';
 export * from './config';

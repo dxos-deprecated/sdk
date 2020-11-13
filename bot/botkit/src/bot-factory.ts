@@ -25,11 +25,14 @@ import {
   createEvent
 } from '@dxos/protocol-plugin-bot';
 
-import { BotContainer } from './bot-container';
+import { NodeBotContainer } from './containers/node-container';
 import { BotManager } from './bot-manager';
 import { getClientConfig } from './config';
 import { getPlatformInfo } from './env';
 import { log } from './log';
+import { BotContainer } from './containers/intefrace';
+import { NATIVE_ENV, NODE_ENV } from './source-manager';
+import { LocalDevBotContainer } from './containers/local-dev-container';
 
 // TODO(egorgripasov): Proper version from corresponding .yml file.
 const { version } = readPackageJson() as any;
@@ -50,13 +53,13 @@ export class BotFactory {
   private readonly _peerKey: Buffer;
   private readonly _plugin: any;
   private readonly _localDev: boolean;
-  private readonly _botContainer: BotContainer;
+  private readonly _botContainers: Record<string, BotContainer>;
   private readonly _platorm: string;
   private _client?: Client;
   private _botManager?: BotManager;
   private _leaveSwarm?: () => void;
 
-  constructor (config: any, botContainer: BotContainer) {
+  constructor (config: any, botContainers: Record<string, BotContainer>) {
     assert(config);
 
     this._config = config;
@@ -66,7 +69,12 @@ export class BotFactory {
     this._plugin = new BotPlugin(this._peerKey, (protocol: any, message: any) => this.handleMessage(protocol, message));
     this._localDev = this._config.get('bot.localDev');
 
-    this._botContainer = botContainer;
+    this._botContainers = this._localDev 
+      ? {
+        [NODE_ENV]: new LocalDevBotContainer(config),
+        [NATIVE_ENV]: new LocalDevBotContainer(config),
+      }
+      : botContainers;
 
     const { platform, arch } = getPlatformInfo();
     this._platorm = `${platform}.${arch}`;
@@ -87,12 +95,14 @@ export class BotFactory {
     });
     await this._client.initialize();
 
-    this._botManager = new BotManager(this._config, this._botContainer, this._client, {
+    this._botManager = new BotManager(this._config, this._botContainers, this._client, {
       signChallenge: this.signChallenge.bind(this),
       emitBotEvent: this.emitBotEvent.bind(this)
     });
 
-    await this._botContainer.start({ controlTopic: this._botManager.controlTopic });
+    for(const container of Object.values(this._botContainers)) {
+      await container.start({ controlTopic: this._botManager.controlTopic });
+    }
     await this._botManager.start();
 
     this._leaveSwarm = await this._client.networkManager.joinProtocolSwarm(this._topic,
@@ -155,7 +165,9 @@ export class BotFactory {
         runCommand = async () => {
           await this._botManager!.killAllBots();
           if (source) {
-            await this._botContainer.removeSource();
+            for(const container of Object.values(this._botContainers)) {
+              await container.removeSource();
+            }
           }
         };
         break;
@@ -222,7 +234,9 @@ export class BotFactory {
   async stop () {
     await this._leaveSwarm?.();
     await this._botManager!.stop();
-    await this._botContainer.stop();
+    for(const container of Object.values(this._botContainers)) {
+      await container.stop();
+    }
     await this._client!.networkManager.close();
   }
 
