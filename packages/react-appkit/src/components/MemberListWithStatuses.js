@@ -14,7 +14,8 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-// TODO(burdon): Is this used?
+// This will be used for party activity indicators
+// ISSUE: https://github.com/dxos/teamwork/issues/424
 export const MemberListWithStatuses = ({ party }) => {
   const [online, setOnline] = useState((party.presence.peers ?? []).length);
   const classes = useStyles();

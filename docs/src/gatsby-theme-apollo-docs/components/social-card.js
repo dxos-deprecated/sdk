@@ -6,6 +6,7 @@
 import React from 'react';
 
 // TODO(burdon): ???
+// ISSUE: https://github.com/dxos/website/issues/160
 import SharedSocialCard from '@dxos/docs-theme/src/components/SocialCard';
 
 const { fonts, image } = preval`

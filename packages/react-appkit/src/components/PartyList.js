@@ -51,6 +51,7 @@ const PartyList = ({ parties = [], selected, onSelect }) => {
               secondary: classes.ellipsis
             }}
             secondary={humanize(topic)} // TODO(burdon): Humanize makes no sense in the UX.
+            // ISSUE: https://github.com/dxos/echo/issues/311
           />
         </ListItem>
       ))}

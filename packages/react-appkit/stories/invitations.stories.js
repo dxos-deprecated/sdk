@@ -21,7 +21,6 @@ import {
   RedeemDialog,
   Theme
 } from '../src';
-
 import { pads, NoPartyComponent } from './common';
 import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 

@@ -15,7 +15,10 @@ export interface ClientInitializerProps {
 }
 
 // TODO(burdon): Bad abstraction -- hides client construction. Replace with ErrorWrapper.
-// TODO(burdon): Document. E.g., "preInitialize?"
+/**
+ * ClientInitializer - Provides Client initialization abstraction with error handling
+ * @param preInitialize - Callback for any pre-initialization logic required for client before initializing it, e.g. model registration.
+ */
 export const ClientInitializer = ({ config, children, preInitialize }: ClientInitializerProps) => {
   const [client] = useState(() => new Client(config));
   const [clientReady, setClientReady] = useState(false);

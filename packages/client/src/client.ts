@@ -131,6 +131,7 @@ export class Client {
     }
 
     await this._echo.createHalo(username);
+
     return this.getProfile();
   }
 
