@@ -85,7 +85,7 @@ for(const dependency of Object.keys(dependenciesRecord)) {
     console.log(chalk`Found multiple different version specifiers of {bold ${dependency}} in the workspace:`);
     for(const [version, infos] of Object.entries(dependenciesRecord[dependency])) {
       for(const info of infos) {
-        console.log(chalk`\t {bold ${version}} in ${join(process.cwd(), info.package, 'package.json')}`)
+        console.log(chalk`\t {bold ${version}} in ${join(process.cwd(), info.path, 'package.json')}`)
       }
     }
   }
