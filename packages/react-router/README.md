@@ -35,4 +35,4 @@ PRs accepted.
 
 ## License
 
-GPL-3.0 © DXOS
+AGPL-3.0 © DXOS

@@ -209,6 +209,7 @@ const PartyTree = ({ parties, items = () => <></>, selected, onSelect, onCreate 
     if (!parties) {
       return;
     }
+
     setExpanded([createId(TYPE_PARTY, selected)]);
   }, []);
 
@@ -240,13 +241,14 @@ const PartyTree = ({ parties, items = () => <></>, selected, onSelect, onCreate 
         onNodeSelect={handleSelect}
         onNodeToggle={handleToggle}
       >
-        {parties.map((partyInfo) => {
-          const topic = keyToString(partyInfo.publicKey);
+        {parties.map(party => {
+          const topic = keyToString(party.publicKey);
+
           return (
             <TreeItem
               key={createId(TYPE_PARTY, topic)}
               nodeId={createId(TYPE_PARTY, topic)}
-              label={<ItemLabel icon={FolderIcon} classes={classes}>{partyInfo.displayName}</ItemLabel>}
+              label={<ItemLabel icon={FolderIcon} classes={classes}>{party.displayName}</ItemLabel>}
               className={clsx(topic === selected && classes.selectedTopic)}
               classes={treeItemClasses}
             >

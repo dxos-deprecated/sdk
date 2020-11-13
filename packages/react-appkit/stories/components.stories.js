@@ -10,7 +10,7 @@ import ConnectedIcon from '@material-ui/icons/Wifi';
 
 import { createKeyPair, keyToString } from '@dxos/crypto';
 
-import { MemberAvatar, useAssets, StatusBar, NewItemCreationMenu } from '../src/components';
+import { MemberAvatar, useAssets, StatusBar, NewItemCreationMenu } from '../src';
 import { pads } from './common';
 
 export default {
