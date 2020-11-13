@@ -1,7 +1,9 @@
 {
   "reporter": [
     "lcov",
-    "text"
+    "text",
+    "html",
+    "text-summary"
   ],
   "lines": 80,
   "branches": "60",
