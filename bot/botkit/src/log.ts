@@ -6,8 +6,8 @@ import debug from 'debug';
 
 export const BASE_DEBUG = 'bot-factory';
 
-export const logBot = new Proxy({}, {
-  get: (target, name) => {
+export const logBot: Record<string, debug.Debugger> = new Proxy({}, {
+  get: (target: any, name: string) => {
     if (!target[name]) {
       target[name] = debug(`${BASE_DEBUG}:${name}`);
     }

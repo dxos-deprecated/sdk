@@ -38,3 +38,17 @@ test.skip('client idempotent calls', async () => {
   await client.destroy();
   await client.destroy();
 });
+
+test('creating profile returns the profile', async () => {
+  const client = new Client();
+
+  await client.initialize();
+
+  const keypair = createKeyPair();
+  const profile = await client.createProfile({ ...keypair, username: 'foo' });
+
+  expect(profile).toBeDefined();
+  expect(profile?.username).toEqual('foo');
+
+  await client.destroy();
+});

@@ -22,7 +22,7 @@ export const getPlatformInfo = () => {
   return { platform, arch };
 };
 
-export const getBotCID = (botRecord, env) => {
+export const getBotCID = (botRecord: string, env: string) => {
   let packageAttrName;
   switch (env) {
     case NATIVE_ENV: {
