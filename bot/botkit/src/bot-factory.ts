@@ -25,14 +25,13 @@ import {
   createEvent
 } from '@dxos/protocol-plugin-bot';
 
-import { NodeBotContainer } from './containers/node-container';
 import { BotManager } from './bot-manager';
 import { getClientConfig } from './config';
+import { BotContainer } from './containers/intefrace';
+import { LocalDevBotContainer } from './containers/local-dev-container';
 import { getPlatformInfo } from './env';
 import { log } from './log';
-import { BotContainer } from './containers/intefrace';
 import { NATIVE_ENV, NODE_ENV } from './source-manager';
-import { LocalDevBotContainer } from './containers/local-dev-container';
 
 // TODO(egorgripasov): Proper version from corresponding .yml file.
 const { version } = readPackageJson() as any;
@@ -69,10 +68,10 @@ export class BotFactory {
     this._plugin = new BotPlugin(this._peerKey, (protocol: any, message: any) => this.handleMessage(protocol, message));
     this._localDev = this._config.get('bot.localDev');
 
-    this._botContainers = this._localDev 
+    this._botContainers = this._localDev
       ? {
         [NODE_ENV]: new LocalDevBotContainer(config),
-        [NATIVE_ENV]: new LocalDevBotContainer(config),
+        [NATIVE_ENV]: new LocalDevBotContainer(config)
       }
       : botContainers;
 
@@ -100,7 +99,7 @@ export class BotFactory {
       emitBotEvent: this.emitBotEvent.bind(this)
     });
 
-    for(const container of Object.values(this._botContainers)) {
+    for (const container of Object.values(this._botContainers)) {
       await container.start({ controlTopic: this._botManager.controlTopic });
     }
     await this._botManager.start();
@@ -165,7 +164,7 @@ export class BotFactory {
         runCommand = async () => {
           await this._botManager!.killAllBots();
           if (source) {
-            for(const container of Object.values(this._botContainers)) {
+            for (const container of Object.values(this._botContainers)) {
               await container.removeSource();
             }
           }
@@ -234,7 +233,7 @@ export class BotFactory {
   async stop () {
     await this._leaveSwarm?.();
     await this._botManager!.stop();
-    for(const container of Object.values(this._botContainers)) {
+    for (const container of Object.values(this._botContainers)) {
       await container.stop();
     }
     await this._client!.networkManager.close();

@@ -15,7 +15,7 @@ import { keyToString } from '@dxos/crypto';
 
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
-import { NATIVE_ENV, NODE_ENV, SourceManager, removeSourceFiles, LOCAL_BOT_MAIN_FILE } from '../source-manager';
+import { SourceManager, removeSourceFiles } from '../source-manager';
 import { BotContainer } from './intefrace';
 
 // Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
@@ -78,7 +78,7 @@ export class NativeBotContainer extends EventEmitter implements BotContainer {
     return {
       command: path.join(installDirectory, NATIVE_BOT_MAIN_FILE),
       args: []
-    }
+    };
   }
 
   /**

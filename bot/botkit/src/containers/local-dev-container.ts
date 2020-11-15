@@ -15,7 +15,7 @@ import { keyToString } from '@dxos/crypto';
 
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
-import { NATIVE_ENV, NODE_ENV, SourceManager, removeSourceFiles, LOCAL_BOT_MAIN_FILE } from '../source-manager';
+import { NATIVE_ENV, SourceManager, removeSourceFiles, LOCAL_BOT_MAIN_FILE } from '../source-manager';
 import { BotContainer, BotAttributes } from './intefrace';
 
 // Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.

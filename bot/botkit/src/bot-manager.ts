@@ -24,11 +24,10 @@ import {
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
 
-import { NodeBotContainer } from './containers/node-container';
 import { BOT_CONFIG_FILENAME } from './config';
+import { BotContainer } from './containers/intefrace';
 import { NATIVE_ENV, getBotCID } from './env';
 import { log } from './log';
-import { BotContainer } from './containers/intefrace';
 
 const chance = new Chance();
 
@@ -102,7 +101,7 @@ export class BotManager {
 
     ensureFileSync(this._botsFile);
 
-    for(const container of Object.values(this._botContainers)) {
+    for (const container of Object.values(this._botContainers)) {
       container.on('bot-close', async (botId: string, code: number) => {
         const botInfo = this._bots.get(botId);
         if (!code && botInfo) {
@@ -111,7 +110,6 @@ export class BotManager {
         }
       });
     }
-
 
     this._controlTopic = createKeyPair().publicKey;
     this._controlPeerKey = this._controlTopic;

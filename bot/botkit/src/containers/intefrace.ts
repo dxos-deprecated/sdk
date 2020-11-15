@@ -1,4 +1,8 @@
-import { BotInfo } from "../bot-manager";
+//
+// Copyright 2020 DXOS.org
+//
+
+import { BotInfo } from '../bot-manager';
 
 /**
  * Container specific attributes for bot startup.
@@ -30,7 +34,7 @@ export interface BotContainer {
    * Removes all source files downloaded.
    */
   removeSource (): Promise<void>
-  
+
   /**
    * Serializes BotInfo into JSON state that's gonna be persisted across restarts.
    */
