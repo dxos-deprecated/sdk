@@ -16,22 +16,7 @@ import { keyToString } from '@dxos/crypto';
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
 import { SourceManager, removeSourceFiles } from '../source-manager';
-import { BotContainer } from './intefrace';
-
-// Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
-export const SPAWNED_BOTS_DIR = '.bots';
-
-// Command to spawn to run a bot in local development mode.
-export const LOCAL_BOT_RUN_COMMAND = 'yarn';
-
-// Fixed arguments to pass to LOCAL_BOT_RUN_COMMAND.
-export const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
-
-// Binary file inside downloaded bot package to run.
-export const NATIVE_BOT_MAIN_FILE = 'main.bin';
-
-// Js file inside Node.js bot package.
-export const NODE_BOT_MAIN_FILE = 'main.js';
+import { BotContainer, NATIVE_BOT_MAIN_FILE, SPAWNED_BOTS_DIR } from './common';
 
 /**
  * Bot Container; Used for running bot instanced inside specific compute service.
@@ -39,7 +24,6 @@ export const NODE_BOT_MAIN_FILE = 'main.js';
 export class NativeBotContainer extends EventEmitter implements BotContainer {
   private readonly _config: any;
   private readonly _sourceManager: SourceManager;
-  private readonly _localDev: boolean;
 
   private _controlTopic?: any;
 
@@ -47,7 +31,6 @@ export class NativeBotContainer extends EventEmitter implements BotContainer {
     super();
 
     this._config = config;
-    this._localDev = this._config.get('bot.localDev');
     this._sourceManager = new SourceManager(config);
   }
 

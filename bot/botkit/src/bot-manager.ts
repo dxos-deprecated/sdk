@@ -25,7 +25,7 @@ import {
 import { Registry } from '@wirelineio/registry-client';
 
 import { BOT_CONFIG_FILENAME } from './config';
-import { BotContainer } from './containers/intefrace';
+import { BotContainer } from './containers/common';
 import { NATIVE_ENV, getBotCID } from './env';
 import { log } from './log';
 
