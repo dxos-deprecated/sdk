@@ -16,10 +16,6 @@ export const BOT_PACKAGE_DOWNLOAD_DIR = 'out/bots';
 // File inside local bot folder to run.
 export const LOCAL_BOT_MAIN_FILE = 'src/main.js';
 
-// Supported environments.
-export const NATIVE_ENV = 'native';
-export const NODE_ENV = 'node';
-
 const DOWNLOAD_TIMEOUT = 40000;
 
 export const removeSourceFiles = async () => {

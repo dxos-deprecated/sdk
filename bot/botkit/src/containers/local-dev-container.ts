@@ -14,8 +14,9 @@ import kill from 'tree-kill';
 import { keyToString } from '@dxos/crypto';
 
 import { BotInfo } from '../bot-manager';
+import { NATIVE_ENV } from '../env';
 import { log, logBot } from '../log';
-import { NATIVE_ENV, SourceManager, removeSourceFiles, LOCAL_BOT_MAIN_FILE } from '../source-manager';
+import { SourceManager, removeSourceFiles, LOCAL_BOT_MAIN_FILE } from '../source-manager';
 import { BotContainer, BotAttributes, SPAWNED_BOTS_DIR, LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
 
 /**

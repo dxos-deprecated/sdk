@@ -29,9 +29,8 @@ import { BotManager } from './bot-manager';
 import { getClientConfig } from './config';
 import { BotContainer } from './containers/common';
 import { LocalDevBotContainer } from './containers/local-dev-container';
-import { getPlatformInfo } from './env';
+import { NATIVE_ENV, NODE_ENV, getPlatformInfo } from './env';
 import { log } from './log';
-import { NATIVE_ENV, NODE_ENV } from './source-manager';
 
 // TODO(egorgripasov): Proper version from corresponding .yml file.
 const { version } = readPackageJson() as any;

@@ -316,7 +316,9 @@ export class BotManager {
     try {
       data = await fs.readJson(this._botsFile);
     } catch (err) {
-      logInfo(err);
+      if (!(err instanceof SyntaxError)) {
+        logInfo(err);
+      }
     }
     data.forEach(({ botId, ...rest }: any) => {
       this._bots.set(botId, { botId, ...rest });
