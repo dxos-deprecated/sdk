@@ -1111,9 +1111,9 @@
     source-map-support "^0.5.12"
     tiny-lru "^7.0.6"
 
-"@dxos/codec-protobuf@^0.2.0":
+"@dxos/codec-protobuf@^0.2.0", "@dxos/codec-protobuf@^0.2.2":
   version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@dxos/codec-protobuf/-/codec-protobuf-0.2.2.tgz#364a24e83cb70497dbcec0defe42016348fcabd6"
+  resolved "https://registry.npmjs.org/@dxos/codec-protobuf/-/codec-protobuf-0.2.2.tgz#364a24e83cb70497dbcec0defe42016348fcabd6"
   integrity sha512-DkFkkciaSLbn6jnD8wwfpzyEOhwMHRQHHNJziN+NmfEWbhmvgyUAWsB4cVmvaGfaYWEhOrmloBtBZMMn6XDilw==
   dependencies:
     protobufjs "^6.10.1"
@@ -1217,42 +1217,6 @@
   dependencies:
     debug "^4.1.1"
 
-"@dxos/echo-db@^2.5.2-alpha.0":
-  version "2.5.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@dxos/echo-db/-/echo-db-2.5.2-beta.0.tgz#a1e11687abde4ff827b7d0f1c7686706dbc18101"
-  integrity sha512-pMQrvx74HVxo+sjI/RBVaCFi18g7HoDsSzC5mvwaLjm4Ws1Lr/SDrlNK692Toa4IGFoDIOa/0U1c1LzSRn+duQ==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.0"
-    "@dxos/credentials" "^2.0.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^2.5.2-beta.0"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^2.5.2-beta.0"
-    "@dxos/network-manager" "^1.0.0-beta.108"
-    "@dxos/object-model" "^2.5.2-beta.0"
-    "@dxos/protocol-plugin-replicator" "^1.1.0-beta.14"
-    "@dxos/random-access-multi-storage" "^1.1.0-beta.7"
-    "@dxos/util" "^2.5.2-beta.0"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/json-stable-stringify" "^1.0.32"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    crypto-js "^4.0.0"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    json-stable-stringify "^1.0.1"
-    lodash.merge "^4.6.2"
-    pify "^5.0.0"
-    protobufjs "^6.9.0"
-    pump "^3.0.0"
-    random-access-memory "^3.1.1"
-    source-map-support "^0.5.12"
-    stream-buffers "^3.0.2"
-
 "@dxos/echo-db@^2.6.4-alpha.0":
   version "2.6.4-alpha.0"
   resolved "https://registry.yarnpkg.com/@dxos/echo-db/-/echo-db-2.6.4-alpha.0.tgz#697c03df2cac90a31d35edf1792899f2fe7815c8"
@@ -1288,32 +1252,6 @@
     random-access-memory "^3.1.1"
     source-map-support "^0.5.12"
     stream-buffers "^3.0.2"
-
-"@dxos/echo-protocol@^2.5.2-beta.0":
-  version "2.5.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@dxos/echo-protocol/-/echo-protocol-2.5.2-beta.0.tgz#e9a337566608b595358df8d8f41d5feaca94a780"
-  integrity sha512-h2NYb3l1dtmuU9ONzOJYKEg1riL+MRa5JG1rhzuC1jzzz2vN3064RReDk87KD406GU3zNI2OSWDi8avdvFw8Qg==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.0"
-    "@dxos/credentials" "^2.0.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^2.5.2-beta.0"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/readable-stream" "^2.3.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    readable-stream "^3.6.0"
-    source-map-support "^0.5.12"
 
 "@dxos/echo-protocol@^2.6.1-alpha.0":
   version "2.6.1-alpha.0"
@@ -1384,7 +1322,7 @@
 
 "@dxos/eslint-plugin@^1.0.8":
   version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@dxos/eslint-plugin/-/eslint-plugin-1.0.8.tgz#8c233c78a314167d13978a1ad1b4f79aa5c41b4f"
+  resolved "https://registry.npmjs.org/@dxos/eslint-plugin/-/eslint-plugin-1.0.8.tgz#8c233c78a314167d13978a1ad1b4f79aa5c41b4f"
   integrity sha512-VjPgvcAqrXYB+OL4iMKHRvBSoB7k+pjDkhX04oNwmouwvaFUbbzOlTt+4TdPBZmBxEGSIKz04uX4t99EobuCiA==
   dependencies:
     "@rushstack/eslint-patch" "^1.0.3"
@@ -1415,6 +1353,24 @@
     subleveldown "^4.1.4"
     through2 "^3.0.1"
     varint "^5.0.0"
+
+"@dxos/feed-store@1.2.0-beta.2":
+  version "1.2.0-beta.2"
+  resolved "https://registry.npmjs.org/@dxos/feed-store/-/feed-store-1.2.0-beta.2.tgz#4346a0ef1581e42d2ebce1ee611e3d6379a7f70c"
+  integrity sha512-sIrqE5CyIYQCu49bqzTY7NIgzcAV9P0PCALbYJkX4M2mb0ac/+19UJrsTNTsOS7IQpw13UQf4H2PAfolTR/UWQ==
+  dependencies:
+    buffer-json-encoding "^1.0.2"
+    debug "^4.1.1"
+    end-of-stream "^1.4.4"
+    hypercore "^7.7.1"
+    hypercore-crypto "^1.0.0"
+    hypertrie "^3.8.0"
+    multi-read-stream "^2.0.0"
+    mutexify "^1.2.0"
+    p-timeout "^3.2.0"
+    pify "^4.0.1"
+    random-access-file "^2.1.0"
+    source-map-support "^0.5.12"
 
 "@dxos/feed-store@^1.2.0-beta.1", "@dxos/feed-store@^1.2.0-beta.23", "@dxos/feed-store@^1.2.0-beta.30":
   version "1.2.0-beta.30"
@@ -1484,30 +1440,6 @@
     signal-promise "^1.0.3"
     source-map-support "^0.5.12"
     through2 "^3.0.1"
-
-"@dxos/model-factory@^2.5.2-beta.0":
-  version "2.5.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-2.5.2-beta.0.tgz#073b71fcae5a3ec715236066845121feec51f0ee"
-  integrity sha512-CvNuCXlGhWR1pz7napULQv0H5pV2Ju1e88vauQC3Q+j6s1Qzp9DMWpfUiNPamiIKXoEWVAwQBnfay50qPo/dtQ==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^2.5.2-beta.0"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^2.5.2-beta.0"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    source-map-support "^0.5.12"
 
 "@dxos/model-factory@^2.6.1-alpha.0":
   version "2.6.1-alpha.0"
@@ -1582,31 +1514,6 @@
     debug "^4.1.1"
     wrtc "^0.4.3"
 
-"@dxos/object-model@^2.5.2-beta.0":
-  version "2.5.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@dxos/object-model/-/object-model-2.5.2-beta.0.tgz#0b8e32834d20b87235833fb1d8b9be71e34c4aec"
-  integrity sha512-ZC5bD8kkjboSday6O1vp1Ig2mhB901q0JfwK2tciLEXUf5EvI3FSnbe2KBLPxpzsLm/e2Ux0l9WwCgn7jQYlYg==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^2.5.2-beta.0"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^2.5.2-beta.0"
-    "@dxos/util" "^2.5.2-beta.0"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    source-map-support "^0.5.12"
-
 "@dxos/object-model@^2.6.4-alpha.0":
   version "2.6.4-alpha.0"
   resolved "https://registry.yarnpkg.com/@dxos/object-model/-/object-model-2.6.4-alpha.0.tgz#e89d9277fa0945905ebc6ba8367cad6f3de9b72e"
@@ -1631,6 +1538,15 @@
     lodash.merge "^4.6.2"
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
+
+"@dxos/protobuf-compiler@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.npmjs.org/@dxos/protobuf-compiler/-/protobuf-compiler-0.2.2.tgz#b20a0c5bef71e472d2fe5829f5d5b54b30186494"
+  integrity sha512-DfnobkcSp2Ev01LOlcfK4zH3+tG4zojXkkuc32h2xqqjxTJ1P5cqahVccmHgowbO2Pj7fc7ijixB2M85xxKt7Q==
+  dependencies:
+    argparse "^2.0.1"
+    chalk "^4.1.0"
+    read-pkg "^5.2.0"
 
 "@dxos/protocol-network-generator@^1.1.0-beta.2":
   version "1.1.0-beta.18"
@@ -1764,27 +1680,6 @@
   version "2.5.0-alpha.0"
   resolved "https://registry.yarnpkg.com/@dxos/util/-/util-2.5.0-alpha.0.tgz#2ec056f288a36d18ab2c835f6ee284094e13d98d"
   integrity sha512-tqzc0BDpckelQhF3lbOPBB/jrvfXScBd5x+tA0Kcoh0jsuckyKeexspZkENvOwtLITfxO5QPij7Zj2nhb4m5oA==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    source-map-support "^0.5.12"
-
-"@dxos/util@^2.5.2-beta.0":
-  version "2.5.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@dxos/util/-/util-2.5.2-beta.0.tgz#b207664a5ad6188340bd32e27c7b26b4d18ec154"
-  integrity sha512-kK76pvuUAlGY1lw5KWkHgPLakJCUh6e1OSMx7GeETzPQMM6ZPgaU53Ve6Bq7+tD4xGu2IugGYIL0YAH2QIueqg==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^0.2.0"
@@ -5097,6 +4992,11 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
+argparse@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
+  integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
+
 aria-query@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-4.2.2.tgz#0d2ca6c9aceb56b8977e9fed6aed7e15bbd2f83b"
@@ -7205,6 +7105,17 @@ count-trailing-zeros@^1.0.1:
   resolved "https://registry.yarnpkg.com/count-trailing-zeros/-/count-trailing-zeros-1.0.1.tgz#aba6c5833be410d45b1eca3e6d583844ce682c77"
   integrity sha1-q6bFgzvkENRbHso+bVg4RM5oLHc=
 
+coveralls@^3.0.7:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/coveralls/-/coveralls-3.1.0.tgz#13c754d5e7a2dd8b44fe5269e21ca394fb4d615b"
+  integrity sha512-sHxOu2ELzW8/NC1UP5XVLbZDzO4S3VxfFye3XYCznopHy02YjNkHcj5bKaVw2O7hVaBdBjEdQGpie4II1mWhuQ==
+  dependencies:
+    js-yaml "^3.13.1"
+    lcov-parse "^1.0.0"
+    log-driver "^1.2.7"
+    minimist "^1.2.5"
+    request "^2.88.2"
+
 cp-file@^6.1.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/cp-file/-/cp-file-6.2.0.tgz#40d5ea4a1def2a9acdd07ba5c0b0246ef73dc10d"
@@ -7216,7 +7127,7 @@ cp-file@^6.1.0:
     pify "^4.0.1"
     safe-buffer "^5.0.1"
 
-cpy-cli@2.0.0:
+cpy-cli@2.0.0, cpy-cli@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/cpy-cli/-/cpy-cli-2.0.0.tgz#13f1528a231605c52ee7b7f74848e4be82253274"
   integrity sha512-LzrtY3lBWvFZcw4lXgkEbbDUd7y78juC3C5l7gj3UyezMEZF0Be9fjCVLN1HoZAzdMDeC3KHehWpHBJvgVAPkw==
@@ -7743,6 +7654,14 @@ deglob@^4.0.1:
     pkg-config "^1.1.0"
     run-parallel "^1.1.2"
     uniq "^1.0.1"
+
+del-cli@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/del-cli/-/del-cli-3.0.1.tgz#2d27ff260204b5104cadeda86f78f180a4ebe89a"
+  integrity sha512-BLHItGr82rUbHhjMu41d+vw9Md49i81jmZSV00HdTq4t+RTHywmEht/23mNFpUl2YeLYJZJyGz4rdlMAyOxNeg==
+  dependencies:
+    del "^5.1.0"
+    meow "^6.1.1"
 
 del@^5.0.0, del@^5.1.0:
   version "5.1.0"
@@ -8670,6 +8589,49 @@ eslint@^7.11.0:
   version "7.12.1"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.12.1.tgz#bd9a81fa67a6cfd51656cdb88812ce49ccec5801"
   integrity sha512-HlMTEdr/LicJfN08LB3nM1rRYliDXOmfoO4vj39xN6BLpFzF00hbwBoqHk8UcJ2M/3nlARZWy/mslvGEuZFvsg==
+  dependencies:
+    "@babel/code-frame" "^7.0.0"
+    "@eslint/eslintrc" "^0.2.1"
+    ajv "^6.10.0"
+    chalk "^4.0.0"
+    cross-spawn "^7.0.2"
+    debug "^4.0.1"
+    doctrine "^3.0.0"
+    enquirer "^2.3.5"
+    eslint-scope "^5.1.1"
+    eslint-utils "^2.1.0"
+    eslint-visitor-keys "^2.0.0"
+    espree "^7.3.0"
+    esquery "^1.2.0"
+    esutils "^2.0.2"
+    file-entry-cache "^5.0.1"
+    functional-red-black-tree "^1.0.1"
+    glob-parent "^5.0.0"
+    globals "^12.1.0"
+    ignore "^4.0.6"
+    import-fresh "^3.0.0"
+    imurmurhash "^0.1.4"
+    is-glob "^4.0.0"
+    js-yaml "^3.13.1"
+    json-stable-stringify-without-jsonify "^1.0.1"
+    levn "^0.4.1"
+    lodash "^4.17.19"
+    minimatch "^3.0.4"
+    natural-compare "^1.4.0"
+    optionator "^0.9.1"
+    progress "^2.0.0"
+    regexpp "^3.1.0"
+    semver "^7.2.1"
+    strip-ansi "^6.0.0"
+    strip-json-comments "^3.1.0"
+    table "^5.2.3"
+    text-table "^0.2.0"
+    v8-compile-cache "^2.0.3"
+
+eslint@^7.13.0:
+  version "7.13.0"
+  resolved "https://registry.npmjs.org/eslint/-/eslint-7.13.0.tgz#7f180126c0dcdef327bfb54b211d7802decc08da"
+  integrity sha512-uCORMuOO8tUzJmsdRtrvcGq5qposf7Rw0LwkTJkoDbOycVQtQjmnhZSuLQnozLE4TmAzlMVV45eCHmQ1OpDKUQ==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@eslint/eslintrc" "^0.2.1"
@@ -11965,7 +11927,7 @@ jest-worker@^26.2.1, jest-worker@^26.6.2:
 
 jest@^26.6.3:
   version "26.6.3"
-  resolved "https://registry.yarnpkg.com/jest/-/jest-26.6.3.tgz#40e8fdbe48f00dfa1f0ce8121ca74b88ac9148ef"
+  resolved "https://registry.npmjs.org/jest/-/jest-26.6.3.tgz#40e8fdbe48f00dfa1f0ce8121ca74b88ac9148ef"
   integrity sha512-lGS5PXGAzR4RF7V5+XObhqz2KZIDUA1yD0DG6pBVmy10eh0ZIXQImRuzocsI/N2XZ1GrLFwTS27In2i2jlpq1Q==
   dependencies:
     "@jest/core" "^26.6.3"
@@ -12107,14 +12069,6 @@ json5@^1.0.1:
   integrity sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
   dependencies:
     minimist "^1.2.0"
-
-jsondown@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/jsondown/-/jsondown-1.0.0.tgz#c5cc5cda65f515d2376136a104b5f535534f26e3"
-  integrity sha512-p6XxPaq59aXwcdDQV3ISMA5xk+1z6fJuctcwwSdR9iQgbYOcIrnknNrhcMGG+0FaUfKHGkdDpQNaZrovfBoyOw==
-  dependencies:
-    memdown "1.4.1"
-    mkdirp "0.5.1"
 
 jsondown@^1.0.0:
   version "1.0.0"
@@ -12333,6 +12287,11 @@ lazy-universal-dotenv@^3.0.1:
     core-js "^3.0.4"
     dotenv "^8.0.0"
     dotenv-expand "^5.1.0"
+
+lcov-parse@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/lcov-parse/-/lcov-parse-1.0.0.tgz#eb0d46b54111ebc561acb4c408ef9363bdc8f7e0"
+  integrity sha1-6w1GtUER68VhrLTECO+TY73I9+A=
 
 lerna@^3.19.0:
   version "3.22.1"
@@ -12822,6 +12781,11 @@ lodash@^4.0.1, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.14, lodash@^4.17.1
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
+log-driver@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.npmjs.org/log-driver/-/log-driver-1.2.7.tgz#63b95021f0702fedfa2c9bb0a24e7797d71871d8"
+  integrity sha512-U7KCmLdqsGHBLeWqYlFA0V0Sl6P08EE1ZrmA9cxjUE0WVqT9qnyVDPz1kzpFEP0jdJuFnasWIfSd7fsaNXkpbg==
+
 log-symbols@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-1.0.2.tgz#376ff7b58ea3086a0f09facc74617eca501e1a18"
@@ -13198,6 +13162,23 @@ meow@^5.0.0:
     trim-newlines "^2.0.0"
     yargs-parser "^10.0.0"
 
+meow@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.npmjs.org/meow/-/meow-6.1.1.tgz#1ad64c4b76b2a24dfb2f635fddcadf320d251467"
+  integrity sha512-3YffViIt2QWgTy6Pale5QpopX/IvU3LPL03jOTqp6pGj3VjesdO/U8CuHMKpnQr4shCNCM5fd5XFFvIIl6JBHg==
+  dependencies:
+    "@types/minimist" "^1.2.0"
+    camelcase-keys "^6.2.2"
+    decamelize-keys "^1.1.0"
+    hard-rejection "^2.1.0"
+    minimist-options "^4.0.2"
+    normalize-package-data "^2.5.0"
+    read-pkg-up "^7.0.1"
+    redent "^3.0.0"
+    trim-newlines "^3.0.0"
+    type-fest "^0.13.1"
+    yargs-parser "^18.1.3"
+
 meow@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/meow/-/meow-8.0.0.tgz#1aa10ee61046719e334ffdc038bb5069250ec99a"
@@ -13397,7 +13378,7 @@ minimatch@2.x:
   dependencies:
     brace-expansion "^1.0.0"
 
-minimist-options@4.1.0:
+minimist-options@4.1.0, minimist-options@^4.0.2:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/minimist-options/-/minimist-options-4.1.0.tgz#c0655713c53a8a2ebd77ffa247d342c40f010619"
   integrity sha512-Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==
@@ -18269,6 +18250,23 @@ ts-jest@^26.4.3:
     semver "7.x"
     yargs-parser "20.x"
 
+ts-jest@^26.4.4:
+  version "26.4.4"
+  resolved "https://registry.npmjs.org/ts-jest/-/ts-jest-26.4.4.tgz#61f13fb21ab400853c532270e52cc0ed7e502c49"
+  integrity sha512-3lFWKbLxJm34QxyVNNCgXX1u4o/RV0myvA2y2Bxm46iGIjKlaY0own9gIckbjZJPn+WaJEnfPPJ20HHGpoq4yg==
+  dependencies:
+    "@types/jest" "26.x"
+    bs-logger "0.x"
+    buffer-from "1.x"
+    fast-json-stable-stringify "2.x"
+    jest-util "^26.1.0"
+    json5 "2.x"
+    lodash.memoize "4.x"
+    make-error "1.x"
+    mkdirp "1.x"
+    semver "7.x"
+    yargs-parser "20.x"
+
 ts-node@^9.0.0:
   version "9.0.0"
   resolved "https://registry.npmjs.org/ts-node/-/ts-node-9.0.0.tgz#e7699d2a110cc8c0d3b831715e417688683460b3"
@@ -18358,6 +18356,11 @@ type-fest@^0.11.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.11.0.tgz#97abf0872310fed88a5c466b25681576145e33f1"
   integrity sha512-OdjXJxnCN1AvyLSzeKIgXTXxV+99ZuXl3Hpo9XpJAv9MBcHrrJOQ5kV7ypXOuQie+AmWG25hLbiKdwYTifzcfQ==
 
+type-fest@^0.13.1:
+  version "0.13.1"
+  resolved "https://registry.npmjs.org/type-fest/-/type-fest-0.13.1.tgz#0172cb5bce80b0bd542ea348db50c7e21834d934"
+  integrity sha512-34R7HTnG0XIJcBSn5XhDd7nNFPRcXYRZrBB2O2jdKqYODldSzBAqzsWoZYYvduky73toYS/ESqxPvkDf/F0XMg==
+
 type-fest@^0.18.0:
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.18.0.tgz#2edfa6382d48653707344f7fccdb0443d460e8d6"
@@ -18420,7 +18423,7 @@ typeforce@^1.11.5:
 
 typescript@^4.0.5:
   version "4.0.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.5.tgz#ae9dddfd1069f1cb5beb3ef3b2170dd7c1332389"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-4.0.5.tgz#ae9dddfd1069f1cb5beb3ef3b2170dd7c1332389"
   integrity sha512-ywmr/VrTVCmNTJ6iV2LwIrfG1P+lv6luD8sUJs+2eI9NLGigaN+nUQc13iHqisq7bra9lnmUSYqbJvegraBOPQ==
 
 uglify-js@^3.1.4:
@@ -18945,7 +18948,7 @@ w3c-xmlserializer@^2.0.0:
   dependencies:
     xml-name-validator "^3.0.0"
 
-wait-for-expect@^3.0.2:
+wait-for-expect@^3.0.1, wait-for-expect@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/wait-for-expect/-/wait-for-expect-3.0.2.tgz#d2f14b2f7b778c9b82144109c8fa89ceaadaa463"
   integrity sha512-cfS1+DZxuav1aBYbaO/kE06EOS8yRw7qOFoD3XtjTkYvCvh3zUvNST8DXK/nPaeqIzIv3P3kL3lRJn8iwOiSag==
@@ -19425,7 +19428,7 @@ yargs-parser@^15.0.1:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs-parser@^18.1.2:
+yargs-parser@^18.1.2, yargs-parser@^18.1.3:
   version "18.1.3"
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-18.1.3.tgz#be68c4975c6b2abf469236b0c870362fab09a7b0"
   integrity sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==
