@@ -3,5 +3,5 @@
 //
 
 export * from './bot';
-export * from './bot-messages';
+export * from './bot-messages.ts';
 export * from './botkit-messages';

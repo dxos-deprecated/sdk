@@ -3,6 +3,7 @@
 //
 
 import assert from 'assert';
+import { InvitationMessage, Message } from './proto/gen/dxos/protocol/bot';
 
 export const COMMAND_SIGN = 'dxos.protocol.bot.SignChallenge';
 export const SIGN_RESPONSE = 'dxos.protocol.bot.SignChallengeResponse';
@@ -15,9 +16,8 @@ export const MESSAGE_CONFIRM = 'dxos.protocol.bot.ConfirmConnection';
 
 /**
  * Creates a new Sign command message.
- * @param {Buffer} message
  */
-export const createSignCommand = (message) => {
+export const createSignCommand = (message: Buffer): Message => {
   assert(message);
   assert(Buffer.isBuffer(message));
 
@@ -31,9 +31,8 @@ export const createSignCommand = (message) => {
 
 /**
  * Creates a response for Sign command message.
- * @param {Buffer} signature
  */
-export const createSignResponse = (signature) => {
+export const createSignResponse = (signature: Buffer): Message => {
   assert(signature);
   assert(Buffer.isBuffer(signature));
 
@@ -47,9 +46,8 @@ export const createSignResponse = (signature) => {
 
 /**
  * Creates a new connection confirmation message.
- * @param {string} id
  */
-export const createConnectConfirmMessage = (botId) => {
+export const createConnectConfirmMessage = (botId: string): Message => {
   assert(botId);
 
   return {
@@ -62,10 +60,8 @@ export const createConnectConfirmMessage = (botId) => {
 
 /**
  * Creates a new invitation message.
- * @param {string} topic
- * @param {Object} invitation
  */
-export const createInvitationMessage = (topic, invitation) => {
+export const createInvitationMessage = (topic: string, invitation: InvitationMessage.Invitation): Message => {
   assert(topic);
   assert(invitation);
 
@@ -80,10 +76,8 @@ export const createInvitationMessage = (topic, invitation) => {
 
 /**
  * Create arbitrary message to bot.
- * @param {string} botId
- * @param {Buffer} command
  */
-export const createBotCommand = (botId, command) => {
+export const createBotCommand = (botId: string, command: Buffer): Message => {
   assert(botId);
   assert(command);
 
@@ -98,10 +92,8 @@ export const createBotCommand = (botId, command) => {
 
 /**
  * Create arbitrary message response from bot.
- * @param {Buffer} data
- * @param {string} error
  */
-export const createBotCommandResponse = (data, error) => {
+export const createBotCommandResponse = (data: Buffer, error: string): Message => {
   return {
     message: {
       __type_url: BOT_COMMAND_RESPONSE,
@@ -117,7 +109,7 @@ export const createBotCommandResponse = (data, error) => {
  * @param {string} type
  * @param {Buffer} data
  */
-export const createEvent = (botId, type, data) => {
+export const createEvent = (botId: string, type: string, data: Buffer): Message => {
   assert(botId);
   assert(type);
 

@@ -5,7 +5,7 @@
 
 import { Schema as CodecSchema } from '@dxos/codec-protobuf';
 
-import { DecodedAny } from './any';
+import { DecodedAny, KnownAny } from './any';
 
 export default {
   'google.protobuf.Any': {
@@ -16,8 +16,8 @@ export default {
         type_url: value.__type_url,
         value: data
       };
-    },
-    decode: (value: any, schema: CodecSchema<any>): DecodedAny => {
+    }, 
+    decode: (value: any, schema: CodecSchema<any>): KnownAny => {
       const codec = schema.tryGetCodecForType(value.type_url);
       const data = codec.decode(value.value);
       return {
