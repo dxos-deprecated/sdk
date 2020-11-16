@@ -9,7 +9,7 @@ import { Broadcast } from '@dxos/broadcast';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { Extension } from '@dxos/protocol';
 
-import { schema } from './gen';
+import { schema } from './proto/gen';
 
 const DEFAULT_TIMEOUT = 60000;
 

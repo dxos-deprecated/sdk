@@ -19,7 +19,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "yarn build:protobuf && tsc --build",
-    "build:protobuf": "build-protobuf src/schema.proto -o src/gen",
+    "build:protobuf": "build-protobuf src/proto/schema.proto -o src/proto/gen -s src/proto/substitutions.ts",
     "coverage": "npm test -- --coverage",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "lint": "eslint 'src/**/*.{ts,js}'",
