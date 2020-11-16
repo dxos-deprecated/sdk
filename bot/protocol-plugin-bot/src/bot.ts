@@ -6,12 +6,11 @@ import assert from 'assert';
 import { EventEmitter } from 'events';
 
 import { Broadcast } from '@dxos/broadcast';
+import { Codec } from '@dxos/codec-protobuf';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { Extension } from '@dxos/protocol';
 
-import { schema } from './proto';
-import { Message } from './proto';
-import { Codec } from '@dxos/codec-protobuf';
+import { schema, Message } from './proto';
 
 const DEFAULT_TIMEOUT = 60000;
 
@@ -23,7 +22,6 @@ export const codec = schema.getCodecForType('dxos.protocol.bot.Message');
 // TODO(marik-d): Temporary until @dxos/protocol has its own types.
 type Protocol = any;
 type Broadcast = any;
-
 
 /**
  * Bot protocol.

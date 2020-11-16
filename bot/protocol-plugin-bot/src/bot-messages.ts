@@ -3,6 +3,7 @@
 //
 
 import assert from 'assert';
+
 import { InvitationMessage, Message } from './proto';
 
 export const COMMAND_SIGN = 'dxos.protocol.bot.SignChallenge';

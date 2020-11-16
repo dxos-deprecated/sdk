@@ -5,6 +5,7 @@
 import assert from 'assert';
 
 import { keyToString } from '@dxos/crypto';
+
 import { Message, Spawn, Status } from './proto';
 
 export const COMMAND_SPAWN = 'dxos.protocol.bot.Spawn';

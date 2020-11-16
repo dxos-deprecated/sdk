@@ -1,3 +1,7 @@
+//
+// Copyright 2020 DXOS.org
+//
+
 declare module '@dxos/broadcast';
 declare module '@dxos/broadcast';
 declare module '@dxos/protocol';

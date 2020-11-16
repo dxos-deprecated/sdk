@@ -61,7 +61,7 @@
   "eslintConfig": {
     "extends": "plugin:@dxos/recomended",
     "ignorePatterns": [
-      "src/gen/*"
+      "src/proto/gen/*"
     ]
   }
 }
