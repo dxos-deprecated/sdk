@@ -1354,25 +1354,7 @@
     through2 "^3.0.1"
     varint "^5.0.0"
 
-"@dxos/feed-store@1.2.0-beta.2":
-  version "1.2.0-beta.2"
-  resolved "https://registry.npmjs.org/@dxos/feed-store/-/feed-store-1.2.0-beta.2.tgz#4346a0ef1581e42d2ebce1ee611e3d6379a7f70c"
-  integrity sha512-sIrqE5CyIYQCu49bqzTY7NIgzcAV9P0PCALbYJkX4M2mb0ac/+19UJrsTNTsOS7IQpw13UQf4H2PAfolTR/UWQ==
-  dependencies:
-    buffer-json-encoding "^1.0.2"
-    debug "^4.1.1"
-    end-of-stream "^1.4.4"
-    hypercore "^7.7.1"
-    hypercore-crypto "^1.0.0"
-    hypertrie "^3.8.0"
-    multi-read-stream "^2.0.0"
-    mutexify "^1.2.0"
-    p-timeout "^3.2.0"
-    pify "^4.0.1"
-    random-access-file "^2.1.0"
-    source-map-support "^0.5.12"
-
-"@dxos/feed-store@^1.2.0-beta.1", "@dxos/feed-store@^1.2.0-beta.23", "@dxos/feed-store@^1.2.0-beta.30":
+"@dxos/feed-store@^1.2.0-beta.2", "@dxos/feed-store@^1.2.0-beta.23", "@dxos/feed-store@^1.2.0-beta.30":
   version "1.2.0-beta.30"
   resolved "https://registry.yarnpkg.com/@dxos/feed-store/-/feed-store-1.2.0-beta.30.tgz#6a6f4d233496679e5e24405a6bfaa0bd6c4363cc"
   integrity sha512-o7xH0ddhVT0shzpx37V9jGHr68/aD+8AcDmhNLuiGSvlncVnBpv8r2NDKTcOJv1u0eVZBo6A2jemAfe56TCyiQ==
@@ -1582,7 +1564,7 @@
     debug "^4.1.1"
     source-map-support "^0.5.12"
 
-"@dxos/protocol@^1.1.0-alpha.4", "@dxos/protocol@^1.1.0-beta.1", "@dxos/protocol@^1.1.0-beta.18":
+"@dxos/protocol@^1.1.0-beta.1", "@dxos/protocol@^1.1.0-beta.18":
   version "1.1.0-beta.18"
   resolved "https://registry.yarnpkg.com/@dxos/protocol/-/protocol-1.1.0-beta.18.tgz#6b90cf448967996893c0f1858ed7cd474fd7686b"
   integrity sha512-UvAZOfzaWazjlzckTxKMVG5eLbFfKBBzfzrBgLgEX/LfYSUZSQb+IlkEvuN44dfuKo6MTT/RU6oRugagmY0ong==
@@ -2058,13 +2040,6 @@
     rimraf "^3.0.0"
     slash "^3.0.0"
     strip-ansi "^6.0.0"
-
-"@jest/create-cache-key-function@^26.5.0":
-  version "26.6.2"
-  resolved "https://registry.yarnpkg.com/@jest/create-cache-key-function/-/create-cache-key-function-26.6.2.tgz#04cf439207a4fd12418d8aee551cddc86f9ac5f5"
-  integrity sha512-LgEuqU1f/7WEIPYqwLPIvvHuc1sB6gMVbT6zWhin3txYUNYK/kGQrC1F2WR4gR34YlI9bBtViTm5z98RqVZAaw==
-  dependencies:
-    "@jest/types" "^26.6.2"
 
 "@jest/environment@^26.6.2":
   version "26.6.2"
@@ -7127,7 +7102,7 @@ cp-file@^6.1.0:
     pify "^4.0.1"
     safe-buffer "^5.0.1"
 
-cpy-cli@2.0.0, cpy-cli@^2.0.0:
+cpy-cli@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/cpy-cli/-/cpy-cli-2.0.0.tgz#13f1528a231605c52ee7b7f74848e4be82253274"
   integrity sha512-LzrtY3lBWvFZcw4lXgkEbbDUd7y78juC3C5l7gj3UyezMEZF0Be9fjCVLN1HoZAzdMDeC3KHehWpHBJvgVAPkw==
@@ -8584,49 +8559,6 @@ eslint-visitor-keys@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-2.0.0.tgz#21fdc8fbcd9c795cc0321f0563702095751511a8"
   integrity sha512-QudtT6av5WXels9WjIM7qz1XD1cWGvX4gGXvp/zBn9nXG02D0utdU3Em2m/QjTnrsk6bBjmCygl3rmj118msQQ==
-
-eslint@^7.11.0:
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.12.1.tgz#bd9a81fa67a6cfd51656cdb88812ce49ccec5801"
-  integrity sha512-HlMTEdr/LicJfN08LB3nM1rRYliDXOmfoO4vj39xN6BLpFzF00hbwBoqHk8UcJ2M/3nlARZWy/mslvGEuZFvsg==
-  dependencies:
-    "@babel/code-frame" "^7.0.0"
-    "@eslint/eslintrc" "^0.2.1"
-    ajv "^6.10.0"
-    chalk "^4.0.0"
-    cross-spawn "^7.0.2"
-    debug "^4.0.1"
-    doctrine "^3.0.0"
-    enquirer "^2.3.5"
-    eslint-scope "^5.1.1"
-    eslint-utils "^2.1.0"
-    eslint-visitor-keys "^2.0.0"
-    espree "^7.3.0"
-    esquery "^1.2.0"
-    esutils "^2.0.2"
-    file-entry-cache "^5.0.1"
-    functional-red-black-tree "^1.0.1"
-    glob-parent "^5.0.0"
-    globals "^12.1.0"
-    ignore "^4.0.6"
-    import-fresh "^3.0.0"
-    imurmurhash "^0.1.4"
-    is-glob "^4.0.0"
-    js-yaml "^3.13.1"
-    json-stable-stringify-without-jsonify "^1.0.1"
-    levn "^0.4.1"
-    lodash "^4.17.19"
-    minimatch "^3.0.4"
-    natural-compare "^1.4.0"
-    optionator "^0.9.1"
-    progress "^2.0.0"
-    regexpp "^3.1.0"
-    semver "^7.2.1"
-    strip-ansi "^6.0.0"
-    strip-json-comments "^3.1.0"
-    table "^5.2.3"
-    text-table "^0.2.0"
-    v8-compile-cache "^2.0.3"
 
 eslint@^7.13.0:
   version "7.13.0"
@@ -12070,10 +12002,9 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
-jsondown@^1.0.0:
+jsondown@dxos/jsondown:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/jsondown/-/jsondown-1.0.0.tgz#c5cc5cda65f515d2376136a104b5f535534f26e3"
-  integrity sha512-p6XxPaq59aXwcdDQV3ISMA5xk+1z6fJuctcwwSdR9iQgbYOcIrnknNrhcMGG+0FaUfKHGkdDpQNaZrovfBoyOw==
+  resolved "https://codeload.github.com/dxos/jsondown/tar.gz/0bec0436f00973e7f2528115c72a5ab96dc45576"
   dependencies:
     memdown "1.4.1"
     mkdirp "0.5.1"
@@ -18232,24 +18163,6 @@ ts-essentials@^2.0.3:
   resolved "https://registry.yarnpkg.com/ts-essentials/-/ts-essentials-2.0.12.tgz#c9303f3d74f75fa7528c3d49b80e089ab09d8745"
   integrity sha512-3IVX4nI6B5cc31/GFFE+i8ey/N2eA0CZDbo6n0yrz0zDX8ZJ8djmU1p+XRz7G3is0F3bB3pu2pAroFdAWQKU3w==
 
-ts-jest@^26.4.3:
-  version "26.4.3"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-26.4.3.tgz#d153a616033e7ec8544b97ddbe2638cbe38d53db"
-  integrity sha512-pFDkOKFGY+nL9v5pkhm+BIFpoAuno96ff7GMnIYr/3L6slFOS365SI0fGEVYx2RKGji5M2elxhWjDMPVcOCdSw==
-  dependencies:
-    "@jest/create-cache-key-function" "^26.5.0"
-    "@types/jest" "26.x"
-    bs-logger "0.x"
-    buffer-from "1.x"
-    fast-json-stable-stringify "2.x"
-    jest-util "^26.1.0"
-    json5 "2.x"
-    lodash.memoize "4.x"
-    make-error "1.x"
-    mkdirp "1.x"
-    semver "7.x"
-    yargs-parser "20.x"
-
 ts-jest@^26.4.4:
   version "26.4.4"
   resolved "https://registry.npmjs.org/ts-jest/-/ts-jest-26.4.4.tgz#61f13fb21ab400853c532270e52cc0ed7e502c49"
@@ -18948,7 +18861,7 @@ w3c-xmlserializer@^2.0.0:
   dependencies:
     xml-name-validator "^3.0.0"
 
-wait-for-expect@^3.0.1, wait-for-expect@^3.0.2:
+wait-for-expect@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/wait-for-expect/-/wait-for-expect-3.0.2.tgz#d2f14b2f7b778c9b82144109c8fa89ceaadaa463"
   integrity sha512-cfS1+DZxuav1aBYbaO/kE06EOS8yRw7qOFoD3XtjTkYvCvh3zUvNST8DXK/nPaeqIzIv3P3kL3lRJn8iwOiSag==
