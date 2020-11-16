@@ -13,14 +13,13 @@ import { log } from './log';
 // Directory inside `cwd` in which bot packages are downloaded and extracted.
 export const BOT_PACKAGE_DOWNLOAD_DIR = 'out/bots';
 
+// Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
+export const SPAWNED_BOTS_DIR = '.bots';
+
 // File inside local bot folder to run.
 export const LOCAL_BOT_MAIN_FILE = 'src/main.js';
 
 const DOWNLOAD_TIMEOUT = 40000;
-
-export const removeSourceFiles = async () => {
-  await fs.remove(BOT_PACKAGE_DOWNLOAD_DIR);
-};
 
 export class SourceManager {
   private readonly _config: any;
