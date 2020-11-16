@@ -4,7 +4,7 @@ import { NODE_ENV, Orchestrator } from '../src/orchestrator';
 
 jest.setTimeout(100 * 1000);
 
-test.skip('bot test - local source', async () => {
+test('bot test - local source', async () => {
   const orchestrator = new Orchestrator({ local: true });
 
   orchestrator.client.registerModel(MessengerModel);
