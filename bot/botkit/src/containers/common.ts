@@ -31,11 +31,6 @@ export interface BotContainer {
   killBot (botInfo: BotInfo): Promise<void>;
 
   /**
-   * Removes all source files downloaded.
-   */
-  removeSource (): Promise<void>
-
-  /**
    * Serializes BotInfo into JSON state that's gonna be persisted across restarts.
    */
   serializeBot (botInfo: BotInfo): any;

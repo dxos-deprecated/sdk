@@ -14,7 +14,7 @@ import { keyToString } from '@dxos/crypto';
 
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
-import { SPAWNED_BOTS_DIR, removeSourceFiles } from '../source-manager';
+import { SPAWNED_BOTS_DIR } from '../source-manager';
 import { BotAttributes, SpawnContainer, NODE_BOT_MAIN_FILE } from './common';
 
 export interface CommandInfo {
@@ -176,10 +176,6 @@ export class SpawnBotContainer extends EventEmitter implements SpawnContainer {
     if (childDir) {
       await fs.remove(childDir);
     }
-  }
-
-  async removeSource () {
-    await removeSourceFiles();
   }
 
   serializeBot ({ id, botId, type, childDir, parties, command, args, stopped, name, env }: BotInfo) {
