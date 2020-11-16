@@ -11,12 +11,13 @@ import { Protocol } from '@dxos/protocol';
 
 import { BotPlugin } from './bot';
 import { createSpawnCommand } from './botkit-messages';
+import { Message } from './proto';
 
-const random = arr => arr[Math.floor(Math.random() * arr.length)];
+const random = <T> (arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-const createNode = async (topic) => {
+const createNode = async (topic: Buffer) => {
   const peerId = crypto.randomBytes(32);
-  const commands = [];
+  const commands: Message[] = [];
   const bot = new BotPlugin(peerId, (protocol, command) => {
     commands.push(command);
   });
@@ -25,7 +26,7 @@ const createNode = async (topic) => {
     id: peerId,
     bot,
     commands,
-    replicate (options) {
+    replicate (options: any) {
       return new Protocol(options)
         .setSession({ peerId })
         .setExtensions([bot.createExtension()])
@@ -35,9 +36,9 @@ const createNode = async (topic) => {
   };
 };
 
-const createPeers = async (topic, graph) => {
-  const peers = [];
-  graph.forEachNode((node) => {
+const createPeers = async (topic: Buffer, graph: any) => {
+  const peers: any[] = [];
+  graph.forEachNode((node: any) => {
     peers.push(node);
   });
 
@@ -47,7 +48,7 @@ const createPeers = async (topic, graph) => {
   }));
 };
 
-const createConnections = (graph) => {
+const createConnections = (graph: any): Promise<any[]> => {
   const options = {
     streamOptions: {
       live: true
@@ -57,9 +58,9 @@ const createConnections = (graph) => {
   let count = graph.getLinksCount();
 
   return new Promise(resolve => {
-    const connections = [];
+    const connections: any[] = [];
 
-    graph.forEachLink((link) => {
+    graph.forEachLink((link: any) => {
       const fromNode = graph.getNode(link.fromId).data;
       const toNode = graph.getNode(link.toId).data;
       const r1 = fromNode.replicate(options);
@@ -78,7 +79,7 @@ const createConnections = (graph) => {
 
 describe('test peers in a network graph of 15 peers', () => {
   const topic = crypto.randomBytes(32);
-  let graph, peers, connections;
+  let graph, peers: any[], connections: any[];
 
   const command = createSpawnCommand('wrn://dxos/bot/chess');
 
@@ -90,7 +91,7 @@ describe('test peers in a network graph of 15 peers', () => {
 
   test('bot commands', async () => {
     const peer1 = random(peers);
-    let peer2 = random(peer1.bot.peers);
+    let peer2: any = random(peer1.bot.peers);
     peer2 = peers.find(p => p.id.equals(peer2));
 
     peer1.bot.sendCommand(peer2.id, command);

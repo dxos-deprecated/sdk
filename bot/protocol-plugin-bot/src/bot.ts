@@ -9,7 +9,9 @@ import { Broadcast } from '@dxos/broadcast';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
 import { Extension } from '@dxos/protocol';
 
-import { schema } from './proto/gen';
+import { schema } from './proto';
+import { Message } from './proto';
+import { Codec } from '@dxos/codec-protobuf';
 
 const DEFAULT_TIMEOUT = 60000;
 
@@ -18,21 +20,33 @@ const DEFAULT_TIMEOUT = 60000;
  */
 export const codec = schema.getCodecForType('dxos.protocol.bot.Message');
 
+// TODO(marik-d): Temporary until @dxos/protocol has its own types.
+type Protocol = any;
+type Broadcast = any;
+
+
 /**
  * Bot protocol.
  */
 export class BotPlugin extends EventEmitter {
   static EXTENSION_NAME = 'dxos.protocol.bot';
 
-  // @type {Map<{string, Protocol>}
-  _peers = new Map();
+  private readonly _peerId: Buffer;
+
+  private readonly _peers = new Map<string, any /* Protocol */>();
+
+  private readonly _onMessage: (protocol: Protocol, message: Message) => Promise<Uint8Array | undefined>;
+
+  private _commandHandler!: (protocol: Protocol, chunk: { data: Buffer }) => Promise<Uint8Array | undefined>;
+
+  private readonly _codec: Codec<Message>;
+
+  private readonly _broadcast: Broadcast;
 
   /**
    * @constructor
-   * @param {string} peerId
-   * @param {Function} commandHandler
    */
-  constructor (peerId, commandHandler = () => {}) {
+  constructor (peerId: Buffer, commandHandler: (protocol: any, message: Message) => Promise<Message | void> | void = () => {}) {
     super();
 
     assert(Buffer.isBuffer(peerId));
@@ -64,10 +78,10 @@ export class BotPlugin extends EventEmitter {
           };
         });
       },
-      send: async (packet, peer) => {
+      send: async (packet: any, peer: any) => {
         await peer.protocol.getExtension(BotPlugin.EXTENSION_NAME).send(packet);
       },
-      subscribe: (onPacket) => {
+      subscribe: (onPacket: (data: Buffer) => ({ data: Buffer }) | undefined) => {
         this._commandHandler = (protocol, chunk) => {
           const packet = onPacket(chunk.data);
 
@@ -98,10 +112,10 @@ export class BotPlugin extends EventEmitter {
     this._broadcast.run();
 
     return new Extension(BotPlugin.EXTENSION_NAME, { timeout })
-      .setInitHandler((protocol) => {
+      .setInitHandler((protocol: Protocol) => {
         this._addPeer(protocol);
       })
-      .setHandshakeHandler(protocol => {
+      .setHandshakeHandler((protocol: Protocol) => {
         const { peerId } = protocol.getSession();
 
         if (this._peers.has(keyToString(peerId))) {
@@ -109,17 +123,15 @@ export class BotPlugin extends EventEmitter {
         }
       })
       .setMessageHandler(this._commandHandler)
-      .setCloseHandler((protocol) => {
+      .setCloseHandler((protocol: Protocol) => {
         this._removePeer(protocol);
       });
   }
 
   /**
    * Broadcast command to peers.
-   * @param {object} command
-   * @return {Promise<void>}
    */
-  async broadcastCommand (command) {
+  async broadcastCommand (command: Message) {
     assert(command);
 
     const buffer = this._codec.encode(command);
@@ -128,11 +140,8 @@ export class BotPlugin extends EventEmitter {
 
   /**
    * Send command to peer.
-   * @param {Buffer} peerId
-   * @param {object} command
-   * @return {Promise<object>}
    */
-  async sendCommand (peerId, command, oneway = false) {
+  async sendCommand (peerId: Buffer, command: Message, oneway = false): Promise<Message | undefined> {
     assert(peerId);
     assert(command);
     assert(Buffer.isBuffer(peerId));
@@ -156,10 +165,8 @@ export class BotPlugin extends EventEmitter {
 
   /**
    * Add peer.
-   * @param {Protocol} protocol
-   * @private
    */
-  _addPeer (protocol) {
+  private _addPeer (protocol: Protocol) {
     const { peerId } = protocol.getSession();
 
     if (this._peers.has(keyToString(peerId))) {
@@ -171,10 +178,8 @@ export class BotPlugin extends EventEmitter {
 
   /**
    * Remove peer.
-   * @param {Protocol} protocol
-   * @private
    */
-  _removePeer (protocol) {
+  private _removePeer (protocol: Protocol) {
     console.assert(protocol);
 
     const { peerId } = protocol.getSession();

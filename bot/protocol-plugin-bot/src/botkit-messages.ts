@@ -5,6 +5,7 @@
 import assert from 'assert';
 
 import { keyToString } from '@dxos/crypto';
+import { Message, Spawn, Status } from './proto';
 
 export const COMMAND_SPAWN = 'dxos.protocol.bot.Spawn';
 export const SPAWN_RESPONSE = 'dxos.protocol.bot.SpawnResponse';
@@ -20,9 +21,8 @@ export const COMMAND_RESPONSE = 'dxos.protocol.bot.CommandResponse';
 
 /**
  * Creates a new spawn command message.
- * @param {string} botName
  */
-export const createSpawnCommand = (botName, options) => {
+export const createSpawnCommand = (botName: string, options?: Spawn.SpawnOptions): Message => {
   return {
     message: {
       __type_url: COMMAND_SPAWN,
@@ -34,10 +34,8 @@ export const createSpawnCommand = (botName, options) => {
 
 /**
  * Creates a new bot management command message.
- * @param {string} botId
- * @param {string} command
  */
-export const createBotManagementCommand = (botId, command) => {
+export const createBotManagementCommand = (botId: string, command: string): Message => {
   assert(botId);
   assert(command);
 
@@ -53,7 +51,7 @@ export const createBotManagementCommand = (botId, command) => {
 /**
  * Creates reset command.
  */
-export const createResetCommand = (source) => {
+export const createResetCommand = (source: boolean): Message => {
   return {
     message: {
       __type_url: COMMAND_RESET,
@@ -65,7 +63,7 @@ export const createResetCommand = (source) => {
 /**
  * Creates stop command.
  */
-export const createStopCommand = (errorCode) => {
+export const createStopCommand = (errorCode: string): Message => {
   return {
     message: {
       __type_url: COMMAND_STOP,
@@ -77,7 +75,7 @@ export const createStopCommand = (errorCode) => {
 /**
  * Creates status command message.
  */
-export const createStatusCommand = () => {
+export const createStatusCommand = (): Message => {
   return {
     message: {
       __type_url: COMMAND_STATUS
@@ -87,11 +85,8 @@ export const createStatusCommand = () => {
 
 /**
  * Creates status response message.
- * @param {String} version
- * @param {String} uptime
- * @param {Array} bots
  */
-export const createStatusResponse = (version, platform, uptime, bots) => {
+export const createStatusResponse = (version: string, platform: string, uptime: string, bots: Status.Bot[]): Message => {
   return {
     message: {
       __type_url: STATUS_RESPONSE,
@@ -105,9 +100,8 @@ export const createStatusResponse = (version, platform, uptime, bots) => {
 
 /**
  * Creates spawn response message.
- * @param {String} botId
  */
-export const createSpawnResponse = (botId) => {
+export const createSpawnResponse = (botId: string): Message => {
   return {
     message: {
       __type_url: SPAWN_RESPONSE,
@@ -118,12 +112,8 @@ export const createSpawnResponse = (botId) => {
 
 /**
  * Creates a new invitation command message.
- * @param {string} botId
- * @param {Buffer} topic
- * @param {string} modelOptions
- * @param {string} invitation
  */
-export const createInvitationCommand = (botId, topic, modelOptions, invitation) => {
+export const createInvitationCommand = (botId: string, topic: Buffer, modelOptions: string, invitation: string): Message => {
   assert(botId);
   assert(topic);
   assert(modelOptions);
@@ -142,10 +132,8 @@ export const createInvitationCommand = (botId, topic, modelOptions, invitation) 
 
 /**
  * Creates arbitrary response message.
- * @param {boolean} status
- * @param {String} error
  */
-export const createCommandResponse = (status, error) => {
+export const createCommandResponse = (status: string, error: string): Message => {
   return {
     message: {
       __type_url: COMMAND_RESPONSE,
