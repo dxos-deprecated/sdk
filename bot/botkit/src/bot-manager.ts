@@ -28,7 +28,7 @@ import { BOT_CONFIG_FILENAME } from './config';
 import { BotContainer } from './containers/common';
 import { NATIVE_ENV, getBotCID } from './env';
 import { log } from './log';
-import { SourceManager, removeSourceFiles } from './source-manager';
+import { BOT_PACKAGE_DOWNLOAD_DIR, SourceManager } from './source-manager';
 
 const chance = new Chance();
 
@@ -280,7 +280,7 @@ export class BotManager {
   }
 
   async removeSource () {
-    await removeSourceFiles();
+    await fs.remove(BOT_PACKAGE_DOWNLOAD_DIR);
   }
 
   /**

@@ -21,10 +21,6 @@ export const LOCAL_BOT_MAIN_FILE = 'src/main.js';
 
 const DOWNLOAD_TIMEOUT = 40000;
 
-export const removeSourceFiles = async () => {
-  await fs.remove(BOT_PACKAGE_DOWNLOAD_DIR);
-};
-
 export class SourceManager {
   private readonly _config: any;
   private readonly _localDev: any;

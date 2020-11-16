@@ -7,13 +7,13 @@ import path from 'path';
 
 import { NODE_ENV } from '../env';
 import { LOCAL_BOT_MAIN_FILE, SPAWNED_BOTS_DIR } from '../source-manager';
+import { CommandInfo, ChildProcessContainer } from './child-process-container';
 import { BotAttributes, LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
-import { CommandInfo, SpawnBotContainer } from './spawn-container';
 
 /**
  * Local Bot Container; Used for running bots locally as a node process.
  */
-export class LocalDevBotContainer extends SpawnBotContainer {
+export class LocalDevBotContainer extends ChildProcessContainer {
   async getBotAttributes (botId: string, installDirectory: string, options: any): Promise<BotAttributes> {
     const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);

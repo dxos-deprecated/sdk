@@ -15,7 +15,7 @@ import { keyToString } from '@dxos/crypto';
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
 import { SPAWNED_BOTS_DIR } from '../source-manager';
-import { BotAttributes, SpawnContainer, NODE_BOT_MAIN_FILE } from './common';
+import { BotAttributes, BotContainer, NODE_BOT_MAIN_FILE } from './common';
 
 export interface CommandInfo {
   command: string
@@ -25,7 +25,7 @@ export interface CommandInfo {
 /**
  * Bot Container; Used for running bot instanced inside specific compute service.
  */
-export class SpawnBotContainer extends EventEmitter implements SpawnContainer {
+export class ChildProcessContainer extends EventEmitter implements BotContainer {
   protected readonly _config: any;
 
   private _controlTopic?: any;

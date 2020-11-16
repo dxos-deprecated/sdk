@@ -4,13 +4,13 @@
 
 import path from 'path';
 
+import { ChildProcessContainer } from './child-process-container';
 import { NODE_BOT_MAIN_FILE } from './common';
-import { SpawnBotContainer } from './spawn-container';
 
 /**
  * Node Bot Container; Used for spawning bots as node processes.
  */
-export class NodeBotContainer extends SpawnBotContainer {
+export class NodeBotContainer extends ChildProcessContainer {
   /**
    * Get process command (to spawn).
    */

@@ -4,13 +4,13 @@
 
 import path from 'path';
 
+import { CommandInfo, ChildProcessContainer } from './child-process-container';
 import { NATIVE_BOT_MAIN_FILE } from './common';
-import { CommandInfo, SpawnBotContainer } from './spawn-container';
 
 /**
  * Native Bot Container; Used for spawning bots as native binaries.
  */
-export class NativeBotContainer extends SpawnBotContainer {
+export class NativeBotContainer extends ChildProcessContainer {
   /**
    * Get process command (to spawn).
    */
