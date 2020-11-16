@@ -40,7 +40,7 @@ const getWebpackConfig = botPath => {
     },
 
     plugins: [
-      new webpack.IgnorePlugin(/\.\/native/),
+      new webpack.IgnorePlugin(/(?!\.\/native-container)\.\/native/),
       new webpack.IgnorePlugin(/^electron$/)
     ],
 

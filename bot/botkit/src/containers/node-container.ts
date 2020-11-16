@@ -13,14 +13,15 @@ import kill from 'tree-kill';
 
 import { keyToString } from '@dxos/crypto';
 
-import { BotInfo } from './bot-manager';
-import { log, logBot } from './log';
-import { NATIVE_ENV, SourceManager, removeSourceFiles } from './source-manager';
+import { BotInfo } from '../bot-manager';
+import { log, logBot } from '../log';
+import { SourceManager, removeSourceFiles } from '../source-manager';
+import { BotAttributes, BotContainer, NODE_BOT_MAIN_FILE, SPAWNED_BOTS_DIR } from './common';
 
-// Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
-export const SPAWNED_BOTS_DIR = '.bots';
-
-export class BotContainer extends EventEmitter {
+/**
+ * Bot Container; Used for running bot instanced inside specific compute service.
+ */
+export class NodeBotContainer extends EventEmitter implements BotContainer {
   private readonly _config: any;
   private readonly _sourceManager: SourceManager;
 
@@ -42,15 +43,25 @@ export class BotContainer extends EventEmitter {
 
   }
 
-  async getBotAttributes (botName: string, botId: string, uniqId: string, ipfsCID: string, env: string, options: any) {
-    const botPathInfo = await this._sourceManager.getBotPathInfo(uniqId, ipfsCID, env, options);
-    assert(botPathInfo, `Invalid bot: ${botName || ipfsCID}`);
+  async getBotAttributes (botName: string, botId: string, uniqId: string, ipfsCID: string, options: any): Promise<BotAttributes> {
+    const installDirectory = await this._sourceManager.downloadAndInstallBot(uniqId, ipfsCID, options);
+    assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
 
-    const childDir = path.join(botPathInfo.installDirectory, SPAWNED_BOTS_DIR, botId);
+    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
 
-    const { command, args } = this._sourceManager.getCommand(botPathInfo, env);
+    const { command, args } = this._getCommand(installDirectory);
     return { childDir, command, args };
+  }
+
+  /**
+   * Get process command (to spawn).
+   */
+  private _getCommand (installDirectory: string) {
+    return {
+      command: 'node',
+      args: [path.join(installDirectory, NODE_BOT_MAIN_FILE)]
+    };
   }
 
   /**
@@ -67,13 +78,11 @@ export class BotContainer extends EventEmitter {
       WIRE_BOT_RESTARTED: (!!botInfo).toString()
     };
 
-    const nodePath = (env !== NATIVE_ENV) ? this._config.get('cli.nodePath') : undefined;
-
     const childOptions: SpawnOptions = {
       env: {
         ...process.env,
         NODE_OPTIONS: '',
-        ...(nodePath ? { NODE_PATH: nodePath } : {}),
+        NODE_PATH: this._config.get('cli.nodePath'),
         ...wireEnv
       },
 
