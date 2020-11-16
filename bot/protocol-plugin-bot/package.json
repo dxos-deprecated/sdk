@@ -13,31 +13,25 @@
   "license": "GPL-3.0",
   "files": [
     "dist",
-    "index.js"
+    "src"
   ],
-  "main": "index.js",
-  "browser": "dist/index.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
-    "build": "npm run clean && npm run build:protobuf && npm run build:babel",
-    "build:babel": "babel ./src --out-dir ./dist --ignore \"**/*.test.js\" --source-maps",
-    "build:protobuf": "pbjs -t json src/schema.proto -o src/schema.json && cpy src/schema.json dist",
-    "clean": "del-cli dist",
+    "build": "yarn build:protobuf && tsc --build",
+    "build:protobuf": "build-protobuf src/schema.proto -o src/gen",
     "coverage": "npm test -- --coverage",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
-    "lint": "semistandard 'src/**/*.js'",
-    "prepublishOnly": "npm run build && npm run test",
-    "test": "jest --verbose --passWithNoTests src",
-    "posttest": "npm run lint"
+    "lint": "eslint 'src/**/*.{ts,js}'",
+    "prepublishOnly": "npm run build",
+    "test": "jest --verbose --passWithNoTests src"
   },
   "browserslist": [
     "> 5%"
   ],
-  "jest": {
-    "testEnvironment": "node"
-  },
   "dependencies": {
     "@dxos/broadcast": "^1.0.0-beta.6",
-    "@dxos/codec-protobuf": "^1.1.0-beta.7",
+    "@dxos/codec-protobuf": "^0.2.2",
     "@dxos/crypto": "^1.0.0-beta.1",
     "@dxos/protocol": "^1.1.0-beta.19",
     "debug": "^4.1.1",
@@ -49,7 +43,9 @@
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-proposal-export-default-from": "^7.5.2",
     "@babel/preset-env": "^7.4.5",
+    "@dxos/eslint-plugin": "^1.0.8",
     "@dxos/feed-store": "1.2.0-beta.2",
+    "@dxos/protobuf-compiler": "^0.2.2",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
     "babel-plugin-add-module-exports": "^1.0.2",
@@ -57,20 +53,25 @@
     "coveralls": "^3.0.7",
     "cpy-cli": "^2.0.0",
     "del-cli": "^3.0.0",
-    "jest": "^24.5.0",
+    "eslint": "^7.13.0",
+    "jest": "^26.6.3",
     "ngraph.generators": "^18.0.1",
     "pump": "^3.0.0",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.0.5",
     "wait-for-expect": "^3.0.1"
   },
   "publishConfig": {
     "access": "public"
   },
-  "semistandard": {
-    "parser": "babel-eslint",
-    "env": [
-      "jest",
-      "node",
-      "browser"
+  "jest": {
+    "preset": "ts-jest/presets/default",
+    "testEnvironment": "node"
+  },
+  "eslintConfig": {
+    "extends": "plugin:@dxos/recomended",
+    "ignorePatterns": [
+      "src/proto/gen/*"
     ]
   }
 }

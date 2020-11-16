@@ -2,23 +2,21 @@
 // Copyright 2020 DXOS.org
 //
 
-import { EventEmitter } from 'events';
 import assert from 'assert';
+import { EventEmitter } from 'events';
 
-import { Codec } from '@dxos/codec-protobuf';
 import { Broadcast } from '@dxos/broadcast';
-import { Extension } from '@dxos/protocol';
 import { keyToString, keyToBuffer } from '@dxos/crypto';
+import { Extension } from '@dxos/protocol';
+
+import { schema } from './gen';
 
 const DEFAULT_TIMEOUT = 60000;
 
 /**
  * Bot protocol codec.
  */
-export const codec = new Codec('dxos.protocol.bot.Message')
-  // eslint-disable-next-line global-require
-  .addJson(require('./schema.json'))
-  .build();
+export const codec = schema.getCodecForType('dxos.protocol.bot.Message');
 
 /**
  * Bot protocol.
@@ -180,7 +178,9 @@ export class BotPlugin extends EventEmitter {
     console.assert(protocol);
 
     const { peerId } = protocol.getSession();
-    if (!peerId) return;
+    if (!peerId) {
+      return;
+    }
 
     this._peers.delete(keyToString(peerId));
     this.emit('peer:exited', peerId);
