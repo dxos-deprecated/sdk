@@ -45,6 +45,7 @@ export class SpawnBotContainer extends EventEmitter implements SpawnContainer {
 
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getBotAttributes (botId: string, installDirectory: string, options: any): Promise<BotAttributes> {
     const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
@@ -63,6 +64,7 @@ export class SpawnBotContainer extends EventEmitter implements SpawnContainer {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getAdditionalOpts (options: any): Promise<any> {
     return {};
   }
