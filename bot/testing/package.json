@@ -72,7 +72,9 @@
       "browser"
     ],
     "ignore": [
-      "dist"
+      "dist",
+      "out",
+      ".bots"
     ]
   },
   "publishConfig": {
