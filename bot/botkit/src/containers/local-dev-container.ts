@@ -2,24 +2,19 @@
 // Copyright 2020 DXOS.org
 //
 
-import assert from 'assert';
 import fs from 'fs-extra';
 import path from 'path';
 
 import { NODE_ENV } from '../env';
-import { LOCAL_BOT_MAIN_FILE } from '../source-manager';
-import { BotAttributes, SPAWNED_BOTS_DIR, LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
+import { LOCAL_BOT_MAIN_FILE, SPAWNED_BOTS_DIR } from '../source-manager';
+import { BotAttributes, LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
 import { CommandInfo, SpawnBotContainer } from './spawn-container';
 
 /**
  * Local Bot Container; Used for running bots locally as a node process.
  */
 export class LocalDevBotContainer extends SpawnBotContainer {
-
-  async getBotAttributes (botName: string, botId: string, uniqId: string, ipfsCID: string, options: any): Promise<BotAttributes> {
-    const installDirectory = await this._sourceManager.downloadAndInstallBot(uniqId, ipfsCID, options);
-    assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
-
+  async getBotAttributes (botId: string, installDirectory: string, options: any): Promise<BotAttributes> {
     const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
 

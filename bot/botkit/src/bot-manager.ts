@@ -28,6 +28,7 @@ import { BOT_CONFIG_FILENAME } from './config';
 import { BotContainer } from './containers/common';
 import { NATIVE_ENV, getBotCID } from './env';
 import { log } from './log';
+import { SourceManager, removeSourceFiles } from './source-manager';
 
 const chance = new Chance();
 
@@ -75,6 +76,7 @@ export class BotManager {
   private readonly _localDev: boolean;
   private readonly _botsFile: string;
   private readonly _registry: any;
+  private readonly _sourceManager: SourceManager;
 
   /**
    * Topic for communications between bots and bot-manager.
@@ -113,6 +115,8 @@ export class BotManager {
 
     this._controlTopic = createKeyPair().publicKey;
     this._controlPeerKey = this._controlTopic;
+
+    this._sourceManager = new SourceManager(config);
   }
 
   get controlTopic () {
@@ -169,7 +173,10 @@ export class BotManager {
     const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;
 
-    const params = await this._botContainers[env].getBotAttributes(botName, botId, id, ipfsCID, options);
+    const installDirectory = await this._sourceManager.downloadAndInstallBot(id, ipfsCID, options);
+    assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
+
+    const params = await this._botContainers[env].getBotAttributes(botId, installDirectory, options);
 
     return this._startBot(botId, { botName, env, name, ...params });
   }

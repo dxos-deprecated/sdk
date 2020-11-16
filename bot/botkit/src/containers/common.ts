@@ -19,7 +19,7 @@ export interface BotContainer {
 
   on(event: 'bot-close', cb: (botId: string, code: number) => void): void;
 
-  getBotAttributes (botName: string, botId: string, uniqId: string, ipfsCID: string, options: any): Promise<BotAttributes>;
+  getBotAttributes (botId: string, installDirectory: string, options: any): Promise<BotAttributes>;
 
   /**
    * Start bot instance.
@@ -42,9 +42,6 @@ export interface BotContainer {
 
   stop(): Promise<void>;
 }
-
-// Directory inside BOT_PACKAGE_DOWNLOAD_DIR/<CID> in which bots are spawned, in their own UUID named subdirectory.
-export const SPAWNED_BOTS_DIR = '.bots';
 
 // Command to spawn to run a bot in local development mode.
 export const LOCAL_BOT_RUN_COMMAND = 'yarn';

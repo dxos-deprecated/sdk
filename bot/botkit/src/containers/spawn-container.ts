@@ -2,7 +2,6 @@
 // Copyright 2020 DXOS.org
 //
 
-import assert from 'assert';
 import { spawn, SpawnOptions } from 'child_process';
 import { EventEmitter } from 'events';
 import fs from 'fs-extra';
@@ -15,8 +14,8 @@ import { keyToString } from '@dxos/crypto';
 
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
-import { SourceManager, removeSourceFiles } from '../source-manager';
-import { BotAttributes, BotContainer, NODE_BOT_MAIN_FILE, SPAWNED_BOTS_DIR } from './common';
+import { SPAWNED_BOTS_DIR, SourceManager, removeSourceFiles } from '../source-manager';
+import { BotAttributes, BotContainer, NODE_BOT_MAIN_FILE } from './common';
 
 export interface CommandInfo {
   command: string
@@ -28,7 +27,6 @@ export interface CommandInfo {
  */
 export class SpawnBotContainer extends EventEmitter implements BotContainer {
   protected readonly _config: any;
-  protected readonly _sourceManager: SourceManager;
 
   private _controlTopic?: any;
 
@@ -36,7 +34,6 @@ export class SpawnBotContainer extends EventEmitter implements BotContainer {
     super();
 
     this._config = config;
-    this._sourceManager = new SourceManager(config);
   }
 
   async start (options: any) {
@@ -48,10 +45,7 @@ export class SpawnBotContainer extends EventEmitter implements BotContainer {
 
   }
 
-  async getBotAttributes (botName: string, botId: string, uniqId: string, ipfsCID: string, options: any): Promise<BotAttributes> {
-    const installDirectory = await this._sourceManager.downloadAndInstallBot(uniqId, ipfsCID, options);
-    assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
-
+  async getBotAttributes (botId: string, installDirectory: string, options: any): Promise<BotAttributes> {
     const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
 
