@@ -43,6 +43,13 @@ export interface BotContainer {
   stop(): Promise<void>;
 }
 
+export interface SpawnContainer extends BotContainer {
+  /**
+   * Additional options for spawn bot process env.
+   */
+  getAdditionalOpts (options: any): Promise<any>
+}
+
 // Command to spawn to run a bot in local development mode.
 export const LOCAL_BOT_RUN_COMMAND = 'yarn';
 

@@ -21,9 +21,9 @@ export class NodeBotContainer extends SpawnBotContainer {
     };
   }
 
-  protected async _getAdditionalOpts (options: any): Promise<any> {
+  async getAdditionalOpts (): Promise<any> {
     return {
-      NODE_PATH: this._config.get('cli.nodePath'),
+      NODE_PATH: this._config.get('cli.nodePath')
     };
   }
 }

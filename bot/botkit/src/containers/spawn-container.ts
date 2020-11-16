@@ -14,8 +14,8 @@ import { keyToString } from '@dxos/crypto';
 
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
-import { SPAWNED_BOTS_DIR, SourceManager, removeSourceFiles } from '../source-manager';
-import { BotAttributes, BotContainer, NODE_BOT_MAIN_FILE } from './common';
+import { SPAWNED_BOTS_DIR, removeSourceFiles } from '../source-manager';
+import { BotAttributes, SpawnContainer, NODE_BOT_MAIN_FILE } from './common';
 
 export interface CommandInfo {
   command: string
@@ -25,7 +25,7 @@ export interface CommandInfo {
 /**
  * Bot Container; Used for running bot instanced inside specific compute service.
  */
-export class SpawnBotContainer extends EventEmitter implements BotContainer {
+export class SpawnBotContainer extends EventEmitter implements SpawnContainer {
   protected readonly _config: any;
 
   private _controlTopic?: any;
@@ -63,7 +63,7 @@ export class SpawnBotContainer extends EventEmitter implements BotContainer {
     };
   }
 
-  protected async _getAdditionalOpts (options: any): Promise<any> {
+  async getAdditionalOpts (options: any): Promise<any> {
     return {};
   }
 
@@ -81,7 +81,7 @@ export class SpawnBotContainer extends EventEmitter implements BotContainer {
       WIRE_BOT_RESTARTED: (!!botInfo).toString()
     };
 
-    const additionalOptions = await this._getAdditionalOpts(botInfo || options);
+    const additionalOptions = await this.getAdditionalOpts(botInfo || options);
 
     const childOptions: SpawnOptions = {
       env: {

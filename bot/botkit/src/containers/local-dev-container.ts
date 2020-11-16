@@ -33,13 +33,13 @@ export class LocalDevBotContainer extends SpawnBotContainer {
     };
   }
 
-  protected async _getAdditionalOpts (options: any): Promise<any> {
+  async getAdditionalOpts (options: any): Promise<any> {
     const { env } = options;
 
     if (env === NODE_ENV) {
       return {
         NODE_PATH: this._config.get('cli.nodePath')
-      }
+      };
     }
     return {};
   }
