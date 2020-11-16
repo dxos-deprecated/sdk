@@ -25,6 +25,7 @@ jobs:
     - run: yarn lint:versions
     - run: yarn lint
     - run: yarn build
+    - run: yarn build:storybook
     - run: yarn test
     - run: yarn coverage
     - uses: romeovs/lcov-reporter-action@v0.2.16
@@ -32,4 +33,3 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         lcov-file: ./coverage/lcov.info
-    

@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "wsrun -t build",
+    "build:storybook": "wsrun --exclude-missing build:storybook",
     "clean": "wsrun clean",
     "lint": "wsrun lint",
     "test": "wsrun -s test",
