@@ -163,9 +163,7 @@ export class BotFactory {
         runCommand = async () => {
           await this._botManager!.killAllBots();
           if (source) {
-            for (const container of Object.values(this._botContainers)) {
-              await container.removeSource();
-            }
+            await this._botManager!.removeSource();
           }
         };
         break;
