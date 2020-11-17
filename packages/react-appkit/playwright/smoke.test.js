@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 //
 // Copyright 2020 DXOS.org
 //
@@ -8,7 +9,7 @@ import { Browser } from './utils';
 
 describe('Smoke test.', () => {
   const browser = firefox;
-  const startUrl = 'localhost:9001';
+  const startUrl = 'http://localhost:9001';
   let user;
 
   beforeAll(async () => {
@@ -21,7 +22,15 @@ describe('Smoke test.', () => {
     await user.closeBrowser();
   });
 
-  test('Opens the storybooks', async () => {
-    await user.page.waitForSelector('#tabbutton-knobs')
+  test('Opens the Redeem Invitation storybook 2', async () => {
+    await user.page.goto(`${startUrl}/iframe.html?id=invitations--with-redeem-invitation&viewMode=story`);
+    await user.page.waitForSelector('//span[text()=\'Submit\']');
+  });
+
+  test('Can create a party in AppKit story', async () => {
+    await user.page.goto(`${startUrl}/iframe.html?id=appkit--with-app-kit-provider&viewMode=story`);
+    await user.page.waitForSelector('//button[text()=\'Add Party\']');
+    await user.page.click('//button[text()=\'Add Party\']');
+    await user.page.waitForSelector('.party-public-key');
   });
 });
