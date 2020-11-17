@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import debug from 'debug';
 import { EventEmitter } from 'events';
 import { join } from 'path';
@@ -18,7 +19,9 @@ import {
   createSignCommand,
   createConnectConfirmMessage,
   createBotCommandResponse,
-  createEvent
+  createEvent,
+  Message,
+  InvitationMessage
 } from '@dxos/protocol-plugin-bot';
 
 import { getClientConfig } from './config';
@@ -80,7 +83,7 @@ export class Bot extends EventEmitter {
    * Start the bot.
    */
   async start () {
-    this._plugin = new BotPlugin(this._controlPeerKey, (protocol: any, message: any) => this._botMessageHandler(protocol, message));
+    this._plugin = new BotPlugin(this._controlPeerKey, (protocol, message) => this._botMessageHandler(protocol, message));
 
     log('Starting.');
     this._client = new Client({
@@ -131,7 +134,8 @@ export class Bot extends EventEmitter {
    * @param {Protocol} protocol
    * @param {{ message }} command.
    */
-  async _botMessageHandler (protocol: any, { message }: { message: any }) {
+  async _botMessageHandler (protocol: any, { message }: Message) {
+    assert(message);
     let result;
     switch (message.__type_url) {
       case COMMAND_BOT_INVITE: {
@@ -142,6 +146,7 @@ export class Bot extends EventEmitter {
 
       case BOT_COMMAND: {
         const { command } = message;
+        assert(command);
         try {
           // TODO(marik-d): Support custom codecs.
           const decodedCommand = JSON.parse(command.toString()) || {};
@@ -149,7 +154,7 @@ export class Bot extends EventEmitter {
           const data = Buffer.from(JSON.stringify(result || {}));
           return createBotCommandResponse(data);
         } catch (error) {
-          return createBotCommandResponse(null, error.message);
+          return createBotCommandResponse(undefined, error.message);
         }
       }
 
@@ -161,7 +166,7 @@ export class Bot extends EventEmitter {
     return result;
   }
 
-  async _joinParty (invitation: unknown) {
+  async _joinParty (invitation: InvitationMessage.Invitation | undefined) {
     if (invitation) {
       const secretProvider = async () => {
         log('secretProvider begin.');
@@ -176,6 +181,7 @@ export class Bot extends EventEmitter {
 
       log(`Joining party with invitation: ${JSON.stringify(invitation)}`);
 
+      assert(invitation.hash);
       const party = await this._client!.echo.joinParty(InvitationDescriptor.fromQueryParameters(invitation as any), secretProvider);
       await party.open();
     }

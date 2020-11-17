@@ -94,7 +94,7 @@ export const createBotCommand = (botId: string, command: Buffer): Message => {
 /**
  * Create arbitrary message response from bot.
  */
-export const createBotCommandResponse = (data: Buffer, error: string): Message => {
+export const createBotCommandResponse = (data?: Buffer, error?: string): Message => {
   return {
     message: {
       __type_url: BOT_COMMAND_RESPONSE,

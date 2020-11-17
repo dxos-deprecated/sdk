@@ -10,4 +10,7 @@
     "src",
     "src/**/*.json"
   ],
+  "references": [
+    { "path": "../protocol-plugin-bot" }
+  ]
 }
