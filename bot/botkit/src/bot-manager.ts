@@ -20,7 +20,8 @@ import {
   BotPlugin,
   createInvitationMessage,
   createSignResponse,
-  createBotCommand
+  createBotCommand,
+  Spawn
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
 
@@ -146,7 +147,7 @@ export class BotManager {
   /**
    * Spawn bot instance.
    */
-  async spawnBot (botName: string, options: any = {}) {
+  async spawnBot (botName: string | undefined, options: Spawn.SpawnOptions = {}) {
     let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
     assert(botName || ipfsCID || this._localDev);
 
@@ -240,7 +241,7 @@ export class BotManager {
    * @param topic Party to join.
    * @param invitation Invitation.
    */
-  async inviteBot (botId: string, topic: string, invitation: any) {
+  async inviteBot (botId: string, topic: string, invitation: string) {
     const botInfo = this._bots.get(botId);
 
     assert(botInfo, 'Invalid Bot Id');
@@ -367,7 +368,7 @@ export class BotManager {
     return result;
   }
 
-  private async _getBotRecord (botName: string) {
+  private async _getBotRecord (botName: string | undefined) {
     if (this._localDev) {
       let name;
       try {

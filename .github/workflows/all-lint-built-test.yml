@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Lint, Build, and Test
+name: CI
 
 on: [push]
 
@@ -25,12 +25,14 @@ jobs:
     - run: yarn lint
     - run: yarn build
     - run: yarn build:storybook
-    - run: yarn test
-    - run: yarn coverage
+    - run: |
+        yarn test:coverage
+        # The c8 tool leaves tmp folder which is large, we don't want it uploaded to artifacts
+        rm -rf coverage/tmp
     - uses: actions/upload-artifact@v2
       with:
-        name: lcov-report
-        path: coverage/lcov-report
+        name: coverage-report
+        path: coverage
     - uses: romeovs/lcov-reporter-action@v0.2.16
       if: ${{ github.event_name == 'pull_request' }}
       with:

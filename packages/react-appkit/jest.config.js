@@ -8,5 +8,5 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(@dxos)/)'
   ],
-  testTimeout: 10000
+  testTimeout: 20000
 };

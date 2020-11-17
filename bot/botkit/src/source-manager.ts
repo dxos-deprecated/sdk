@@ -8,6 +8,8 @@ import fs from 'fs-extra';
 import path from 'path';
 import url from 'url';
 
+import { Spawn } from '@dxos/protocol-plugin-bot';
+
 import { log } from './log';
 
 // Directory inside `cwd` in which bot packages are downloaded and extracted.
@@ -37,7 +39,7 @@ export class SourceManager {
    *
    * @returns Install directory.
    */
-  async downloadAndInstallBot (id: string, ipfsCID: string, options: any): Promise<string> {
+  async downloadAndInstallBot (id: string, ipfsCID: string | undefined, options: Spawn.SpawnOptions): Promise<string> {
     // Local bot development mode, bypasses WNS/IPFS.
     if (this._localDev) {
       return process.cwd();
@@ -45,6 +47,7 @@ export class SourceManager {
 
     const installDirectory = path.join(process.cwd(), BOT_PACKAGE_DOWNLOAD_DIR, id);
     if (!fs.existsSync(installDirectory)) {
+      assert(ipfsCID);
       await this._downloadBot(installDirectory, ipfsCID, options);
     }
 
@@ -54,7 +57,7 @@ export class SourceManager {
   /**
    * Download the bot package from IPFS.
    */
-  async _downloadBot (baseDirectory: string, ipfsCID: string, { ipfsEndpoint }: any) {
+  async _downloadBot (baseDirectory: string, ipfsCID: string, { ipfsEndpoint }: Spawn.SpawnOptions) {
     assert(baseDirectory);
     assert(ipfsCID);
 

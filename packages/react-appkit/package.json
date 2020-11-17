@@ -15,7 +15,7 @@
     "lint": "eslint '{src,tests,stories}/**/*.{ts,js,tsx,jsx}'",
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir . --verbose --coverage",
+    "test": "jest --rootDir . --verbose",
     "test:playwright": "./scripts/start-and-wait.sh && jest --rootDir=./playwright --runInBand"
   },
   "dependencies": {
