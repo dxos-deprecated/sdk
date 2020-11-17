@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-client",
-  "version": "2.7.6-alpha.0",
+  "version": "2.7.7-alpha.0",
   "description": "React client API",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@dxos/async": "1.0.0-beta.10",
-    "@dxos/client": "^2.7.6-alpha.0",
+    "@dxos/client": "^2.7.7-alpha.0",
     "@dxos/credentials": "^2.0.0",
     "@dxos/crypto": "^1.0.0-beta.10",
     "@dxos/debug": "^1.0.0-beta.73",
@@ -50,14 +50,14 @@
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "^1.0.0",
-    "eslint": "^7.11.0",
+    "eslint": "^7.13.0",
     "eslint-plugin-react": "^7.21.5",
     "jest": "^26.6.3",
     "level-js": "^5.0.2",
     "react": "^16.12.0",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-dom": "^16.12.0",
-    "ts-jest": "^26.4.3"
+    "ts-jest": "^26.4.4"
   },
   "peerDependencies": {
     "react": "16.12.0"

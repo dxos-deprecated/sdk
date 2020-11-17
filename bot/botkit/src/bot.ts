@@ -4,6 +4,7 @@
 
 import debug from 'debug';
 import { EventEmitter } from 'events';
+import { join } from 'path';
 
 import { promiseTimeout } from '@dxos/async';
 import { Client } from '@dxos/client';
@@ -83,9 +84,10 @@ export class Bot extends EventEmitter {
 
     log('Starting.');
     this._client = new Client({
-      // TODO(marik-d): ReferenceError: indexedDB is not defined.
-      // storagePath: this._persistent ? path.join(this._cwd, BOT_STORAGE) : undefined,
-      // storageType: this._persistent ? 'node' : 'ram',
+      storage: {
+        persistent: this._persistent,
+        path: join(this._cwd, BOT_STORAGE)
+      },
       swarm: getClientConfig(this._config).swarm
     });
     await this._preInit();
