@@ -24,6 +24,7 @@ jobs:
     - run: yarn lint:versions
     - run: yarn lint
     - run: yarn build
+    - run: yarn build:storybook
     - run: yarn test
     - run: yarn coverage
     - uses: actions/upload-artifact@v2
