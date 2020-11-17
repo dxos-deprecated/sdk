@@ -47,3 +47,5 @@ version.json
 
 .yalc
 yalc.lock
+
+storybook-static

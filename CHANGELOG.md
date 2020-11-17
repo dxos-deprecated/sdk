@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.8](https://www.github.com/dxos/sdk/compare/v2.7.7...v2.7.8) (2020-11-17)
+
+
+### Bug Fixes
+
+* Fix jsondown failing build  ([#335](https://www.github.com/dxos/sdk/issues/335)) ([739bff2](https://www.github.com/dxos/sdk/commit/739bff2db14d45c3296fc0487f4463d9b39d3ec7))
+
 ### [2.7.7](https://www.github.com/dxos/sdk/compare/v2.7.6...v2.7.7) (2020-11-13)
 
 
