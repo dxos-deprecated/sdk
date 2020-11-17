@@ -39,7 +39,7 @@ export class SourceManager {
    *
    * @returns Install directory.
    */
-  async downloadAndInstallBot (id: string, ipfsCID: string, options: Spawn.SpawnOptions): Promise<string> {
+  async downloadAndInstallBot (id: string, ipfsCID: string | undefined, options: Spawn.SpawnOptions): Promise<string> {
     // Local bot development mode, bypasses WNS/IPFS.
     if (this._localDev) {
       return process.cwd();
@@ -47,6 +47,7 @@ export class SourceManager {
 
     const installDirectory = path.join(process.cwd(), BOT_PACKAGE_DOWNLOAD_DIR, id);
     if (!fs.existsSync(installDirectory)) {
+      assert(ipfsCID);
       await this._downloadBot(installDirectory, ipfsCID, options);
     }
 

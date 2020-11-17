@@ -147,7 +147,7 @@ export class BotManager {
   /**
    * Spawn bot instance.
    */
-  async spawnBot (botName: string, options: Spawn.SpawnOptions = {}) {
+  async spawnBot (botName: string | undefined, options: Spawn.SpawnOptions = {}) {
     let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
     assert(botName || ipfsCID || this._localDev);
 
@@ -174,7 +174,6 @@ export class BotManager {
     const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;
 
-    assert(ipfsCID);
     const installDirectory = await this._sourceManager.downloadAndInstallBot(id, ipfsCID, options);
     assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
 
@@ -369,7 +368,7 @@ export class BotManager {
     return result;
   }
 
-  private async _getBotRecord (botName: string) {
+  private async _getBotRecord (botName: string | undefined) {
     if (this._localDev) {
       let name;
       try {

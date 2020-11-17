@@ -132,7 +132,6 @@ export class BotFactory {
       case COMMAND_SPAWN: {
         try {
           const { botName, options } = message;
-          assert(botName);
           const botId = await this._botManager!.spawnBot(botName, options);
           // TODO(egorgripasov): Move down.
           await waitForCondition(() => this._botManager!.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
