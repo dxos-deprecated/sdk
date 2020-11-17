@@ -15,7 +15,7 @@
     "lint": "eslint '{src,tests,stories}/**/*.{ts,js,tsx,jsx}'",
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir . --verbose --coverage"
+    "test": "jest --rootDir . --verbose"
   },
   "dependencies": {
     "@dxos/botkit-client": "^2.7.7-alpha.0",
