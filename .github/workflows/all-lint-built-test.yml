@@ -7,7 +7,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,11 +24,15 @@ jobs:
     - run: yarn lint:versions
     - run: yarn lint
     - run: yarn build
+    - run: yarn build:storybook
     - run: yarn test
     - run: yarn coverage
+    - uses: actions/upload-artifact@v2
+      with:
+        name: lcov-report
+        path: coverage/lcov-report
     - uses: romeovs/lcov-reporter-action@v0.2.16
       if: ${{ github.event_name == 'pull_request' }}
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         lcov-file: ./coverage/lcov.info
-    
