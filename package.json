@@ -26,9 +26,10 @@
     "test": "wsrun -s test",
     "coverage": "istanbul-combine -d coverage -p summary -r lcov packages/**/coverage/coverage-final.json",
     "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https",
-    "lint:versions": "ts-node scripts/version-lint.ts"
+    "lint:versions": "lint-version"
   },
   "devDependencies": {
+    "@dxos/lint-version": "^0.1.0",
     "@types/chalk": "^2.2.0",
     "@types/semver": "^7.3.4",
     "babel-eslint": "^10.0.2",
@@ -38,8 +39,6 @@
     "lint-staged": "^9.5.0",
     "lockfile-lint": "^4.3.7",
     "semistandard": "14.2.0",
-    "semver": "^7.3.2",
-    "ts-node": "^9.0.0",
     "wsrun": "^5.2.4"
   },
   "semistandard": {
