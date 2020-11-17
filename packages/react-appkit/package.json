@@ -9,6 +9,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc && copyfiles './src/components/util/images/*.jpg' './dist/'",
+    "build:storybook": "build-storybook",
     "build:watch": "tsc --watch",
     "clean": "rm -rf dist",
     "lint": "eslint '{src,tests,stories}/**/*.{ts,js,tsx,jsx}'",
