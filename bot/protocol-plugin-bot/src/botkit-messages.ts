@@ -102,7 +102,7 @@ export const createStatusResponse = (version: string, platform: string, uptime: 
 /**
  * Creates spawn response message.
  */
-export const createSpawnResponse = (botId: string): Message => {
+export const createSpawnResponse = (botId?: string): Message => {
   return {
     message: {
       __type_url: SPAWN_RESPONSE,
