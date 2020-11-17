@@ -22,7 +22,9 @@ import {
   createSpawnResponse,
   createCommandResponse,
   createBotCommandResponse,
-  createEvent
+  createEvent,
+  Message,
+  Invite
 } from '@dxos/protocol-plugin-bot';
 
 import { BotManager } from './bot-manager';
@@ -64,7 +66,7 @@ export class BotFactory {
     this._topic = keyToBuffer(this._config.get('bot.topic'));
     // For simplicity of communication with BotFactory assume its PeerId is the same as topic.
     this._peerKey = this._topic;
-    this._plugin = new BotPlugin(this._peerKey, (protocol: any, message: any) => this.handleMessage(protocol, message));
+    this._plugin = new BotPlugin(this._peerKey, (protocol, message) => this.handleMessage(protocol, message));
     this._localDev = this._config.get('bot.localDev');
 
     this._botContainers = this._localDev
@@ -120,8 +122,9 @@ export class BotFactory {
   /**
    * Handle incoming message.
    */
-  async handleMessage (protocol: any, { message }: any) {
+  async handleMessage (protocol: any, { message }: Message) {
     log(`Received command: ${JSON.stringify(message)}`);
+    assert(message);
 
     let runCommand;
 
@@ -129,23 +132,27 @@ export class BotFactory {
       case COMMAND_SPAWN: {
         try {
           const { botName, options } = message;
+          assert(botName);
           const botId = await this._botManager!.spawnBot(botName, options);
           // TODO(egorgripasov): Move down.
           await waitForCondition(() => this._botManager!.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
           return createSpawnResponse(botId);
         } catch (err) {
           log(err);
-          return createSpawnResponse(null);
+          return createSpawnResponse(undefined);
         }
       }
 
       case COMMAND_INVITE: {
-        runCommand = async () => this.inviteBot(message.botId, message);
+        const { botId } = message;
+        assert(botId);
+        runCommand = async () => this.inviteBot(botId, message);
         break;
       }
 
       case COMMAND_MANAGE: {
         const { botId, command } = message;
+        assert(botId);
         runCommand = async () => {
           switch (command) {
             case 'start': return this._botManager!.startBot(botId);
@@ -185,12 +192,13 @@ export class BotFactory {
 
       case BOT_COMMAND: {
         const { botId, command } = message;
+        assert(botId);
         try {
           const result = await this._botManager!.sendDirectBotCommand(botId, command);
           const { message: { data, error } } = result;
           return createBotCommandResponse(data, error);
         } catch (err) {
-          return createBotCommandResponse(null, err.message);
+          return createBotCommandResponse(undefined, err.message);
         }
       }
 
@@ -215,7 +223,7 @@ export class BotFactory {
   /**
    * Invite bot to a party.
    */
-  async inviteBot (botId: string, botConfig: any) {
+  async inviteBot (botId: string, botConfig: Invite) {
     assert(botId);
     assert(botConfig);
 
@@ -224,6 +232,7 @@ export class BotFactory {
     assert(topic);
     log(`Invite bot request for '${botId}': ${JSON.stringify(botConfig)}`);
 
+    assert(invitation);
     await this._botManager!.inviteBot(botId, topic, invitation);
   }
 

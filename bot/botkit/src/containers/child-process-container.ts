@@ -11,6 +11,7 @@ import path from 'path';
 import kill from 'tree-kill';
 
 import { keyToString } from '@dxos/crypto';
+import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
@@ -46,7 +47,7 @@ export class ChildProcessContainer extends EventEmitter implements BotContainer 
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getBotAttributes (botId: string, installDirectory: string, options: any): Promise<BotAttributes> {
+  async getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<BotAttributes> {
     const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
 
