@@ -1,5 +1,6 @@
 {
   "reporter": [
+    "html",
     "text",
     "text-summary"
   ],
