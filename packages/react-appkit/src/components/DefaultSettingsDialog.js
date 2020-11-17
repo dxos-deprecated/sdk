@@ -7,7 +7,7 @@ import React from 'react';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import ItemSettings from '../components/ItemSettings';
+import ItemSettings from './ItemSettings';
 
 const chance = new Chance();
 
@@ -22,11 +22,11 @@ const DefaultSettingsDialog = ({ open, onClose, onCancel, item }) => {
   return (
     <ItemSettings
       open={open}
+      item={item}
+      icon={<SettingsIcon />}
+      closingDisabled={false}
       onClose={handleClose}
       onCancel={onCancel}
-      item={item}
-      closingDisabled={false}
-      icon={<SettingsIcon />}
     />
   );
 };

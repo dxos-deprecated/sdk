@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import jsondown from 'jsondown';
 import leveljs from 'level-js';
 import memdown from 'memdown';
 
@@ -15,9 +16,17 @@ import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
+import { isNode } from './platform';
+
+export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown'
+
 export interface ClientConfig {
-  storageType?: 'ram' | 'persistent' | 'idb' | 'chrome' | 'firefox' | 'node',
-  storagePath?: string,
+  storage?: {
+    persistent?: boolean,
+    type?: 'ram' | 'idb' | 'chrome' | 'firefox' | 'node',
+    keyStorage?: KeyStorageType,
+    path?: string
+  },
   swarm?: {
     signal?: string,
     ice?: {
@@ -54,25 +63,27 @@ export class Client {
 
   constructor (config: ClientConfig = {}) {
     this._config = config;
+    // TODO(burdon): Make hierarchical (e.g., snapshot.[enabled, interval])
     const {
-      storageType = 'ram',
+      storage = {},
       swarm = DEFAULT_SWARM_CONFIG,
-      storagePath = 'dxos/storage',
       wns,
       snapshots = false,
       snapshotInterval
     } = config;
 
+    const { feedStorage, keyStorage, snapshotStorage } = createStorages(storage, snapshots);
+
+    // TODO(burdon): Extract constants.
     this._echo = new ECHO({
-      feedStorage: createStorage(`${storagePath}/feeds`, storageType === 'persistent' ? undefined : storageType),
-      keyStorage: storageType === 'ram' ? memdown() : leveljs(`${storagePath}/keystore`),
-      snapshotStorage: snapshots
-        ? createStorage(`${storagePath}/snapshots`, storageType === 'persistent' ? undefined : storageType)
-        : createStorage(`${storagePath}/snapshots`, 'ram'),
+      feedStorage,
+      keyStorage,
+      snapshotStorage,
       swarmProvider: new SwarmProvider(swarm),
       snapshots,
       snapshotInterval
     });
+
     this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
   }
 
@@ -88,14 +99,14 @@ export class Client {
       return;
     }
 
-    const timeoutId = setTimeout(() => {
-      console.error('Client.initialize is taking more then 10 seconds to complete. Something probably went wrong.');
+    const timeout = setTimeout(() => {
+      console.error('Initialize is taking more then 10 seconds to complete. Something probably went wrong.');
     }, 10000);
 
     await this._echo.open();
 
     this._initialized = true;
-    clearInterval(timeoutId);
+    clearInterval(timeout);
   }
 
   /**
@@ -116,13 +127,19 @@ export class Client {
   /**
    * Create Profile. Add Identity key if public and secret key are provided. Then initializes profile with given username.
    * If not public and secret key are provided it relies on keyring to contain an identity key.
+   * @returns {ProfileInfo} User profile info.
    */
+  // TODO(burdon): Breaks if profile already exists.
+  // TODO(burdon): ProfileInfo is not imported or defined.
   async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
+    // TODO(burdon): What if not set?
     if (publicKey && secretKey) {
       await this._echo.createIdentity({ publicKey, secretKey });
     }
 
     await this._echo.createHalo(username);
+
+    return this.getProfile();
   }
 
   /**
@@ -133,11 +150,10 @@ export class Client {
       return;
     }
 
-    const publicKey = keyToString(this._echo.identityKey.publicKey);
-
     return {
       username: this._echo.identityDisplayName,
-      publicKey
+      // TODO(burdon): Why convert to string?
+      publicKey: keyToString(this._echo.identityKey.publicKey)
     };
   }
 
@@ -148,8 +164,9 @@ export class Client {
   /**
    * @returns true if the profile exists.
    */
+  // TODO(burdon): Remove?
   hasProfile () {
-    return !!this.getProfile();
+    return this._echo.identityKey;
   }
 
   /**
@@ -249,3 +266,41 @@ const DEFAULT_SWARM_CONFIG: ClientConfig['swarm'] = {
   signal: 'ws://localhost:4000',
   ice: [{ urls: 'stun:stun.wireline.ninja:3478' }]
 };
+
+function createStorages (config: ClientConfig['storage'], snapshotsEnabled: boolean) {
+  const {
+    path = 'dxos/storage',
+    type,
+    keyStorage,
+    persistent = false
+  } = config ?? {};
+
+  if (persistent && type === 'ram') {
+    throw new Error('RAM storage cannot be used in persistent mode.');
+  }
+  if (!persistent && (type !== undefined && type !== 'ram')) {
+    throw new Error('Cannot use a persistent storage in not persistent mode.');
+  }
+  if (persistent && keyStorage === 'ram') {
+    throw new Error('RAM key storage cannot be used in persistent mode.');
+  }
+  if (!persistent && (keyStorage !== 'ram' && keyStorage !== undefined)) {
+    throw new Error('Cannot use a persistent key storage in not persistent mode.');
+  }
+
+  return {
+    feedStorage: createStorage(`${path}/feeds`, persistent ? type : 'ram'),
+    keyStorage: createKeyStorage(`${path}/keystore`, persistent ? keyStorage : 'ram'),
+    snapshotStorage: createStorage(`${path}/snapshots`, persistent && snapshotsEnabled ? type : 'ram')
+  };
+}
+
+function createKeyStorage (path: string, type?: KeyStorageType) {
+  const defaultedType = type ?? (isNode() ? 'jsondown' : 'leveljs');
+
+  switch (defaultedType) {
+    case 'leveljs': return leveljs(path);
+    case 'jsondown': return jsondown(path);
+    case 'ram': return memdown();
+  }
+}

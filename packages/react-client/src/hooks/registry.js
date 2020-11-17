@@ -13,7 +13,7 @@ const WRN_TYPE_BOT_FACTORY = 'wrn:bot-factory';
 export const useRegistry = () => {
   const { registry } = useClient();
   if (!registry) {
-    console.warn('No registry. Configure WNS in your Client config in order to gain access to WNS registry.');
+    console.warn('Registry not configured.');
   }
 
   return registry;

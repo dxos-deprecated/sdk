@@ -3,17 +3,13 @@
 //
 
 import debug from 'debug';
-import EventEmitter from 'events';
-import fs from 'fs-extra';
-import jsondown from 'jsondown';
-import path from 'path';
-import ram from 'random-access-memory';
+import { EventEmitter } from 'events';
+import { join } from 'path';
 
 import { promiseTimeout } from '@dxos/async';
 import { Client } from '@dxos/client';
-import { Keyring, KeyStore } from '@dxos/credentials';
 import { randomBytes, keyToBuffer, keyToString, createKeyPair } from '@dxos/crypto';
-import { InvitationDescriptor } from '@dxos/echo-db';
+import { InvitationDescriptor, Party } from '@dxos/echo-db';
 import { transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_BOT_INVITE,
@@ -24,7 +20,6 @@ import {
   createBotCommandResponse,
   createEvent
 } from '@dxos/protocol-plugin-bot';
-import { createStorage, STORAGE_NODE } from '@dxos/random-access-multi-storage';
 
 import { getClientConfig } from './config';
 
@@ -38,17 +33,26 @@ export const BOT_STORAGE = '/data';
  * Base class for bots.
  */
 export class Bot extends EventEmitter {
-  /**
-   * @type {Set}
-   */
-  _parties = new Set();
+  private readonly _parties = new Set();
 
-  /**
-   * @constructor
-   * @param {Object} config
-   * @param {Object} options
-   */
-  constructor (config, options = {}) {
+  private readonly _uid: string;
+  private readonly _persistent: boolean;
+  private readonly _restarted: boolean;
+  private readonly _cwd: string;
+  private readonly _name: string;
+  private readonly _controlTopic: Buffer;
+  private readonly _controlPeerKey: Buffer;
+  private readonly _botFactoryPeerKey: Buffer;
+
+  private readonly _options: any;
+  private readonly _config: any;
+
+  private _plugin?: any /* BotPlugin */;
+  private _client?: Client;
+
+  private _leaveControlSwarm?: () => void;
+
+  constructor (config: any, options: any = {}) {
     super();
 
     const { uid, persistent = true, restarted = false, cwd, name, controlTopic } = config.get('bot');
@@ -76,27 +80,15 @@ export class Bot extends EventEmitter {
    * Start the bot.
    */
   async start () {
-    this._plugin = new BotPlugin(this._controlPeerKey, (...args) => this._botMessageHandler(...args));
-
-    let feedStorage;
-    if (this._persistent) {
-      const storagePath = path.join(this._cwd, BOT_STORAGE);
-      await fs.ensureDir(storagePath);
-
-      feedStorage = createStorage(storagePath, STORAGE_NODE);
-      this._keyRing = new Keyring(new KeyStore(jsondown(`${storagePath}/keystore`)));
-      await this._keyRing.load();
-    } else {
-      feedStorage = ram;
-      this._keyRing = new Keyring();
-    }
+    this._plugin = new BotPlugin(this._controlPeerKey, (protocol: any, message: any) => this._botMessageHandler(protocol, message));
 
     log('Starting.');
-
     this._client = new Client({
-      storage: feedStorage,
-      swarm: getClientConfig(this._config).swarm,
-      keyring: this._keyRing
+      storage: {
+        persistent: this._persistent,
+        path: join(this._cwd, BOT_STORAGE)
+      },
+      swarm: getClientConfig(this._config).swarm
     });
     await this._preInit();
     await this._client.initialize();
@@ -122,14 +114,15 @@ export class Bot extends EventEmitter {
   }
 
   async stop () {
-    await this._leaveControlSwarm();
+    await this._leaveControlSwarm?.();
   }
 
-  async botCommandHandler () {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async botCommandHandler (command: any): Promise<any | void> {
 
   }
 
-  async emitBotEvent (type, data) {
+  async emitBotEvent (type: any, data: any) {
     await this._plugin.sendCommand(this._botFactoryPeerKey, createEvent(this._uid, type, data));
   }
 
@@ -138,12 +131,12 @@ export class Bot extends EventEmitter {
    * @param {Protocol} protocol
    * @param {{ message }} command.
    */
-  async _botMessageHandler (protocol, { message }) {
+  async _botMessageHandler (protocol: any, { message }: { message: any }) {
     let result;
     switch (message.__type_url) {
       case COMMAND_BOT_INVITE: {
-        const { topic, invitation } = message;
-        await this._joinParty(topic, invitation);
+        const { invitation } = message;
+        await this._joinParty(invitation);
         break;
       }
 
@@ -168,7 +161,7 @@ export class Bot extends EventEmitter {
     return result;
   }
 
-  async _joinParty (topic, invitation) {
+  async _joinParty (invitation: unknown) {
     if (invitation) {
       const secretProvider = async () => {
         log('secretProvider begin.');
@@ -183,12 +176,12 @@ export class Bot extends EventEmitter {
 
       log(`Joining party with invitation: ${JSON.stringify(invitation)}`);
 
-      const party = await this._client.echo.joinParty(InvitationDescriptor.fromQueryParameters(invitation), secretProvider);
+      const party = await this._client!.echo.joinParty(InvitationDescriptor.fromQueryParameters(invitation as any), secretProvider);
       await party.open();
     }
   }
 
-  _onJoin (parties = []) {
+  _onJoin (parties: Party[] = []) {
     parties.map(party => {
       const topic = keyToString(party.key);
       if (!this._parties.has(topic)) {
@@ -201,7 +194,7 @@ export class Bot extends EventEmitter {
   async _connectToControlTopic () {
     const connect = new Promise(resolve => {
       // TODO(egorgripasov): Factor out.
-      this._plugin.on('peer:joined', peerId => {
+      this._plugin.on('peer:joined', (peerId: Buffer) => {
         if (peerId.equals(this._botFactoryPeerKey)) {
           log('Bot factory peer connected');
           resolve();
@@ -209,8 +202,8 @@ export class Bot extends EventEmitter {
       });
     });
 
-    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
-      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin));
+    this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
+      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
 
     return promiseTimeout(connect, CONNECT_TIMEOUT);
   }
