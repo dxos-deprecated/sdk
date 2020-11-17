@@ -25,7 +25,10 @@ jobs:
     - run: yarn lint
     - run: yarn build
     - run: yarn build:storybook
-    - run: yarn test:coverage
+    - run: |
+        yarn test:coverage
+        # The c8 tool leaves tmp folder which is large, we don't want it uploaded to artifacts
+        rm -rf coverage/tmp
     - uses: actions/upload-artifact@v2
       with:
         name: coverage-report
