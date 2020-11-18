@@ -51,5 +51,3 @@ export const NATIVE_BOT_MAIN_FILE = 'main.bin';
 
 // Js file inside Node.js bot package.
 export const NODE_BOT_MAIN_FILE = 'main.js';
-
-export const BROWSER_BOT_MAIN_FILE = 'index.html';

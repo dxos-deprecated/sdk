@@ -2,13 +2,18 @@
 // Copyright 2020 DXOS.org
 //
 
+import { Spawn } from '@dxos/protocol-plugin-bot';
 import { EventEmitter } from 'events';
 import moment from 'moment';
 import path from 'path';
 import playwright from 'playwright';
+import { sync as findPkgJson } from 'pkg-up'
+import debug from 'debug'
+
+const log = debug('dxos:botkit:container:browser')
 
 import { BotInfo } from '../bot-manager';
-import { BotContainer, BROWSER_BOT_MAIN_FILE } from './common';
+import { BotContainer } from './common';
 
 // TODO(egorgripasov): Allow consumer to select.
 const BROWSER_TYPE = 'chromium';
@@ -17,7 +22,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
   private readonly _config: any;
 
   private _controlTopic?: any;
-  private _browser?: any;
+  private _browser!: playwright.ChromiumBrowser;
 
   constructor (config: any) {
     super();
@@ -37,8 +42,8 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getBotAttributes (botId: string, installDirectory: string, options: any): Promise<any> {
-    const botFilePath = path.join(BROWSER_BOT_MAIN_FILE);
+  async getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<any> {
+    const botFilePath = path.join(installDirectory, 'main.js');
     return { botFilePath };
   }
 
@@ -47,10 +52,10 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
 
     const context = await this._browser.newContext();
     const page = await context.newPage();
-
-    await page.goto(`file:${path.join(__dirname, 'browser-test.html')}`);
-    const content = await page.content();
-    console.log(content);
+    
+    await page.goto(`file:${path.join(path.dirname(findPkgJson({ cwd: __dirname })!), 'res/browser-test.html')}`);
+    log(`Injecting script ${botFilePath}`)
+    await page.addScriptTag({ path: botFilePath });
 
     const timeState = {
       started: moment.utc(),

@@ -7,8 +7,11 @@ import path from 'path';
 import webpack from 'webpack';
 import tar from 'tar';
 import fetch from 'node-fetch';
+import debug from 'debug'
 
 const BUILD_PATH = './out/builds/node';
+
+const log = debug('dxos:testing:distributor')
 
 const getWebpackConfig = botPath => {
   return {
@@ -107,5 +110,9 @@ const publishBot = async ipfsEndpoint => {
  */
 export const buildAndPublishBot = async (ipfsEndpoint, botPath) => {
   await buildBot(botPath);
-  return publishBot(ipfsEndpoint);
+  log('Bot package built');
+  log(`Publishing to IPFS node: ${ipfsEndpoint}`);
+  const ipfsCID = await publishBot(ipfsEndpoint);
+  log(`Published: ${ipfsCID}`);
+  return ipfsCID;
 };

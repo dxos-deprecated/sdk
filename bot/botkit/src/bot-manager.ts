@@ -170,6 +170,10 @@ export class BotManager {
 
     log(`Spawn bot request for ${botName || ipfsCID || displayName} env: ${env}`);
 
+    if(this._botContainers[env] === undefined) {
+      throw new Error(`Unknown env ${env}. Available envs are: ${Object.keys(this._botContainers)}`);
+    }
+
     assert(id, 'Invalid Bot Id.');
     assert(displayName, 'Invalid Bot Name.');
 
