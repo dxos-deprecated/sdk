@@ -2,12 +2,12 @@
 # Copyright 2020 DXOS.org
 #
 
-name: release - Publish to NPM
+name: Publish to NPM (from beta branch)
 
 on:
   push:
     branches:
-      - release
+      - beta
 
 jobs:
   publish-npm:
@@ -29,11 +29,11 @@ jobs:
           yarn test
           git reset --hard
           VERSION=`cat package.json | grep '"version":' | awk '{ print $2 }' | sed 's/[",]//g'`
-          yarn lerna version $VERSION --no-git-tag-version -y
-          git commit -am "v$VERSION"
+          yarn lerna version ${VERSION}-beta.0 --no-git-tag-version -y
+          git commit -am "v$VERSION-beta.0"
           git push
-          git tag -f "v$VERSION"
+          git tag -f "v$VERSION-beta.0"
           git push --tags -f
-          yarn lerna publish from-package --force-publish -y
+          yarn lerna publish from-package --force-publish -y --dist-tag="beta"
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

@@ -2,12 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-# Workflow:
-# - Clean install of deps.
-# - Builds and runs jest and playwrite tests (with different versions of node). TODO(burdon): Which?
-# - Runs and uploads code coverage.
-
-name: CI
+name: Run all tests
 
 on: [push]
 
@@ -20,28 +15,39 @@ jobs:
         node-version: [12.x]
 
     steps:
+    # checkout and install
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn install --frozen-lockfile
+
+    # lint
     - run: yarn lint:lockfile
     - run: yarn lint:versions
     - run: yarn lint
+
+    # build
     - run: yarn build
     - run: yarn build:storybook
+
+    # jest tests with coverage
     - run: |
         yarn test:coverage
         # The c8 tool leaves tmp folder which is large, we don't want it uploaded to artifacts.
         rm -rf coverage/tmp
-    - run: yarn test:playwright
+
     - uses: actions/upload-artifact@v2
       with:
         name: coverage-report
         path: ./coverage/**
+
     - uses: romeovs/lcov-reporter-action@v0.2.16
-      if: ${{ github.event_name == 'pull_request' }}
+      if: ${{ github.event_name == 'pull_request' }} # TODO(burdon): Why?
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         lcov-file: ./coverage/lcov.info
+
+    # test playwright
+    - run: yarn test:playwright
