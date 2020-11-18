@@ -15,7 +15,8 @@
     "lint": "eslint '{src,tests,stories}/**/*.{ts,js,tsx,jsx}'",
     "prepublishOnly": "npm run build && npm run test",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir . --verbose"
+    "test": "jest --rootDir ./tests --verbose",
+    "test:playwright": "./scripts/start-and-wait.sh && jest --rootDir ./playwright --runInBand"
   },
   "dependencies": {
     "@dxos/botkit-client": "^2.7.9-alpha.0",
@@ -60,6 +61,7 @@
     "copyfiles": "^2.4.0",
     "eslint": "^7.13.0",
     "jest": "^26.6.3",
+    "playwright": "^1.5.2",
     "storybook-react-router": "^1.0.8",
     "ts-jest": "^26.4.4",
     "typescript": "^4.0.5"
