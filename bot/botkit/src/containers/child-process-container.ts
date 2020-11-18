@@ -166,9 +166,11 @@ export class ChildProcessContainer extends EventEmitter implements BotContainer 
       if (watcher) {
         watcher.close();
       }
-      kill(process.pid, 'SIGKILL', () => {
-        resolve();
-      });
+      if (process && process.pid) {
+        kill(process.pid, 'SIGKILL', () => {
+          resolve();
+        });
+      }
     });
   }
 
