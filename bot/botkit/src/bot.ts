@@ -27,6 +27,7 @@ import {
 import { getClientConfig } from './config';
 
 const CONNECT_TIMEOUT = 30000;
+const HEARTBEAT_INTERVAL = 120 * 1000;
 
 const log = debug('dxos:botkit');
 
@@ -112,6 +113,8 @@ export class Bot extends EventEmitter {
     parties.subscribe(() => {
       this._onJoin(parties.value);
     });
+
+    await this._startHeartbeat();
 
     await this._plugin.sendCommand(this._botFactoryPeerKey, createConnectConfirmMessage(this._uid));
   }
@@ -212,5 +215,14 @@ export class Bot extends EventEmitter {
       transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
 
     return promiseTimeout(connect, CONNECT_TIMEOUT);
+  }
+
+  async _startHeartbeat() {
+    setInterval(() => {
+      const used: any = process.memoryUsage();
+      for (let key in used) {
+        log(`${key} ${Math.round(used[key] / 1024 / 1024 * 100) / 100} MB`);
+      }
+    }, HEARTBEAT_INTERVAL);
   }
 }
