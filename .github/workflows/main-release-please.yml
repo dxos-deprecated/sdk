@@ -1,8 +1,14 @@
+#
+# Copyright 2020 DXOS.org
+#
+
+name: main - release-please
+
 on:
   push:
     branches:
       - main
-name: main - release-please
+
 jobs:
   release-please:
     runs-on: ubuntu-latest

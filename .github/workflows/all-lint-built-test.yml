@@ -1,5 +1,11 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+#
+# Copyright 2020 DXOS.org
+#
+
+# Workflow:
+# - Clean install of deps.
+# - Builds and runs jest and playwrite tests (with different versions of node). TODO(burdon): Which?
+# - Runs and uploads code coverage.
 
 name: CI
 
@@ -27,13 +33,13 @@ jobs:
     - run: yarn build:storybook
     - run: |
         yarn test:coverage
-        # The c8 tool leaves tmp folder which is large, we don't want it uploaded to artifacts
+        # The c8 tool leaves tmp folder which is large, we don't want it uploaded to artifacts.
         rm -rf coverage/tmp
     - run: yarn test:playwright
     - uses: actions/upload-artifact@v2
       with:
         name: coverage-report
-        path: coverage
+        path: ./coverage/**
     - uses: romeovs/lcov-reporter-action@v0.2.16
       if: ${{ github.event_name == 'pull_request' }}
       with:
