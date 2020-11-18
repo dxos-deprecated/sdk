@@ -28,7 +28,6 @@
     "@dxos/react-json-tree": "^0.11.3",
     "@dxos/react-router": "^2.7.9-alpha.0",
     "@dxos/react-ux": "^2.7.9-alpha.0",
-    "@dxos/view-model": "^1.0.0-beta.28",
     "@material-ui/core": "^4.9.0",
     "@material-ui/data-grid": "^4.0.0-alpha.8",
     "@material-ui/icons": "^4.5.1",
