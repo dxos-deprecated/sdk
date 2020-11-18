@@ -27,7 +27,7 @@ import {
 import { getClientConfig } from './config';
 
 const CONNECT_TIMEOUT = 30000;
-const HEARTBEAT_INTERVAL = 120 * 1000;
+const HEARTBEAT_INTERVAL = 180 * 1000;
 
 const log = debug('dxos:botkit');
 
