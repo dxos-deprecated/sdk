@@ -1,6 +1,6 @@
 {
   "name": "@dxos/client",
-  "version": "2.7.7-alpha.0",
+  "version": "2.7.9-alpha.0",
   "license": "AGPL-3.0",
   "author": "DXOS.org",
   "main": "dist/src/index.js",
@@ -9,7 +9,7 @@
     "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
     "prepublishOnly": "npm run build && npm run test",
-    "test": "jest --rootDir ./src --verbose --forceExit --coverage"
+    "test": "jest --rootDir ./src --verbose --forceExit"
   },
   "dependencies": {
     "@dxos/async": "1.0.0-beta.10",

@@ -1,6 +1,6 @@
 {
   "name": "@dxos/sdk",
-  "version": "2.7.8",
+  "version": "2.7.9",
   "private": true,
   "description": "DXOS SDK monorepo.",
   "homepage": "https://github.com/dxos/sdk#readme",
@@ -24,7 +24,8 @@
     "clean": "wsrun clean",
     "lint": "wsrun lint",
     "test": "wsrun -s test",
-    "coverage": "istanbul-combine -d coverage -p summary -r lcov packages/**/coverage/coverage-final.json",
+    "test:coverage": "c8 --check-coverage yarn test",
+    "test:playwright": "wsrun -s --exclude-missing test:playwright",
     "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https",
     "lint:versions": "lint-version"
   },
@@ -33,8 +34,8 @@
     "@types/chalk": "^2.2.0",
     "@types/semver": "^7.3.4",
     "babel-eslint": "^10.0.2",
+    "c8": "^7.3.5",
     "chalk": "^4.1.0",
-    "istanbul-combine": "^0.3.0",
     "lerna": "^3.19.0",
     "lint-staged": "^9.5.0",
     "lockfile-lint": "^4.3.7",

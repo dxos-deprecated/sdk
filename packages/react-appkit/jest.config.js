@@ -4,9 +4,8 @@
 
 module.exports = {
   preset: 'ts-jest/presets/js-with-ts',
-  coverageDirectory: 'coverage',
   transformIgnorePatterns: [
     'node_modules/(?!(@dxos)/)'
   ],
-  testTimeout: 10000
+  testTimeout: 20000
 };

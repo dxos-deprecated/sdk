@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.9](https://www.github.com/dxos/sdk/compare/v2.7.8...v2.7.9) (2020-11-17)
+
+
+### Bug Fixes
+
+* Add a step to build storybook ([#333](https://www.github.com/dxos/sdk/issues/333)) ([e72f918](https://www.github.com/dxos/sdk/commit/e72f918ca7f69837ec4d3cfeab6521511d95b191))
+
 ### [2.7.8](https://www.github.com/dxos/sdk/compare/v2.7.7...v2.7.8) (2020-11-17)
 
 
