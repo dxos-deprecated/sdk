@@ -29,6 +29,7 @@ jobs:
         yarn test:coverage
         # The c8 tool leaves tmp folder which is large, we don't want it uploaded to artifacts
         rm -rf coverage/tmp
+    - run: yarn test:playwright
     - uses: actions/upload-artifact@v2
       with:
         name: coverage-report

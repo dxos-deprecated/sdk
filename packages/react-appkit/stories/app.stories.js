@@ -42,7 +42,7 @@ const NoPartyComponent = () => {
       <h2>Parties</h2>
       {parties.map(party => {
         const publicKey = keyToString(party.key);
-        return (<div key={publicKey}>{publicKey}</div>);
+        return (<div key={publicKey} className="party-public-key">{publicKey}</div>);
       })}
       <button onClick={handleCreate}>Add Party</button>
     </Box>
