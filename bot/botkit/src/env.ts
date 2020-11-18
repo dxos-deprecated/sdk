@@ -9,6 +9,7 @@ import os from 'os';
 // Supported environments.
 export const NATIVE_ENV = 'native';
 export const NODE_ENV = 'node';
+export const BROWSER_ENV = 'browser';
 
 /**
  * Get platform info.

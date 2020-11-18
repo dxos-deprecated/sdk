@@ -38,6 +38,7 @@
     "memdown": "^5.1.0",
     "moment": "^2.24.0",
     "node-watch": "^0.6.4",
+    "playwright": "^1.6.1",
     "random-access-memory": "^3.1.1",
     "read-pkg-up": "^7.0.1",
     "tcp-port-used": "^1.0.1",

@@ -46,12 +46,14 @@ export interface BotInfo {
   stopped: boolean
   name: string
   type?: any
-  childDir: string
-  command: string
-  args: string[]
+  childDir?: string
+  command?: string
+  args?: string[]
   env: string
-  process: any
+  process?: any
   watcher?: any
+  page?: any
+  context?: any
 }
 
 interface Options {
