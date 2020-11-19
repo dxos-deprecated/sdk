@@ -5,10 +5,11 @@
 import React, { useContext } from 'react';
 import getDisplayName from 'react-display-name';
 
+import { raise } from '../util';
 import { ClientContext } from './context';
 
 export const useConfig = () => {
-  const { config } = useContext(ClientContext);
+  const { config } = useContext(ClientContext) ?? raise(new Error('`useConfig` hook is called outside of ClientContext. Wrap the component with `ClientProvider` or `ClientInitializer`'));
   return config;
 };
 
