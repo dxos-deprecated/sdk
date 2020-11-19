@@ -30,7 +30,7 @@
     "**/playwright",
     "**/docs",
     "**/proto",
-    "**/index.js",
+    "**/index.{js,ts}",
     "**/*.test.*"
   ]
 }
