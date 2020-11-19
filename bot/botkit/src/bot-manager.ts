@@ -205,7 +205,9 @@ export class BotManager {
 
   async killAllBots () {
     for await (const botInfo of this._bots.values()) {
-      await this._botContainers[botInfo.env].killBot(botInfo);
+      if (this._botContainers[botInfo.env]) {
+        await this._botContainers[botInfo.env].killBot(botInfo);
+      }
     }
     this._bots.clear();
     await this._saveBotsToFile();
