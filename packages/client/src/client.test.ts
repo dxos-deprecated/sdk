@@ -22,7 +22,6 @@ test('client initialize', async () => {
   await client.destroy();
 });
 
-// TODO(burdon): This breaks.
 test.skip('client idempotent calls', async () => {
   const client = new Client();
   await client.initialize();
@@ -30,6 +29,10 @@ test.skip('client idempotent calls', async () => {
 
   const keypair = createKeyPair();
   await client.createProfile({ ...keypair, username: 'testuser' });
+  expect(client.hasProfile()).toBeTruthy(); // TODO(burdon): Remove -- just access profile property.
+  // TODO(burdon): Fails.
+  //   This is a bad error message: Why mention halo party?
+  //   Identity key already exists. Call createProfile without a keypair to only create a halo party.
   await client.createProfile({ ...keypair, username: 'testuser' });
 
   expect(client.hasProfile()).toBeTruthy();
@@ -41,7 +44,6 @@ test.skip('client idempotent calls', async () => {
 
 test('creating profile returns the profile', async () => {
   const client = new Client();
-
   await client.initialize();
 
   const keypair = createKeyPair();
