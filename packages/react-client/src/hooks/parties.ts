@@ -39,14 +39,3 @@ export const useParties = () => {
 
   return parties;
 };
-
-export const withParties = WrappedComponent => {
-  const Component = ({ ...rest }) => {
-    const parties = useParties();
-
-    return <WrappedComponent {...rest} parties={parties} />;
-  };
-
-  Component.displayName = `withParties(${getDisplayName(WrappedComponent)})`;
-  return Component;
-};
