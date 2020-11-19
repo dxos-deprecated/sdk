@@ -9,11 +9,19 @@ import { keyToString } from '@dxos/crypto';
 
 import { useClient } from './client';
 
-export const useItems = ({ partyKey, ...filter } = {}) => {
+export interface UseItemsProps {
+  partyKey: Uint8Array
+}
+
+export const useItems = ({ partyKey, ...filter }: UseItemsProps) => {
   const client = useClient();
   const party = client.echo.getParty(partyKey);
   const key = keyToString(partyKey);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<any[]>([]);
+
+  if (!party) {
+    throw new Error('Party not found.');
+  }
 
   useDeepCompareEffect(() => {
     const result = party.database.queryItems(filter);
