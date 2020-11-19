@@ -13,9 +13,9 @@ const BUILD_PATH = './out/builds/node';
 
 const log = debug('dxos:testing:distributor')
 
-const getWebpackConfig = botPath => {
+const getWebpackConfig = (botPath, browser = false) => {
   return {
-    target: 'node',
+    target: browser ? undefined : 'node',
 
     mode: 'development',
 
@@ -26,11 +26,13 @@ const getWebpackConfig = botPath => {
     output: {
       path: path.resolve(BUILD_PATH),
       filename: '[name].js',
-      libraryTarget: 'commonjs2',
+      libraryTarget: browser ? undefined : 'commonjs2',
       devtoolModuleFilenameTemplate: '[absolute-resource-path]'
     },
 
-    externals: {
+    externals: browser
+     ? {} 
+     : {
       fatfs: 'fatfs',
       runtimejs: 'runtimejs',
       wrtc: 'wrtc',
@@ -77,8 +79,8 @@ const getWebpackConfig = botPath => {
   };
 };
 
-export const buildBot = async (botPath) => {
-  const webpackConf = getWebpackConfig(botPath);
+export const buildBot = async (botPath, browser) => {
+  const webpackConf = getWebpackConfig(botPath, browser);
 
   return new Promise((resolve, reject) => {
     webpack({ ...webpackConf, stats: 'errors-only' }, (err, stats) => {
@@ -108,9 +110,9 @@ const publishBot = async ipfsEndpoint => {
  * @param {string} ipfsEndpoint IPFS Gateway endpoint.
  * @param {string} botPath Path to bot file from cwd.
  */
-export const buildAndPublishBot = async (ipfsEndpoint, botPath) => {
-  await buildBot(botPath);
-  log('Bot package built');
+export const buildAndPublishBot = async (ipfsEndpoint, botPath, browser) => {
+  log(`Building package, browser=${browser}`);
+  await buildBot(botPath, browser);
   log(`Publishing to IPFS node: ${ipfsEndpoint}`);
   const ipfsCID = await publishBot(ipfsEndpoint);
   log(`Published: ${ipfsCID}`);

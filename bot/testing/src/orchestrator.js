@@ -97,7 +97,7 @@ export class Orchestrator {
       let ipfsCID = this._builds.get(botPath);
       log('Building & publishing bot package...')
       if (!ipfsCID) {
-        ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath);
+        ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath, env === 'browser');
         this._builds.set(botPath, ipfsCID);
       }
       options = {
