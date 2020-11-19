@@ -23,6 +23,12 @@
 
 
     "**/dist",
-    "**/proto/gen"
+    "**/proto/gen",
+    "**/storybook-static",
+    "**/.storybook",
+    "**/stories",
+    "**/playwright",
+    "**/docs",
+    "**/proto",
   ]
 }
