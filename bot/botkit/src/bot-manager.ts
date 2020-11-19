@@ -298,6 +298,7 @@ export class BotManager {
    * @param options
    */
   private async _startBot (botId: string, options: any = {}) {
+    log(`_startBot ${botId} ${options.env}`)
     let botInfo = this._bots.get(botId);
     botInfo = await this._botContainers[options.env].startBot(botId, botInfo, options);
 

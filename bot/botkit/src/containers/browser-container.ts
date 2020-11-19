@@ -51,13 +51,16 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
   async startBot (botId: string, botInfo: BotInfo | undefined, options: any = {}): Promise<any> {
     const { botFilePath, env, name } = botInfo || options;
 
+    log('Creating context');
     const context = await this._browser.newContext();
+    log('Creating page');
     const page = await context.newPage();
-
+    
     page.on('console', msg => {
       logBot[botId](msg.text());
     });
     
+    log('Navigating to index.html');
     await page.goto(`file:${path.join(path.dirname(findPkgJson({ cwd: __dirname })!), 'res/browser-test.html')}`);
     log(`Injecting script ${botFilePath}`)
     await page.addScriptTag({ path: botFilePath });
