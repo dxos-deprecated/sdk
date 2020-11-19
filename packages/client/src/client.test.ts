@@ -6,11 +6,13 @@ import { createKeyPair } from '@dxos/crypto';
 
 import { Client } from './client';
 
+test('sanity', () => {
+  expect(true).toBeTruthy();
+});
+
 test('client initialize', async () => {
   const client = new Client();
   await client.initialize();
-
-  console.log('test 1');
 
   // TODO(burdon): Profiling (takes 6s).
   // TODO(burdon): What if not provided?
