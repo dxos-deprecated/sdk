@@ -1,12 +1,14 @@
 {
+  "all": true,
+  "check-coverage": true,
   "reporter": [
     "html",
     "text",
     "text-summary"
   ],
-  "lines": 30,
-  "branches": "20",
-  "statements": "30",
+  "lines": 5,
+  "branches": "5",
+  "statements": "5",
   "comment": "unfortunately, with c8 we cannot have config in JS and import the defaults for overriding. that's why we copy-paste them here, and add our own",
   "exclude": [
     "coverage/**",
