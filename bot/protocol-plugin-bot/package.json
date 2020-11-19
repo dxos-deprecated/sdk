@@ -24,7 +24,7 @@
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "prepublishOnly": "npm run build",
-    "test": "jest --verbose --passWithNoTests src"
+    "test": "jest --verbose --passWithNoTests"
   },
   "browserslist": [
     "> 5%"
@@ -55,6 +55,7 @@
     "access": "public"
   },
   "jest": {
+    "rootDir": "./src",
     "preset": "ts-jest/presets/default",
     "testEnvironment": "node"
   },
