@@ -6,6 +6,12 @@ import { createKeyPair } from '@dxos/crypto';
 
 import { Client } from './client';
 
+test('initialize and destroy in a reasonable time', async () => {
+  const client = new Client();
+  await client.initialize();
+  await client.destroy();
+}, 500);
+
 test('initialize', async () => {
   const client = new Client();
   await client.initialize();
