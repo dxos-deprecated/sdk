@@ -22,6 +22,7 @@ test('client initialize', async () => {
   await client.destroy();
 });
 
+// TODO(burdon): Skipped.
 test.skip('client idempotent calls', async () => {
   const client = new Client();
   await client.initialize();
