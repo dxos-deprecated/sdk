@@ -30,7 +30,7 @@ jobs:
 
     # build
     - run: yarn build
-    - run: yarn build:storybook
+    - run: yarn build:storybook # TODO(burdon): Why do we build this? If for playwright then move below.
 
     # jest tests with coverage
     - run: |
@@ -40,8 +40,14 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
+        # zip file: https://github.com/actions/upload-artifact#zipped-artifact-downloads
         name: coverage-report
-        path: ./coverage/index.html
+        path: ./coverage
+
+    - uses: tintef/nyc-reporter-action
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPORTER: 'text'
 
     # TODO(burdon): Which other reporters should we consider? (https://github.com/marketplace?type=actions)
     # TODO(burdon): Why only for pull requests?
