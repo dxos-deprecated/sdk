@@ -35,7 +35,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     const { controlTopic } = options;
     this._controlTopic = controlTopic;
 
-    this._browser = await playwright[BROWSER_TYPE].launch();
+    this._browser = await playwright[BROWSER_TYPE].launch({ headless: false });
   }
 
   async stop () {
@@ -56,7 +56,11 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     log('Creating page');
     const page = await context.newPage();
     
+    page.on('pageerror', error => {
+      logBot[botId](error.stack);
+    })
     page.on('console', msg => {
+      log('Console', msg.type(), msg.text())
       logBot[botId](msg.text());
     });
     
