@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.11](https://www.github.com/dxos/sdk/compare/v2.7.10...v2.7.11) (2020-11-18)
+
+
+### Bug Fixes
+
+* Add more logging. ([#347](https://www.github.com/dxos/sdk/issues/347)) ([962a628](https://www.github.com/dxos/sdk/commit/962a628f7d2580a42a6fedcc4189b34189055087))
+
 ### [2.7.10](https://www.github.com/dxos/sdk/compare/v2.7.9...v2.7.10) (2020-11-18)
 
 
