@@ -9,6 +9,7 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
+    "experimentalDecorators": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
