@@ -14,6 +14,7 @@ const log = debug('dxos:botkit:container:browser')
 
 import { BotInfo } from '../bot-manager';
 import { BotContainer } from './common';
+import { logBot } from '../log';
 
 // TODO(egorgripasov): Allow consumer to select.
 const BROWSER_TYPE = 'chromium';
@@ -52,6 +53,10 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
 
     const context = await this._browser.newContext();
     const page = await context.newPage();
+
+    page.on('console', msg => {
+      logBot[botId](msg.text());
+    });
     
     await page.goto(`file:${path.join(path.dirname(findPkgJson({ cwd: __dirname })!), 'res/browser-test.html')}`);
     log(`Injecting script ${botFilePath}`)
