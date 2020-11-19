@@ -10,6 +10,8 @@ test('client initialize', async () => {
   const client = new Client();
   await client.initialize();
 
+  console.log('test 1');
+
   // TODO(burdon): Profiling (takes 6s).
   // TODO(burdon): What if not provided?
   const keypair = createKeyPair();
@@ -27,8 +29,6 @@ test.skip('client idempotent calls', async () => {
   const client = new Client();
   await client.initialize();
   await client.initialize();
-
-  console.log('test 1');
 
   const keypair = createKeyPair();
   await client.createProfile({ ...keypair, username: 'testuser' });
