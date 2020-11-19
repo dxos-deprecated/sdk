@@ -29,6 +29,8 @@
     "**/stories",
     "**/playwright",
     "**/docs",
-    "**/proto"
+    "**/proto",
+    "**/index.{js,ts}",
+    "**/*.test.*"
   ]
 }
