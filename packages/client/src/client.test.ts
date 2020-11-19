@@ -6,10 +6,6 @@ import { createKeyPair } from '@dxos/crypto';
 
 import { Client } from './client';
 
-test('sanity', () => {
-  expect(true).toBeTruthy();
-});
-
 test('client initialize', async () => {
   const client = new Client();
   await client.initialize();
