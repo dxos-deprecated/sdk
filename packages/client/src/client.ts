@@ -19,12 +19,13 @@ import { Registry } from '@wirelineio/registry-client';
 
 import { isNode } from './platform';
 
-export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown'
+export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
+export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown';
 
 export interface ClientConfig {
   storage?: {
     persistent?: boolean,
-    type?: 'ram' | 'idb' | 'chrome' | 'firefox' | 'node',
+    type?: StorageType,
     keyStorage?: KeyStorageType,
     path?: string
   },

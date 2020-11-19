@@ -33,7 +33,6 @@ test('initialize and destroy are idempotent', async () => {
 
 test('creating profile returns the profile', async () => {
   const client = new Client();
-
   await client.initialize();
 
   const keypair = createKeyPair();

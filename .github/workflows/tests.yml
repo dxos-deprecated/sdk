@@ -1,0 +1,48 @@
+#
+# Copyright 2020 DXOS.org
+#
+
+name: Run all tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      # checkout and install
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn install --frozen-lockfile
+
+      # lint
+      - run: yarn lint:lockfile
+      - run: yarn lint:versions
+      - run: yarn lint
+
+      # build
+      - run: yarn build
+      - run: yarn build:storybook # TODO(burdon): Why do we build this? If for playwright then move below.
+
+      # jest tests with coverage
+      - run: |
+          yarn test:coverage
+          # The c8 tool leaves tmp folder which is large, we don't want it uploaded to artifacts.
+          rm -rf coverage/tmp
+
+      - uses: actions/upload-artifact@v2
+        with:
+          # zip file: https://github.com/actions/upload-artifact#zipped-artifact-downloads
+          name: coverage-report
+          path: ./coverage
+
+      # test playwright
+      - run: yarn test:playwright
