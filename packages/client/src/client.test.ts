@@ -28,6 +28,8 @@ test.skip('client idempotent calls', async () => {
   await client.initialize();
   await client.initialize();
 
+  console.log('test 1');
+
   const keypair = createKeyPair();
   await client.createProfile({ ...keypair, username: 'testuser' });
   expect(client.hasProfile()).toBeTruthy(); // TODO(burdon): Remove -- just access profile property.
