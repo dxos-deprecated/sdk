@@ -3,7 +3,7 @@
 //
 
 module.exports = {
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   preset: 'ts-jest/presets/js-with-ts',
   testTimeout: 10000
 };

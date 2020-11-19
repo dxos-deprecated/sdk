@@ -1,6 +1,6 @@
 {
   "name": "@dxos/protocol-plugin-bot",
-  "version": "2.7.10-alpha.0",
+  "version": "2.7.11-alpha.0",
   "description": "Protocol plugin for managing the life-cycle of bots.",
   "homepage": "https://github.com/dxos/protocol/tree/master/packages/protocol-plugin-bot#readme",
   "bugs": {
@@ -24,7 +24,7 @@
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "prepublishOnly": "npm run build",
-    "test": "jest --verbose --passWithNoTests src"
+    "test": "jest --verbose --passWithNoTests"
   },
   "browserslist": [
     "> 5%"
@@ -55,6 +55,7 @@
     "access": "public"
   },
   "jest": {
+    "rootDir": "./src",
     "preset": "ts-jest/presets/default",
     "testEnvironment": "node"
   },
