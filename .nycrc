@@ -29,6 +29,6 @@
     "**/stories",
     "**/playwright",
     "**/docs",
-    "**/proto",
+    "**/proto"
   ]
 }
