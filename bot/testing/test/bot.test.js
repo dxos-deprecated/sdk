@@ -27,7 +27,7 @@ test('bot test - local source', async () => {
   await orchestrator.destroy();
 });
 
-test.skip('bot test - remote source', async () => {
+test('bot test - remote source', async () => {
   const orchestrator = new Orchestrator({ local: false });
 
   orchestrator.client.registerModel(MessengerModel);

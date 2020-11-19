@@ -6,7 +6,7 @@ import { createKeyPair } from '@dxos/crypto';
 
 import { Client } from './client';
 
-test('client initialize', async () => {
+test('initialize', async () => {
   const client = new Client();
   await client.initialize();
 
@@ -22,22 +22,10 @@ test('client initialize', async () => {
   await client.destroy();
 });
 
-// TODO(burdon): Skipped.
-test.skip('client idempotent calls', async () => {
+test('initialize and destroy are idempotent', async () => {
   const client = new Client();
   await client.initialize();
   await client.initialize();
-
-  const keypair = createKeyPair();
-  await client.createProfile({ ...keypair, username: 'testuser' });
-  expect(client.hasProfile()).toBeTruthy(); // TODO(burdon): Remove -- just access profile property.
-  // TODO(burdon): Fails.
-  //   This is a bad error message: Why mention halo party?
-  //   Identity key already exists. Call createProfile without a keypair to only create a halo party.
-  await client.createProfile({ ...keypair, username: 'testuser' });
-
-  expect(client.hasProfile()).toBeTruthy();
-  expect(client.getProfile()).toBeDefined();
 
   await client.destroy();
   await client.destroy();
@@ -70,6 +58,17 @@ test('persistent storage', async () => {
   await client.createProfile({ ...keypair, username: 'foo' });
 
   expect(client.getProfile()).toBeDefined();
+
+  await client.destroy();
+});
+
+test('creating profile twice throws an error', async () => {
+  const client = new Client();
+  await client.initialize();
+
+  const keypair = createKeyPair();
+  await client.createProfile({ ...keypair, username: 'testuser' });
+  await expect(client.createProfile({ ...keypair, username: 'testuser' })).rejects.toThrow();
 
   await client.destroy();
 });
