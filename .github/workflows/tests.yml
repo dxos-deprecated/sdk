@@ -45,8 +45,8 @@ jobs:
           path: ./coverage
 
       - uses: tj-actions/coverage-reporter@v3
-          with:
-            coverage-command: "yarn test:coverage"
+        with:
+          coverage-command: yarn test:coverage
 
       # TODO(burdon): Which other reporters should we consider? (https://github.com/marketplace?type=actions)
       # TODO(burdon): Why only for pull requests?
