@@ -16,7 +16,6 @@ test('initialize', async () => {
   const client = new Client();
   await client.initialize();
 
-  // TODO(burdon): Profiling (takes 6s).
   // TODO(burdon): What if not provided?
   const keypair = createKeyPair();
   await client.createProfile({ ...keypair, username: 'testuser' });
@@ -24,7 +23,6 @@ test('initialize', async () => {
   expect(client.hasProfile()).toBeTruthy();
   expect(client.getProfile()).toBeDefined();
 
-  // TODO(burdon): Test has closed.
   await client.destroy();
 });
 
