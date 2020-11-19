@@ -44,13 +44,5 @@ jobs:
           name: coverage-report
           path: ./coverage
 
-      # TODO(burdon): Which other reporters should we consider? (https://github.com/marketplace?type=actions)
-      # TODO(burdon): Why only for pull requests?
-      - uses: romeovs/lcov-reporter-action@v0.2.16
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./coverage/lcov.info # TODO(burdon): This file doesn't exist.
-
       # test playwright
       - run: yarn test:playwright
