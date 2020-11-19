@@ -4,13 +4,7 @@
 
 import { createContext } from 'react';
 
-import { Client, ClientConfig } from '@dxos/client';
-
-export interface ClientContextValue {
-  client: Client,
-  config: ClientConfig,
-  reset?: () => {},
-}
+import { Client } from '@dxos/client';
 
 /**
  * https://reactjs.org/docs/context.html#reactcreatecontext
