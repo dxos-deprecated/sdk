@@ -6,6 +6,7 @@ import jsondown from 'jsondown';
 import leveljs from 'level-js';
 import memdown from 'memdown';
 
+import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
 import { humanize, keyToString } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
@@ -18,12 +19,13 @@ import { Registry } from '@wirelineio/registry-client';
 
 import { isNode } from './platform';
 
-export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown'
+export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
+export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown';
 
 export interface ClientConfig {
   storage?: {
     persistent?: boolean,
-    type?: 'ram' | 'idb' | 'chrome' | 'firefox' | 'node',
+    type?: StorageType,
     keyStorage?: KeyStorageType,
     path?: string
   },
@@ -94,6 +96,7 @@ export class Client {
   /**
    * Initializes internal resources.
    */
+  @synchronized
   async initialize () {
     if (this._initialized) {
       return;
@@ -112,7 +115,11 @@ export class Client {
   /**
    * Cleanup, release resources.
    */
+  @synchronized
   async destroy () {
+    if (!this._initialized) {
+      return;
+    }
     await this._echo.close();
   }
 
@@ -120,6 +127,7 @@ export class Client {
    * Resets and destroys client storage.
    * Warning: Inconsistent state after reset, do not continue to use this client instance.
    */
+  @synchronized
   async reset () {
     await this._echo.reset();
   }
@@ -131,7 +139,12 @@ export class Client {
    */
   // TODO(burdon): Breaks if profile already exists.
   // TODO(burdon): ProfileInfo is not imported or defined.
+  @synchronized
   async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
+    if (this.getProfile()) {
+      throw new Error('Profile already exists.');
+    }
+
     // TODO(burdon): What if not set?
     if (publicKey && secretKey) {
       await this._echo.createIdentity({ publicKey, secretKey });

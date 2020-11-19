@@ -1185,15 +1185,6 @@
     stream-to-array "^2.3.0"
     uuid "^3.3.2"
 
-"@dxos/crypto@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-0.0.1.tgz#96ecb7efad8b99a8bc29b7a4522e3890df827296"
-  integrity sha512-ELTJSXE2Inq7THr+Fd6NMoF6xnIPHtCtBJln83PtS+NvR/mjlSagEP/bDpGi7CLv++O/mjjB9ALHm33YjDpndA==
-  dependencies:
-    crypto-js "^3.1.9-1"
-    humanhash "^1.0.4"
-    hypercore-crypto "^1.0.0"
-
 "@dxos/crypto@^1.0.0-beta.1", "@dxos/crypto@^1.0.0-beta.10", "@dxos/crypto@^1.0.0-beta.12", "@dxos/crypto@^1.0.0-beta.7":
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-1.0.0-beta.12.tgz#6459639ac717d2c5c83db930ee754b470f23df85"
@@ -1725,14 +1716,6 @@
     lodash.merge "^4.6.2"
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
-
-"@dxos/view-model@^1.0.0-beta.28":
-  version "1.0.0-beta.28"
-  resolved "https://registry.yarnpkg.com/@dxos/view-model/-/view-model-1.0.0-beta.28.tgz#7a311c4357990179bdc890766ada8238d103800e"
-  integrity sha512-K5NykObD0cqjeq80LyKFEKz0/3chBa4o/cRBIrNVJjiCsJQIbfL7enXQzeI1B7vT4PUbRnb2g5d59skDEJNA6Q==
-  dependencies:
-    "@dxos/crypto" "^0.0.1"
-    "@dxos/model-factory" "^1.0.0-beta.28"
 
 "@emotion/cache@^10.0.27", "@emotion/cache@^10.0.9":
   version "10.0.29"

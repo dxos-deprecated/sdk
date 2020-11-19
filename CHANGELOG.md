@@ -1,5 +1,19 @@
 # Changelog
 
+### [2.7.11](https://www.github.com/dxos/sdk/compare/v2.7.10...v2.7.11) (2020-11-18)
+
+
+### Bug Fixes
+
+* Add more logging. ([#347](https://www.github.com/dxos/sdk/issues/347)) ([962a628](https://www.github.com/dxos/sdk/commit/962a628f7d2580a42a6fedcc4189b34189055087))
+
+### [2.7.10](https://www.github.com/dxos/sdk/compare/v2.7.9...v2.7.10) (2020-11-18)
+
+
+### Bug Fixes
+
+* Remove redundant view-model ([#342](https://www.github.com/dxos/sdk/issues/342)) ([5ba537d](https://www.github.com/dxos/sdk/commit/5ba537dfd01fc4f77f7d07c83e77dc4b59ac91d8))
+
 ### [2.7.9](https://www.github.com/dxos/sdk/compare/v2.7.8...v2.7.9) (2020-11-17)
 
 

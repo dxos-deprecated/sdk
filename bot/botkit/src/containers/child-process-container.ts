@@ -159,15 +159,19 @@ export class ChildProcessContainer extends EventEmitter implements BotContainer 
     return botInfo;
   }
 
-  async stopBot (botInfo: BotInfo) {
+  async stopBot (botInfo: BotInfo): Promise<void> {
     const { process, watcher } = botInfo;
 
-    if (process && process.pid) {
-      kill(process.pid, 'SIGKILL');
-    }
-    if (watcher) {
-      watcher.close();
-    }
+    return new Promise(resolve => {
+      if (watcher) {
+        watcher.close();
+      }
+      if (process && process.pid) {
+        kill(process.pid, 'SIGKILL', () => {
+          resolve();
+        });
+      }
+    });
   }
 
   async killBot (botInfo: BotInfo) {
