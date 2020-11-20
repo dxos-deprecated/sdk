@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.13](https://www.github.com/dxos/sdk/compare/v2.7.12...v2.7.13) (2020-11-20)
+
+
+### Bug Fixes
+
+* Trigger publish ([a81428d](https://www.github.com/dxos/sdk/commit/a81428d106406d75876915c95400ab01980f87c7))
+
 ### [2.7.12](https://www.github.com/dxos/sdk/compare/v2.7.11...v2.7.12) (2020-11-20)
 
 
