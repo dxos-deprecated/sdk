@@ -18,6 +18,13 @@ test('initialize and destroy are idempotent', async () => {
   await client.initialize();
   expect(client.initialized).toBeTruthy();
 
+  // TODO(burdon): What if not provided?
+  const keypair = createKeyPair();
+  await client.createProfile({ ...keypair, username: 'testuser' });
+
+  expect(client.hasProfile()).toBeTruthy();
+  expect(client.getProfile()).toBeDefined();
+
   await client.destroy();
   await client.destroy();
   expect(client.initialized).toBeFalsy();
