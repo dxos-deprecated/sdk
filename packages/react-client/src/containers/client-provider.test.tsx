@@ -16,19 +16,26 @@ const TestComponent = () => {
   const client = useClient();
   return (<>
     <div>Hello World</div>
-    <div>{`Client is: ${client ? 'defined' : 'NOT there'}`}</div>
+    <div>{`Client is ${client ? 'defined' : 'NOT there'}`}</div>
   </>);
 };
 
 describe('ClientProvider', () => {
-  const client = new Client();
+  let client: Client;
 
-  test('Renders with children', async () => {
+  beforeAll(async () => {
+    client = new Client();
     await client.initialize();
     const keypair = createKeyPair();
     await client.createProfile({ ...keypair, username: 'Tester' });
     await client.echo.open();
+  });
 
+  afterAll(async () => {
+    await client.destroy();
+  });
+
+  test('Renders with children', async () => {
     render(
       <ClientProvider client={client}>
         <TestComponent />
@@ -36,6 +43,15 @@ describe('ClientProvider', () => {
     );
 
     expect(() => screen.getByText('Hello World')).not.toThrow();
+  });
+
+  test('Provides the client', async () => {
+    render(
+      <ClientProvider client={client}>
+        <TestComponent />
+      </ClientProvider>
+    );
+
     expect(() => screen.getByText('Client is defined')).not.toThrow();
     expect(() => screen.getByText('Client is NOT there')).toThrow();
   });
