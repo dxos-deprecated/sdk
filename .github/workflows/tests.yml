@@ -30,7 +30,6 @@ jobs:
 
       # build
       - run: yarn build
-      - run: yarn build:storybook # TODO(burdon): Why do we build this? If for playwright then move below.
 
       # jest tests with coverage
       - run: |
@@ -46,4 +45,5 @@ jobs:
           path: ./coverage
 
       # test playwright
+      - run: yarn build:storybook
       - run: yarn test:playwright
