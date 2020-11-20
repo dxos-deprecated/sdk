@@ -4,7 +4,7 @@
 
 import { renderHook } from '@testing-library/react-hooks';
 
-import { useConfig } from '../src';
+import { useConfig } from '.';
 
 describe('Config hook', () => {
   const render = () => useConfig();
