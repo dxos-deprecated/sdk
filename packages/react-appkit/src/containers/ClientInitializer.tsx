@@ -19,6 +19,8 @@ export interface ClientInitializerProps {
  * @param preInitialize - Callback for any pre-initialization logic required for client before initializing it, e.g. model registration.
  */
 // TODO(burdon): Bad abstraction -- hides client construction. Replace with ErrorWrapper.
+// TODO(rzadp): removing preInitialize is blocked on:
+// ISSUE: https://github.com/dxos/echo/issues/329
 export const ClientInitializer = ({ config, children, preInitialize }: ClientInitializerProps) => {
   const [client] = useState(() => new Client(config));
   const [clientReady, setClientReady] = useState(false);
