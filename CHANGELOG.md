@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.14](https://www.github.com/dxos/sdk/compare/v2.7.13...v2.7.14) (2020-11-20)
+
+
+### Bug Fixes
+
+* Export registries ([#363](https://www.github.com/dxos/sdk/issues/363)) ([0d7b55d](https://www.github.com/dxos/sdk/commit/0d7b55dbdac916ae9b73ed738e8337d8d0b77f5e))
+
 ### [2.7.13](https://www.github.com/dxos/sdk/compare/v2.7.12...v2.7.13) (2020-11-20)
 
 
