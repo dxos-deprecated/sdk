@@ -116,7 +116,7 @@ export class Client {
 
     const t = 10;
     const timeout = setTimeout(() => {
-      throw new Error(`Initialize timed out after ${t}s.`);
+      console.error('Initialize takes longer than usual.');
     }, t * 1000);
 
     await this._echo.open();
