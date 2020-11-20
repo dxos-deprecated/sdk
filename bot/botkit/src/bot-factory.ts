@@ -34,8 +34,7 @@ import { LocalDevBotContainer } from './containers/local-dev-container';
 import { NATIVE_ENV, NODE_ENV, getPlatformInfo } from './env';
 import { log } from './log';
 
-// TODO(egorgripasov): Proper version from corresponding .yml file.
-const { version } = readPackageJson() as any;
+const { packageJson: { version } } = readPackageJson({ cwd: __dirname }) as any;
 
 const BOT_SPAWN_TIMEOUT = 50000;
 const BOT_SPAWN_CHECK_INTERVAL = 50;
