@@ -2,7 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Publish to NPM (from beta branch)
+name: Publish to NPM (beta branch => x.x.x-beta.x)
 
 on:
   push:
