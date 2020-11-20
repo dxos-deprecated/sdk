@@ -19,6 +19,8 @@ export interface ClientInitializerProps {
  * @param preInitialize - Callback for any pre-initialization logic required for client before initializing it, e.g. model registration.
  */
 // TODO(burdon): Bad abstraction -- hides client construction. Replace with ErrorWrapper.
+// TODO(rzadp): removing preInitialize is blocked on:
+// ISSUE: https://github.com/dxos/echo/issues/329
 export const ClientInitializer = ({ config, children, preInitialize }: ClientInitializerProps) => {
   const [client] = useState(() => new Client(config));
   const [clientReady, setClientReady] = useState(false);
@@ -31,6 +33,8 @@ export const ClientInitializer = ({ config, children, preInitialize }: ClientIni
         await client.initialize();
         setClientReady(true);
       } catch (ex) {
+        // It's important to print the error to the console here so sentry can report it.
+        console.error(ex);
         setError(ex);
       }
     })();
@@ -52,6 +56,7 @@ export const ClientInitializer = ({ config, children, preInitialize }: ClientIni
   return (
     <ErrorBoundary
       config={config}
+      // It's important to print the error to the console here so sentry can report it.
       onError={console.error}
       onRestart={handleRestart}
       onReset={handleReset}

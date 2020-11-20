@@ -2,15 +2,16 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useEffect, useState } from 'react';
-import getDisplayName from 'react-display-name';
+import { useEffect, useState } from 'react';
+
+import { Party } from '@dxos/echo-db';
 
 import { useClient } from './client';
 
 /**
  * Get party.
  */
-export const useParty = partyKey => {
+export const useParty = (partyKey: Uint8Array) => {
   const client = useClient();
   return partyKey ? client.echo.getParty(partyKey) : undefined;
 };
@@ -20,7 +21,7 @@ export const useParty = partyKey => {
  */
 export const useParties = () => {
   const client = useClient();
-  const [parties, setParties] = useState([]);
+  const [parties, setParties] = useState<Party[]>([]);
 
   useEffect(() => {
     const result = client.echo.queryParties();
@@ -38,15 +39,4 @@ export const useParties = () => {
   }, []);
 
   return parties;
-};
-
-export const withParties = WrappedComponent => {
-  const Component = ({ ...rest }) => {
-    const parties = useParties();
-
-    return <WrappedComponent {...rest} parties={parties} />;
-  };
-
-  Component.displayName = `withParties(${getDisplayName(WrappedComponent)})`;
-  return Component;
 };

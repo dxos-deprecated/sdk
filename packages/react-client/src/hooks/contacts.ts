@@ -4,6 +4,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { PartyMember } from '@dxos/echo-db';
+
 import { useClient } from './client';
 
 /**
@@ -12,7 +14,7 @@ import { useClient } from './client';
  */
 export function useContacts () {
   const client = useClient();
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState<PartyMember[]>([]);
 
   useEffect(() => {
     const result = client.echo.queryContacts();

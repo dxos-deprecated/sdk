@@ -34,8 +34,7 @@ import { LocalDevBotContainer } from './containers/local-dev-container';
 import { NATIVE_ENV, NODE_ENV, getPlatformInfo } from './env';
 import { log } from './log';
 
-// TODO(egorgripasov): Proper version from corresponding .yml file.
-const { version } = readPackageJson() as any;
+const botkitPackage = readPackageJson({ cwd: __dirname }) as any;
 
 const BOT_SPAWN_TIMEOUT = 50000;
 const BOT_SPAWN_CHECK_INTERVAL = 50;
@@ -55,6 +54,7 @@ export class BotFactory {
   private readonly _localDev: boolean;
   private readonly _botContainers: Record<string, BotContainer>;
   private readonly _platorm: string;
+  private readonly _version: string;
   private _client?: Client;
   private _botManager?: BotManager;
   private _leaveSwarm?: () => void;
@@ -80,6 +80,8 @@ export class BotFactory {
 
     const { platform, arch } = getPlatformInfo();
     this._platorm = `${platform}.${arch}`;
+
+    this._version = botkitPackage?.packageJson?.version;
 
     process.on('SIGINT', async (...args) => {
       log('Signal received.', ...args);
@@ -184,7 +186,7 @@ export class BotFactory {
 
       case COMMAND_STATUS: {
         return createStatusResponse(
-          version,
+          this._version,
           this._platorm,
           Math.floor(process.uptime()).toString(),
           await this._botManager!.getStatus()
