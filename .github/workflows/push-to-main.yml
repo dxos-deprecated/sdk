@@ -2,7 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Trigger release-please
+name: Publish to NPM (main branch => x.x.x-alpha.x)
 
 on:
   push:
