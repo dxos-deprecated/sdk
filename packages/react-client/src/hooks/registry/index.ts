@@ -3,3 +3,5 @@
 //
 
 export * from './registry';
+export * from './registryBotFactories';
+export * from './registryBots';
