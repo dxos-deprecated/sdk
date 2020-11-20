@@ -31,6 +31,8 @@ export const ClientInitializer = ({ config, children, preInitialize }: ClientIni
         await client.initialize();
         setClientReady(true);
       } catch (ex) {
+        // It's important to print the error to the console here so sentry can report it.
+        console.error(ex);
         setError(ex);
       }
     })();
@@ -52,6 +54,7 @@ export const ClientInitializer = ({ config, children, preInitialize }: ClientIni
   return (
     <ErrorBoundary
       config={config}
+      // It's important to print the error to the console here so sentry can report it.
       onError={console.error}
       onRestart={handleRestart}
       onReset={handleReset}
