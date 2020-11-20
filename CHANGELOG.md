@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.12](https://www.github.com/dxos/sdk/compare/v2.7.11...v2.7.12) (2020-11-20)
+
+
+### Bug Fixes
+
+* Bot factory version. ([#357](https://www.github.com/dxos/sdk/issues/357)) ([25daefe](https://www.github.com/dxos/sdk/commit/25daefedca86c624129c5b540a7c8dfaf4c77de8))
+* Update tests ([#346](https://www.github.com/dxos/sdk/issues/346)) ([e7ffce5](https://www.github.com/dxos/sdk/commit/e7ffce5798f937275bc0fcc063d1946df6ef2808))
+
 ### [2.7.11](https://www.github.com/dxos/sdk/compare/v2.7.10...v2.7.11) (2020-11-18)
 
 
