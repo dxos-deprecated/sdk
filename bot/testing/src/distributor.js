@@ -30,8 +30,16 @@ const getWebpackConfig = (botPath, browser = false) => {
       devtoolModuleFilenameTemplate: '[absolute-resource-path]'
     },
 
+    node: browser
+     ? {
+        fs: 'empty'
+      }
+      : undefined,
+
     externals: browser
-     ? {} 
+     ? {
+      'read-pkg-up': 'read-pkg-up',
+     } 
      : {
       fatfs: 'fatfs',
       runtimejs: 'runtimejs',
@@ -45,7 +53,7 @@ const getWebpackConfig = (botPath, browser = false) => {
     },
 
     plugins: [
-      new webpack.IgnorePlugin(/(?!\.\/native-container)\.\/native/),
+      // new webpack.IgnorePlugin(/(?!\.\/native-container)\.\/native/),
       new webpack.IgnorePlugin(/^electron$/)
     ],
 
