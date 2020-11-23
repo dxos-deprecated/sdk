@@ -150,6 +150,8 @@ export class BotPlugin extends EventEmitter {
       return;
     }
 
+    console.log('sendCommand', JSON.stringify(command));
+
     const buffer = this._codec.encode(command);
     const result = await peer.getExtension(BotPlugin.EXTENSION_NAME).send(buffer, { oneway });
 

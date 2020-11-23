@@ -10,7 +10,7 @@ import yaml from 'js-yaml';
 import get from 'lodash.get';
 import path from 'path';
 
-import { Client } from '@dxos/client';
+import { Client, PaymentClient, decodeBase64ToObj } from '@dxos/client';
 import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
 import { transportProtocolProvider } from '@dxos/network-manager';
 import {
@@ -78,6 +78,7 @@ export class BotManager {
   private readonly _botsFile: string;
   private readonly _registry: any;
   private readonly _sourceManager: SourceManager;
+  private readonly _paymentClient: PaymentClient;
 
   /**
    * Topic for communications between bots and bot-manager.
@@ -101,6 +102,8 @@ export class BotManager {
     this._botsFile = path.join(process.cwd(), BOTS_DUMP_FILE);
 
     this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
+
+    this._paymentClient = new PaymentClient(this._config);
 
     ensureFileSync(this._botsFile);
 
@@ -148,7 +151,7 @@ export class BotManager {
    * Spawn bot instance.
    */
   async spawnBot (botName: string | undefined, options: Spawn.SpawnOptions = {}) {
-    let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
+    let { ipfsCID, env = NATIVE_ENV, name: displayName, id, payment } = options;
     assert(botName || ipfsCID || this._localDev);
 
     if (!ipfsCID) {
@@ -170,6 +173,10 @@ export class BotManager {
 
     assert(id, 'Invalid Bot Id.');
     assert(displayName, 'Invalid Bot Name.');
+    assert(payment, 'Invalid payment.');
+
+    const transfer = decodeBase64ToObj(payment);
+    await this._paymentClient.redeemTransfer(transfer);
 
     const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;
