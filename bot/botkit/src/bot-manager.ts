@@ -47,12 +47,14 @@ export interface BotInfo {
   stopped: boolean
   name: string
   type?: any
-  childDir: string
-  command: string
-  args: string[]
+  childDir?: string
+  command?: string
+  args?: string[]
   env: string
-  process: any
+  process?: any
   watcher?: any
+  page?: any
+  context?: any
 }
 
 interface Options {
@@ -167,6 +169,10 @@ export class BotManager {
     }
 
     log(`Spawn bot request for ${botName || ipfsCID || displayName} env: ${env}`);
+
+    if (this._botContainers[env] === undefined) {
+      throw new Error(`Unknown env ${env}. Available envs are: ${Object.keys(this._botContainers)}`);
+    }
 
     assert(id, 'Invalid Bot Id.');
     assert(displayName, 'Invalid Bot Name.');
@@ -292,6 +298,7 @@ export class BotManager {
    * @param options
    */
   private async _startBot (botId: string, options: any = {}) {
+    log(`_startBot ${botId} ${options.env}`);
     let botInfo = this._bots.get(botId);
     botInfo = await this._botContainers[options.env].startBot(botId, botInfo, options);
 

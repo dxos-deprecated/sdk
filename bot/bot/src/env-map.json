@@ -69,6 +69,10 @@
   "WIRE_BOT_IPC_SERVER": {
     "path": "bot.ipc.serverId"
   },
+  "WIRE_BOT_PERSISTENT": {
+    "path": "bot.persistent",
+    "type": "boolean"
+  },
   "WIRE_CLI_NODE_PATH": {
     "path": "cli.nodePath"
   },
