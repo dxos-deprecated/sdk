@@ -169,17 +169,17 @@ const AppBar = ({
    * Initiate the device invitation flow.
    */
   const handleDeviceInvite = async () => {
-    const invitation = await client.partyManager.identityManager.deviceManager.addDevice(
-      (invitation, secret) => secret && secret.equals(invitation.secret),
-      () => {
-        const passcode = generatePasscode();
-        setPasscode(passcode);
-        return Buffer.from(passcode);
-      },
-      {
-        onFinish: () => setDialog()
-      }
-    );
+    const secretValidator = (invitation, secret) => secret && secret.equals(invitation.secret);
+    const secretProvider = () => {
+      const passcode = generatePasscode();
+      setPasscode(passcode);
+      return Buffer.from(passcode);
+    };
+    const onFinish = () => setDialog();
+
+    // TODO(rzadp): Uncomment after updating ECHO.
+    // const invitation = await client.createHaloInvitation({ secretProvider, secretValidator }, { onFinish });
+    const invitation = await client.echo._identityManager.halo.invitationManager.createInvitation({ secretProvider, secretValidator }, { onFinish });
 
     setInvitation(invitation);
     setPasscode(null);
@@ -294,7 +294,7 @@ const AppBar = ({
   //
 
   const menuItems = [
-    // action(ACTION_DEVICE_INVITATION)
+    action(ACTION_DEVICE_INVITATION)
   ];
 
   // if (topic) {

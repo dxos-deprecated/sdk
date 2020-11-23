@@ -34,7 +34,7 @@ export const useAuthenticator = (invitation) => {
       if (invitation.identityKey) {
         // An invitation for this device to join an existing Identity.
         // Join the Identity
-        await client.admitDevice(invitation, secretProvider);
+        await client.echo.joinHalo(invitation, secretProvider);
         if (!signal.aborted) {
           setState({ identity: keyToString(invitation.identityKey) });
         }
@@ -47,6 +47,7 @@ export const useAuthenticator = (invitation) => {
     }
 
     runEffect().catch(err => {
+      console.error(err);
       // TODO(burdon): Doesn't support retry. Provide hint (e.g., should retry/cancel).
       if (!signal.aborted) {
         setState({ error: String(err) });

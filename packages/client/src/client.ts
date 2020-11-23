@@ -246,6 +246,22 @@ export class Client {
     return party.createOfflineInvitation(recipientKey);
   }
 
+  /**
+   * @param partyKey Party publicKey
+   * @param secretProvider
+   * @param options
+   */
+  // TODO(rzadp): Uncomment after updating ECHO.
+  // async createHaloInvitation (secretProvider: SecretProvider, options?: InvitationOptions) {
+  //   return this.echo.createHaloInvitation(
+  //     {
+  //       secretProvider,
+  //       secretValidator: (invitation: any, secret: any) => secret && secret.equals(invitation.secret)
+  //     }
+  //     , options
+  //   );
+  // }
+
   //
   // Contacts
   //
