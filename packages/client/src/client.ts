@@ -8,7 +8,7 @@ import memdown from 'memdown';
 
 import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
-import { humanize, keyToString } from '@dxos/crypto';
+import { humanize, keyToString, PublicKey } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
 import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';
@@ -242,8 +242,8 @@ export class Client {
    */
   // TODO(burdon): Move to party.
   async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Uint8Array) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
-    return party.createOfflineInvitation(recipientKey);
+    const party = await this.echo.getParty(PublicKey.from(partyKey)) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
+    return party.createOfflineInvitation(PublicKey.from(recipientKey));
   }
 
   /**
@@ -251,15 +251,15 @@ export class Client {
    * @param secretProvider
    * @param options
    */
-  // async createHaloInvitation (secretProvider: SecretProvider, options?: InvitationOptions) {
-  //   return await this.echo._identityManager.halo.invitationManager.createInvitation(
-  //     {
-  //       secretProvider,
-  //       secretValidator: (invitation: any, secret: any) => secret && secret.equals(invitation.secret)
-  //     }
-  //     , options
-  //   );
-  // }
+  async createHaloInvitation (secretProvider: SecretProvider, options?: InvitationOptions) {
+    return this.echo.createHaloInvitation(
+      {
+        secretProvider,
+        secretValidator: (invitation: any, secret: any) => secret && secret.equals(invitation.secret)
+      }
+      , options
+    );
+  }
 
   //
   // Contacts
