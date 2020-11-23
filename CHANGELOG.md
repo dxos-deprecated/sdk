@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.15](https://www.github.com/dxos/sdk/compare/v2.7.14...v2.7.15) (2020-11-23)
+
+
+### Bug Fixes
+
+* Add first version of device invite ([#372](https://www.github.com/dxos/sdk/issues/372)) ([dec8ee4](https://www.github.com/dxos/sdk/commit/dec8ee4a045b975b4a6937a7802bb9490930d8df))
+
 ### [2.7.14](https://www.github.com/dxos/sdk/compare/v2.7.13...v2.7.14) (2020-11-20)
 
 
