@@ -7,11 +7,11 @@ import path from 'path';
 import webpack from 'webpack';
 import tar from 'tar';
 import fetch from 'node-fetch';
-import debug from 'debug'
+import debug from 'debug';
 
 const BUILD_PATH = './out/builds/node';
 
-const log = debug('dxos:testing:distributor')
+const log = debug('dxos:testing:distributor');
 
 const getWebpackConfig = (botPath, browser = false) => {
   return {
@@ -31,22 +31,22 @@ const getWebpackConfig = (botPath, browser = false) => {
     },
 
     node: browser
-     ? {
+      ? {
         fs: 'empty'
       }
       : undefined,
 
     externals: browser
-     ? {
-      'read-pkg-up': 'read-pkg-up',
-     } 
-     : {
-      fatfs: 'fatfs',
-      runtimejs: 'runtimejs',
-      wrtc: 'wrtc',
-      bip32: 'bip32',
-      typeforce: 'typeforce'
-    },
+      ? {
+        'read-pkg-up': 'read-pkg-up'
+      }
+      : {
+        fatfs: 'fatfs',
+        runtimejs: 'runtimejs',
+        wrtc: 'wrtc',
+        bip32: 'bip32',
+        typeforce: 'typeforce'
+      },
 
     resolve: {
       modules: ['node_modules']

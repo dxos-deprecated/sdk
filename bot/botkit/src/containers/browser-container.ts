@@ -2,20 +2,21 @@
 // Copyright 2020 DXOS.org
 //
 
-import { Spawn } from '@dxos/protocol-plugin-bot';
-import { keyToString } from '@dxos/crypto'
+import debug from 'debug';
 import { EventEmitter } from 'events';
 import moment from 'moment';
 import path from 'path';
+import { sync as findPkgJson } from 'pkg-up';
 import playwright from 'playwright';
-import { sync as findPkgJson } from 'pkg-up'
-import debug from 'debug'
 
-const log = debug('dxos:botkit:container:browser')
+import { keyToString } from '@dxos/crypto';
+import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { BotInfo } from '../bot-manager';
-import { BotContainer } from './common';
 import { logBot } from '../log';
+import { BotContainer } from './common';
+
+const log = debug('dxos:botkit:container:browser');
 
 // TODO(egorgripasov): Allow consumer to select.
 const BROWSER_TYPE = 'chromium';
@@ -40,7 +41,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
   }
 
   async stop () {
-    await this._browser.close();  
+    await this._browser.close();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,29 +61,29 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
       WIRE_BOT_NAME: name,
       WIRE_BOT_CWD: '/dxos/bot',
       WIRE_BOT_RESTARTED: (!!botInfo).toString(),
-      WIRE_BOT_PERSISTENT: 'false', // Storage is currently broken 
+      WIRE_BOT_PERSISTENT: 'false' // Storage is currently broken
     };
 
     log('Creating context');
     const context = await this._browser.newContext();
     log('Creating page');
     const page = await context.newPage();
-    
+
     page.on('pageerror', error => {
       logBot[botId](error.stack);
-    })
+    });
     page.on('console', msg => {
-      log('Console', msg.type(), msg.text())
+      log('Console', msg.type(), msg.text());
       logBot[botId](msg.text());
     });
-    
+
     log('Navigating to index.html');
     await page.goto(`file:${path.join(path.dirname(findPkgJson({ cwd: __dirname })!), 'res/browser-test.html')}`);
-    log('Injecting env', wireEnv)
+    log('Injecting env', wireEnv);
     await page.evaluate((wireEnv) => {
       ((window.process as any) ||= {}).env = wireEnv;
-    }, wireEnv)
-    log(`Injecting script ${botFilePath}`)
+    }, wireEnv);
+    log(`Injecting script ${botFilePath}`);
     await page.addScriptTag({ path: botFilePath });
 
     const timeState = {

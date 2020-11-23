@@ -95,7 +95,7 @@ export class Orchestrator {
     } else {
       // TODO(egorgripasov): Browser support.
       let ipfsCID = this._builds.get(botPath);
-      log('Building & publishing bot package...')
+      log('Building & publishing bot package...');
       if (!ipfsCID) {
         ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath, env === 'browser');
         this._builds.set(botPath, ipfsCID);
@@ -108,7 +108,7 @@ export class Orchestrator {
       };
     }
 
-    log('Sending spawn bot command...')
+    log('Sending spawn bot command...');
     const botId = await this._spawnBot(botPath, options);
     await this._inviteBot(botId);
 

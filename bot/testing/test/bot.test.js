@@ -4,7 +4,7 @@ import { BROWSER_ENV, NODE_ENV, Orchestrator } from '../src/orchestrator';
 
 jest.setTimeout(100 * 1000);
 
-test.skip('local source', async () => {
+test('local source', async () => {
   const orchestrator = new Orchestrator({ local: true });
 
   orchestrator.client.registerModel(MessengerModel);
@@ -27,7 +27,7 @@ test.skip('local source', async () => {
   await orchestrator.destroy();
 });
 
-test.skip('remote source', async () => {
+test('remote source', async () => {
   const orchestrator = new Orchestrator({ local: false });
 
   orchestrator.client.registerModel(MessengerModel);

@@ -170,7 +170,7 @@ export class BotManager {
 
     log(`Spawn bot request for ${botName || ipfsCID || displayName} env: ${env}`);
 
-    if(this._botContainers[env] === undefined) {
+    if (this._botContainers[env] === undefined) {
       throw new Error(`Unknown env ${env}. Available envs are: ${Object.keys(this._botContainers)}`);
     }
 
@@ -298,7 +298,7 @@ export class BotManager {
    * @param options
    */
   private async _startBot (botId: string, options: any = {}) {
-    log(`_startBot ${botId} ${options.env}`)
+    log(`_startBot ${botId} ${options.env}`);
     let botInfo = this._bots.get(botId);
     botInfo = await this._botContainers[options.env].startBot(botId, botInfo, options);
 
