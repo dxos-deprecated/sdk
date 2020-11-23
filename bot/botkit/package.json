@@ -1,6 +1,6 @@
 {
   "name": "@dxos/botkit",
-  "version": "2.7.14-alpha.0",
+  "version": "2.7.15-alpha.0",
   "description": "Botkit",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@dxos/async": "1.0.0-beta.10",
-    "@dxos/client": "^2.7.14-alpha.0",
+    "@dxos/client": "^2.7.15-alpha.0",
     "@dxos/config": "^1.0.0-beta.73",
     "@dxos/credentials": "^2.0.0",
     "@dxos/crypto": "^1.0.0-beta.10",
@@ -38,13 +38,13 @@
     "memdown": "^5.1.0",
     "moment": "^2.24.0",
     "node-watch": "^0.6.4",
+    "pkg-up": "^3.1.0",
     "playwright": "^1.6.1",
     "random-access-memory": "^3.1.1",
     "read-pkg-up": "^7.0.1",
     "tcp-port-used": "^1.0.1",
     "tree-kill": "^1.2.2",
-    "uuidv4": "^6.0.2",
-    "pkg-up": "^3.1.0"
+    "uuidv4": "^6.0.2"
   },
   "devDependencies": {
     "@dxos/eslint-plugin": "^1.0.8",
