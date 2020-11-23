@@ -7,7 +7,7 @@ import leveljs from 'level-js';
 import memdown from 'memdown';
 
 import { synchronized } from '@dxos/async';
-import { Keyring } from '@dxos/credentials';
+import { KeyRecord, Keyring } from '@dxos/credentials';
 import { humanize, keyToString, PublicKey } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
 import { FeedStore } from '@dxos/feed-store';
@@ -198,8 +198,7 @@ export class Client {
 
     return {
       username: this._echo.identityDisplayName,
-      // TODO(burdon): Why convert to string?
-      publicKey: keyToString(this._echo.identityKey.publicKey)
+      publicKey: this._echo.identityKey.publicKey
     };
   }
 
@@ -227,7 +226,7 @@ export class Client {
    * @param options
    */
   async createInvitation (partyKey: Uint8Array, secretProvider: SecretProvider, options?: InvitationOptions) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
+    const party = await this.echo.getParty(PublicKey.from(partyKey)) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
     return party.createInvitation({
       // TODO(marik-d): Probably an error here.
       secretValidator: async (invitation, secret) => secret && secret.equals((invitation as any).secret),

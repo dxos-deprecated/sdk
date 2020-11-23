@@ -1198,7 +1198,7 @@
     stream-to-array "^2.3.0"
     uuid "^3.3.2"
 
-"@dxos/credentials@^2.1.12-alpha.0":
+"@dxos/credentials@2.1.12-alpha.0", "@dxos/credentials@^2.1.12-alpha.0":
   version "2.1.12-alpha.0"
   resolved "https://registry.yarnpkg.com/@dxos/credentials/-/credentials-2.1.12-alpha.0.tgz#19106f0579c2d239209b24dd38f3c59b842ae9a4"
   integrity sha512-/nDlsIhpl/HwJn2TQcZZhdrKriB/erUGl+8lJP67rBeedK/ciNltUjqDa8Jw5xIB/Zpc9A3L35YCRZpaU1IFdg==
@@ -1240,6 +1240,15 @@
     stream-to-array "^2.3.0"
     uuid "^3.3.2"
 
+"@dxos/crypto@1.0.5", "@dxos/crypto@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-1.0.5.tgz#16e884f33a2edff0eee91d6a71ed5e79631353ca"
+  integrity sha512-G2csaAHRLZMhHrNU1FP+kzAYfyWOQGq+M2uAsp0fib/k6egIM/S9BIP5hQbdGvIv0xlbkLNDtcYWef96flRJ2g==
+  dependencies:
+    crypto-js "^3.1.9-1"
+    humanhash "^1.0.4"
+    hypercore-crypto "^1.0.0"
+
 "@dxos/crypto@1.0.5-beta.0":
   version "1.0.5-beta.0"
   resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-1.0.5-beta.0.tgz#b40d0d90974cff21bd5defdd38be98a8a8bbf671"
@@ -1253,15 +1262,6 @@
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-1.0.0-beta.12.tgz#6459639ac717d2c5c83db930ee754b470f23df85"
   integrity sha512-dq6b0RJ92EzpxO5i0kyXstNWGjlHjtL13Ef2vWS+ROB+om6jZ/zVRC7+WIwgCbA7re1aIME3os0T/dY2sjGVIA==
-  dependencies:
-    crypto-js "^3.1.9-1"
-    humanhash "^1.0.4"
-    hypercore-crypto "^1.0.0"
-
-"@dxos/crypto@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-1.0.5.tgz#16e884f33a2edff0eee91d6a71ed5e79631353ca"
-  integrity sha512-G2csaAHRLZMhHrNU1FP+kzAYfyWOQGq+M2uAsp0fib/k6egIM/S9BIP5hQbdGvIv0xlbkLNDtcYWef96flRJ2g==
   dependencies:
     crypto-js "^3.1.9-1"
     humanhash "^1.0.4"
@@ -15358,9 +15358,9 @@ protobufjs@^6.10.1, protobufjs@^6.9.0:
     "@types/node" "^13.7.0"
     long "^4.0.0"
 
-"protobufjs@git+https://github.com/wirelineio/protobuf.js.git#wireline-dist":
+"protobufjs@https://github.com/wirelineio/protobuf.js#wireline-dist":
   version "6.8.8"
-  resolved "git+https://github.com/wirelineio/protobuf.js.git#ad757d3ffe2565f4deea8a4e1b4c2383ede574c4"
+  resolved "https://github.com/wirelineio/protobuf.js#ad757d3ffe2565f4deea8a4e1b4c2383ede574c4"
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
