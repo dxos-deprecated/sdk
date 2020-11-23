@@ -6,28 +6,35 @@ import { createKeyPair } from '@dxos/crypto';
 
 import { Client } from './client';
 
-test('initialize', async () => {
+test('initialize and destroy in a reasonable time', async () => {
   const client = new Client();
   await client.initialize();
-
-  // TODO(burdon): Profiling (takes 6s).
-  // TODO(burdon): What if not provided?
-  const keypair = createKeyPair();
-  await client.createProfile({ ...keypair, username: 'testuser' });
-
-  expect(client.hasProfile()).toBeTruthy();
-  expect(client.getProfile()).toBeDefined();
-
-  // TODO(burdon): Test has closed.
   await client.destroy();
-});
+}, 100);
 
 test('initialize and destroy are idempotent', async () => {
   const client = new Client();
   await client.initialize();
   await client.initialize();
+  expect(client.initialized).toBeTruthy();
 
   await client.destroy();
+  await client.destroy();
+  expect(client.initialized).toBeFalsy();
+});
+
+test('initialize', async () => {
+  const client = new Client();
+  await client.initialize();
+
+  // TODO(burdon): Open promises.
+  //   On test close: A worker process has failed to exit gracefully and has been force exited.
+  const keypair = createKeyPair();
+  await client.createProfile({ ...keypair, username: 'test-user' });
+
+  expect(client.hasProfile()).toBeTruthy();
+  expect(client.getProfile()).toBeDefined();
+
   await client.destroy();
 });
 
@@ -36,30 +43,40 @@ test('creating profile returns the profile', async () => {
   await client.initialize();
 
   const keypair = createKeyPair();
-  const profile = await client.createProfile({ ...keypair, username: 'foo' });
+  const profile = await client.createProfile({ ...keypair, username: 'test-user' });
 
   expect(profile).toBeDefined();
-  expect(profile?.username).toEqual('foo');
+  expect(profile?.username).toEqual('test-user');
 
   await client.destroy();
 });
 
 test('persistent storage', async () => {
-  const client = new Client({
+  const config = {
     storage: {
       persistent: true,
       path: `/tmp/dxos-${Date.now()}`
     }
-  });
+  };
 
-  await client.initialize();
+  {
+    const client = new Client(config);
+    await client.initialize();
 
-  const keypair = createKeyPair();
-  await client.createProfile({ ...keypair, username: 'foo' });
+    const keypair = createKeyPair();
+    await client.createProfile({ ...keypair, username: 'test-user' });
 
-  expect(client.getProfile()).toBeDefined();
+    expect(client.getProfile()).toBeDefined();
 
-  await client.destroy();
+    await client.destroy();
+  }
+
+  {
+    const client = new Client(config);
+    await client.initialize();
+
+    expect(client.getProfile()).toBeDefined();
+  }
 });
 
 test('creating profile twice throws an error', async () => {
@@ -67,8 +84,11 @@ test('creating profile twice throws an error', async () => {
   await client.initialize();
 
   const keypair = createKeyPair();
-  await client.createProfile({ ...keypair, username: 'testuser' });
-  await expect(client.createProfile({ ...keypair, username: 'testuser' })).rejects.toThrow();
+  await client.createProfile({ ...keypair, username: 'test-user' });
+  expect(client.hasProfile()).toBeTruthy();
+
+  await expect(client.createProfile({ ...keypair, username: 'test-user' })).rejects.toThrow();
+  expect(client.hasProfile()).toBeTruthy();
 
   await client.destroy();
 });

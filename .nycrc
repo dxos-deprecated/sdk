@@ -2,13 +2,13 @@
   "all": true,
   "check-coverage": true,
   "reporter": [
+    "text-summary",
     "html",
-    "text",
-    "text-summary"
+    "lcovonly"
   ],
-  "lines": 3,
-  "branches": "3",
-  "statements": "3",
+  "lines": 10,
+  "branches": "10",
+  "statements": "10",
   "comment": "unfortunately, with c8 we cannot have config in JS and import the defaults for overriding. that's why we copy-paste them here, and add our own",
   "exclude": [
     "coverage/**",
@@ -29,6 +29,8 @@
     "**/stories",
     "**/playwright",
     "**/docs",
-    "**/proto"
+    "**/proto",
+    "**/index.{js,ts}",
+    "**/*.test.*"
   ]
 }

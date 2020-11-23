@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-ux",
-  "version": "2.7.11-alpha.0",
+  "version": "2.7.14-alpha.0",
   "description": "React components",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -12,7 +12,7 @@
     "clean": "rm -rf dist",
     "lint": "eslint '{src,tests}/**/*.{ts,js,tsx,jsx}'",
     "storybook": "start-storybook -s ./stories/static -p 9001 -c .storybook --ci",
-    "test": "jest --rootDir . --verbose"
+    "test": "jest --rootDir ./tests --verbose --runInBand"
   },
   "dependencies": {
     "@dxos/crypto": "^1.0.0-beta.10",

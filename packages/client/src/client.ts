@@ -74,7 +74,7 @@ export class Client {
       snapshotInterval
     } = config;
 
-    const { feedStorage, keyStorage, snapshotStorage } = createStorages(storage, snapshots);
+    const { feedStorage, keyStorage, snapshotStorage } = createStorageObjects(storage, snapshots);
 
     // TODO(burdon): Extract constants.
     this._echo = new ECHO({
@@ -93,6 +93,18 @@ export class Client {
     return this._config;
   }
 
+  get echo () {
+    return this._echo;
+  }
+
+  get registry () {
+    return this._registry;
+  }
+
+  get initialized () {
+    return this._initialized;
+  }
+
   /**
    * Initializes internal resources.
    */
@@ -102,9 +114,10 @@ export class Client {
       return;
     }
 
+    const t = 10;
     const timeout = setTimeout(() => {
-      console.error('Initialize is taking more then 10 seconds to complete. Something probably went wrong.');
-    }, 10000);
+      throw new Error(`Initialize timed out after ${t}s.`);
+    }, t * 1000);
 
     await this._echo.open();
 
@@ -120,17 +133,27 @@ export class Client {
     if (!this._initialized) {
       return;
     }
+
     await this._echo.close();
+
+    this._initialized = false;
   }
 
   /**
    * Resets and destroys client storage.
    * Warning: Inconsistent state after reset, do not continue to use this client instance.
    */
+  // TODO(burdon): Should not require reloading the page (make re-entrant).
+  //   Recreate echo instance? Big impact on hooks. Test.
   @synchronized
   async reset () {
     await this._echo.reset();
+    await this.destroy();
   }
+
+  //
+  // HALO Profile
+  //
 
   /**
    * Create Profile. Add Identity key if public and secret key are provided. Then initializes profile with given username.
@@ -156,8 +179,18 @@ export class Client {
   }
 
   /**
+   * @returns true if the profile exists.
+   * @deprecated Use getProfile.
+   */
+  // TODO(burdon): Remove?
+  hasProfile () {
+    return this._echo.identityKey;
+  }
+
+  /**
    * @returns {ProfileInfo} User profile info.
    */
+  // TODO(burdon): Change to property (currently returns a new object each time).
   getProfile () {
     if (!this._echo.identityKey) {
       return;
@@ -170,17 +203,14 @@ export class Client {
     };
   }
 
+  // TODO(burdon): Should be part of profile object. Or use standard Result object.
   subscribeToProfile (cb: () => void): () => void {
     return this._echo.identityReady.on(cb);
   }
 
-  /**
-   * @returns true if the profile exists.
-   */
-  // TODO(burdon): Remove?
-  hasProfile () {
-    return this._echo.identityKey;
-  }
+  //
+  // Parties
+  //
 
   /**
    * @deprecated
@@ -193,55 +223,63 @@ export class Client {
 
   /**
    * @param partyKey Party publicKey
+   * @param secretProvider
+   * @param options
    */
   async createInvitation (partyKey: Uint8Array, secretProvider: SecretProvider, options?: InvitationOptions) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found ${humanize(partyKey)}`));
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
     return party.createInvitation({
-      secretValidator: async (invitation, secret) => secret && secret.equals((invitation as any).secret), // TODO(marik-d): Probably an error here.
+      // TODO(marik-d): Probably an error here.
+      secretValidator: async (invitation, secret) => secret && secret.equals((invitation as any).secret),
       secretProvider
     },
     options);
   }
 
   /**
-   * @param {Buffer} publicKey Party publicKey
-   * @param {Buffer} recipient Recipient publicKey
+   * @param {Buffer} partyKey Party publicKey
+   * @param {Buffer} recipientKey Recipient publicKey
    */
+  // TODO(burdon): Move to party.
   async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Uint8Array) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found ${humanize(partyKey)}`));
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
     return party.createOfflineInvitation(recipientKey);
   }
+
+  //
+  // Contacts
+  //
 
   /**
    * Returns an Array of all known Contacts across all Parties.
    * @returns {Contact[]}
    */
+  // TODO(burdon): Not implemented.
   async getContacts () {
     console.warn('client.getContacts not impl. Returning []');
     // return this._partyManager.getContacts();
     return [];
   }
 
+  //
+  // ECHO
+  //
+
   /**
    * Registers a new model.
    */
+  // TODO(burdon): Expose echo directly?
   registerModel (constructor: ModelConstructor<any>): this {
     this._echo.modelFactory.registerModel(constructor);
-
     return this;
   }
 
-  get echo () {
-    return this._echo;
-  }
-
-  get registry () {
-    return this._registry;
-  }
+  //
+  // Deprecated
+  // TODO(burdon): Separate wrapper for devtools?
+  //
 
   /**
-   * For devtools.
-   *
    * @deprecated Use echo.keyring
    */
   get keyring (): Keyring {
@@ -249,8 +287,6 @@ export class Client {
   }
 
   /**
-   * For devtools.
-   *
    * @deprecated Use echo.feedStore
    */
   get feedStore (): FeedStore {
@@ -258,8 +294,6 @@ export class Client {
   }
 
   /**
-   * For devtools.
-   *
    * @deprecated Use echo.networkManager.
    */
   get networkManager (): NetworkManager {
@@ -275,12 +309,13 @@ export class Client {
   }
 }
 
+// TODO(burdon): Shouldn't be here.
 const DEFAULT_SWARM_CONFIG: ClientConfig['swarm'] = {
   signal: 'ws://localhost:4000',
   ice: [{ urls: 'stun:stun.wireline.ninja:3478' }]
 };
 
-function createStorages (config: ClientConfig['storage'], snapshotsEnabled: boolean) {
+function createStorageObjects (config: ClientConfig['storage'], snapshotsEnabled: boolean) {
   const {
     path = 'dxos/storage',
     type,
@@ -315,5 +350,6 @@ function createKeyStorage (path: string, type?: KeyStorageType) {
     case 'leveljs': return leveljs(path);
     case 'jsondown': return jsondown(path);
     case 'ram': return memdown();
+    default: throw new Error(`Invalid type: ${defaultedType}`);
   }
 }

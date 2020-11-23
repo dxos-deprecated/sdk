@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
   code: {
     display: 'block',
     font: 'monospace',
+    whiteSpace: 'pre',
     padding: 8,
     border: '1px solid #ccc',
     backgroundColor: '#eee',

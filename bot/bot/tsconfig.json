@@ -2,17 +2,15 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "jsx": "react",
     "lib": [
       "DOM"
     ]
   },
   "include": [
     "src",
-    "tests"
+    "src/**/*.json"
   ],
-  "ignore": "/node_modules/",
   "references": [
-    { "path": "../client" }
+    { "path": "../protocol-plugin-bot" }
   ]
 }
