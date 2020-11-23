@@ -17,4 +17,8 @@ export class Agent {
 
     return JSON.parse(result.toString());
   }
+
+  async stop () {
+    await this._botFactoryClient.sendBotManagementRequest(this._botId, 'kill');
+  }
 }
