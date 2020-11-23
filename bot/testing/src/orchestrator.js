@@ -140,6 +140,8 @@ export class Orchestrator {
 
       const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
 
+      factory.stdout.pipe(process.stdout);
+
       factory.stderr.on('data', data => {
         if (/"started":true/.test(data.toString())) {
           log('Bot Factory started.');

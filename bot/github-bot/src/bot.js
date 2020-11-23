@@ -5,7 +5,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-import { Bot } from '@dxos/botkit';
+import { Bot } from '@dxos/bot';
 import { docToMarkdown, markdownToDoc } from '@dxos/editor-core';
 import { TextModel, TYPE_TEXT_MODEL_UPDATE } from '@dxos/text-model';
 

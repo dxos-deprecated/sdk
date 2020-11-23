@@ -3,7 +3,7 @@
 //
 
 import { waitForCondition } from '@dxos/async';
-import { Bot, getConfig } from '@dxos/botkit';
+import { Bot, getConfig } from '@dxos/bot';
 import { createId } from '@dxos/crypto';
 import { MessengerModel } from '@dxos/messenger-model';
 
