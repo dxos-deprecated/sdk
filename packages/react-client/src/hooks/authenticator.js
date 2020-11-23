@@ -19,6 +19,8 @@ export const useAuthenticator = (invitation) => {
   const [state, setState] = useState({});
   const hash = invitation ? invitation.hash : '';
 
+  console.log('useAuthenticator', invitation)
+
   // Memoize these functions by inivitation hash.
   const [secretProvider, secretResolver] = useMemo(() => trigger(), [hash]);
 
@@ -34,7 +36,12 @@ export const useAuthenticator = (invitation) => {
       if (invitation.identityKey) {
         // An invitation for this device to join an existing Identity.
         // Join the Identity
-        await client.admitDevice(invitation, secretProvider);
+        console.log('joining halo...')
+        const joinedHalo = await client.echo.joinHalo(invitation, secretProvider);
+        console.log('joinedHalo', joinedHalo)
+        // console.log('opening..')
+        // await joinedHalo.open()
+        // console.log('opened!')
         if (!signal.aborted) {
           setState({ identity: keyToString(invitation.identityKey) });
         }
@@ -47,6 +54,7 @@ export const useAuthenticator = (invitation) => {
     }
 
     runEffect().catch(err => {
+      console.error(err)
       // TODO(burdon): Doesn't support retry. Provide hint (e.g., should retry/cancel).
       if (!signal.aborted) {
         setState({ error: String(err) });

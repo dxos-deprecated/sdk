@@ -246,6 +246,21 @@ export class Client {
     return party.createOfflineInvitation(recipientKey);
   }
 
+  /**
+   * @param partyKey Party publicKey
+   * @param secretProvider
+   * @param options
+   */
+  async createHaloInvitation (secretProvider: SecretProvider, options?: InvitationOptions) {
+    return await this.echo._identityManager.halo.invitationManager.createInvitation(
+      {
+        secretProvider,
+        secretValidator: (invitation: any, secret: any) => secret && secret.equals(invitation.secret)
+      }
+      , options
+    );
+  }
+
   //
   // Contacts
   //

@@ -23,10 +23,13 @@ const Authenticator = () => {
 
   // TODO(burdon): Provide status of remote connection (e.g., show sender key; don't display PIN until connected).
   const [{ topic, identity, error }, setSecret] = useAuthenticator(invitation);
+  console.log('useAuthenticator gets us: ', { topic, identity, error })
   if (topic) {
     appRouter.push({ topic });
   } else if (identity) {
+    // console.log('pushing ', createPath())
     history.push(createPath());
+    // window.location.replace(createPath())
   }
 
   const handleSubmit = async (value) => {
