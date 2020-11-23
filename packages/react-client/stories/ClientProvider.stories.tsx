@@ -28,11 +28,11 @@ const Test = () => {
 };
 
 const PartyView = ({ party }: { party: Party }) => {
-  const items = useItems({ partyKey: party.key }) as any;
+  const items = useItems({ partyKey: party.key.asUint8Array() }) as any;
 
   return (
     <div>
-      <p>{humanize(party.key)}</p>
+      <p>{humanize(party.key.toString())}</p>
       <button onClick={() => party.database.createItem({ model: ObjectModel })}>Create item</button>
       <ul>
         {items.map((item: any) => <li key={item.id}>{item.id}</li>)}

@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from 'react';
 
+import { PublicKey } from '@dxos/crypto';
 import { Party } from '@dxos/echo-db';
 
 import { useClient } from './client';
@@ -13,7 +14,7 @@ import { useClient } from './client';
  */
 export const useParty = (partyKey: Uint8Array) => {
   const client = useClient();
-  return partyKey ? client.echo.getParty(partyKey) : undefined;
+  return partyKey ? client.echo.getParty(PublicKey.from(partyKey)) : undefined;
 };
 
 /**
