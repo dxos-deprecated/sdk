@@ -172,16 +172,12 @@ const AppBar = ({
     const secretValidator = (invitation, secret) => secret && secret.equals(invitation.secret);
     const secretProvider = () => {
       const passcode = generatePasscode();
-      console.log('setting passcode: ', passcode)
       setPasscode(passcode);
       return Buffer.from(passcode);
     };
     const onFinish = () => setDialog();
 
-    // TODO(rzadp) - Create public interface, do not use private fields
-    const invitation = await client.echo._identityManager.halo.invitationManager.createInvitation({ secretProvider, secretValidator }, { onFinish });
-    // const invitation = await 
-    console.log('invitation', invitation)
+    const invitation = await client.createHaloInvitation({ secretProvider, secretValidator }, { onFinish });
 
     setInvitation(invitation);
     setPasscode(null);
