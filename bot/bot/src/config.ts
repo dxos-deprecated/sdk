@@ -19,7 +19,7 @@ export const getConfig = () => {
   const keyPair = createKeyPair();
 
   // process.env is replaced
-  const env = typeof window !== undefined && window.process?.env ? window.process.env : process.env;
+  const env = typeof window !== 'undefined' && window.process?.env ? window.process.env : process.env;
 
   const config = new Config(
     mapFromKeyValues(envmap, env),

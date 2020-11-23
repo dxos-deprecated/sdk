@@ -37,7 +37,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     const { controlTopic } = options;
     this._controlTopic = controlTopic;
 
-    this._browser = await playwright[BROWSER_TYPE].launch({ headless: false });
+    this._browser = await playwright[BROWSER_TYPE].launch();
   }
 
   async stop () {
