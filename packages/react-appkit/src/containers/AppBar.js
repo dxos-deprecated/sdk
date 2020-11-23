@@ -179,7 +179,7 @@ const AppBar = ({
     const onFinish = () => setDialog();
 
     // TODO(rzadp) - Create public interface, do not use private fields
-    // const invitation = await client.echo._identityManager.halo.invitationManager.createInvitation({ secretProvider, secretValidator }, { onFinish });
+    const invitation = await client.echo._identityManager.halo.invitationManager.createInvitation({ secretProvider, secretValidator }, { onFinish });
     // const invitation = await 
     console.log('invitation', invitation)
 
