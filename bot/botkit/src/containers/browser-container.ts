@@ -3,6 +3,7 @@
 //
 
 import { Spawn } from '@dxos/protocol-plugin-bot';
+import { keyToString } from '@dxos/crypto'
 import { EventEmitter } from 'events';
 import moment from 'moment';
 import path from 'path';
@@ -51,6 +52,17 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
   async startBot (botId: string, botInfo: BotInfo | undefined, options: any = {}): Promise<any> {
     const { botFilePath, env, name } = botInfo || options;
 
+    const wireEnv = {
+      ...process.env,
+      NODE_OPTIONS: '',
+      WIRE_BOT_CONTROL_TOPIC: keyToString(this._controlTopic),
+      WIRE_BOT_UID: botId,
+      WIRE_BOT_NAME: name,
+      WIRE_BOT_CWD: '/dxos/bot',
+      WIRE_BOT_RESTARTED: (!!botInfo).toString(),
+      WIRE_BOT_PERSISTENT: 'false', // Storage is currently broken 
+    };
+
     log('Creating context');
     const context = await this._browser.newContext();
     log('Creating page');
@@ -66,6 +78,10 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     
     log('Navigating to index.html');
     await page.goto(`file:${path.join(path.dirname(findPkgJson({ cwd: __dirname })!), 'res/browser-test.html')}`);
+    log('Injecting env', wireEnv)
+    await page.evaluate((wireEnv) => {
+      ((window.process as any) ||= {}).env = wireEnv;
+    }, wireEnv)
     log(`Injecting script ${botFilePath}`)
     await page.addScriptTag({ path: botFilePath });
 
