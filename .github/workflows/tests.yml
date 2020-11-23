@@ -25,7 +25,7 @@ jobs:
 
       # lint
       - run: yarn lint:lockfile
-      - run: yarn lint:versions
+      - run: yarn version:check
       - run: yarn lint
 
       # build
