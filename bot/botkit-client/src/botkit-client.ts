@@ -20,7 +20,7 @@ import {
 } from '@dxos/protocol-plugin-bot';
 
 import { keyToBuffer } from '@dxos/crypto';
-import { transportProtocolProvider } from '@dxos/network-manager';
+import { NetworkManager, transportProtocolProvider } from '@dxos/network-manager';
 
 const { log } = logs('botkit-client');
 
@@ -30,12 +30,14 @@ const CONNECT_TIMEOUT = 30000;
  * BotFactory Client.
  */
 export class BotFactoryClient {
-  /**
-   * Constructor
-   * @param {NetworkManager} networkManager
-   * @param {String} botFactoryTopic
-   */
-  constructor (networkManager, botFactoryTopic) {
+  _botFactoryTopic: Buffer;
+  _botFactoryPeerId: Buffer;
+  _networkManager: NetworkManager;
+  _peerId: Buffer;
+  _botPlugin: BotPlugin;
+  _connected: Boolean;
+  
+  constructor (networkManager: NetworkManager, botFactoryTopic: string) {
     assert(botFactoryTopic);
     assert(networkManager);
 
@@ -52,10 +54,8 @@ export class BotFactoryClient {
 
   /**
    * Send request for bot spawning.
-   * @param {String} botName
-   * @param {Object} options
    */
-  async sendSpawnRequest (botName, options) {
+  async sendSpawnRequest (botName: string, options: Object) {
     if (!this._connected) {
       await this._connect();
     }
@@ -71,7 +71,7 @@ export class BotFactoryClient {
     return botId;
   }
 
-  async sendBotManagementRequest (botId, command) {
+  async sendBotManagementRequest (botId: string, command: Buffer) {
     if (!this._connected) {
       await this._connect();
     }
@@ -90,12 +90,8 @@ export class BotFactoryClient {
 
   /**
    * Send request for bot invitation.
-   * @param {String} botId
-   * @param {String} partyToJoin
-   * @param {Object} spec
-   * @param {Object} invitation
    */
-  async sendInvitationRequest (botId, partyToJoin, spec, invitation) {
+  async sendInvitationRequest (botId: string, partyToJoin: string, spec: Object, invitation: Object) {
     if (!this._connected) {
       await this._connect();
     }
@@ -149,7 +145,7 @@ export class BotFactoryClient {
     }
   }
 
-  async sendBotCommand (botId, command) {
+  async sendBotCommand (botId: string, command: Buffer) {
     if (!this._connected) {
       await this._connect();
     }
@@ -170,7 +166,7 @@ export class BotFactoryClient {
   async _connect () {
     const connect = new Promise(resolve => {
       // TODO(egorgripasov): Factor out.
-      this._botPlugin.on('peer:joined', peerId => {
+      this._botPlugin.on('peer:joined', (peerId: Buffer) => {
         if (peerId.equals(this._botFactoryPeerId)) {
           log('Bot factory peer connected');
           this._connected = true;
