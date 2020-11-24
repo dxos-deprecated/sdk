@@ -3,18 +3,18 @@
 //
 
 import { spawn, SpawnOptions, ChildProcess } from 'child_process';
-import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import moment from 'moment';
 import watch from 'node-watch';
 import kill from 'tree-kill';
 
+import { Event } from '@dxos/async';
 import { keyToString } from '@dxos/crypto';
 import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { BotId, BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
-import { BotContainer, ContainerStartOptions } from './common';
+import { BotContainer, BotExitEventArgs, ContainerStartOptions } from './common';
 
 export interface CommandInfo {
   command: string
@@ -30,7 +30,9 @@ interface RunningBot {
 /**
  * Bot Container; Used for running bot instanced inside specific compute service.
  */
-export abstract class ChildProcessContainer extends EventEmitter implements BotContainer {
+export abstract class ChildProcessContainer implements BotContainer {
+  readonly botExit = new Event<BotExitEventArgs>();
+
   private readonly _bots = new Map<BotId, RunningBot>() ;
 
   private _controlTopic?: any;
@@ -100,9 +102,9 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
       logBot[botProcess.pid](`${data}`);
     });
 
-    botProcess.on('close', code => {
-      this.emit('bot-close', botId, code);
-      log(`Bot pid: ${botProcess.pid} exited with code ${code}.`);
+    botProcess.on('close', exitCode => {
+      this.botExit.emit({ botId, exitCode });
+      log(`Bot pid: ${botProcess.pid} exited with code ${exitCode}.`);
     });
 
     botProcess.on('error', (err) => {

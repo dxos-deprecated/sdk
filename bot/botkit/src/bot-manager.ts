@@ -104,9 +104,9 @@ export class BotManager {
     ensureFileSync(this._botsFile);
 
     for (const container of Object.values(this._botContainers)) {
-      container.on('bot-close', async (botId: string, code: number) => {
+      container.botExit.on(async ({ botId, exitCode }) => {
         const botInfo = this._bots.get(botId);
-        if (!code && botInfo) {
+        if (!exitCode && botInfo) {
           botInfo.stopped = true;
           await this._saveBotsToFile();
         }

@@ -2,10 +2,17 @@
 // Copyright 2020 DXOS.org
 //
 
-import { BotInfo } from '../bot-manager';
+import { ReadOnlyEvent } from '@dxos/async';
+
+import { BotId, BotInfo } from '../bot-manager';
 
 export interface ContainerStartOptions {
   controlTopic: Buffer
+}
+
+export interface BotExitEventArgs {
+  botId: BotId
+  exitCode: number
 }
 
 export interface BotContainer {
@@ -19,7 +26,7 @@ export interface BotContainer {
    */
   stop(): Promise<void>;
 
-  on(event: 'bot-close', cb: (botId: string, code: number) => void): void;
+  botExit: ReadOnlyEvent<BotExitEventArgs>;
 
   /**
    * Start bot instance.
