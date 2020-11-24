@@ -44,14 +44,10 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     await this._browser.close();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<any> {
-    const botFilePath = path.join(installDirectory, 'main.js');
-    return { botFilePath };
-  }
-
   async startBot (botId: string, botInfo: BotInfo | undefined, options: any = {}): Promise<any> {
-    const { botFilePath, env, name } = botInfo || options;
+    const { env, name } = botInfo || options;
+    const { installDirectory } = options;
+    const botFilePath = path.join(installDirectory, 'main.js');
 
     const wireEnv = {
       ...process.env,

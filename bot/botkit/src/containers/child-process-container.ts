@@ -16,7 +16,7 @@ import { Spawn } from '@dxos/protocol-plugin-bot';
 import { BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
 import { SPAWNED_BOTS_DIR } from '../source-manager';
-import { BotAttributes, BotContainer, NODE_BOT_MAIN_FILE } from './common';
+import { BotContainer, NODE_BOT_MAIN_FILE } from './common';
 
 export interface CommandInfo {
   command: string
@@ -26,7 +26,7 @@ export interface CommandInfo {
 /**
  * Bot Container; Used for running bot instanced inside specific compute service.
  */
-export class ChildProcessContainer extends EventEmitter implements BotContainer {
+export abstract class ChildProcessContainer extends EventEmitter implements BotContainer {
   protected readonly _config: any;
 
   private _controlTopic?: any;
@@ -46,26 +46,13 @@ export class ChildProcessContainer extends EventEmitter implements BotContainer 
 
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<BotAttributes> {
-    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
-    await fs.ensureDir(childDir);
-
-    const { command, args } = this._getCommand(installDirectory);
-    return { childDir, command, args };
-  }
-
   /**
    * Get process command (to spawn).
    */
-  protected _getCommand (installDirectory: string): CommandInfo {
-    return {
-      command: 'node',
-      args: [path.join(installDirectory, NODE_BOT_MAIN_FILE)]
-    };
-  }
+  protected abstract _getCommand (installDirectory: string, spawnOptions: Spawn.SpawnOptions): CommandInfo;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // TODO(marik-d): Return env from _getCommand.
   async getAdditionalOpts (options: any): Promise<any> {
     return {};
   }
@@ -74,7 +61,12 @@ export class ChildProcessContainer extends EventEmitter implements BotContainer 
    * Start bot instance.
    */
   async startBot (botId: string, botInfo: BotInfo | undefined, options: any = {}) {
-    const { name, env, childDir, command, args } = botInfo || options;
+    const { name, env } = botInfo || options;
+    const { installDirectory, spawnOptions } = options;
+    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
+    await fs.ensureDir(childDir);
+
+    const { command, args } = this._getCommand(installDirectory, spawnOptions);
 
     const wireEnv = {
       WIRE_BOT_CONTROL_TOPIC: keyToString(this._controlTopic),

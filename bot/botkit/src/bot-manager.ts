@@ -183,9 +183,7 @@ export class BotManager {
     const installDirectory = await this._sourceManager.downloadAndInstallBot(id, ipfsCID, options);
     assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
 
-    const params = await this._botContainers[env].getBotAttributes(botId, installDirectory, options);
-
-    return this._startBot(botId, { botName, env, name, ...params });
+    return this._startBot(botId, { botName, env, name, installDirectory, spawnOptions: options });
   }
 
   /**

@@ -6,22 +6,11 @@ import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { BotInfo } from '../bot-manager';
 
-/**
- * Container specific attributes for bot startup.
- */
-export interface BotAttributes {
-  childDir: string,
-  command: string,
-  args: string[]
-}
-
 export interface BotContainer {
 
   start(options: any): Promise<void>
 
   on(event: 'bot-close', cb: (botId: string, code: number) => void): void;
-
-  getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<BotAttributes>;
 
   /**
    * Start bot instance.
