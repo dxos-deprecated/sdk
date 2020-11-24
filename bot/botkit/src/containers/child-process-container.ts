@@ -21,6 +21,7 @@ import { BotContainer, NODE_BOT_MAIN_FILE } from './common';
 export interface CommandInfo {
   command: string
   args: string[]
+  env?: Record<string, string>
 }
 
 /**
@@ -37,6 +38,11 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
     this._config = config;
   }
 
+  /**
+   * Get process command (to spawn).
+   */
+  protected abstract _getCommand (installDirectory: string, spawnOptions: Spawn.SpawnOptions): CommandInfo;
+
   async start (options: any) {
     const { controlTopic } = options;
     this._controlTopic = controlTopic;
@@ -44,17 +50,6 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
 
   async stop () {
 
-  }
-
-  /**
-   * Get process command (to spawn).
-   */
-  protected abstract _getCommand (installDirectory: string, spawnOptions: Spawn.SpawnOptions): CommandInfo;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // TODO(marik-d): Return env from _getCommand.
-  async getAdditionalOpts (options: any): Promise<any> {
-    return {};
   }
 
   /**
@@ -66,7 +61,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
     const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
 
-    const { command, args } = this._getCommand(installDirectory, spawnOptions);
+    const { command, args, env: childEnv } = this._getCommand(installDirectory, spawnOptions);
 
     const wireEnv = {
       WIRE_BOT_CONTROL_TOPIC: keyToString(this._controlTopic),
@@ -76,13 +71,11 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
       WIRE_BOT_RESTARTED: (!!botInfo).toString()
     };
 
-    const additionalOptions = await this.getAdditionalOpts(botInfo || options);
-
     const childOptions: SpawnOptions = {
       env: {
         ...process.env,
         NODE_OPTIONS: '',
-        ...additionalOptions,
+        ...childEnv,
         ...wireEnv
       },
 
@@ -166,6 +159,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
     });
   }
 
+  // TODO(marik-d): Remove: BotManager should handle bot directories.
   async killBot (botInfo: BotInfo) {
     await this.stopBot(botInfo);
 
