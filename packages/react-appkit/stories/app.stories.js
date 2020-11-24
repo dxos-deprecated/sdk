@@ -9,7 +9,7 @@ import StoryRouter from 'storybook-react-router';
 
 import Box from '@material-ui/core/Box';
 
-import { keyToBuffer, keyToString } from '@dxos/crypto';
+import { keyToBuffer } from '@dxos/crypto';
 import { ErrorHandler } from '@dxos/debug';
 import { useClient, useParties, useParty } from '@dxos/react-client';
 
@@ -41,7 +41,7 @@ const NoPartyComponent = () => {
       ))}
       <h2>Parties</h2>
       {parties.map(party => {
-        const publicKey = keyToString(party.key);
+        const publicKey = party.key.toString();
         return (<div key={publicKey} className="party-public-key">{publicKey}</div>);
       })}
       <button onClick={handleCreate}>Add Party</button>
@@ -56,7 +56,7 @@ const PartyComponent = () => {
   return (
     <Box m={2}>
       <h1>Party</h1>
-      <div>Public Key: {keyToString(party.key)}</div>
+      <div>Public Key: {party.key.toString()}</div>
       <div>DisplayName: {party.displayName}</div>
     </Box>
   );

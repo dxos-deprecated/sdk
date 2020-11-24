@@ -6,7 +6,6 @@ import { button, select } from '@storybook/addon-knobs';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { keyToString } from '@dxos/crypto';
 import { useClient, useParties } from '@dxos/react-client';
 
 /**
@@ -24,7 +23,7 @@ function RenderPartyKnobs ({ story }) {
   const parties = useParties();
 
   const options = parties.reduce((prev, p) => {
-    const key = keyToString(p.key);
+    const key = p.key.toString();
     return {
       ...prev,
       [key]: key

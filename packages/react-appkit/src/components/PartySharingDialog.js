@@ -31,7 +31,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useTheme } from '@material-ui/styles';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
-import { humanize, keyToBuffer, keyToString, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { humanize, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { useClient, useContacts, useInvitation, useOfflineInvitation } from '@dxos/react-client';
 
 import { useMembers } from '../hooks';
@@ -169,7 +169,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const [invitations, setInvitations] = useState([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
-  const topic = keyToString(party.key);
+  const topic = party.key.toString();
 
   const members = useMembers(party);
   const [contacts] = useContacts();

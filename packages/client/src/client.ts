@@ -8,7 +8,7 @@ import memdown from 'memdown';
 
 import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
-import { humanize, keyToString, PublicKey } from '@dxos/crypto';
+import { humanize, PublicKey } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
 import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';

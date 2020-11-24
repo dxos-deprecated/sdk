@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 
-import { keyToBuffer, keyToString } from '@dxos/crypto';
+import { keyToBuffer } from '@dxos/crypto';
 import { useClient, useItems } from '@dxos/react-client';
 
 import { DefaultSettingsDialog, PartyCard } from '../components';
@@ -14,7 +14,7 @@ const PartyCardContainer = ({ party }) => {
   const client = useClient();
   const router = useAppRouter();
   const [pads] = usePads();
-  const topic = keyToString(party.key);
+  const topic = party.key.toString();
   const items = useItems({ partyKey: keyToBuffer(topic), type: pads.map(pad => pad.type) });
   const [newItemType, setNewItemType] = useState(undefined);
   const [itemSettingsOpen, setItemSettingsOpen] = useState(false);

@@ -22,7 +22,7 @@ import SettingsIcon from '@material-ui/icons/MoreVert';
 import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 import { makeStyles } from '@material-ui/styles';
 
-import { humanize, keyToString } from '@dxos/crypto';
+import { humanize } from '@dxos/crypto';
 
 import NewItemCreationMenu from './NewItemCreationMenu';
 import PadIcon from './PadIcon';
@@ -151,7 +151,7 @@ const PartyCard = ({
   const [showDeleted, setShowDeleted] = useState(false);
   const createItemAnchor = useRef();
 
-  const topic = party ? keyToString(party.key) : '';
+  const topic = party ? party.key.toString() : '';
 
   const handleNewItemSelected = (type) => {
     setNewItemCreationMenuOpen(false);

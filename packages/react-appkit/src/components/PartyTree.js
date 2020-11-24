@@ -16,7 +16,6 @@ import FolderIcon from '@material-ui/icons/FolderOpen';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeView from '@material-ui/lab/TreeView';
 
-import { keyToString } from '@dxos/crypto';
 import { EditableText } from '@dxos/react-ux';
 
 import { MemberList } from './MemberList';
@@ -230,7 +229,7 @@ const PartyTree = ({ parties, items = () => <></>, selected, onSelect, onCreate 
     setExpanded(nodeIds);
   };
 
-  const selectedParty = parties.find(party => keyToString(party.key) === selected);
+  const selectedParty = parties.find(party => party.key.toString() === selected);
 
   // TODO(burdon): Factor out control buttons.
   return (
@@ -242,7 +241,7 @@ const PartyTree = ({ parties, items = () => <></>, selected, onSelect, onCreate 
         onNodeToggle={handleToggle}
       >
         {parties.map(party => {
-          const topic = keyToString(party.publicKey);
+          const topic = party.publicKey.toString();
 
           return (
             <TreeItem
