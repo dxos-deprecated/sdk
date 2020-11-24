@@ -2,8 +2,6 @@
 // Copyright 2020 DXOS.org
 //
 
-import { Spawn } from '@dxos/protocol-plugin-bot';
-
 import { BotInfo } from '../bot-manager';
 
 export interface ContainerStartOptions {

@@ -2,13 +2,10 @@
 // Copyright 2020 DXOS.org
 //
 
-import fs from 'fs-extra';
-import path from 'path';
-
 import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { NODE_ENV } from '../env';
-import { LOCAL_BOT_MAIN_FILE, SPAWNED_BOTS_DIR } from '../source-manager';
+import { LOCAL_BOT_MAIN_FILE } from '../source-manager';
 import { CommandInfo, ChildProcessContainer } from './child-process-container';
 import { LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
 

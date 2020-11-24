@@ -4,13 +4,11 @@
 
 import debug from 'debug';
 import { EventEmitter } from 'events';
-import moment from 'moment';
 import path from 'path';
 import { sync as findPkgJson } from 'pkg-up';
 import playwright from 'playwright';
 
 import { keyToString } from '@dxos/crypto';
-import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { BotId, BotInfo } from '../bot-manager';
 import { logBot } from '../log';
@@ -44,7 +42,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
   }
 
   async startBot (botInfo: BotInfo): Promise<void> {
-    const { botId, name, installDirectory } = botInfo
+    const { botId, name, installDirectory } = botInfo;
     const botFilePath = path.join(installDirectory, 'main.js');
 
     const wireEnv = {

@@ -16,7 +16,7 @@ import { Spawn } from '@dxos/protocol-plugin-bot';
 import { BotId, BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
 import { SPAWNED_BOTS_DIR } from '../source-manager';
-import { BotContainer, ContainerStartOptions, NODE_BOT_MAIN_FILE } from './common';
+import { BotContainer, ContainerStartOptions } from './common';
 
 export interface CommandInfo {
   command: string
@@ -123,7 +123,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
     this._bots.set(botId, {
       process: botProcess,
       watcher
-    })
+    });
   }
 
   async stopBot (botInfo: BotInfo): Promise<void> {
@@ -142,7 +142,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
   }
 
   // TODO(marik-d): Remove: BotManager should handle bot directories.
-  async killBot (botInfo: BotInfo) {
+  async killBot () {
     // await this.stopBot(botInfo);
 
     // const { childDir } = botInfo;

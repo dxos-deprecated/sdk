@@ -189,8 +189,8 @@ export class BotManager {
       name,
       env,
       started: 0,
-      lastActive: 0,
-    })
+      lastActive: 0
+    });
 
     return this._startBot(botId);
   }
@@ -305,7 +305,7 @@ export class BotManager {
    * @param options
    */
   private async _startBot (botId: string) {
-    let botInfo = this._bots.get(botId);
+    const botInfo = this._bots.get(botId);
     assert(botInfo);
     log(`_startBot ${JSON.stringify(botInfo)}`);
     await this._botContainers[botInfo.env].startBot(botInfo);
