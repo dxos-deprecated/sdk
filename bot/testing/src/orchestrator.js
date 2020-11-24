@@ -4,7 +4,6 @@
 
 import { spawn } from 'child_process';
 import debug from 'debug';
-import fs from 'fs-extra';
 import path from 'path';
 import ram from 'random-access-memory';
 import kill from 'tree-kill';
@@ -15,7 +14,7 @@ import { Client } from '@dxos/client';
 import { SIGNATURE_LENGTH, keyToBuffer, createKeyPair, keyToString, verify, sha256 } from '@dxos/crypto';
 
 import { Agent } from './agent';
-import { CONFIG } from './config';
+import { CONFIG, FACTORY_OUT_DIR } from './config';
 import { buildAndPublishBot } from './distributor';
 
 const log = debug('dxos:testing');
@@ -23,7 +22,6 @@ const log = debug('dxos:testing');
 const ORCHESTRATOR_NAME = 'Test';
 
 const FACTORY_START_TIMEOUT = 5 * 1000;
-const FACTORY_OUT_DIR = './out';
 
 export const NODE_ENV = 'node';
 export const BROWSER_ENV = 'browser';
@@ -122,7 +120,6 @@ export class Orchestrator {
   async destroy () {
     kill(this._factory.process.pid, 'SIGKILL');
     await this._factoryClient.close();
-    await fs.remove(path.join(process.cwd(), FACTORY_OUT_DIR, this._factory.topic));
     // TODO(egorgripasov): Produced feed store errors.
     // await this._client.destroy();
   }
