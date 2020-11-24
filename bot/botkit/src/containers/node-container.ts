@@ -5,12 +5,20 @@
 import path from 'path';
 
 import { ChildProcessContainer } from './child-process-container';
-import { NODE_BOT_MAIN_FILE } from './common';
+
+// Js file inside Node.js bot package.
+const NODE_BOT_MAIN_FILE = 'main.js';
 
 /**
  * Node Bot Container; Used for spawning bots as node processes.
  */
 export class NodeBotContainer extends ChildProcessContainer {
+  constructor (
+    private readonly _nodePath: string
+  ) {
+    super();
+  }
+
   /**
    * Get process command (to spawn).
    */
@@ -19,7 +27,7 @@ export class NodeBotContainer extends ChildProcessContainer {
       command: 'node',
       args: [path.join(installDirectory, NODE_BOT_MAIN_FILE)],
       env: {
-        NODE_PATH: this._config.get('cli.nodePath')
+        NODE_PATH: this._nodePath
       }
     };
   }

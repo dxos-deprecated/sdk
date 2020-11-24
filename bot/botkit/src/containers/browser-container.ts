@@ -3,34 +3,28 @@
 //
 
 import debug from 'debug';
-import { EventEmitter } from 'events';
 import path from 'path';
 import { sync as findPkgJson } from 'pkg-up';
 import playwright from 'playwright';
 
+import { Event } from '@dxos/async';
 import { keyToString } from '@dxos/crypto';
 
 import { BotId, BotInfo } from '../bot-manager';
 import { logBot } from '../log';
-import { BotContainer, ContainerStartOptions } from './common';
+import { BotContainer, BotExitEventArgs, ContainerStartOptions } from './common';
 
 const log = debug('dxos:botkit:container:browser');
 
 // TODO(egorgripasov): Allow consumer to select.
 const BROWSER_TYPE = 'chromium';
 
-export class BrowserContainer extends EventEmitter implements BotContainer {
-  private readonly _config: any;
-
+export class BrowserContainer implements BotContainer {
   private _controlTopic?: any;
   private _browser!: playwright.ChromiumBrowser;
   private readonly _bots = new Map<BotId, playwright.BrowserContext>();
 
-  constructor (config: any) {
-    super();
-
-    this._config = config;
-  }
+  readonly botExit = new Event<BotExitEventArgs>();
 
   async start ({ controlTopic }: ContainerStartOptions) {
     this._controlTopic = controlTopic;
@@ -85,9 +79,5 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     if (context) {
       await context.close();
     }
-  }
-
-  async killBot (botInfo: BotInfo) {
-    await this.stopBot(botInfo);
   }
 }
