@@ -20,16 +20,12 @@ const log = debug('dxos:botkit:container:browser');
 const BROWSER_TYPE = 'chromium';
 
 export class BrowserContainer extends EventEmitter implements BotContainer {
-  private readonly _config: any;
-
   private _controlTopic?: any;
   private _browser!: playwright.ChromiumBrowser;
   private readonly _bots = new Map<BotId, playwright.BrowserContext>();
 
-  constructor (config: any) {
+  constructor () {
     super();
-
-    this._config = config;
   }
 
   async start ({ controlTopic }: ContainerStartOptions) {
