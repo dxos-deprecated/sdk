@@ -15,7 +15,7 @@ export interface BotContainer {
   /**
    * Start bot instance.
    */
-  startBot (botId: string, botInfo: BotInfo, options: any): Promise<void>;
+  startBot (botInfo: BotInfo): Promise<void>;
 
   stopBot (botInfo: BotInfo): Promise<void>
 

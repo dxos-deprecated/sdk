@@ -38,23 +38,19 @@ const logInfo = debug('dxos:botkit');
 // File where information about running bots is stored.
 export const BOTS_DUMP_FILE = 'out/factory-state';
 
+export type BotId = string;
+
 export interface BotInfo {
-  botId: string
+  botId: BotId
   id: string
+  installDirectory: string
+  spawnOptions: Spawn.SpawnOptions
   parties: string[]
   started: any
   lastActive: any
   stopped: boolean
   name: string
-  type?: any
-  childDir?: string
-  command?: string
-  args?: string[]
   env: string
-  process?: any
-  watcher?: any
-  page?: any
-  context?: any
 }
 
 interface Options {
@@ -186,15 +182,17 @@ export class BotManager {
     this._bots.set(botId, {
       botId,
       id,
+      installDirectory,
+      spawnOptions: options,
       parties: [],
       stopped: true,
       name,
-      env: options.env!,
+      env,
       started: 0,
       lastActive: 0,
     })
 
-    return this._startBot(botId, { botName, env, name, installDirectory, spawnOptions: options });
+    return this._startBot(botId);
   }
 
   /**
@@ -306,11 +304,11 @@ export class BotManager {
    * @param botId
    * @param options
    */
-  private async _startBot (botId: string, options: any = {}) {
-    log(`_startBot ${botId} ${options.env}`);
+  private async _startBot (botId: string) {
     let botInfo = this._bots.get(botId);
     assert(botInfo);
-    await this._botContainers[options.env].startBot(botId, botInfo, options);
+    log(`_startBot ${JSON.stringify(botInfo)}`);
+    await this._botContainers[botInfo.env].startBot(botInfo);
 
     await this._saveBotsToFile();
 

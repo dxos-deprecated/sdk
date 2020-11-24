@@ -12,7 +12,7 @@ import playwright from 'playwright';
 import { keyToString } from '@dxos/crypto';
 import { Spawn } from '@dxos/protocol-plugin-bot';
 
-import { BotInfo } from '../bot-manager';
+import { BotId, BotInfo } from '../bot-manager';
 import { logBot } from '../log';
 import { BotContainer } from './common';
 
@@ -26,6 +26,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
 
   private _controlTopic?: any;
   private _browser!: playwright.ChromiumBrowser;
+  private readonly _bots = new Map<BotId, playwright.BrowserContext>();
 
   constructor (config: any) {
     super();
@@ -44,9 +45,8 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     await this._browser.close();
   }
 
-  async startBot (botId: string, botInfo: BotInfo, options: any = {}): Promise<void> {
-    const { env, name } = botInfo || options;
-    const { installDirectory } = options;
+  async startBot (botInfo: BotInfo): Promise<void> {
+    const { botId, name, installDirectory } = botInfo
     const botFilePath = path.join(installDirectory, 'main.js');
 
     const wireEnv = {
@@ -84,7 +84,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
   }
 
   async stopBot (botInfo: BotInfo) {
-    const { context } = botInfo;
+    const context = this._bots.get(botInfo.botId);
 
     if (context) {
       await context.close();
@@ -95,15 +95,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     await this.stopBot(botInfo);
   }
 
-  serializeBot ({ id, botId, type, parties, stopped, name, env }: BotInfo) {
-    return {
-      id,
-      botId,
-      type,
-      name,
-      parties,
-      stopped,
-      env
-    };
+  serializeBot (botInfo: BotInfo) {
+    return botInfo;
   }
 }
