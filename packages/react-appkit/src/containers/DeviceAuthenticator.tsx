@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { DialogTitle, makeStyles } from '@material-ui/core';
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TitledDialog = ({ children }) => {
+const TitledDialog = ({ children }: {children?: ReactNode}) => {
   return (
     <FullScreen>
       <Dialog open>
@@ -45,7 +45,7 @@ const TitledDialog = ({ children }) => {
 const DeviceAuthenticator = () => {
   const classes = useStyles();
   const history = useHistory();
-  const invitation = InvitationDescriptor.fromQueryParameters(useQuery());
+  const invitation = InvitationDescriptor.fromQueryParameters(useQuery() as any);
   // const client = useClient();
   const appRouter = useAppRouter();
   const [pinCode, setPinCode] = useState('');

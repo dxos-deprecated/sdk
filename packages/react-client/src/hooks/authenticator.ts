@@ -6,21 +6,20 @@ import { useEffect, useState, useMemo } from 'react';
 
 import { trigger } from '@dxos/async';
 import { keyToString } from '@dxos/crypto';
+import { InvitationDescriptor } from '@dxos/echo-db';
 
 import { useClient } from './client';
 
 /**
  * Handles the invitation handshake.
- * @param {InvitationDescriptor} invitation
- * @returns {[Object, function]}
  */
-export const useAuthenticator = (invitation) => {
+export const useAuthenticator = (invitation: InvitationDescriptor) => {
   const client = useClient();
-  const [state, setState] = useState({});
+  const [state, setState] = useState<any>({});
   const hash = invitation ? invitation.hash : '';
 
-  // Memoize these functions by inivitation hash.
-  const [secretProvider, secretResolver] = useMemo(() => trigger(), [hash]);
+  // Memoize these functions by invitation hash.
+  const [secretProvider, secretResolver] = useMemo(() => trigger<Buffer>(), [hash]);
 
   useEffect(() => {
     if (!invitation) {
