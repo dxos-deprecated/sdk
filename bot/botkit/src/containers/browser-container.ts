@@ -44,7 +44,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     await this._browser.close();
   }
 
-  async startBot (botId: string, botInfo: BotInfo | undefined, options: any = {}): Promise<any> {
+  async startBot (botId: string, botInfo: BotInfo, options: any = {}): Promise<void> {
     const { env, name } = botInfo || options;
     const { installDirectory } = options;
     const botFilePath = path.join(installDirectory, 'main.js');
@@ -81,36 +81,6 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     }, wireEnv);
     log(`Injecting script ${botFilePath}`);
     await page.addScriptTag({ path: botFilePath });
-
-    const timeState = {
-      started: moment.utc(),
-      lastActive: moment.utc()
-    };
-
-    if (botInfo) {
-      // Restart.
-      Object.assign(botInfo, {
-        context,
-        page,
-        stopped: false,
-        ...timeState
-      });
-    } else {
-      // New instance.
-      botInfo = {
-        botId,
-        context,
-        page,
-        id: options.botName,
-        parties: [],
-        stopped: false,
-        name,
-        env,
-        ...timeState
-      };
-    }
-
-    return botInfo;
   }
 
   async stopBot (botInfo: BotInfo) {

@@ -55,8 +55,8 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
   /**
    * Start bot instance.
    */
-  async startBot (botId: string, botInfo: BotInfo | undefined, options: any = {}) {
-    const { name, env } = botInfo || options;
+  async startBot (botId: string, botInfo: BotInfo, options: any = {}) {
+    const { name } = botInfo || options;
     const { installDirectory, spawnOptions } = options;
     const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
     await fs.ensureDir(childDir);
@@ -87,40 +87,14 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
 
     const botProcess = spawn(command, args, childOptions);
 
+    // TODO(marik-d): Fix this.
     const timeState = {
       started: moment.utc(),
       lastActive: moment.utc()
     };
-
     const watcher = watch(childDir, { recursive: true }, () => {
       timeState.lastActive = moment.utc();
     });
-
-    if (botInfo) {
-      // Restart.
-      Object.assign(botInfo, {
-        process: botProcess,
-        watcher,
-        stopped: false,
-        ...timeState
-      });
-    } else {
-      // New instance.
-      botInfo = {
-        botId,
-        childDir,
-        process: botProcess,
-        id: options.botName,
-        parties: [],
-        command,
-        args,
-        watcher,
-        stopped: false,
-        name,
-        env,
-        ...timeState
-      };
-    }
 
     log(`Spawned bot: ${JSON.stringify({ pid: botProcess.pid, command, args, wireEnv, cwd: childDir })}`);
 
@@ -140,8 +114,6 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
     botProcess.on('error', (err) => {
       logBot[botProcess.pid](`Error: ${err}`);
     });
-
-    return botInfo;
   }
 
   async stopBot (botInfo: BotInfo): Promise<void> {
