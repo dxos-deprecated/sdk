@@ -10,7 +10,7 @@ import yaml from 'js-yaml';
 import get from 'lodash.get';
 import path from 'path';
 
-import { Client, PaymentClient, decodeBase64ToObj } from '@dxos/client';
+import { Client, PaymentClient, decodeBase64ToObj, getPaymentInfo } from '@dxos/client';
 import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
 import { transportProtocolProvider } from '@dxos/network-manager';
 import {
@@ -176,6 +176,11 @@ export class BotManager {
     assert(payment, 'Invalid payment.');
 
     const { channelAddress, transferId, preImage } = decodeBase64ToObj(payment);
+
+    const transfer = await this._paymentClient.getTransfer(transferId);
+    log('Received payment for bot spawn.');
+    log(JSON.stringify(getPaymentInfo(transfer), undefined, 2));
+
     await this._paymentClient.redeemTransfer(channelAddress, transferId, preImage);
 
     const botId = keyToString(createKeyPair().publicKey);

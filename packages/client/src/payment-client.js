@@ -18,6 +18,22 @@ export const decodeBase64ToObj = (str) => {
   return JSON.parse(Buffer.from(str, 'base64').toString());
 };
 
+export const getPaymentInfo = (transfer) => {
+  const { assetId, balance, channelAddress, transferId } = transfer;
+
+  const balances = {};
+  balance.to.forEach((address, index) => {
+    balances[address] = utils.formatEther(balance.amount[index]);
+  });
+
+  return {
+    assetId,
+    balances,
+    channelAddress,
+    transferId
+  };
+};
+
 /**
  * Represents client connection to a Vector server node.
  */
