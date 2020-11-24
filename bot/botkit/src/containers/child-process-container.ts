@@ -33,17 +33,9 @@ interface RunningBot {
  * Bot Container; Used for running bot instanced inside specific compute service.
  */
 export abstract class ChildProcessContainer extends EventEmitter implements BotContainer {
-  protected readonly _config: any;
-
   private readonly _bots = new Map<BotId, RunningBot>() ;
 
   private _controlTopic?: any;
-
-  constructor (config: any) {
-    super();
-
-    this._config = config;
-  }
 
   /**
    * Get process command (to spawn).
