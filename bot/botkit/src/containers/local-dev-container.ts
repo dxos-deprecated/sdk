@@ -6,7 +6,12 @@ import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { LOCAL_BOT_MAIN_FILE } from '../source-manager';
 import { CommandInfo, ChildProcessContainer } from './child-process-container';
-import { LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
+
+// Command to spawn to run a bot in local development mode.
+const LOCAL_BOT_RUN_COMMAND = 'yarn';
+
+// Fixed arguments to pass to LOCAL_BOT_RUN_COMMAND.
+const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
 
 /**
  * Local Bot Container; Used for running bots locally as a node process.
