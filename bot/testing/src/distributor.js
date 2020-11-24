@@ -9,11 +9,13 @@ import tar from 'tar';
 import fetch from 'node-fetch';
 import debug from 'debug';
 
-const BUILD_PATH = './out/builds/node';
+import { createId } from '@dxos/crypto';
+
+const BUILD_PATH = './out/builds/';
 
 const log = debug('dxos:testing:distributor');
 
-const getWebpackConfig = (botPath, browser = false) => {
+const getWebpackConfig = (botPath, buildPath, browser = false) => {
   return {
     target: browser ? undefined : 'node',
 
@@ -24,7 +26,7 @@ const getWebpackConfig = (botPath, browser = false) => {
     entry: path.resolve(botPath),
 
     output: {
-      path: path.resolve(BUILD_PATH),
+      path: path.resolve(buildPath),
       filename: '[name].js',
       libraryTarget: browser ? undefined : 'commonjs2',
       devtoolModuleFilenameTemplate: '[absolute-resource-path]'
@@ -88,9 +90,11 @@ const getWebpackConfig = (botPath, browser = false) => {
 };
 
 export const buildBot = async (botPath, browser) => {
-  const webpackConf = getWebpackConfig(botPath, browser);
+  const buildPath = path.join(BUILD_PATH, createId());
 
-  return new Promise((resolve, reject) => {
+  const webpackConf = getWebpackConfig(botPath, buildPath, browser);
+
+  await new Promise((resolve, reject) => {
     webpack({ ...webpackConf, stats: 'errors-only' }, (err, stats) => {
       if (err /* || stats.hasErrors() */) {
         reject(err);
@@ -99,16 +103,18 @@ export const buildBot = async (botPath, browser) => {
       }
     });
   });
+
+  return buildPath;
 };
 
-const publishBot = async ipfsEndpoint => {
+const publishBot = async (ipfsEndpoint, buildPath) => {
   if (!ipfsEndpoint.endsWith('/')) {
     ipfsEndpoint = `${ipfsEndpoint}/`;
   }
 
   const response = await fetch(ipfsEndpoint, {
     method: 'POST',
-    body: tar.c({ gzip: true, C: BUILD_PATH }, ['.'])
+    body: tar.c({ gzip: true, C: buildPath }, ['.'])
   });
 
   return response.headers.get('Ipfs-Hash');
@@ -120,9 +126,9 @@ const publishBot = async ipfsEndpoint => {
  */
 export const buildAndPublishBot = async (ipfsEndpoint, botPath, browser) => {
   log(`Building package, browser=${browser}`);
-  await buildBot(botPath, browser);
-  log(`Publishing to IPFS node: ${ipfsEndpoint}`);
-  const ipfsCID = await publishBot(ipfsEndpoint);
+  const buildPath = await buildBot(botPath, browser);
+  log(`Publishing to IPFS node: ${ipfsEndpoint} from ${buildPath}`);
+  const ipfsCID = await publishBot(ipfsEndpoint, buildPath);
   log(`Published: ${ipfsCID}`);
   return ipfsCID;
 };

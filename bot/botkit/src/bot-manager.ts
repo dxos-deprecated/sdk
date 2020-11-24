@@ -96,7 +96,7 @@ export class BotManager {
     this._emitBotEvent = emitBotEvent;
 
     this._localDev = this._config.get('bot.localDev');
-    this._botsFile = path.join(process.cwd(), BOTS_DUMP_FILE);
+    this._botsFile = path.join(process.cwd(), this._config.get('bot.dumpFile', BOTS_DUMP_FILE));
 
     this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
 

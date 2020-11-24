@@ -13,3 +13,5 @@ export const CONFIG = {
   WIRE_IPFS_SERVER: 'https://apollo1.kube.moon.dxos.network/dxos/ipfs/api',
   WIRE_IPFS_GATEWAY: 'https://apollo1.kube.moon.dxos.network/dxos/ipfs/gateway/'
 };
+
+export const FACTORY_OUT_DIR = './out';
