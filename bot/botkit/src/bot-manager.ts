@@ -44,6 +44,7 @@ export interface BotInfo {
   botId: BotId
   id: string
   installDirectory: string
+  storageDirectory: string
   spawnOptions: Spawn.SpawnOptions
   parties: string[]
   started: any
@@ -103,9 +104,9 @@ export class BotManager {
     ensureFileSync(this._botsFile);
 
     for (const container of Object.values(this._botContainers)) {
-      container.on('bot-close', async (botId: string, code: number) => {
+      container.botExit.on(async ({ botId, exitCode }) => {
         const botInfo = this._bots.get(botId);
-        if (!code && botInfo) {
+        if (!exitCode && botInfo) {
           botInfo.stopped = true;
           await this._saveBotsToFile();
         }
@@ -183,6 +184,7 @@ export class BotManager {
       botId,
       id,
       installDirectory,
+      storageDirectory: path.join(process.cwd(), '.bots', botId),
       spawnOptions: options,
       parties: [],
       stopped: false,
@@ -209,7 +211,8 @@ export class BotManager {
     const botInfo = this._bots.get(botId);
     assert(botInfo, 'Invalid Bot Id');
 
-    await this._botContainers[botInfo.env].killBot(botInfo);
+    await this._botContainers[botInfo.env].stopBot(botInfo);
+    await fs.remove(botInfo.storageDirectory);
     this._bots.delete(botId);
     await this._saveBotsToFile();
 
@@ -219,7 +222,8 @@ export class BotManager {
   async killAllBots () {
     for await (const botInfo of this._bots.values()) {
       if (this._botContainers[botInfo.env]) {
-        await this._botContainers[botInfo.env].killBot(botInfo);
+        await this._botContainers[botInfo.env].stopBot(botInfo);
+        await fs.remove(botInfo.storageDirectory);
       }
     }
     this._bots.clear();
