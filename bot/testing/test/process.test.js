@@ -4,12 +4,12 @@ import { promisify } from 'util';
 
 import { Orchestrator } from '../src/orchestrator';
 
-const BOT_NUMBER = 5;
+const BOT_NUMBER = 1;
 
 jest.setTimeout(100 * 1000);
 
 // TODO(egorgripasov): Run multiple test files simultaneously.
-test.skip('bot resource test', async () => {
+test('bot resource test', async () => {
   const orchestrator = new Orchestrator({ local: true });
   await orchestrator.start();
 

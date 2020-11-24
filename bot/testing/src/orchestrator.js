@@ -97,12 +97,12 @@ export class Orchestrator {
         botPath
       };
     } else {
-      // TODO(egorgripasov): Browser support.
-      let ipfsCID = this._builds.get(botPath);
-      log('Building & publishing bot package...');
+      const buildId = `${botPath}-${env}`;
+      let ipfsCID = this._builds.get(buildId);
       if (!ipfsCID) {
+        log('Building & publishing bot package...');
         ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath, env === 'browser');
-        this._builds.set(botPath, ipfsCID);
+        this._builds.set(buildId, ipfsCID);
       }
       options = {
         ...rest,
@@ -122,7 +122,7 @@ export class Orchestrator {
   async destroy () {
     kill(this._factory.process.pid, 'SIGKILL');
     await this._factoryClient.close();
-    await fs.remove(path.join(process.cwd(), FACTORY_OUT_DIR));
+    await fs.remove(path.join(process.cwd(), FACTORY_OUT_DIR, this._factory.topic));
     // TODO(egorgripasov): Produced feed store errors.
     // await this._client.destroy();
   }
@@ -141,7 +141,8 @@ export class Orchestrator {
         WIRE_BOT_RESET: true,
         WIRE_BOT_TOPIC: topic,
         WIRE_BOT_SECRET_KEY: keyToString(secretKey),
-        WIRE_BOT_LOCAL_DEV: this._localRun
+        WIRE_BOT_LOCAL_DEV: this._localRun,
+        WIRE_BOT_DUMP_FILE: path.join(FACTORY_OUT_DIR, topic)
       };
 
       const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
