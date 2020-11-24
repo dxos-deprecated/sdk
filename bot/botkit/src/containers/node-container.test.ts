@@ -1,23 +1,23 @@
 import { createId, randomBytes } from "@dxos/crypto";
 import { BotInfo } from "../bot-manager";
-import { BROWSER_ENV } from "../env";
-import { BrowserContainer } from "./browser-container"
+import { NODE_ENV } from "../env";
 import { sync as findPkgJson } from 'pkg-up';
 import path from 'path';
+import { NodeBotContainer } from "./node-container";
 
 test('Start & stop bot', async () => {
-  const container = new BrowserContainer();
+  const container = new NodeBotContainer(process.argv0);
   await container.start({ controlTopic: randomBytes() })
   
   const botInfo: BotInfo = {
     botId: createId(),
     id: createId(),
-    env: BROWSER_ENV,
+    env: NODE_ENV,
     installDirectory: path.join(path.dirname(findPkgJson({ cwd: __dirname })!), 'res/test/package'),
     name: 'bot',
     parties: [],
     spawnOptions: {
-      env: BROWSER_ENV
+      env: NODE_ENV
     },
     storageDirectory: `out/bots/${createId()}`,
     started: 0,
