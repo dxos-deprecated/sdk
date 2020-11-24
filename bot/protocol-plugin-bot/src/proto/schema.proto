@@ -20,11 +20,11 @@ message Spawn {
   // TODO(ashwin): Move to common repo.
 
   // TODO(ashwin): Use protobuf type for payment.
-  // message Payment {
-  //  string channelAddress = 1;
-  //  string transferId = 2;
-  //  string preImage = 3;
-  // }
+  message Payment {
+   string channelAddress = 1;
+   string transferId = 2;
+   string preImage = 3;
+  }
 
   message SpawnOptions {
     string id = 1;
@@ -33,7 +33,7 @@ message Spawn {
     string ipfsCID = 4;
     string ipfsEndpoint = 5;
     string botPath = 6;
-    string payment = 7;
+    Payment payment = 7;
   }
 
   SpawnOptions options = 2;
