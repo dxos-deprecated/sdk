@@ -8,7 +8,7 @@ import memdown from 'memdown';
 
 import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
-import { humanize, keyToString } from '@dxos/crypto';
+import { humanize, keyToString, PublicKey } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
 import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';
@@ -199,7 +199,7 @@ export class Client {
     return {
       username: this._echo.identityDisplayName,
       // TODO(burdon): Why convert to string?
-      publicKey: keyToString(this._echo.identityKey.publicKey)
+      publicKey: this._echo.identityKey.publicKey
     };
   }
 
@@ -226,8 +226,8 @@ export class Client {
    * @param secretProvider
    * @param options
    */
-  async createInvitation (partyKey: Uint8Array, secretProvider: SecretProvider, options?: InvitationOptions) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
+  async createInvitation (partyKey: PublicKey, secretProvider: SecretProvider, options?: InvitationOptions) {
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${partyKey.toString()}`));
     return party.createInvitation({
       // TODO(marik-d): Probably an error here.
       secretValidator: async (invitation, secret) => secret && secret.equals((invitation as any).secret),
@@ -241,8 +241,8 @@ export class Client {
    * @param {Buffer} recipientKey Recipient publicKey
    */
   // TODO(burdon): Move to party.
-  async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Uint8Array) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
+  async createOfflineInvitation (partyKey: PublicKey, recipientKey: PublicKey) {
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey.toString())}`));
     return party.createOfflineInvitation(recipientKey);
   }
 

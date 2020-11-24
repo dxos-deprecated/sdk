@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { Client } from '@dxos/client';
-import { createKeyPair, humanize, keyToString } from '@dxos/crypto';
+import { createKeyPair, keyToString } from '@dxos/crypto';
 import { Party } from '@dxos/echo-db';
 import { ObjectModel } from '@dxos/object-model';
 
@@ -28,11 +28,11 @@ const Test = () => {
 };
 
 const PartyView = ({ party }: { party: Party }) => {
-  const items = useItems({ partyKey: party.key }) as any;
+  const items = useItems({ partyKey: party.key.asUint8Array() }) as any;
 
   return (
     <div>
-      <p>{humanize(party.key)}</p>
+      <p>{party.key.toString()}</p>
       <button onClick={() => party.database.createItem({ model: ObjectModel })}>Create item</button>
       <ul>
         {items.map((item: any) => <li key={item.id}>{item.id}</li>)}

@@ -5,7 +5,6 @@
 import { useEffect, useState, useMemo } from 'react';
 
 import { trigger } from '@dxos/async';
-import { keyToString } from '@dxos/crypto';
 import { InvitationDescriptor } from '@dxos/echo-db';
 
 import { useClient } from './client';
@@ -35,7 +34,7 @@ export const useAuthenticator = (invitation: InvitationDescriptor) => {
         // Join the Identity
         await client.echo.joinHalo(invitation, secretProvider);
         if (!signal.aborted) {
-          setState({ identity: keyToString(invitation.identityKey) });
+          setState({ identity: invitation.identityKey.toString() });
         }
       }
     }
