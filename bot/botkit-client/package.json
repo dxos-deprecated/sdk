@@ -5,7 +5,7 @@
   "keywords": [],
   "license": "AGPL-3.0",
   "author": "DXOS.org",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "build": "npm run clean && tsc",
     "build:watch": "yarn run build --watch",

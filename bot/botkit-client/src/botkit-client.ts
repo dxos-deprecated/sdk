@@ -71,7 +71,7 @@ export class BotFactoryClient {
     return botId;
   }
 
-  async sendBotManagementRequest (botId: string, command: Buffer) {
+  async sendBotManagementRequest (botId: string, command: string) {
     if (!this._connected) {
       await this._connect();
     }
@@ -81,6 +81,7 @@ export class BotFactoryClient {
 
     const response =
       await this._botPlugin.sendCommand(this._botFactoryTopic, createBotManagementCommand(botId, command));
+    assert(response?.message);
     const { message: { error } } = response;
 
     if (error) {
@@ -99,6 +100,7 @@ export class BotFactoryClient {
     log(`Sending spawn request for party: ${partyToJoin} with invitation id: ${invitation}`);
     const invitationResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
       createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation)));
+    assert(invitationResponse?.message);
     const { message: { error } } = invitationResponse;
 
     if (error) {
@@ -113,6 +115,7 @@ export class BotFactoryClient {
 
     log('Sending reset request.');
     const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createResetCommand(source));
+    assert(response?.message);
     const { message: { error } } = response;
 
     if (error) {
@@ -137,6 +140,7 @@ export class BotFactoryClient {
 
       const status = await this._botPlugin.sendCommand(this._botFactoryTopic, createStatusCommand());
       // TODO(egorgripasov): Use dxos/codec function.
+      assert(status?.message);
       const { message: { __type_url, ...data } } = status; // eslint-disable-line camelcase
       return { started: true, ...data };
     } catch (err) {
