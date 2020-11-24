@@ -108,7 +108,7 @@ const DeviceAuthenticator = () => {
           <>
             <LinearProgress />
             <Typography className={classes.marginTop} variant='body1' gutterBottom>
-            Cancelling...
+              Cancelling...
             </Typography>
           </>
         ) : (
