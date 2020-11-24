@@ -38,11 +38,6 @@ export const useAuthenticator = (invitation) => {
         if (!signal.aborted) {
           setState({ identity: keyToString(invitation.identityKey) });
         }
-      } else {
-        const party = await client.database.joinParty(invitation, secretProvider);
-        if (!signal.aborted) {
-          setState({ topic: keyToString(party.key) });
-        }
       }
     }
 
