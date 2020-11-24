@@ -16,7 +16,7 @@ import { Spawn } from '@dxos/protocol-plugin-bot';
 import { BotId, BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
 import { SPAWNED_BOTS_DIR } from '../source-manager';
-import { BotContainer, NODE_BOT_MAIN_FILE } from './common';
+import { BotContainer, ContainerStartOptions, NODE_BOT_MAIN_FILE } from './common';
 
 export interface CommandInfo {
   command: string
@@ -50,8 +50,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
    */
   protected abstract _getCommand (installDirectory: string, spawnOptions: Spawn.SpawnOptions): CommandInfo;
 
-  async start (options: any) {
-    const { controlTopic } = options;
+  async start ({ controlTopic }: ContainerStartOptions) {
     this._controlTopic = controlTopic;
   }
 
@@ -150,9 +149,5 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
     // if (childDir) {
     //   await fs.remove(childDir);
     // }
-  }
-
-  serializeBot (botInfo: BotInfo) {
-    return botInfo;
   }
 }

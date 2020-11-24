@@ -333,7 +333,7 @@ export class BotManager {
   }
 
   private async _saveBotsToFile () {
-    const data = [...this._bots.values()].map(botInfo => this._botContainers[botInfo.env].serializeBot(botInfo));
+    const data = [...this._bots.values()];
     await fs.writeJSON(this._botsFile, data);
   }
 

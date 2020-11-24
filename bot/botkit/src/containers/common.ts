@@ -6,9 +6,20 @@ import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { BotInfo } from '../bot-manager';
 
-export interface BotContainer {
+export interface ContainerStartOptions {
+  controlTopic: Buffer
+}
 
-  start(options: any): Promise<void>
+export interface BotContainer {
+  /**
+   * Start container.
+   */
+  start(options: ContainerStartOptions): Promise<void>
+
+  /**
+   * Stop container.
+   */
+  stop(): Promise<void>;
 
   on(event: 'bot-close', cb: (botId: string, code: number) => void): void;
 
@@ -17,16 +28,16 @@ export interface BotContainer {
    */
   startBot (botInfo: BotInfo): Promise<void>;
 
+  /**
+   * Stop bot instance.
+   */
   stopBot (botInfo: BotInfo): Promise<void>
 
-  killBot (botInfo: BotInfo): Promise<void>;
-
   /**
-   * Serializes BotInfo into JSON state that's gonna be persisted across restarts.
+   * Stop bot instance and remove it's data.
    */
-  serializeBot (botInfo: BotInfo): any;
-
-  stop(): Promise<void>;
+  // TODO(marik-d): Remove this: bot manager should handle bot data files.
+  killBot (botInfo: BotInfo): Promise<void>;
 }
 
 // Command to spawn to run a bot in local development mode.

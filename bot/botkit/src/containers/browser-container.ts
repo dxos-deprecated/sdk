@@ -14,7 +14,7 @@ import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { BotId, BotInfo } from '../bot-manager';
 import { logBot } from '../log';
-import { BotContainer } from './common';
+import { BotContainer, ContainerStartOptions } from './common';
 
 const log = debug('dxos:botkit:container:browser');
 
@@ -34,10 +34,8 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
     this._config = config;
   }
 
-  async start (options: any) {
-    const { controlTopic } = options;
+  async start ({ controlTopic }: ContainerStartOptions) {
     this._controlTopic = controlTopic;
-
     this._browser = await playwright[BROWSER_TYPE].launch();
   }
 
@@ -93,9 +91,5 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
 
   async killBot (botInfo: BotInfo) {
     await this.stopBot(botInfo);
-  }
-
-  serializeBot (botInfo: BotInfo) {
-    return botInfo;
   }
 }
