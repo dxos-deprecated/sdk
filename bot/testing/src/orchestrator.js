@@ -82,6 +82,10 @@ export class Orchestrator {
     return this._party;
   }
 
+  get botFactoryPid () {
+    return this._factory.process.pid;
+  }
+
   /**
    * @param {{ botPath, env }} command.
    */
