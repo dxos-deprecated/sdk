@@ -2,42 +2,40 @@
 // Copyright 2020 DXOS.org
 //
 
-import { Spawn } from '@dxos/protocol-plugin-bot';
-
 import { BotInfo } from '../bot-manager';
 
-/**
- * Container specific attributes for bot startup.
- */
-export interface BotAttributes {
-  childDir: string,
-  command: string,
-  args: string[]
+export interface ContainerStartOptions {
+  controlTopic: Buffer
 }
 
 export interface BotContainer {
+  /**
+   * Start container.
+   */
+  start(options: ContainerStartOptions): Promise<void>
 
-  start(options: any): Promise<void>
+  /**
+   * Stop container.
+   */
+  stop(): Promise<void>;
 
   on(event: 'bot-close', cb: (botId: string, code: number) => void): void;
-
-  getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<BotAttributes>;
 
   /**
    * Start bot instance.
    */
-  startBot (botId: string, botInfo: BotInfo | undefined, options: any): Promise<BotInfo>;
-
-  stopBot (botInfo: BotInfo): Promise<void>
-
-  killBot (botInfo: BotInfo): Promise<void>;
+  startBot (botInfo: BotInfo): Promise<void>;
 
   /**
-   * Serializes BotInfo into JSON state that's gonna be persisted across restarts.
+   * Stop bot instance.
    */
-  serializeBot (botInfo: BotInfo): any;
+  stopBot (botInfo: BotInfo): Promise<void>
 
-  stop(): Promise<void>;
+  /**
+   * Stop bot instance and remove it's data.
+   */
+  // TODO(marik-d): Remove this: bot manager should handle bot data files.
+  killBot (botInfo: BotInfo): Promise<void>;
 }
 
 // Command to spawn to run a bot in local development mode.

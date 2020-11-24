@@ -38,23 +38,19 @@ const logInfo = debug('dxos:botkit');
 // File where information about running bots is stored.
 export const BOTS_DUMP_FILE = 'out/factory-state';
 
+export type BotId = string;
+
 export interface BotInfo {
-  botId: string
+  botId: BotId
   id: string
+  installDirectory: string
+  spawnOptions: Spawn.SpawnOptions
   parties: string[]
   started: any
   lastActive: any
   stopped: boolean
   name: string
-  type?: any
-  childDir?: string
-  command?: string
-  args?: string[]
   env: string
-  process?: any
-  watcher?: any
-  page?: any
-  context?: any
 }
 
 interface Options {
@@ -100,7 +96,7 @@ export class BotManager {
     this._emitBotEvent = emitBotEvent;
 
     this._localDev = this._config.get('bot.localDev');
-    this._botsFile = path.join(process.cwd(), BOTS_DUMP_FILE);
+    this._botsFile = path.join(process.cwd(), this._config.get('bot.dumpFile', BOTS_DUMP_FILE));
 
     this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
 
@@ -183,9 +179,20 @@ export class BotManager {
     const installDirectory = await this._sourceManager.downloadAndInstallBot(id, ipfsCID, options);
     assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
 
-    const params = await this._botContainers[env].getBotAttributes(botId, installDirectory, options);
+    this._bots.set(botId, {
+      botId,
+      id,
+      installDirectory,
+      spawnOptions: options,
+      parties: [],
+      stopped: false,
+      name,
+      env,
+      started: 0,
+      lastActive: 0
+    });
 
-    return this._startBot(botId, { botName, env, name, ...params });
+    return this._startBot(botId);
   }
 
   /**
@@ -297,12 +304,12 @@ export class BotManager {
    * @param botId
    * @param options
    */
-  private async _startBot (botId: string, options: any = {}) {
-    log(`_startBot ${botId} ${options.env}`);
-    let botInfo = this._bots.get(botId);
-    botInfo = await this._botContainers[options.env].startBot(botId, botInfo, options);
+  private async _startBot (botId: string) {
+    const botInfo = this._bots.get(botId);
+    assert(botInfo);
+    log(`_startBot ${JSON.stringify(botInfo)}`);
+    await this._botContainers[botInfo.env].startBot(botInfo);
 
-    this._bots.set(botId, botInfo!);
     await this._saveBotsToFile();
 
     return botId;
@@ -326,7 +333,7 @@ export class BotManager {
   }
 
   private async _saveBotsToFile () {
-    const data = [...this._bots.values()].map(botInfo => this._botContainers[botInfo.env].serializeBot(botInfo));
+    const data = [...this._bots.values()];
     await fs.writeJSON(this._botsFile, data);
   }
 
