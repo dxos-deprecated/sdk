@@ -62,9 +62,8 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
    * Start bot instance.
    */
   async startBot (botInfo: BotInfo) {
-    const { botId, name, installDirectory, spawnOptions } = botInfo;
-    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
-    await fs.ensureDir(childDir);
+    const { botId, name, installDirectory, storageDirectory, spawnOptions } = botInfo;
+    await fs.ensureDir(storageDirectory);
 
     const { command, args, env: childEnv } = this._getCommand(installDirectory, spawnOptions);
 
@@ -72,7 +71,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
       WIRE_BOT_CONTROL_TOPIC: keyToString(this._controlTopic),
       WIRE_BOT_UID: botId,
       WIRE_BOT_NAME: name,
-      WIRE_BOT_CWD: childDir,
+      WIRE_BOT_CWD: storageDirectory,
       WIRE_BOT_RESTARTED: 'false' // TODO(marik-d): Remove.
     };
 
@@ -84,7 +83,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
         ...wireEnv
       },
 
-      cwd: childDir,
+      cwd: storageDirectory,
 
       // https://nodejs.org/api/child_process.html#child_process_options_detached
       detached: false
@@ -97,11 +96,11 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
       started: moment.utc(),
       lastActive: moment.utc()
     };
-    const watcher = watch(childDir, { recursive: true }, () => {
+    const watcher = watch(storageDirectory, { recursive: true }, () => {
       timeState.lastActive = moment.utc();
     });
 
-    log(`Spawned bot: ${JSON.stringify({ pid: botProcess.pid, command, args, wireEnv, cwd: childDir })}`);
+    log(`Spawned bot: ${JSON.stringify({ pid: botProcess.pid, command, args, wireEnv, cwd: storageDirectory })}`);
 
     botProcess.stdout!.on('data', (data) => {
       logBot[botProcess.pid](`${data}`);

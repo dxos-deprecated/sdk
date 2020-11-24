@@ -44,6 +44,7 @@ export interface BotInfo {
   botId: BotId
   id: string
   installDirectory: string
+  storageDirectory: string
   spawnOptions: Spawn.SpawnOptions
   parties: string[]
   started: any
@@ -183,6 +184,7 @@ export class BotManager {
       botId,
       id,
       installDirectory,
+      storageDirectory: path.join(process.cwd(), '.bots', botId),
       spawnOptions: options,
       parties: [],
       stopped: false,
