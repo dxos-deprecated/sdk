@@ -86,8 +86,4 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
       await context.close();
     }
   }
-
-  async killBot (botInfo: BotInfo) {
-    await this.stopBot(botInfo);
-  }
 }

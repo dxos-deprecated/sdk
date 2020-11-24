@@ -142,13 +142,4 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
       }
     });
   }
-
-  // TODO(marik-d): Remove: BotManager should handle bot directories.
-  async killBot (botInfo: BotInfo) {
-    await this.stopBot(botInfo);
-
-    const { installDirectory, botId } = botInfo;
-    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
-    await fs.remove(childDir);
-  }
 }

@@ -211,7 +211,8 @@ export class BotManager {
     const botInfo = this._bots.get(botId);
     assert(botInfo, 'Invalid Bot Id');
 
-    await this._botContainers[botInfo.env].killBot(botInfo);
+    await this._botContainers[botInfo.env].stopBot(botInfo);
+    await fs.remove(botInfo.storageDirectory);
     this._bots.delete(botId);
     await this._saveBotsToFile();
 
@@ -221,7 +222,8 @@ export class BotManager {
   async killAllBots () {
     for await (const botInfo of this._bots.values()) {
       if (this._botContainers[botInfo.env]) {
-        await this._botContainers[botInfo.env].killBot(botInfo);
+        await this._botContainers[botInfo.env].stopBot(botInfo);
+        await fs.remove(botInfo.storageDirectory);
       }
     }
     this._bots.clear();

@@ -30,12 +30,6 @@ export interface BotContainer {
    * Stop bot instance.
    */
   stopBot (botInfo: BotInfo): Promise<void>
-
-  /**
-   * Stop bot instance and remove it's data.
-   */
-  // TODO(marik-d): Remove this: bot manager should handle bot data files.
-  killBot (botInfo: BotInfo): Promise<void>;
 }
 
 // Command to spawn to run a bot in local development mode.
