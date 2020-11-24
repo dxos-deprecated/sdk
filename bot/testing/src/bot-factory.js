@@ -5,6 +5,6 @@ const { BrowserContainer, BotFactory, NodeBotContainer, BROWSER_ENV, NODE_ENV, g
 const config = getConfig();
 
 new BotFactory(config, {
-  [NODE_ENV]: new NodeBotContainer(config),
-  [BROWSER_ENV]: new BrowserContainer(config)
+  [NODE_ENV]: new NodeBotContainer(config.get('cli.nodePath')),
+  [BROWSER_ENV]: new BrowserContainer()
 }).start();
