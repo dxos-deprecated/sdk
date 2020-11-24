@@ -74,5 +74,8 @@
   },
   "WIRE_BOT_CONTROL_TOPIC": {
     "path": "bot.controlTopic"
+  },
+  "WIRE_BOT_DUMP_FILE": {
+    "path": "bot.dumpFile"
   }
 }

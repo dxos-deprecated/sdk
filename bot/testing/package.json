@@ -17,7 +17,8 @@
     "test": "jest --rootDir ./test --passWithNoTests --forceExit"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "globalTeardown": "<rootDir>/../src/teardown.js"
   },
   "dependencies": {
     "@dxos/async": "1.0.0-beta.10",
