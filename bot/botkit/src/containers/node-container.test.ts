@@ -1,14 +1,20 @@
-import { createId, randomBytes } from "@dxos/crypto";
-import { BotInfo } from "../bot-manager";
-import { NODE_ENV } from "../env";
-import { sync as findPkgJson } from 'pkg-up';
+//
+// Copyright 2020 DXOS.org
+//
+
 import path from 'path';
-import { NodeBotContainer } from "./node-container";
+import { sync as findPkgJson } from 'pkg-up';
+
+import { createId, randomBytes } from '@dxos/crypto';
+
+import { BotInfo } from '../bot-manager';
+import { NODE_ENV } from '../env';
+import { NodeBotContainer } from './node-container';
 
 test('Start & stop bot', async () => {
   const container = new NodeBotContainer(process.argv0);
-  await container.start({ controlTopic: randomBytes() })
-  
+  await container.start({ controlTopic: randomBytes() });
+
   const botInfo: BotInfo = {
     botId: createId(),
     id: createId(),
@@ -22,10 +28,10 @@ test('Start & stop bot', async () => {
     storageDirectory: `out/bots/${createId()}`,
     started: 0,
     lastActive: 0,
-    stopped: false,
-  }
-  await container.startBot(botInfo)
-  await container.stopBot(botInfo)
+    stopped: false
+  };
+  await container.startBot(botInfo);
+  await container.stopBot(botInfo);
 
   await container.stop();
-})
+});

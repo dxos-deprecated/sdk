@@ -12,7 +12,7 @@ import { LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
  * Local Bot Container; Used for running bots locally as a node process.
  */
 export class LocalDevBotContainer extends ChildProcessContainer {
-  constructor(
+  constructor (
     private readonly _nodePath: string
   ) {
     super();
@@ -27,7 +27,7 @@ export class LocalDevBotContainer extends ChildProcessContainer {
       command: LOCAL_BOT_RUN_COMMAND,
       args: LOCAL_BOT_RUN_ARGS.concat([botPath || LOCAL_BOT_MAIN_FILE]),
       env: {
-        NODE_PATH: this._nodePath,
+        NODE_PATH: this._nodePath
       }
     };
   }

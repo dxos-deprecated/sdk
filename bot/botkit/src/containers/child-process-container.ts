@@ -7,7 +7,6 @@ import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import moment from 'moment';
 import watch from 'node-watch';
-import path from 'path';
 import kill from 'tree-kill';
 
 import { keyToString } from '@dxos/crypto';
@@ -15,7 +14,6 @@ import { Spawn } from '@dxos/protocol-plugin-bot';
 
 import { BotId, BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
-import { SPAWNED_BOTS_DIR } from '../source-manager';
 import { BotContainer, ContainerStartOptions } from './common';
 
 export interface CommandInfo {

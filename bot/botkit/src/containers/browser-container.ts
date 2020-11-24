@@ -24,10 +24,6 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
   private _browser!: playwright.ChromiumBrowser;
   private readonly _bots = new Map<BotId, playwright.BrowserContext>();
 
-  constructor () {
-    super();
-  }
-
   async start ({ controlTopic }: ContainerStartOptions) {
     this._controlTopic = controlTopic;
     this._browser = await playwright[BROWSER_TYPE].launch();
