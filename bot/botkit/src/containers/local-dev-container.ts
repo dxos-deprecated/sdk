@@ -4,7 +4,6 @@
 
 import { Spawn } from '@dxos/protocol-plugin-bot';
 
-import { NODE_ENV } from '../env';
 import { LOCAL_BOT_MAIN_FILE } from '../source-manager';
 import { CommandInfo, ChildProcessContainer } from './child-process-container';
 import { LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
@@ -20,18 +19,10 @@ export class LocalDevBotContainer extends ChildProcessContainer {
     const { botPath } = spawnOptions;
     return {
       command: LOCAL_BOT_RUN_COMMAND,
-      args: LOCAL_BOT_RUN_ARGS.concat([botPath || LOCAL_BOT_MAIN_FILE])
-    };
-  }
-
-  async getAdditionalOpts (options: any): Promise<any> {
-    const { env } = options;
-
-    if (env === NODE_ENV) {
-      return {
+      args: LOCAL_BOT_RUN_ARGS.concat([botPath || LOCAL_BOT_MAIN_FILE]),
+      env: {
         NODE_PATH: this._config.get('cli.nodePath')
-      };
-    }
-    return {};
+      }
+    };
   }
 }
