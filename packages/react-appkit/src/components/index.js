@@ -2,7 +2,6 @@
 // Copyright 2020 DXOS.org
 //
 
-import AuthenticatorDialog from './AuthenticatorDialog';
 import BotDialog from './BotDialog';
 import DebugPanel from './DebugPanel';
 import DefaultSettingsDialog from './DefaultSettingsDialog';
@@ -33,7 +32,6 @@ import Theme, { createTheme, defaultThemeProperties } from './Theme';
 export * from './util';
 
 export {
-  AuthenticatorDialog,
   BotDialog,
   DebugPanel,
   DefaultSettingsDialog,
