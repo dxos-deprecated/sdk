@@ -4,8 +4,6 @@
 
 import { spawn, SpawnOptions, ChildProcess } from 'child_process';
 import fs from 'fs-extra';
-import moment from 'moment';
-import watch from 'node-watch';
 import kill from 'tree-kill';
 
 import { Event } from '@dxos/async';
@@ -24,7 +22,6 @@ export interface CommandInfo {
 
 interface RunningBot {
   process: ChildProcess
-  watcher: any;
 }
 
 /**
@@ -84,13 +81,14 @@ export abstract class ChildProcessContainer implements BotContainer {
     const botProcess = spawn(command, args, childOptions);
 
     // TODO(marik-d): Fix this.
-    const timeState = {
-      started: moment.utc(),
-      lastActive: moment.utc()
-    };
-    const watcher = watch(storageDirectory, { recursive: true }, () => {
-      timeState.lastActive = moment.utc();
-    });
+    // TODO(marik-d): Causes leaks.
+    // const timeState = {
+    //   started: moment.utc(),
+    //   lastActive: moment.utc()
+    // };
+    // const watcher = watch(storageDirectory, { recursive: true }, () => {
+    //   timeState.lastActive = moment.utc();
+    // });
 
     log(`Spawned bot: ${JSON.stringify({ pid: botProcess.pid, command, args, wireEnv, cwd: storageDirectory })}`);
 
@@ -112,8 +110,7 @@ export abstract class ChildProcessContainer implements BotContainer {
     });
 
     this._bots.set(botId, {
-      process: botProcess,
-      watcher
+      process: botProcess
     });
   }
 
@@ -121,17 +118,12 @@ export abstract class ChildProcessContainer implements BotContainer {
     if (!this._bots.has(botInfo.botId)) {
       return;
     }
-    const { process, watcher } = this._bots.get(botInfo.botId)!;
+    const { process } = this._bots.get(botInfo.botId)!;
 
     return new Promise(resolve => {
-      if (watcher) {
-        watcher.close();
-      }
-      if (process && process.pid) {
-        kill(process.pid, 'SIGKILL', () => {
-          resolve();
-        });
-      }
+      kill(process.pid, 'SIGKILL', () => {
+        resolve();
+      });
     });
   }
 }
