@@ -5,11 +5,11 @@
 import AppBar from './AppBar';
 import AppContainer from './AppContainer';
 import AppKitProvider from './AppKitProvider';
-import Authenticator from './Authenticator';
 import CheckForErrors from './CheckForErrors';
 import ClientInitializer from './ClientInitializer';
 import DefaultItemList from './DefaultItemList';
 import DefaultSidebar from './DefaultSidebar';
+import DeviceAuthenticator from './DeviceAuthenticator';
 import PartyCardContainer from './PartyCardContainer';
 import RedeemDialog from './RedeemDialog';
 import Registration from './Registration';
@@ -20,7 +20,7 @@ export {
   AppBar,
   AppContainer,
   AppKitProvider,
-  Authenticator,
+  DeviceAuthenticator,
   CheckForErrors,
   ClientInitializer,
   DefaultSidebar,

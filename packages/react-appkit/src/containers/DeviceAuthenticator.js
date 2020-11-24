@@ -16,7 +16,7 @@ import { useAppRouter } from '../hooks';
 /**
  * Handles inbound invitation URL.
  */
-const Authenticator = () => {
+const DeviceAuthenticator = () => {
   const history = useHistory();
   const invitation = InvitationDescriptor.fromQueryParameters(useQuery());
   const appRouter = useAppRouter();
@@ -54,4 +54,4 @@ const Authenticator = () => {
   );
 };
 
-export default Authenticator;
+export default DeviceAuthenticator;
