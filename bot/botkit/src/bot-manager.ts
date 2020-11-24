@@ -175,8 +175,8 @@ export class BotManager {
     assert(displayName, 'Invalid Bot Name.');
     assert(payment, 'Invalid payment.');
 
-    const transfer = decodeBase64ToObj(payment);
-    await this._paymentClient.redeemTransfer(transfer);
+    const { channelAddress, transferId, preImage } = decodeBase64ToObj(payment);
+    await this._paymentClient.redeemTransfer(channelAddress, transferId, preImage);
 
     const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;

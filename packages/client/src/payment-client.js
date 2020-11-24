@@ -266,12 +266,25 @@ export class PaymentClient {
     };
   }
 
-  async redeemTransfer (transfer) {
-    const {
-      channelAddress,
-      transferId,
-      preImage
-    } = transfer;
+  async getTransfer (transferId) {
+    assert(transferId, 'Invalid transferId.');
+
+    await this._connect();
+
+    const result = await this._service.getTransfer({ transferId, publicIdentifier: this._service.publicIdentifier });
+    if (result.isError) {
+      throw result.getError();
+    }
+
+    const transfer = result.getValue();
+
+    return transfer;
+  }
+
+  async redeemTransfer (channelAddress, transferId, preImage) {
+    assert(channelAddress, 'Invalid channel.');
+    assert(transferId, 'Invalid transferId.');
+    assert(preImage, 'Invalid preImage.');
 
     await this._connect();
     const result = await this._service.resolveTransfer({
