@@ -73,7 +73,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
       WIRE_BOT_UID: botId,
       WIRE_BOT_NAME: name,
       WIRE_BOT_CWD: childDir,
-      WIRE_BOT_RESTARTED: 'false', // TODO(marik-d): Remove.
+      WIRE_BOT_RESTARTED: 'false' // TODO(marik-d): Remove.
     };
 
     const childOptions: SpawnOptions = {
@@ -127,7 +127,9 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
   }
 
   async stopBot (botInfo: BotInfo): Promise<void> {
-    if(!this._bots.has(botInfo.botId)) return;
+    if (!this._bots.has(botInfo.botId)) {
+      return;
+    }
     const { process, watcher } = this._bots.get(botInfo.botId)!;
 
     return new Promise(resolve => {
