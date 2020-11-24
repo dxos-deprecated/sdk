@@ -31,8 +31,8 @@ export const BROWSER_ENV = 'browser';
 // Get Id information of bot.
 // Important: this regulates how often bot gets downloaded from ipfs.
 const testTime = Date.now();
-const getBotIdentifiers = botPath => {
-  const name = `wrn://dxos/bot/${path.basename(botPath)}`;
+const getBotIdentifiers = (botPath, env) => {
+  const name = `wrn://dxos/bot/${env}/${path.basename(botPath)}`;
   const id = sha256(`${name}${testTime}`);
   return {
     id,
@@ -167,8 +167,9 @@ export class Orchestrator {
   }
 
   async _spawnBot (botPath, options) {
+    const { env } = options;
     const botId = await this._factoryClient.sendSpawnRequest(undefined, {
-      ...getBotIdentifiers(botPath),
+      ...getBotIdentifiers(botPath, env),
       ...options
     });
 
