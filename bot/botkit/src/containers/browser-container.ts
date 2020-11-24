@@ -52,7 +52,7 @@ export class BrowserContainer extends EventEmitter implements BotContainer {
       WIRE_BOT_UID: botId,
       WIRE_BOT_NAME: name,
       WIRE_BOT_CWD: '/dxos/bot',
-      WIRE_BOT_RESTARTED: (!!botInfo).toString(),
+      WIRE_BOT_RESTARTED: false, // TODO(marik-d): Remove.
       WIRE_BOT_PERSISTENT: 'false' // Storage is currently broken
     };
 

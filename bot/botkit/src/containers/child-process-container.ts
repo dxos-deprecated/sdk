@@ -73,7 +73,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
       WIRE_BOT_UID: botId,
       WIRE_BOT_NAME: name,
       WIRE_BOT_CWD: childDir,
-      WIRE_BOT_RESTARTED: (!!botInfo).toString()
+      WIRE_BOT_RESTARTED: 'false', // TODO(marik-d): Remove.
     };
 
     const childOptions: SpawnOptions = {
@@ -127,6 +127,7 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
   }
 
   async stopBot (botInfo: BotInfo): Promise<void> {
+    if(!this._bots.has(botInfo.botId)) return;
     const { process, watcher } = this._bots.get(botInfo.botId)!;
 
     return new Promise(resolve => {
@@ -142,12 +143,11 @@ export abstract class ChildProcessContainer extends EventEmitter implements BotC
   }
 
   // TODO(marik-d): Remove: BotManager should handle bot directories.
-  async killBot () {
-    // await this.stopBot(botInfo);
+  async killBot (botInfo: BotInfo) {
+    await this.stopBot(botInfo);
 
-    // const { childDir } = botInfo;
-    // if (childDir) {
-    //   await fs.remove(childDir);
-    // }
+    const { installDirectory, botId } = botInfo;
+    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
+    await fs.remove(childDir);
   }
 }

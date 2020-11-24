@@ -185,7 +185,7 @@ export class BotManager {
       installDirectory,
       spawnOptions: options,
       parties: [],
-      stopped: true,
+      stopped: false,
       name,
       env,
       started: 0,
