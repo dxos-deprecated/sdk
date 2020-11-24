@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.16](https://www.github.com/dxos/sdk/compare/v2.7.15...v2.7.16) (2020-11-24)
+
+
+### Bug Fixes
+
+* Device invitation flow uniform with regular invitations ([#378](https://www.github.com/dxos/sdk/issues/378)) ([a436387](https://www.github.com/dxos/sdk/commit/a436387768077de6de415ebc01d373c1d400f694))
+
 ### [2.7.15](https://www.github.com/dxos/sdk/compare/v2.7.14...v2.7.15) (2020-11-23)
 
 
