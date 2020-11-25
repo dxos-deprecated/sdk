@@ -179,7 +179,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const createOfflineInvitation = (contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
 
   const handleBotInvite = async (botFactoryTopic, botId, spec = {}) => {
-    const botFactoryClient = new BotFactoryClient(client.networkManager, botFactoryTopic);
+    const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
 
     const secretProvider = () => {};
 

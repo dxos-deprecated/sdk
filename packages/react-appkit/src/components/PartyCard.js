@@ -141,9 +141,9 @@ const PartyCard = ({
       return;
     }
     if (partyOpen) {
-      setDisplayName(party.getProperty('displayName') || humanize(party.key));
+      setDisplayName(party.getProperty('displayName') || humanize(party.key.toString()));
     } else {
-      setDisplayName(humanize(party.key));
+      setDisplayName(humanize(party.key.toString()));
     }
   }, [partyOpen]);
 
