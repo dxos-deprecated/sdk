@@ -1429,10 +1429,10 @@
   resolved "https://registry.npmjs.org/@dxos/lint-version/-/lint-version-0.1.0.tgz#2ece32126fee3c3ceae7c38fa4ad39203569569d"
   integrity sha512-/TjLRXpHT878t5VfETNmg3IwcV0oo7VLEllvgT9FMn8KRFWYxDubvtubKysFYYvrnytyNnaMNpoApDDcVMruJw==
 
-"@dxos/messenger-model@^1.0.1-beta.15":
-  version "1.0.1-beta.15"
-  resolved "https://registry.npmjs.org/@dxos/messenger-model/-/messenger-model-1.0.1-beta.15.tgz#a115665a5195503134f324f8a99d946c8b337844"
-  integrity sha512-h2zk82rlneuJqnDFD3rJu9W4HyGW4PTitjIyWrw1Y5fzRJkbeJzZ90zTM79gfpXEUFy6EGuz4uGNG625WqeN1Q==
+"@dxos/messenger-model@1.0.1-beta.16":
+  version "1.0.1-beta.16"
+  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.0.1-beta.16.tgz#bdabc1c0ef6d0dd23b8c7a02280010a62aa5e9d8"
+  integrity sha512-3DTnjGPq/bHYC1M2jPKJOt85jqmGJVXx9glcoHATMuejKQorFbeow4jxA7/EwMa07IO3qQkqyokRCFCgzD0o0A==
   dependencies:
     "@dxos/codec-protobuf" "^0.2.0"
     "@dxos/model-factory" "^2.6.1-alpha.0"
@@ -1498,6 +1498,30 @@
     signal-promise "^1.0.3"
     source-map-support "^0.5.12"
     through2 "^3.0.1"
+
+"@dxos/model-factory@^2.6.1-alpha.0":
+  version "2.6.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-2.6.1-alpha.0.tgz#083f0f3b3f50efdf46dfcd3299fefa0b74947d80"
+  integrity sha512-JLplI5IbCZNiDObONc0QogHAyKfBkHSx40nZKm1KgXLL8t1AY8W3q+D+EoYXPW3AwlxuURxJhRz98h0zyBLi9w==
+  dependencies:
+    "@dxos/async" "^1.0.0-beta.8"
+    "@dxos/codec-protobuf" "^0.2.0"
+    "@dxos/crypto" "^1.0.0-beta.7"
+    "@dxos/echo-protocol" "^2.6.1-alpha.0"
+    "@dxos/feed-store" "^1.2.0-beta.30"
+    "@dxos/util" "^2.6.1-alpha.0"
+    "@types/debug" "^4.1.1"
+    "@types/end-of-stream" "^1.4.0"
+    "@types/lodash" "^4.14.159"
+    "@types/node" "^14.0.9"
+    "@types/stream-buffers" "^3.0.2"
+    "@types/through2" "^2.0.36"
+    debug "^4.1.1"
+    hypercore "^7.7.1"
+    js-data-structs "^1.1.2"
+    lodash.merge "^4.6.2"
+    protobufjs "^6.9.0"
+    source-map-support "^0.5.12"
 
 "@dxos/network-generator@^1.0.0-beta.1":
   version "1.0.0-beta.3"
