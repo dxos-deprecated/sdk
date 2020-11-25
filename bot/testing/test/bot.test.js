@@ -6,7 +6,6 @@ jest.setTimeout(100 * 1000);
 
 test('local source', async () => {
   const orchestrator = new Orchestrator({ local: true });
-
   orchestrator.client.registerModel(MessengerModel);
 
   await orchestrator.start();
@@ -21,8 +20,6 @@ test('local source', async () => {
   const messages = await agent.sendCommand({ type: 'get-all' });
 
   expect(messages).toHaveLength(2);
-
-  console.log(messages);
 
   await orchestrator.destroy();
 });
@@ -56,8 +53,6 @@ test('browser', async () => {
   const messages = await agent.sendCommand({ type: 'get-all' });
 
   expect(messages).toHaveLength(2);
-
-  console.log(messages);
 
   await orchestrator.destroy();
 });
