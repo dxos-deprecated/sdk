@@ -5,8 +5,9 @@
 import assert from 'assert';
 import { keyPair } from 'hypercore-crypto';
 
+import { keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
-
+import { NetworkManager, transportProtocolProvider } from '@dxos/network-manager';
 import {
   BotPlugin,
   createSpawnCommand,
@@ -17,9 +18,6 @@ import {
   createStopCommand,
   createBotCommand
 } from '@dxos/protocol-plugin-bot';
-
-import { keyToBuffer } from '@dxos/crypto';
-import { NetworkManager, transportProtocolProvider } from '@dxos/network-manager';
 
 const { log } = logs('botkit-client');
 
@@ -35,7 +33,7 @@ export class BotFactoryClient {
   _peerId: Buffer;
   _botPlugin: BotPlugin;
   _connected: Boolean;
-  
+
   constructor (networkManager: NetworkManager, botFactoryTopic: string) {
     assert(botFactoryTopic);
     assert(networkManager);
@@ -64,6 +62,7 @@ export class BotFactoryClient {
       createSpawnCommand(botName, options));
 
     assert(spawnResponse, `Unable to spawn bot ${botName}`);
+    // eslint-disable-next-line camelcase
     assert(spawnResponse.message?.__type_url === 'dxos.protocol.bot.SpawnResponse', 'Invalid response type');
 
     const { message: { botId } } = spawnResponse;
@@ -81,6 +80,7 @@ export class BotFactoryClient {
 
     const response =
       await this._botPlugin.sendCommand(this._botFactoryTopic, createBotManagementCommand(botId, command));
+    // eslint-disable-next-line camelcase
     assert(response?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = response;
 
@@ -100,6 +100,7 @@ export class BotFactoryClient {
     log(`Sending spawn request for party: ${partyToJoin} with invitation id: ${invitation}`);
     const invitationResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
       createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation)));
+    // eslint-disable-next-line camelcase
     assert(invitationResponse?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = invitationResponse;
 
@@ -115,6 +116,7 @@ export class BotFactoryClient {
 
     log('Sending reset request.');
     const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createResetCommand(source));
+    // eslint-disable-next-line camelcase
     assert(response?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = response;
 
@@ -141,6 +143,7 @@ export class BotFactoryClient {
       const status = await this._botPlugin.sendCommand(this._botFactoryTopic, createStatusCommand());
       // TODO(egorgripasov): Use dxos/codec function.
       assert(status?.message);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { message: { __type_url, ...data } } = status; // eslint-disable-line camelcase
       return { started: true, ...data };
     } catch (err) {
@@ -179,23 +182,24 @@ export class BotFactoryClient {
           }
         });
       });
-  
+
       await this._networkManager.joinProtocolSwarm(this._botFactoryTopic,
         transportProtocolProvider(this._botFactoryTopic, this._peerId, this._botPlugin));
-  
+
       await promise;
     }, CONNECT_TIMEOUT, () => new Error(`Failed to connect to bot factory: Timed out in ${CONNECT_TIMEOUT}ms.`));
   }
 }
 
 // TODO(marik-d): Move to async (replace existing implemetation).
-function timeout<T>(action: () => Promise<T>, timeout: number, getError?: () => Error) {
-  function throwOnTimeout(timeout: number, getError: () => Error) {
+function timeout<T> (action: () => Promise<T>, timeout: number, getError?: () => Error) {
+  function throwOnTimeout (timeout: number, getError: () => Error) {
+    // eslint-disable-next-line promise/param-names
     return new Promise((_, reject) => setTimeout(() => reject(getError()), timeout));
   }
 
   return Promise.race([
     action(),
     throwOnTimeout(timeout, getError ?? (() => new Error(`Timed out in ${timeout}ms.`)))
-  ])
+  ]);
 }
