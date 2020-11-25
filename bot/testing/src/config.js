@@ -10,8 +10,8 @@ export const CONFIG = {
   WIRE_WNS_USER_KEY: null,
   WIRE_WNS_BOND_ID: null,
   WIRE_WNS_CHAIN_ID: 'devnet-2',
-  WIRE_IPFS_SERVER: 'https://apollo1.kube.moon.dxos.network/dxos/ipfs/api',
-  WIRE_IPFS_GATEWAY: 'https://apollo1.kube.moon.dxos.network/dxos/ipfs/gateway/'
+  WIRE_IPFS_SERVER: 'https://apollo2.kube.moon.dxos.network/dxos/ipfs/api',
+  WIRE_IPFS_GATEWAY: 'https://apollo2.kube.moon.dxos.network/dxos/ipfs/gateway/'
 };
 
 export const FACTORY_OUT_DIR = './out';
