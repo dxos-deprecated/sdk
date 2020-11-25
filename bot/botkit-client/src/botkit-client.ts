@@ -65,6 +65,7 @@ export class BotFactoryClient {
       createSpawnCommand(botName, options));
 
     assert(spawnResponse, `Unable to spawn bot ${botName}`);
+    assert(spawnResponse.message?.__type_url === 'dxos.protocol.bot.SpawnResponse', 'Invalid response type');
 
     const { message: { botId } } = spawnResponse;
 
@@ -81,7 +82,7 @@ export class BotFactoryClient {
 
     const response =
       await this._botPlugin.sendCommand(this._botFactoryTopic, createBotManagementCommand(botId, command));
-    assert(response?.message);
+    assert(response?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = response;
 
     if (error) {
@@ -100,7 +101,7 @@ export class BotFactoryClient {
     log(`Sending spawn request for party: ${partyToJoin} with invitation id: ${invitation}`);
     const invitationResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
       createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation)));
-    assert(invitationResponse?.message);
+    assert(invitationResponse?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = invitationResponse;
 
     if (error) {
@@ -115,7 +116,7 @@ export class BotFactoryClient {
 
     log('Sending reset request.');
     const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createResetCommand(source));
-    assert(response?.message);
+    assert(response?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = response;
 
     if (error) {

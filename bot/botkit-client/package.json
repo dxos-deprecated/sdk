@@ -6,11 +6,9 @@
   "license": "AGPL-3.0",
   "author": "DXOS.org",
   "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc",
-    "build:watch": "yarn run build --watch",
-    "clean": "rm -rf dist",
-    "dist": "tsc",
+    "build": "tsc",
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
