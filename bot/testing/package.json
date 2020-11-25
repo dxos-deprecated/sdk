@@ -1,6 +1,6 @@
 {
   "name": "@dxos/testing",
-  "version": "2.7.15-alpha.0",
+  "version": "2.7.16-alpha.0",
   "description": "Testing framework",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -17,13 +17,14 @@
     "test": "jest --rootDir ./test --passWithNoTests --forceExit"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "globalTeardown": "<rootDir>/../src/teardown.js"
   },
   "dependencies": {
     "@dxos/async": "1.0.0-beta.10",
-    "@dxos/botkit": "^2.7.15-alpha.0",
-    "@dxos/botkit-client": "^2.7.15-alpha.0",
-    "@dxos/client": "^2.7.15-alpha.0",
+    "@dxos/botkit": "^2.7.16-alpha.0",
+    "@dxos/botkit-client": "^2.7.16-alpha.0",
+    "@dxos/client": "^2.7.16-alpha.0",
     "@dxos/config": "^1.0.0-beta.73",
     "@dxos/credentials": "^2.0.0",
     "@dxos/crypto": "^1.0.0-beta.10",

@@ -4,7 +4,6 @@
 
 import { spawn } from 'child_process';
 import debug from 'debug';
-import fs from 'fs-extra';
 import path from 'path';
 import ram from 'random-access-memory';
 import kill from 'tree-kill';
@@ -15,7 +14,7 @@ import { Client } from '@dxos/client';
 import { SIGNATURE_LENGTH, keyToBuffer, createKeyPair, keyToString, verify, sha256 } from '@dxos/crypto';
 
 import { Agent } from './agent';
-import { CONFIG } from './config';
+import { CONFIG, FACTORY_OUT_DIR } from './config';
 import { buildAndPublishBot } from './distributor';
 
 const log = debug('dxos:testing');
@@ -23,7 +22,6 @@ const log = debug('dxos:testing');
 const ORCHESTRATOR_NAME = 'Test';
 
 const FACTORY_START_TIMEOUT = 5 * 1000;
-const FACTORY_OUT_DIR = './out';
 
 export const NODE_ENV = 'node';
 export const BROWSER_ENV = 'browser';
@@ -31,8 +29,8 @@ export const BROWSER_ENV = 'browser';
 // Get Id information of bot.
 // Important: this regulates how often bot gets downloaded from ipfs.
 const testTime = Date.now();
-const getBotIdentifiers = botPath => {
-  const name = `wrn://dxos/bot/${path.basename(botPath)}`;
+const getBotIdentifiers = (botPath, env) => {
+  const name = `wrn://dxos/bot/${env}/${path.basename(botPath)}`;
   const id = sha256(`${name}${testTime}`);
   return {
     id,
@@ -97,12 +95,12 @@ export class Orchestrator {
         botPath
       };
     } else {
-      // TODO(egorgripasov): Browser support.
-      let ipfsCID = this._builds.get(botPath);
-      log('Building & publishing bot package...');
+      const buildId = `${botPath}-${env}`;
+      let ipfsCID = this._builds.get(buildId);
       if (!ipfsCID) {
+        log('Building & publishing bot package...');
         ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath, env === 'browser');
-        this._builds.set(botPath, ipfsCID);
+        this._builds.set(buildId, ipfsCID);
       }
       options = {
         ...rest,
@@ -122,7 +120,6 @@ export class Orchestrator {
   async destroy () {
     kill(this._factory.process.pid, 'SIGKILL');
     await this._factoryClient.close();
-    await fs.remove(path.join(process.cwd(), FACTORY_OUT_DIR));
     // TODO(egorgripasov): Produced feed store errors.
     // await this._client.destroy();
   }
@@ -141,7 +138,8 @@ export class Orchestrator {
         WIRE_BOT_RESET: true,
         WIRE_BOT_TOPIC: topic,
         WIRE_BOT_SECRET_KEY: keyToString(secretKey),
-        WIRE_BOT_LOCAL_DEV: this._localRun
+        WIRE_BOT_LOCAL_DEV: this._localRun,
+        WIRE_BOT_DUMP_FILE: path.join(FACTORY_OUT_DIR, topic)
       };
 
       const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
@@ -166,8 +164,9 @@ export class Orchestrator {
   }
 
   async _spawnBot (botPath, options) {
+    const { env } = options;
     const botId = await this._factoryClient.sendSpawnRequest(undefined, {
-      ...getBotIdentifiers(botPath),
+      ...getBotIdentifiers(botPath, env),
       ...options
     });
 
