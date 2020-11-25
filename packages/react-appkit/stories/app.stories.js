@@ -56,7 +56,7 @@ const PartyComponent = () => {
   return (
     <Box m={2}>
       <h1>Party</h1>
-      <div>Public Key: {party.key.toString()}</div>
+      <div>Public Key: {party.key.toHex()}</div>
       <div>DisplayName: {party.displayName}</div>
     </Box>
   );

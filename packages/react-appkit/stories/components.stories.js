@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 import DebugIcon from '@material-ui/icons/BugReport';
 import ConnectedIcon from '@material-ui/icons/Wifi';
 
-import { createKeyPair } from '@dxos/crypto';
+import { createKeyPair, PublicKey } from '@dxos/crypto';
 
 import { MemberAvatar, useAssets, StatusBar, NewItemCreationMenu } from '../src';
 import { pads } from './common';
@@ -19,7 +19,7 @@ export default {
 
 export const withMemberAvatar = () => {
   const member = {
-    publicKey: createKeyPair().publicKey,
+    publicKey: PublicKey.from(createKeyPair().publicKey),
     displayName: 'Test name'
   };
 
@@ -32,7 +32,7 @@ export const withMemberAvatar = () => {
 
 export const withNoDisplayName = () => {
   const member = {
-    publicKey: createKeyPair().publicKey,
+    publicKey: PublicKey.from(createKeyPair().publicKey),
     displayName: undefined
   };
 
@@ -48,7 +48,7 @@ export const withImages = () => {
 
   return (
     <Box m={2}>
-      <img src={assets.getThumbnail(createKeyPair().publicKey.toString())} />
+      <img src={assets.getThumbnail(PublicKey.from(createKeyPair().publicKey).toString())} />
     </Box>
   );
 };
