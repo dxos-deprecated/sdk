@@ -1095,12 +1095,12 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@dxos/async@1.0.0-beta.10", "@dxos/async@^1.0.0-beta.8":
+"@dxos/async@1.0.0-beta.10":
   version "1.0.0-beta.10"
   resolved "https://registry.yarnpkg.com/@dxos/async/-/async-1.0.0-beta.10.tgz#a1247891cbdee3b84614c92d6790a7d7695e9260"
   integrity sha512-U3f1afmdl8KNjK8y89E89G+Cd2l52+Wjww92hZ9IfiU6wOvNsNG9WRruAYCOoRpBMYaEv/QJq+UuLhgD5o8iSQ==
 
-"@dxos/async@^1.0.0-beta.10":
+"@dxos/async@^1.0.0-beta.10", "@dxos/async@^1.0.0-beta.8":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@dxos/async/-/async-1.0.0.tgz#691f5b6908e09942c62e603c7a6abc0e9010c92a"
   integrity sha512-8yoPxp86GvPBTWBSnbOYwcPouml2G2V3tyFNZXqhPaZ7EfDFKUSWdoN4wzqJ/FdGWbc/vaMBPdx9ufGXgqeh/A==
@@ -1498,30 +1498,6 @@
     signal-promise "^1.0.3"
     source-map-support "^0.5.12"
     through2 "^3.0.1"
-
-"@dxos/model-factory@^2.6.1-alpha.0":
-  version "2.6.1-alpha.0"
-  resolved "https://registry.npmjs.org/@dxos/model-factory/-/model-factory-2.6.1-alpha.0.tgz#083f0f3b3f50efdf46dfcd3299fefa0b74947d80"
-  integrity sha512-JLplI5IbCZNiDObONc0QogHAyKfBkHSx40nZKm1KgXLL8t1AY8W3q+D+EoYXPW3AwlxuURxJhRz98h0zyBLi9w==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
-    "@dxos/echo-protocol" "^2.6.1-alpha.0"
-    "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^2.6.1-alpha.0"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    source-map-support "^0.5.12"
 
 "@dxos/network-generator@^1.0.0-beta.1":
   version "1.0.0-beta.3"

@@ -61,7 +61,7 @@ export class BotPlugin extends EventEmitter {
         }
       } catch (err) {
         // Ignore with console error.
-        console.error(err);
+        console.error(err.stack);
       }
     };
 
