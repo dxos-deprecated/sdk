@@ -16,7 +16,8 @@ import {
   createBotManagementCommand,
   createResetCommand,
   createStopCommand,
-  createBotCommand
+  createBotCommand,
+  Spawn
 } from '@dxos/protocol-plugin-bot';
 
 const { log } = logs('botkit-client');
@@ -52,7 +53,7 @@ export class BotFactoryClient {
   /**
    * Send request for bot spawning.
    */
-  async sendSpawnRequest (botName: string, options: Object) {
+  async sendSpawnRequest (botName: string, options: Spawn.SpawnOptions) {
     if (!this._connected) {
       await this._connect();
     }
