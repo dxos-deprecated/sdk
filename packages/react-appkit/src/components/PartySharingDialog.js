@@ -169,7 +169,6 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const [invitations, setInvitations] = useState([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
-  const topic = party.key.toString();
 
   const members = useMembers(party);
   const [contacts] = useContacts();
@@ -193,7 +192,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
     const invitation = await party.createInvitation({ secretValidator, secretProvider });
 
     const botUID = await botFactoryClient.sendSpawnRequest(botId);
-    await botFactoryClient.sendInvitationRequest(botUID, topic, spec, invitation.toQueryParameters());
+    await botFactoryClient.sendInvitationRequest(botUID, party.key.toHex(), spec, invitation.toQueryParameters());
     setBotDialogVisible(false);
   };
 
