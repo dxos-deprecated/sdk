@@ -53,7 +53,7 @@ const DeviceAuthenticator = () => {
   const [cancelling, setCancelling] = useState(false);
 
   // TODO(burdon): Provide status of remote connection (e.g., show sender key; don't display PIN until connected).
-  const [{ topic, identity, error }, setSecret] = useAuthenticator(invitation);
+  const [{ topic, identity, error }, setSecret] = useAuthenticator(invitation as any);
   if (topic) {
     appRouter.push({ topic });
   } else if (identity) {

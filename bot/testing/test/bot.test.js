@@ -31,7 +31,11 @@ test('remote source', async () => {
 
   await orchestrator.start();
 
-  await orchestrator.startAgent({ botPath: './src/test-agent.js', env: NODE_ENV });
+  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.js', env: NODE_ENV });
+
+  await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
+
+  await agent.sendCommand({ type: 'append' });
 
   await orchestrator.destroy();
 });
