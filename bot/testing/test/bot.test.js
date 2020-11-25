@@ -21,7 +21,6 @@ test('local source', async () => {
 
   expect(messages).toHaveLength(2);
 
-  console.log(messages);
 
   await orchestrator.destroy();
 });
@@ -56,7 +55,6 @@ test('browser', async () => {
 
   expect(messages).toHaveLength(2);
 
-  console.log(messages);
 
   await orchestrator.destroy();
 });
