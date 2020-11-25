@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.17](https://www.github.com/dxos/sdk/compare/v2.7.16...v2.7.17) (2020-11-25)
+
+
+### Bug Fixes
+
+* Release SDK with ECHO 2.6.5 ([ca733a0](https://www.github.com/dxos/sdk/commit/ca733a01e78bf4655b2837e409c853259d36d2e1))
+
 ### [2.7.16](https://www.github.com/dxos/sdk/compare/v2.7.15...v2.7.16) (2020-11-24)
 
 
