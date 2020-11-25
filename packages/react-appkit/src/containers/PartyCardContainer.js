@@ -4,6 +4,7 @@
 
 import React, { useState } from 'react';
 
+import { keyToString } from '@dxos/crypto';
 import { useClient, useItems } from '@dxos/react-client';
 
 import { DefaultSettingsDialog, PartyCard } from '../components';
@@ -13,7 +14,6 @@ const PartyCardContainer = ({ party }) => {
   const client = useClient();
   const router = useAppRouter();
   const [pads] = usePads();
-  const topic = party.key.toString();
   const items = useItems({ partyKey: party.key, type: pads.map(pad => pad.type) });
   const [newItemType, setNewItemType] = useState(undefined);
   const [itemSettingsOpen, setItemSettingsOpen] = useState(false);
@@ -23,7 +23,7 @@ const PartyCardContainer = ({ party }) => {
     const item = await pad.create({ party, client }, { name }, metadata);
     callback && callback(item);
     handleCanceledSettings();
-    router.push({ topic, item: item.id });
+    router.push({ topic: keyToString(party.key.asUint8Array()), item: item.id });
   };
 
   const handleCanceledSettings = () => {
@@ -52,7 +52,7 @@ const PartyCardContainer = ({ party }) => {
       />
       <Settings
         party={party}
-        topic={topic}
+        topic={party.key}
         open={itemSettingsOpen}
         onClose={handleSavedSettings}
         onCancel={handleCanceledSettings}
