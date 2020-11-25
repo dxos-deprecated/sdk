@@ -10,7 +10,7 @@ import { Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
 
-import { keyToBuffer, PublicKey } from '@dxos/crypto';
+import { keyToBuffer, keyToString, PublicKey } from '@dxos/crypto';
 import { ObjectModel } from '@dxos/object-model';
 import { useParty, useItems } from '@dxos/react-client';
 
@@ -54,7 +54,7 @@ const DefaultItemList = () => {
   const anchor = useRef();
 
   const handleSelect = (itemId) => {
-    router.push({ topic, item: itemId });
+    router.push({ topic: keyToString(party.key.asUint8Array()), item: itemId });
   };
 
   const handleCreate = async (type) => {

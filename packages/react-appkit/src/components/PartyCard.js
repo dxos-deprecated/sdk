@@ -22,7 +22,7 @@ import SettingsIcon from '@material-ui/icons/MoreVert';
 import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 import { makeStyles } from '@material-ui/styles';
 
-import { humanize } from '@dxos/crypto';
+import { humanize, keyToString } from '@dxos/crypto';
 
 import NewItemCreationMenu from './NewItemCreationMenu';
 import PadIcon from './PadIcon';
@@ -159,7 +159,7 @@ const PartyCard = ({
   };
 
   const handleSelect = (itemId) => {
-    router.push({ topic, item: itemId });
+    router.push({ topic: keyToString(party.key.asUint8Array()), item: itemId });
   };
 
   if (onNewParty) {

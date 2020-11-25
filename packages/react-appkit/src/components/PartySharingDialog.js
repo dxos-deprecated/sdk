@@ -31,7 +31,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useTheme } from '@material-ui/styles';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
-import { humanize, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { useClient, useContacts, useInvitation, useOfflineInvitation } from '@dxos/react-client';
 
 import { useMembers } from '../hooks';
@@ -271,7 +271,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
                       <MemberAvatar member={member} />
                     </TableCell>
                     <TableCell>
-                      {member.displayName || humanize(member.publicKey)}
+                      {member.displayName || 'Loading...'}
                     </TableCell>
                     <TableCell />
                     <TableCell classes={{ root: classes.colStatus }}>
@@ -295,7 +295,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
                       <MemberAvatar member={contact} />
                     </TableCell>
                     <TableCell>
-                      {contact.displayName || humanize(contact.publicKey)}
+                      {contact.displayName || 'Loading...'}
                     </TableCell>
                     <TableCell />
                     <TableCell classes={{ root: classes.colStatus }}>
