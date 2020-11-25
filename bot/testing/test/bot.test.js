@@ -21,7 +21,6 @@ test('local source', async () => {
 
   expect(messages).toHaveLength(2);
 
-
   await orchestrator.destroy();
 });
 
@@ -54,7 +53,6 @@ test('browser', async () => {
   const messages = await agent.sendCommand({ type: 'get-all' });
 
   expect(messages).toHaveLength(2);
-
 
   await orchestrator.destroy();
 });
