@@ -15,7 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import YesIcon from '@material-ui/icons/CheckCircleOutline';
 import NoIcon from '@material-ui/icons/RadioButtonUnchecked';
 
-import { humanize, keyToString } from '@dxos/crypto';
+import { humanize } from '@dxos/crypto';
 import { truncateString } from '@dxos/debug';
 
 // TODO(burdon): Move to dxos/react-ux.
@@ -75,9 +75,9 @@ const MemberTable = ({ party, onMemberSelect }) => {
       <TableBody>
         {party.members.sort(sorter).map((member) => {
           const formatDisplay = (key, name) => (key
-            ? `${name || humanize(key)} (${truncateString(keyToString(key), 8)})` : '');
+            ? `${name || humanize(key)} (${truncateString(key.toString(), 8)})` : '');
 
-          const key = keyToString(member.publicKey);
+          const key = member.publicKey.toString();
           let admittedBy = '';
           if (member.admittedBy) {
             if (party.key.equals(member.admittedBy)) {

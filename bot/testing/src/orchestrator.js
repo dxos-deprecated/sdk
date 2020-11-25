@@ -185,8 +185,8 @@ export class Orchestrator {
 
     const invitation = await this._party.createInvitation({ secretValidator });
 
-    await this._factoryClient.sendInvitationRequest(botId, keyToString(this._party.key), {}, invitation.toQueryParameters());
+    await this._factoryClient.sendInvitationRequest(botId, this._party.key.toHex(), {}, invitation.toQueryParameters());
 
-    // log(`Bot ${botId} invited.`);
+    log(`Bot ${botId} invited.`);
   }
 }

@@ -141,9 +141,9 @@ const PartyCard = ({
       return;
     }
     if (partyOpen) {
-      setDisplayName(party.getProperty('displayName') || humanize(party.key));
+      setDisplayName(party.getProperty('displayName') || humanize(party.key.toString()));
     } else {
-      setDisplayName(humanize(party.key));
+      setDisplayName(humanize(party.key.toString()));
     }
   }, [partyOpen]);
 
@@ -151,7 +151,7 @@ const PartyCard = ({
   const [showDeleted, setShowDeleted] = useState(false);
   const createItemAnchor = useRef();
 
-  const topic = party ? keyToString(party.key) : '';
+  const topic = party ? party.key.toString() : '';
 
   const handleNewItemSelected = (type) => {
     setNewItemCreationMenuOpen(false);
@@ -159,7 +159,7 @@ const PartyCard = ({
   };
 
   const handleSelect = (itemId) => {
-    router.push({ topic, item: itemId });
+    router.push({ topic: keyToString(party.key.asUint8Array()), item: itemId });
   };
 
   if (onNewParty) {

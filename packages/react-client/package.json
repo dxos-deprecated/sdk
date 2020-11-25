@@ -17,10 +17,10 @@
   "dependencies": {
     "@dxos/async": "1.0.0-beta.10",
     "@dxos/client": "^2.7.16-alpha.0",
-    "@dxos/credentials": "^2.0.0",
-    "@dxos/crypto": "^1.0.0-beta.10",
+    "@dxos/credentials": "2.1.12-alpha.0",
+    "@dxos/crypto": "1.0.5",
     "@dxos/debug": "^1.0.0-beta.73",
-    "@dxos/echo-db": "^2.6.4-alpha.0",
+    "@dxos/echo-db": "2.6.6-alpha.0",
     "@dxos/metrics": "^1.0.0-beta.6",
     "@dxos/random-access-multi-storage": "^1.1.0-beta.7",
     "level-js": "^5.0.2",

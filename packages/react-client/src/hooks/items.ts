@@ -5,18 +5,18 @@
 import { useState } from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
-import { keyToString } from '@dxos/crypto';
+import { PublicKey } from '@dxos/crypto';
 
 import { useClient } from './client';
 
 export interface UseItemsProps {
-  partyKey: Uint8Array
+  partyKey: PublicKey
 }
 
 export const useItems = ({ partyKey, ...filter }: UseItemsProps) => {
   const client = useClient();
-  const party = client.echo.getParty(partyKey);
-  const key = keyToString(partyKey);
+  const party = client.echo.getParty(PublicKey.from(partyKey));
+  const key = partyKey.toString();
   const [items, setItems] = useState<any[]>([]);
 
   if (!party) {

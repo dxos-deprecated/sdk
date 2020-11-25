@@ -6,7 +6,6 @@ import React from 'react';
 
 import Box from '@material-ui/core/Box';
 
-import { keyToString } from '@dxos/crypto';
 import { useClient, useParties } from '@dxos/react-client';
 
 export const NoPartyComponent = () => {
@@ -20,11 +19,11 @@ export const NoPartyComponent = () => {
       <p>Create and select a party using the knobs.</p>
       <h2>Keys</h2>
       {keys.map(key => (
-        <div key={key.publicKey}>{keyToString(key.publicKey)}</div>
+        <div key={key.publicKey.toString()}>{key.publicKey.toString()}</div>
       ))}
       <h2>Parties</h2>
       {parties.map(party => {
-        const publicKey = keyToString(party.key);
+        const publicKey = party.key.toString();
         return (<div key={publicKey}>{publicKey}</div>);
       })}
     </Box>
