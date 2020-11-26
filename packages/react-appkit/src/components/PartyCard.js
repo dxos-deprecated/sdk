@@ -5,7 +5,7 @@
 import clsx from 'clsx';
 import React, { useState, useRef } from 'react';
 
-import { ListItemSecondaryAction } from '@material-ui/core';
+import { Button, ListItemSecondaryAction } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -30,6 +30,16 @@ import PartyMemberList from './PartyMemberList';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import { useAssets } from './util';
+
+// ISSUE: https://github.com/dxos/echo/issues/337
+// ISSUE: https://github.com/dxos/echo/issues/338
+const getPartyName = (party) => {
+  try {
+    return party.getProperty('displayName');
+  } catch {
+    return 'Loading...';
+  }
+};
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -147,7 +157,49 @@ const PartyCard = ({
     );
   }
 
-  const displayName = party.getProperty('displayName') || 'Untitled';
+  if (!party.isActive()) {
+    return (
+      <>
+        <Card className={clsx(classes.card, classes.unsubscribed)}>
+          <CardMedia
+            component='img'
+            height={100}
+            image={assets.getThumbnail(topic)}
+          />
+
+          <CardHeader
+            classes={{
+              root: classes.headerRoot,
+              content: classes.headerContent,
+              action: classes.headerAction
+            }}
+            title={
+              <Typography
+                classes={{ root: classes.title }}
+                component='h2'
+                variant='h5'
+                className='party-header-title'
+              >
+                Closed party
+              </Typography>
+            }
+          />
+
+          <CardActions className={classes.actions}>
+            <Button
+              size='small'
+              color='secondary'
+              onClick={async () => party.activate({ global: true })}
+            >
+              Activate
+            </Button>
+          </CardActions>
+        </Card>
+      </>
+    );
+  }
+
+  const displayName = getPartyName(party) || 'Untitled';
 
   return (
     <>
@@ -257,20 +309,19 @@ const PartyCard = ({
           open={settingsDialogOpen}
           properties={{
             showDeleted,
-            subscribed: true
+            active: party.isActive()
           }}
           onExport={onExport}
           displayName={displayName}
-          onClose={({ showDeleted, displayName }) => {
+          onClose={async ({ showDeleted, displayName, active }) => {
             party.setProperty('displayName', displayName);
             setShowDeleted(showDeleted);
-            // Not yet implemented for the new ECHO
-            // if (subscribed && !party.subscribed) {
-            //   handleSubscribe();
-            // }
-            // if (!subscribed && party.subscribed) {
-            //   handleUnsubscribe();
-            // }
+            if (active && !party.isActive()) {
+              await party.activate({ global: true });
+            }
+            if (!active && party.isActive()) {
+              await party.deactivate({ global: true });
+            }
             setSettingsDialogOpen(false);
           }}
         />

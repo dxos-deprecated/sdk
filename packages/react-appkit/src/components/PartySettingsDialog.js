@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 
 const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, displayName: initialDisplayName }) => {
   const classes = useStyles();
-  const [subscribed] = useState(properties.subscribed);
+  const [active, setActive] = useState(properties.active);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
@@ -55,7 +55,7 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, display
   const [displayName, setDisplayName] = useState(initialDisplayName);
 
   const handleClose = () => {
-    onClose({ subscribed, showDeleted, displayName });
+    onClose({ active, showDeleted, displayName });
   };
 
   const handleExportToIPFS = async () => {
@@ -93,17 +93,16 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, display
         {/* TODO(burdon): Implement state and handlers. */}
         <FormControl className={classes.form}>
           <FormGroup>
-            {/* Not implemented for the new echo */}
-            {/* <FormControlLabel
+            <FormControlLabel
               control={
                 <Checkbox
-                  checked={subscribed}
-                  value={subscribed}
-                  onChange={() => setSubscribed(!subscribed)}
+                  checked={active}
+                  value={active}
+                  onChange={() => setActive(!active)}
                 />
               }
               label='Active'
-            /> */}
+            />
             <FormControlLabel
               control={
                 <Checkbox

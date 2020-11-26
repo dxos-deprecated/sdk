@@ -1356,11 +1356,6 @@
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
-"@dxos/lint-version@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/@dxos/lint-version/-/lint-version-0.1.0.tgz#2ece32126fee3c3ceae7c38fa4ad39203569569d"
-  integrity sha512-/TjLRXpHT878t5VfETNmg3IwcV0oo7VLEllvgT9FMn8KRFWYxDubvtubKysFYYvrnytyNnaMNpoApDDcVMruJw==
-
 "@dxos/messenger-model@1.2.0-alpha.16":
   version "1.2.0-alpha.16"
   resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.16.tgz#c4eed3b77c1f5679036f456847c619e7147d6054"
@@ -1658,6 +1653,17 @@
     lodash.merge "^4.6.2"
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
+
+"@dxos/version-check@^0.1.0":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@dxos/version-check/-/version-check-0.1.7.tgz#03b5e0c48dca14006790a187958c29ccaf739a6c"
+  integrity sha512-iZShLr18QkBblOb3pPutV/5VhbIz2H3Q3UxOoBmFYeGW1HfPxzS9EZjn1TapyXijlWTkBEeVq7MYsnoHI3wLCw==
+  dependencies:
+    "@types/yargs" "^15.0.9"
+    chalk "^4.1.0"
+    node-fetch "^2.6.1"
+    semver "^7.3.2"
+    yargs "^16.1.1"
 
 "@emotion/cache@^10.0.27", "@emotion/cache@^10.0.9":
   version "10.0.29"
@@ -4299,6 +4305,13 @@
   version "15.0.9"
   resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-15.0.9.tgz#524cd7998fe810cdb02f26101b699cccd156ff19"
   integrity sha512-HmU8SeIRhZCWcnRskCs36Q1Q00KBV6Cqh/ora8WN1+22dY07AZdn6Gel8QZ3t26XYPImtcL8WV/eqjhVmMEw4g==
+  dependencies:
+    "@types/yargs-parser" "*"
+
+"@types/yargs@^15.0.9":
+  version "15.0.10"
+  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-15.0.10.tgz#0fe3c8173a0d5c3e780b389050140c3f5ea6ea74"
+  integrity sha512-z8PNtlhrj7eJNLmrAivM7rjBESG6JwC5xP3RVk12i/8HVP7Xnx/sEmERnRImyEuUaJfO942X0qMOYsoupaJbZQ==
   dependencies:
     "@types/yargs-parser" "*"
 
@@ -19410,7 +19423,7 @@ yargs@^15.0.2, yargs@^15.3.1, yargs@^15.4.1:
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
 
-yargs@^16.0.0:
+yargs@^16.0.0, yargs@^16.1.1:
   version "16.1.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-16.1.1.tgz#5a4a095bd1ca806b0a50d0c03611d38034d219a1"
   integrity sha512-hAD1RcFP/wfgfxgMVswPE+z3tlPFtxG8/yWUrG2i17sTWGCGqWnxKcLTF4cUKDUK8fzokwsmO9H0TDkRbMHy8w==
