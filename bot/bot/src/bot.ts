@@ -52,7 +52,7 @@ export class Bot extends EventEmitter {
   private readonly _config: any;
 
   private _plugin?: any /* BotPlugin */;
-  private _client?: Client;
+  protected _client?: Client;
 
   private _leaveControlSwarm?: () => void;
 

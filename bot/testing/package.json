@@ -5,20 +5,20 @@
   "keywords": [],
   "license": "AGPL-3.0",
   "author": "DXOS.org",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "private": true,
   "scripts": {
     "build": "npm run clean && npm run dist",
     "build:watch": "yarn run build --watch",
     "clean": "rm -rf dist",
-    "dist": "babel ./src --out-dir ./dist --ignore \"**/*.test.js\"",
+    "dist": "tsc",
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
     "test": "jest --rootDir ./test --passWithNoTests --verbose --forceExit"
   },
   "jest": {
     "testEnvironment": "node",
-    "globalTeardown": "<rootDir>/../src/teardown.js"
+    "globalTeardown": "<rootDir>/../src/teardown.ts"
   },
   "dependencies": {
     "@dxos/async": "1.0.0-beta.10",
@@ -52,22 +52,15 @@
     "webpack": "^4.44.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.3.0",
-    "@babel/plugin-proposal-export-default-from": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
     "@dxos/messenger-model": "1.2.0-alpha.16",
-    "babel-jest": "^25.1.0",
-    "babel-loader": "^8.0.0",
-    "babel-plugin-add-module-exports": "^1.0.0",
-    "babel-plugin-inline-import": "^3.0.0",
+    "@types/tar": "^4.0.4",
     "esbuild": "^0.8.11",
     "jest": "^26.6.3",
     "process-exists": "^4.0.0",
     "pstree.remy": "^1.1.8",
-    "semistandard": "14.2.0"
+    "semistandard": "14.2.0",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.0.5"
   },
   "semistandard": {
     "parser": "babel-eslint",

@@ -10,12 +10,13 @@ import fetch from 'node-fetch';
 import debug from 'debug';
 
 import { createId } from '@dxos/crypto';
+import assert from 'assert';
 
 const BUILD_PATH = './out/builds/';
 
 const log = debug('dxos:testing:distributor');
 
-const getWebpackConfig = (botPath, buildPath, browser = false) => {
+const getWebpackConfig = (botPath: string, buildPath: string, browser = false): webpack.Configuration => {
   return {
     target: browser ? undefined : 'node',
 
@@ -69,7 +70,7 @@ const getWebpackConfig = (botPath, buildPath, browser = false) => {
             options: {
               cacheDirectory: './dist/babel-cache/',
               // TODO(egorgripasov): Webpack does not see babel conf.
-              ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc')))
+              ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc'), 'utf8'))
             }
           }
         },
@@ -80,7 +81,7 @@ const getWebpackConfig = (botPath, buildPath, browser = false) => {
             options: {
               cacheDirectory: './dist/babel-cache/',
               // TODO(egorgripasov): Webpack does not see babel conf.
-              ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc')))
+              ...JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc'), 'utf8'))
             }
           }
         }
@@ -89,7 +90,7 @@ const getWebpackConfig = (botPath, buildPath, browser = false) => {
   };
 };
 
-export const buildBot = async (botPath, browser) => {
+export const buildBot = async (botPath: string, browser: boolean) => {
   const buildPath = path.join(BUILD_PATH, createId());
 
   const webpackConf = getWebpackConfig(botPath, buildPath, browser);
@@ -107,7 +108,7 @@ export const buildBot = async (botPath, browser) => {
   return buildPath;
 };
 
-const publishBot = async (ipfsEndpoint, buildPath) => {
+const publishBot = async (ipfsEndpoint: string, buildPath: string) => {
   if (!ipfsEndpoint.endsWith('/')) {
     ipfsEndpoint = `${ipfsEndpoint}/`;
   }
@@ -124,7 +125,7 @@ const publishBot = async (ipfsEndpoint, buildPath) => {
  * @param {string} ipfsEndpoint IPFS Gateway endpoint.
  * @param {string} botPath Path to bot file from cwd.
  */
-export const buildAndPublishBot = async (ipfsEndpoint, botPath, browser) => {
+export const buildAndPublishBot = async (ipfsEndpoint: string, botPath: string, browser: boolean) => {
   log(`Building package, browser=${browser}`);
   const buildPath = await buildBot(botPath, browser);
   log(`Publishing to IPFS node: ${ipfsEndpoint} from ${buildPath}`);

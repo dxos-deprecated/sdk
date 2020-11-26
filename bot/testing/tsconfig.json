@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "jsx": "react",
+    "lib": [
+      "DOM"
+    ],
+    "strictPropertyInitialization": false
+  },
+  "include": [
+    "src",
+  ],
+  "ignore": "/node_modules/"
+}
