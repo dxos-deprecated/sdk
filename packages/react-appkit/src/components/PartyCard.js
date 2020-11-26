@@ -3,7 +3,7 @@
 //
 
 import clsx from 'clsx';
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 
 import { Button, ListItemSecondaryAction } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
@@ -35,9 +35,9 @@ const getPartyName = (party) => {
   try {
     return party.getProperty('displayName');
   } catch {
-    return 'Loading...'
+    return 'Loading...';
   }
-}
+};
 
 const useStyles = makeStyles(theme => ({
   card: {
