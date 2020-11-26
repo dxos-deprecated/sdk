@@ -94,15 +94,16 @@ export class BotFactoryClient {
    * @param {String} partyToJoin
    * @param {Object} spec
    * @param {Object} invitation
+   * @param {Object} payment
    */
-  async sendInvitationRequest (botId, partyToJoin, spec, invitation) {
+  async sendInvitationRequest (botId, partyToJoin, spec, invitation, payment) {
     if (!this._connected) {
       await this._connect();
     }
 
     log(`Sending spawn request for party: ${partyToJoin} with invitation id: ${invitation}`);
     const invitationResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
-      createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation)));
+      createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation), payment));
     const { message: { error } } = invitationResponse;
 
     if (error) {

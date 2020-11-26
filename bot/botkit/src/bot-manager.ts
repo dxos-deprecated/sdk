@@ -21,7 +21,8 @@ import {
   createInvitationMessage,
   createSignResponse,
   createBotCommand,
-  Spawn
+  Spawn,
+  Payment
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
 
@@ -175,15 +176,7 @@ export class BotManager {
     assert(displayName, 'Invalid Bot Name.');
     assert(payment, 'Invalid payment.');
 
-    const { channelAddress, transferId, preImage } = payment;
-    const transfer = await this._paymentClient.getTransfer(transferId);
-
-    assert(channelAddress === transfer.channelAddress, 'Channel address mismatch.');
-
-    log('Received payment for bot spawn.');
-    log(JSON.stringify(getPaymentInfo(transfer), undefined, 2));
-
-    await this._paymentClient.redeemTransfer(channelAddress, transferId, preImage);
+    await this._resolvePayment(payment);
 
     const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;
@@ -257,8 +250,10 @@ export class BotManager {
    * @param topic Party to join.
    * @param invitation Invitation.
    */
-  async inviteBot (botId: string, topic: string, invitation: string) {
+  async inviteBot (botId: string, topic: string, invitation: string, payment: Payment) {
     const botInfo = this._bots.get(botId);
+
+    await this._resolvePayment(payment);
 
     assert(botInfo, 'Invalid Bot Id');
     if (botInfo.parties.indexOf(topic) === -1) {
@@ -403,5 +398,23 @@ export class BotManager {
       throw new Error(`Invalid bot: ${botName}`);
     }
     return records[0];
+  }
+
+  private async _resolvePayment (payment: Payment) {
+    assert(payment, 'Invalid payment.');
+
+    const { channelAddress, transferId, preImage } = payment;
+
+    assert(transferId, 'Invalid transfer.');
+    assert(channelAddress, 'Invalid channel.');
+    assert(preImage, 'Invalid preImage.');
+
+    const transfer = await this._paymentClient.getTransfer(transferId);
+
+    assert(channelAddress === transfer.channelAddress, 'Channel address mismatch.');
+
+    log(`Validating received payment: ${JSON.stringify(getPaymentInfo(transfer))}`);
+
+    await this._paymentClient.redeemTransfer(channelAddress, transferId, preImage);
   }
 }

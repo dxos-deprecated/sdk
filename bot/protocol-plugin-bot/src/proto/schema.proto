@@ -12,19 +12,17 @@ message Message {
   google.protobuf.Any message = 1;
 }
 
+// TODO(ashwin): Move to common repo.
+message Payment {
+  string channelAddress = 1;
+  string transferId = 2;
+  string preImage = 3;
+}
+
 // Command to spawn a bot.
 message Spawn {
   // Bot WRN (e.g. wrn://example/bot/chess).
   string botName = 1;
-
-  // TODO(ashwin): Move to common repo.
-
-  // TODO(ashwin): Use protobuf type for payment.
-  message Payment {
-   string channelAddress = 1;
-   string transferId = 2;
-   string preImage = 3;
-  }
 
   message SpawnOptions {
     string id = 1;
@@ -33,6 +31,8 @@ message Spawn {
     string ipfsCID = 4;
     string ipfsEndpoint = 5;
     string botPath = 6;
+
+    // Payment for bot spawn.
     Payment payment = 7;
   }
 
@@ -57,6 +57,9 @@ message Invite {
 
   // Invitation for the case of credentials usage.
   string invitation = 4;
+
+  // Payment for bot invite.
+  Payment payment = 5;
 }
 
 message CommandResponse {

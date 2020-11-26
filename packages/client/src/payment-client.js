@@ -18,6 +18,10 @@ export const decodeBase64ToObj = (str) => {
   return JSON.parse(Buffer.from(str, 'base64').toString());
 };
 
+/**
+ * Get payment details for a transfer.
+ * @param {object} transfer
+ */
 export const getPaymentInfo = (transfer) => {
   const { assetId, balance, channelAddress, transferId } = transfer;
 
@@ -35,6 +39,35 @@ export const getPaymentInfo = (transfer) => {
 };
 
 /**
+ * Create payment utility.
+ * @param {object} config
+ * @param {string} coupon
+ * @param {string} channel
+ * @param {string} amount
+ */
+export const createPayment = async (config, coupon, channel, amount) => {
+  assert(config, 'Invalid config.');
+
+  let payment;
+
+  if (coupon) {
+    payment = decodeBase64ToObj(coupon);
+  }
+
+  if (!payment) {
+    assert(channel, 'Invalid channel.');
+    assert(amount, 'Invalid amount.');
+
+    // Create payment, if not using coupon.
+    const paymentClient = new PaymentClient(config);
+    await paymentClient.connect();
+    payment = await paymentClient.createTransfer(channel, amount);
+  }
+
+  return payment;
+};
+
+/**
  * Represents client connection to a Vector server node.
  */
 export class PaymentClient {
@@ -49,12 +82,18 @@ export class PaymentClient {
     this._connected = false;
   }
 
+  /**
+   * Connect to the server node.
+   */
   async connect () {
     await this._connect();
 
     return { id: this._service.publicIdentifier };
   }
 
+  /**
+   * Get basic server node info.
+   */
   async getNodeInfo () {
     const { provider } = this._config.get('services.payment');
 
@@ -72,6 +111,9 @@ export class PaymentClient {
     };
   }
 
+  /**
+   * Get wallet address (uses mnemonic in profile, not server node).
+   */
   async getWalletAddress () {
     const { mnemonic, provider } = this._config.get('services.payment');
 
@@ -84,6 +126,9 @@ export class PaymentClient {
     return wallet.address;
   }
 
+  /**
+   * Get wallet balance (uses mnemonic in profile, not server node).
+   */
   async getWalletBalance () {
     const { mnemonic, provider } = this._config.get('services.payment');
 
@@ -98,6 +143,11 @@ export class PaymentClient {
     return utils.formatEther(balance);
   }
 
+  /**
+   * Sends funds to an address.
+   * @param {string} address
+   * @param {string} amount
+   */
   async sendFunds (address, amount) {
     const { mnemonic, provider } = this._config.get('services.payment');
 
@@ -111,6 +161,9 @@ export class PaymentClient {
     return tx.wait();
   }
 
+  /**
+   * List channels created on the server.
+   */
   async listChannels () {
     await this._connect();
 
@@ -122,6 +175,10 @@ export class PaymentClient {
     return channelsResult.getValue();
   }
 
+  /**
+   * Get channel details.
+   * @param {string} channelAddress
+   */
   async getChannelInfo (channelAddress) {
     assert(channelAddress, 'Invalid channel.');
 
@@ -136,6 +193,10 @@ export class PaymentClient {
     return channel;
   }
 
+  /**
+   * Setup a payment channel with a counterparty.
+   * @param {string} counterpartyIdentifier
+   */
   async setupChannel (counterpartyIdentifier) {
     assert(counterpartyIdentifier, 'Invalid counterparty ID.');
 
@@ -159,6 +220,10 @@ export class PaymentClient {
     return { channelAddress };
   }
 
+  /**
+   * Get balances for either party in a payment channel.
+   * @param {string} channelAddress
+   */
   async getChannelBalances (channelAddress) {
     assert(channelAddress, 'Invalid channel.');
 
@@ -186,6 +251,11 @@ export class PaymentClient {
     return balances;
   }
 
+  /**
+   * Add funds to a payment channel.
+   * @param {string} channelAddress
+   * @param {string} amount
+   */
   async addFunds (channelAddress, amount) {
     assert(channelAddress, 'Invalid channel.');
     assert(amount, 'Invalid amount.');
@@ -218,6 +288,10 @@ export class PaymentClient {
     await rpcProvider.waitForTransaction(result.getValue().txHash);
   }
 
+  /**
+   * Reconcile on-chain deposit with payment channel balance.
+   * @param {string} channelAddress
+   */
   async reconcileDeposit (channelAddress) {
     assert(channelAddress, 'Invalid channel.');
 
@@ -244,6 +318,11 @@ export class PaymentClient {
     }
   }
 
+  /**
+   * Create a transfer to the counterparty (micropayment).
+   * @param {string} channelAddress
+   * @param {string} amount
+   */
   async createTransfer (channelAddress, amount) {
     assert(channelAddress, 'Invalid channel.');
     assert(amount, 'Invalid amount.');
@@ -282,6 +361,10 @@ export class PaymentClient {
     };
   }
 
+  /**
+   * Get transfer details.
+   * @param {string} transferId
+   */
   async getTransfer (transferId) {
     assert(transferId, 'Invalid transferId.');
 
@@ -297,6 +380,12 @@ export class PaymentClient {
     return transfer;
   }
 
+  /**
+   * Redeem a transfer (micropayment) created by the counterparty.
+   * @param {string} channelAddress
+   * @param {string} transferId
+   * @param {string} preImage
+   */
   async redeemTransfer (channelAddress, transferId, preImage) {
     assert(channelAddress, 'Invalid channel.');
     assert(transferId, 'Invalid transferId.');
@@ -317,6 +406,11 @@ export class PaymentClient {
     }
   }
 
+  /**
+   * Withdraw funds from the channel (to on-chain address).
+   * @param {string} channelAddress
+   * @param {string} amount
+   */
   async withdrawFunds (channelAddress, amount) {
     assert(channelAddress, 'Invalid channel.');
     assert(amount, 'Invalid amount.');
@@ -339,6 +433,9 @@ export class PaymentClient {
     }
   }
 
+  /**
+   * Connect and cache server node handle.
+   */
   async _connect () {
     if (!this._connected) {
       const { server } = this._config.get('services.payment');
