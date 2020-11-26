@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.18](https://www.github.com/dxos/sdk/compare/v2.7.17...v2.7.18) (2020-11-26)
+
+
+### Bug Fixes
+
+* First version of party activation ([#390](https://www.github.com/dxos/sdk/issues/390)) ([84cc1f1](https://www.github.com/dxos/sdk/commit/84cc1f117c95c83af9d4683805a6127978614988)), closes [#387](https://www.github.com/dxos/sdk/issues/387) [#387](https://www.github.com/dxos/sdk/issues/387)
+* Initial attempt at party names ([#388](https://www.github.com/dxos/sdk/issues/388)) ([5c18e80](https://www.github.com/dxos/sdk/commit/5c18e80d7bb96b3b0ea881624176119afb50b0a9))
+
 ### [2.7.17](https://www.github.com/dxos/sdk/compare/v2.7.16...v2.7.17) (2020-11-25)
 
 
