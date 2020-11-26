@@ -197,7 +197,7 @@ const PartyCard = ({
     );
   }
 
-  const displayName = getPartyName() || 'Untitled';
+  const displayName = getPartyName(party) || 'Untitled';
 
   return (
     <>
