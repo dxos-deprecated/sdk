@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.19](https://www.github.com/dxos/sdk/compare/v2.7.18...v2.7.19) (2020-11-26)
+
+
+### Bug Fixes
+
+* Remove broken humanize ([8ad4f84](https://www.github.com/dxos/sdk/commit/8ad4f848f0b45f41392d3b5d6a627aa860d95d69))
+
 ### [2.7.18](https://www.github.com/dxos/sdk/compare/v2.7.17...v2.7.18) (2020-11-26)
 
 
