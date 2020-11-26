@@ -3,7 +3,7 @@
 //
 
 import clsx from 'clsx';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 
 import { ListItemSecondaryAction } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
@@ -22,7 +22,7 @@ import SettingsIcon from '@material-ui/icons/MoreVert';
 import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 import { makeStyles } from '@material-ui/styles';
 
-import { humanize, keyToString } from '@dxos/crypto';
+import { keyToString } from '@dxos/crypto';
 
 import NewItemCreationMenu from './NewItemCreationMenu';
 import PadIcon from './PadIcon';
@@ -117,35 +117,9 @@ const PartyCard = ({
 }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
-  const [partyOpen, setPartyOpen] = useState(false);
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const [displayName, setDisplayName] = useState('');
-
-  useEffect(() => {
-    if (!party) {
-      return;
-    }
-    (async function () {
-      await party.open();
-      const PARTY_ITEM_TYPE = 'wrn://dxos.org/item/party'; // not exported by echo cause it's internal
-      // hack until https://github.com/dxos/echo/issues/246 is resolved
-      await party.database.queryItems({ type: PARTY_ITEM_TYPE }).update.waitFor(value => value.length > 0);
-      setPartyOpen(true);
-    })();
-  }, [party]);
-
-  useEffect(() => {
-    if (!party) {
-      return;
-    }
-    if (partyOpen) {
-      setDisplayName(party.getProperty('displayName') || humanize(party.key.toString()));
-    } else {
-      setDisplayName(humanize(party.key.toString()));
-    }
-  }, [partyOpen]);
 
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
@@ -172,6 +146,8 @@ const PartyCard = ({
       </Card>
     );
   }
+
+  const displayName = party.getProperty('displayName') || 'Untitled';
 
   return (
     <>
@@ -285,11 +261,8 @@ const PartyCard = ({
           }}
           onExport={onExport}
           displayName={displayName}
-          onDisplayNameChange={(displayName) => {
+          onClose={({ showDeleted, displayName }) => {
             party.setProperty('displayName', displayName);
-            setDisplayName(displayName);
-          }}
-          onClose={({ showDeleted }) => {
             setShowDeleted(showDeleted);
             // Not yet implemented for the new ECHO
             // if (subscribed && !party.subscribed) {
