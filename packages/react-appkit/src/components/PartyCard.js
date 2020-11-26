@@ -31,6 +31,14 @@ import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import { useAssets } from './util';
 
+const getPartyName = (party) => {
+  try {
+    return party.getProperty('displayName');
+  } catch {
+    return 'Loading...'
+  }
+}
+
 const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
@@ -189,7 +197,7 @@ const PartyCard = ({
     );
   }
 
-  const displayName = party.getProperty('displayName') || 'Untitled';
+  const displayName = getPartyName() || 'Untitled';
 
   return (
     <>
