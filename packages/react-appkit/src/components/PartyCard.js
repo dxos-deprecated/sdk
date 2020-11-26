@@ -3,7 +3,7 @@
 //
 
 import clsx from 'clsx';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 
 import { Button, ListItemSecondaryAction } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
@@ -179,7 +179,7 @@ const PartyCard = ({
             <Button
               size='small'
               color='secondary'
-              onClick={() => party.activate({global: true})}
+              onClick={async () => party.activate({ global: true })}
             >
               Activate
             </Button>
@@ -303,14 +303,14 @@ const PartyCard = ({
           }}
           onExport={onExport}
           displayName={displayName}
-          onClose={({ showDeleted, displayName, active }) => {
+          onClose={async ({ showDeleted, displayName, active }) => {
             party.setProperty('displayName', displayName);
             setShowDeleted(showDeleted);
             if (active && !party.isActive()) {
-              party.activate({global: true});
+              await party.activate({ global: true });
             }
             if (!active && party.isActive()) {
-              party.deactivate({global: true});
+              await party.deactivate({ global: true });
             }
             setSettingsDialogOpen(false);
           }}
