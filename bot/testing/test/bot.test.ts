@@ -11,7 +11,7 @@ test('local source', async () => {
 
   await orchestrator.start();
 
-  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.js' });
+  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.ts' });
 
   await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
 
@@ -32,7 +32,7 @@ test('remote source', async () => {
 
   await orchestrator.start();
 
-  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.js', env: NODE_ENV });
+  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.ts', env: NODE_ENV });
 
   await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
 
@@ -48,7 +48,7 @@ test('browser', async () => {
 
   await orchestrator.start();
 
-  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.js', env: BROWSER_ENV });
+  const agent = await orchestrator.startAgent({ botPath: './src/test-agent.ts', env: BROWSER_ENV });
 
   await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
 

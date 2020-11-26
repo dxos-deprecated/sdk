@@ -35,7 +35,7 @@ export const BROWSER_ENV = 'browser';
 // Get Id information of bot.
 // Important: this regulates how often bot gets downloaded from ipfs.
 const testTime = Date.now();
-const getBotIdentifiers = (botPath: string, env: string) => {
+const getBotIdentifiers = (botPath: string, env: string | undefined) => {
   const name = `wrn://dxos/bot/${env}/${path.basename(botPath)}`;
   const id = sha256(`${name}${testTime}`);
   return {
@@ -153,7 +153,7 @@ export class Orchestrator {
         WIRE_BOT_DUMP_FILE: path.join(FACTORY_OUT_DIR, topic)
       };
 
-      const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
+      const factory = spawn('node', [path.join(__dirname, './bot-factory.ts')], { env });
 
       factory.stdout.pipe(process.stdout);
 
@@ -176,7 +176,6 @@ export class Orchestrator {
 
   async _spawnBot (botPath: string, options: Spawn.SpawnOptions) {
     const { env } = options;
-    assert(env);
     const botId = await this._factoryClient.sendSpawnRequest(undefined, {
       ...getBotIdentifiers(botPath, env),
       ...options

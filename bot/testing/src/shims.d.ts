@@ -3,3 +3,4 @@
 //
 
 declare module 'random-access-memory';
+declare module 'pstree.remy';
