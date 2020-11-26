@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, displayName, onDisplayNameChange }) => {
+const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, displayName: initialDisplayName }) => {
   const classes = useStyles();
   const [subscribed] = useState(properties.subscribed);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
@@ -52,6 +52,7 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, display
   const [error, setError] = useState(undefined);
   const [exportedCid, setExportedCid] = useState(undefined);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
+  const [displayName, setDisplayName] = useState(initialDisplayName);
 
   const handleClose = () => {
     onClose({ subscribed, showDeleted, displayName });
@@ -83,13 +84,11 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, display
       </DialogTitle>
 
       <DialogContent>
-        {false && ( // disabled until https://github.com/dxos/echo/issues/246 and are resolved https://github.com/dxos/echo/issues/248
-          <EditableText
-            label='Name'
-            value={displayName}
-            onUpdate={onDisplayNameChange}
-          />
-        )}
+        <EditableText
+          label='Name'
+          value={displayName}
+          onUpdate={setDisplayName}
+        />
 
         {/* TODO(burdon): Implement state and handlers. */}
         <FormControl className={classes.form}>
