@@ -6,8 +6,6 @@ import React from 'react';
 
 import { List, ListItem, makeStyles } from '@material-ui/core';
 
-import { humanize } from '@dxos/crypto';
-
 import { MemberAvatar } from '.';
 import { useMembers } from '../hooks';
 
@@ -42,7 +40,7 @@ export const MemberList = ({ party, children }) => {
         <ListItem key={member.publicKey} className={classes.member}>
           <MemberAvatar member={member} />
           &nbsp;
-          {shortenName(member.displayName || humanize(member.publicKey))}
+          {shortenName(member.displayName || 'Loading...')}
         </ListItem>
       ))}
     </List>
