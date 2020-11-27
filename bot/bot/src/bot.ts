@@ -7,7 +7,7 @@ import debug from 'debug';
 import { EventEmitter } from 'events';
 import { join } from 'path';
 
-import { promiseTimeout } from '@dxos/async';
+import { runWithTimeout } from '@dxos/async';
 import { Client } from '@dxos/client';
 import { randomBytes, keyToBuffer, keyToString, createKeyPair } from '@dxos/crypto';
 import { InvitationDescriptor, Party } from '@dxos/echo-db';
@@ -201,20 +201,22 @@ export class Bot extends EventEmitter {
   }
 
   async _connectToControlTopic () {
-    const connect = new Promise(resolve => {
-      // TODO(egorgripasov): Factor out.
-      this._plugin.on('peer:joined', (peerId: Buffer) => {
-        if (peerId.equals(this._botFactoryPeerKey)) {
-          log('Bot factory peer connected');
-          resolve();
-        }
+    await runWithTimeout(async () => {
+      const promise = new Promise(resolve => {
+        // TODO(egorgripasov): Factor out.
+        this._plugin.on('peer:joined', (peerId: Buffer) => {
+          if (peerId.equals(this._botFactoryPeerKey)) {
+            log('Bot factory peer connected');
+            resolve();
+          }
+        });
       });
-    });
-
-    this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
-      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
-
-    return promiseTimeout(connect, CONNECT_TIMEOUT);
+  
+      this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
+        transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
+  
+      await promise;
+    }, CONNECT_TIMEOUT, new Error(`Bot failed to connect to control topic: Timed out in ${CONNECT_TIMEOUT} ms.`))
   }
 
   async _startHeartbeat () {

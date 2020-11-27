@@ -1205,10 +1205,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@dxos/async@1.0.1-alpha.0":
-  version "1.0.1-alpha.0"
-  resolved "https://registry.npmjs.org/@dxos/async/-/async-1.0.1-alpha.0.tgz#a384581ae25bc12fa77cdd2361bed696b95282c5"
-  integrity sha512-uNAOoV+0hkiMqn21PzFxbKzYOTtQFRPVgmuL+Uf9UEAQJkinChAXtLBcr7xljVB9DuuIJs+oMJDQlG19TZGFbQ==
+"@dxos/async@1.0.2-alpha.0":
+  version "1.0.2-alpha.0"
+  resolved "https://registry.npmjs.org/@dxos/async/-/async-1.0.2-alpha.0.tgz#cb46d597567a178225e8a67b71cf5e3e5e257a68"
+  integrity sha512-d9UgIaLbmuYHP24WASQX8OI1GJbJVy2021VqczIuDF0m3C5tHIqC7yr75L5eC4BAalEQoPGYcpWnzgD6ZpjiBw==
 
 "@dxos/async@^1.0.0-beta.10", "@dxos/async@^1.0.0-beta.8":
   version "1.0.0"
@@ -1604,17 +1604,6 @@
     p-event "^4.2.0"
     pump "^3.0.0"
     source-map-support "^0.5.12"
-
-"@dxos/protocol-plugin-bot@^2.7.17-alpha.0":
-  version "2.7.17-alpha.0"
-  resolved "https://registry.npmjs.org/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-2.7.17-alpha.0.tgz#5da82aef2426cde3fac788504c5e0fe4bec4764b"
-  integrity sha512-bFDjFC8tF1Hzxv/ttiwYrxKbnMvoUJjKnJBw8rq7cpwqPyX1ZbHq6zRN89W7iL8/stSakE9ZL58X///T4cR2UA==
-  dependencies:
-    "@dxos/broadcast" "^1.0.0-beta.6"
-    "@dxos/codec-protobuf" "^0.2.2"
-    "@dxos/crypto" "1.0.5"
-    "@dxos/protocol" "^1.1.0-beta.19"
-    debug "^4.1.1"
 
 "@dxos/protocol-plugin-replicator@^1.1.0-alpha.4", "@dxos/protocol-plugin-replicator@^1.1.0-beta.14":
   version "1.1.0-beta.18"
