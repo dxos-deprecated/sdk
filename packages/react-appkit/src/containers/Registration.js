@@ -5,6 +5,8 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+
 import { keyPairFromSeedPhrase } from '@dxos/credentials';
 import { useClient, useConfig } from '@dxos/react-client';
 import { useQuery, createUrl } from '@dxos/react-router';
@@ -18,6 +20,7 @@ const Registration = () => {
   const { redirectUrl = '/', ...rest } = useQuery();
   const client = useClient();
   const config = useConfig();
+  const [recovering, setRecovering] = useState(false);
 
   const clearIdentity = async () => {
     setOpen(false);
@@ -42,7 +45,9 @@ const Registration = () => {
 
   const handleFinishRestore = async (seedPhrase) => {
     await clearIdentity();
+    setRecovering(true);
     await client.echo.recoverHalo(seedPhrase);
+    setRecovering(false);
     history.push(createUrl(redirectUrl, rest));
   };
 
@@ -54,6 +59,14 @@ const Registration = () => {
         onFinishCreate={handleFinishCreate}
         onFinishRestore={handleFinishRestore}
       />
+      {recovering && (
+        <Dialog open maxWidth='sm'>
+          <DialogTitle>Recovering...</DialogTitle>
+          <DialogContent>
+            <DialogContentText>One of your other devices needs to be online.</DialogContentText>
+          </DialogContent>
+        </Dialog>
+      )}
     </FullScreen>
   );
 };
