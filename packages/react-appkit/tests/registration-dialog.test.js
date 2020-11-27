@@ -12,7 +12,10 @@ describe('RegistrationDialog', () => {
   let finished;
 
   const defaultProps = {
-    onFinish: () => {
+    onFinishCreate: () => {
+      finished = true;
+    },
+    onFinishRestore: () => {
       finished = true;
     }
   };
