@@ -158,7 +158,7 @@ export class Orchestrator {
         WIRE_BOT_DUMP_FILE: path.join(FACTORY_OUT_DIR, topic)
       };
 
-      const factory = spawn('node', [path.join(__dirname, './bot-factory.ts')], { env });
+      const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
 
       factory.stdout.pipe(process.stdout);
 
