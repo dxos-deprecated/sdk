@@ -9,14 +9,14 @@ const BOT_NUMBER = 5;
 jest.setTimeout(100 * 1000);
 
 // TODO(egorgripasov): Run multiple test files simultaneously.
-test('bot resource test', async () => {
+test.skip('bot resource test', async () => {
   const orchestrator = new Orchestrator({ local: true });
   await orchestrator.start();
 
   const agents = [];
   for (let i = 0; i < BOT_NUMBER; i++) {
     agents.push(
-      await orchestrator.startAgent({ botPath: './src/test-agent.js' })
+      await orchestrator.startAgent({ botPath: './src/test-agent.ts' })
     );
   }
 
