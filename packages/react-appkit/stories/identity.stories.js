@@ -24,7 +24,12 @@ export const withRegistration = () => {
 
   return (
     <Box m={2}>
-      <RegistrationDialog open={open} onFinishCreate={handleFinishCreate} onFinishRestore={() => console.warn('Not implemented in the storybook')} />
+      <RegistrationDialog
+        open={open}
+        onFinishCreate={handleFinishCreate}
+        onFinishRestore={() => console.warn('Not implemented in this storybook')}
+        keyringDecrypter={() => console.warn('Not implemented in this storybook')}
+      />
     </Box>
   );
 };

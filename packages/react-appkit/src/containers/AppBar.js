@@ -21,12 +21,11 @@ import ShareIcon from '@material-ui/icons/Share';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
-import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { encrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { useClient, useConfig, useProfile } from '@dxos/react-client';
 
 import BotDialog from '../components/BotDialog';
 import ExportKeyringDialog from '../components/ExportKeyringDialog';
-import ImportKeyringDialog from '../components/ImportKeyringDialog';
 import InvitationDialog from '../components/InvitationDialog';
 import { Action, useActionHandler, useAppRouter } from '../hooks';
 
@@ -38,7 +37,6 @@ const ACTION_USER_INVITATION = 1;
 const ACTION_DEVICE_INVITATION = 2;
 const ACTION_BOT_INVITATION = 3;
 const ACTION_EXPORT_KEYRING = 4;
-const ACTION_IMPORT_KEYRING = 5;
 const ACTION_RESET_STORAGE = 6;
 const ACTION_OPEN_SETTINGS = 7;
 const ACTION_OPEN_PARTY_HOME = 8;
@@ -187,16 +185,8 @@ const AppBar = ({
     setDialog({ dialog: ACTION_DEVICE_INVITATION });
   };
 
-  // TODO(burdon): Broken.
-  const keyringEncrypter = async passphrase => {
-    const keyring = await client.keyringStore.getKeyring(topic);
-    return encrypt(keyring.toJSON(), passphrase);
-  };
-
-  // TODO(burdon): Broken.
-  const keyringDecrypter = async (data, passphrase) => {
-    const keyring = await client.keyringStore.getKeyring(topic);
-    await keyring.loadJSON(decrypt(data, passphrase));
+  const keyringEncrypter = passphrase => {
+    return encrypt(client.echo.keyring.toJSON(), passphrase);
   };
 
   //
@@ -225,13 +215,6 @@ const AppBar = ({
       label: 'Export keys',
       handler: () => {
         setDialog({ dialog: ACTION_EXPORT_KEYRING });
-      }
-    },
-
-    [ACTION_IMPORT_KEYRING]: {
-      label: 'Import keys',
-      handler: () => {
-        setDialog({ dialog: ACTION_IMPORT_KEYRING });
       }
     },
 
@@ -297,10 +280,7 @@ const AppBar = ({
     action(ACTION_DEVICE_INVITATION)
   ];
 
-  // if (topic) {
-  //   menuItems.push(action(ACTION_EXPORT_KEYRING));
-  //   menuItems.push(action(ACTION_IMPORT_KEYRING));
-  // }
+  menuItems.push(action(ACTION_EXPORT_KEYRING));
 
   if (onSettingsOpened) {
     menuItems.push(action(ACTION_OPEN_SETTINGS));
@@ -374,16 +354,6 @@ const AppBar = ({
           topic={topic}
           onClose={handleClose}
           encrypter={keyringEncrypter}
-        />
-      )
-    },
-    {
-      key: ACTION_IMPORT_KEYRING,
-      dialog: (
-        <ImportKeyringDialog
-          open={dialog === ACTION_IMPORT_KEYRING}
-          onClose={handleClose}
-          decrypter={keyringDecrypter}
         />
       )
     }

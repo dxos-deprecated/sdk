@@ -25,12 +25,15 @@ import RestoreIcon from '@material-ui/icons/Restore';
 
 import { generateSeedPhrase } from '@dxos/credentials';
 
+import ImportKeyringDialog from './ImportKeyringDialog';
+
 const STAGE_PENDING = -1;
 const STAGE_START = 0;
 const STAGE_RESTORE = 1;
 const STAGE_ENTER_USERNAME = 2;
 const STAGE_SHOW_SEED_PHRASE = 3;
 const STAGE_CHECK_SEED_PHRASE = 4;
+const STAGE_IMPORT_KEYRING = 5;
 
 // TODO(burdon): Factor out.
 const ordinal = n => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
@@ -107,7 +110,7 @@ const DialogActions = withStyles(theme => ({
 /**
  * Registration and recovery dialog.
  */
-const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFinishRestore }) => {
+const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFinishRestore, keyringDecrypter }) => {
   const classes = useStyles();
   const [stage, setStage] = useState(STAGE_START);
   const [seedPhrase] = useState(generateSeedPhrase());
@@ -244,7 +247,9 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
                 </Paper>
               </div>
             </DialogContent>
-            <DialogActions />
+            <DialogActions>
+              <Button variant='text' color='secondary' onClick={() => setStage(STAGE_IMPORT_KEYRING)}>Import Keyring</Button>
+            </DialogActions>
           </>
         );
       }
@@ -338,6 +343,12 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
               <LinearProgress />
             </DialogContent>
           </>
+        );
+      }
+
+      case STAGE_IMPORT_KEYRING: {
+        return (
+          <ImportKeyringDialog open onClose={() => setStage(STAGE_START)} decrypter={keyringDecrypter} />
         );
       }
     }

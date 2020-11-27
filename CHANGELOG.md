@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.21](https://www.github.com/dxos/sdk/compare/v2.7.20...v2.7.21) (2020-11-27)
+
+
+### Bug Fixes
+
+* Keychain import and export ([#398](https://www.github.com/dxos/sdk/issues/398)) ([4cee55b](https://www.github.com/dxos/sdk/commit/4cee55b5f3cafd4557b629f61c9298dfe9bee95e))
+
 ### [2.7.20](https://www.github.com/dxos/sdk/compare/v2.7.19...v2.7.20) (2020-11-27)
 
 
