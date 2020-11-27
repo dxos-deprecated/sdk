@@ -1233,7 +1233,7 @@
   dependencies:
     protobufjs "^6.10.1"
 
-"@dxos/codec-protobuf@^1.1.0-beta.2", "@dxos/codec-protobuf@^1.1.0-beta.9":
+"@dxos/codec-protobuf@^1.1.0-beta.2", "@dxos/codec-protobuf@^1.1.0-beta.7", "@dxos/codec-protobuf@^1.1.0-beta.9":
   version "1.1.0-beta.11"
   resolved "https://registry.yarnpkg.com/@dxos/codec-protobuf/-/codec-protobuf-1.1.0-beta.11.tgz#2325420040ce97a450390e097ae60f525a62b80c"
   integrity sha512-8TlF1BrGSymjcKnvrbFJA1WS3PwTofhbXSTe38f4ydyghBSqZ52u8fVC7v1vxLrOHtST+irqG+T8zzAFGCuWRg==
@@ -1615,6 +1615,18 @@
     "@dxos/crypto" "1.0.5"
     "@dxos/protocol" "^1.1.0-beta.19"
     debug "^4.1.1"
+
+"@dxos/protocol-plugin-bot@beta":
+  version "1.1.0-beta.19"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-1.1.0-beta.19.tgz#e756cbaecbf5f5aae703c24be1bd21dd37ca224d"
+  integrity sha512-t0OpRTKAdbN2KBAPPhl4Sg0PKX5Nmswsy/sGr8J0otg9amIgj28QUNLA++VPtXy0I/9+qEQMRuOeBPHwapmBLw==
+  dependencies:
+    "@dxos/broadcast" "^1.0.0-beta.6"
+    "@dxos/codec-protobuf" "^1.1.0-beta.7"
+    "@dxos/crypto" "^1.0.0-beta.1"
+    "@dxos/protocol" "^1.1.0-beta.19"
+    debug "^4.1.1"
+    source-map-support "^0.5.12"
 
 "@dxos/protocol-plugin-replicator@^1.1.0-alpha.4", "@dxos/protocol-plugin-replicator@^1.1.0-beta.14":
   version "1.1.0-beta.18"
