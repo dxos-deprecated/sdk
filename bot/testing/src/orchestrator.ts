@@ -145,7 +145,7 @@ export class Orchestrator {
         ...process.env,
         NODE_OPTIONS: '',
         ...CONFIG,
-        DEBUG: 'bot-factory,bot-factory:*,dxos:botkit*',
+        DEBUG: 'bot-factory,bot-factory:*,dxos:botkit*,dxos:testing*',
         WIRE_BOT_RESET: 'true',
         WIRE_BOT_TOPIC: topic,
         WIRE_BOT_SECRET_KEY: keyToString(secretKey),

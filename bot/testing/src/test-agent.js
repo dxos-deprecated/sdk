@@ -6,8 +6,11 @@ import { waitForCondition } from '@dxos/async';
 import { Bot, getConfig } from '@dxos/bot';
 import { createId } from '@dxos/crypto';
 import { MessengerModel } from '@dxos/messenger-model';
+import debug from 'debug'
 
 export const ITEM_TYPE = 'dxos.org/type/testing/object';
+
+const log = debug('dxos:testing:test-agent');
 
 class TestAgent extends Bot {
   /** @type {Item<MessengerModel>} */
@@ -29,6 +32,7 @@ class TestAgent extends Bot {
   }
 
   async botCommandHandler (command) {
+    log('Received command', JSON.stringify(command))
     await waitForCondition(() => !!this._item);
     switch (command.type) {
       case 'append': {
