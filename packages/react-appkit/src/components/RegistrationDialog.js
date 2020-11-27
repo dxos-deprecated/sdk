@@ -107,11 +107,12 @@ const DialogActions = withStyles(theme => ({
 /**
  * Registration and recovery dialog.
  */
-const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
+const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFinishRestore }) => {
   const classes = useStyles();
   const [stage, setStage] = useState(STAGE_START);
   const [seedPhrase] = useState(generateSeedPhrase());
   const [username, setUsername] = useState('');
+  const [recoveredSeedPhrase, setRecoveredSeedPhrase] = useState('');
 
   const words = seedPhrase.split(' ');
   const selected = [Math.floor(Math.random() * words.length), Math.floor(Math.random() * words.length)];
@@ -130,6 +131,8 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
     element.download = 'dxos-recovery-seedphrase.txt';
     element.click();
   };
+
+  const restoreSeedPhraseValid = () => recoveredSeedPhrase.trim().toLowerCase().split(/\s+/g).length === 12;
 
   const handleNext = async (ev) => {
     switch (stage) {
@@ -157,7 +160,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
         // TODO(burdon): Decide policy.
         if (match || skipMatch) {
           setStage(STAGE_PENDING);
-          await onFinish(username, seedPhrase);
+          await onFinishCreate(username, seedPhrase);
         } else {
           setStage(STAGE_SHOW_SEED_PHRASE);
         }
@@ -165,16 +168,15 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
       }
 
       case STAGE_RESTORE: {
-        const restoreSeedPhrase = seedPhraseRef.current.value.trim().toLowerCase();
+        const restoreSeedPhrase = recoveredSeedPhrase.trim().toLowerCase();
 
         // Sanity check that it looks like a seed phrase.
-        if (restoreSeedPhrase.split(/\s+/g).length !== 12) {
-          // TODO(burdon): Report invalid input to user.
-          console.log('Invalid seed phrase: ', restoreSeedPhrase);
+        if (!restoreSeedPhraseValid()) {
+          throw new Error('Invalid seed phrase.');
         } else {
           // TODO(dboreham): Do more checks on input (not all strings containing 12 words are valid seed phrases).
           setStage(STAGE_PENDING);
-          await onFinish(username, restoreSeedPhrase);
+          await onFinishRestore(restoreSeedPhrase);
         }
         break;
       }
@@ -253,11 +255,11 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
             <DialogTitle>Restoring your Wallet</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the seed phrase.</DialogContentText>
-              <TextField autoFocus fullWidth spellCheck={false} inputRef={seedPhraseRef} onKeyDown={handleKeyDown} />
+              <TextField autoFocus fullWidth spellCheck={false} value={recoveredSeedPhrase} onChange={e => setRecoveredSeedPhrase(e.target.value)} onKeyDown={handleKeyDown} />
             </DialogContent>
             <DialogActions>
               <Button color='primary' onClick={() => setStage(STAGE_START)}>Back</Button>
-              <Button variant='contained' color='primary' onClick={handleNext}>Restore</Button>
+              <Button variant='contained' color='primary' onClick={handleNext} disabled={!restoreSeedPhraseValid()}>Restore</Button>
             </DialogActions>
           </>
         );
