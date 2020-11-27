@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-appkit",
-  "version": "2.7.19-alpha.0",
+  "version": "2.7.20-alpha.0",
   "description": "Application framework components",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -19,15 +19,15 @@
     "test:playwright": "./scripts/start-and-wait.sh && jest --rootDir ./playwright --runInBand"
   },
   "dependencies": {
-    "@dxos/botkit-client": "^2.7.19-alpha.0",
+    "@dxos/botkit-client": "^2.7.20-alpha.0",
     "@dxos/credentials": "2.1.12-alpha.0",
     "@dxos/crypto": "1.0.5",
     "@dxos/debug": "^1.0.0-beta.73",
     "@dxos/metrics": "^1.0.0-beta.6",
-    "@dxos/react-client": "^2.7.19-alpha.0",
+    "@dxos/react-client": "^2.7.20-alpha.0",
     "@dxos/react-json-tree": "^0.11.3",
-    "@dxos/react-router": "^2.7.19-alpha.0",
-    "@dxos/react-ux": "^2.7.19-alpha.0",
+    "@dxos/react-router": "^2.7.20-alpha.0",
+    "@dxos/react-ux": "^2.7.20-alpha.0",
     "@material-ui/core": "^4.9.0",
     "@material-ui/data-grid": "^4.0.0-alpha.8",
     "@material-ui/icons": "^4.5.1",
