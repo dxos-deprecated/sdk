@@ -19,7 +19,7 @@
     "globalTeardown": "<rootDir>/../src/teardown.ts"
   },
   "dependencies": {
-    "@dxos/async": "1.0.0-beta.10",
+    "@dxos/async": "1.0.1-alpha.0",
     "@dxos/botkit": "^2.7.20-alpha.0",
     "@dxos/botkit-client": "^2.7.20-alpha.0",
     "@dxos/client": "^2.7.20-alpha.0",
