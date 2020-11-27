@@ -17,7 +17,8 @@ import {
   createResetCommand,
   createStopCommand,
   createBotCommand,
-  Spawn
+  Spawn,
+  BotCommandResponse
 } from '@dxos/protocol-plugin-bot';
 
 const { log } = logs('botkit-client');
@@ -53,14 +54,13 @@ export class BotFactoryClient {
   /**
    * Send request for bot spawning.
    */
-  async sendSpawnRequest (botName: string, options: Spawn.SpawnOptions) {
+  async sendSpawnRequest (botName: string | undefined, options: Spawn.SpawnOptions) {
     if (!this._connected) {
       await this._connect();
     }
 
     log(`Sending spawn request for bot ${botName}`);
-    const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
-      createSpawnCommand(botName, options));
+    const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic, createSpawnCommand(botName, options));
 
     assert(spawnResponse, `Unable to spawn bot ${botName}`);
     // eslint-disable-next-line camelcase
@@ -153,12 +153,15 @@ export class BotFactoryClient {
     }
   }
 
-  async sendBotCommand (botId: string, command: Buffer) {
+  async sendBotCommand (botId: string, command: Buffer): Promise<{ message: BotCommandResponse; }> {
     if (!this._connected) {
       await this._connect();
     }
 
-    return this._botPlugin.sendCommand(this._botFactoryTopic, createBotCommand(botId, command));
+    const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createBotCommand(botId, command));
+    // eslint-disable-next-line camelcase
+    assert(response?.message?.__type_url === 'dxos.protocol.bot.BotCommandResponse');
+    return { message: response.message };
   }
 
   /**

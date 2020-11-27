@@ -52,7 +52,7 @@ export class Bot extends EventEmitter {
   private readonly _config: any;
 
   private _plugin?: any /* BotPlugin */;
-  private _client?: Client;
+  protected _client?: Client;
 
   private _leaveControlSwarm?: () => void;
 
@@ -96,8 +96,6 @@ export class Bot extends EventEmitter {
     });
     await this._preInit();
     await this._client.initialize();
-
-    console.log({ restarted: this._restarted, persistent: this._persistent });
 
     if (!this._persistent || !this._client.getProfile()) {
       const { publicKey, secretKey } = createKeyPair();

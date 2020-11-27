@@ -6,6 +6,7 @@ jest.setTimeout(100 * 1000);
 
 test('local source', async () => {
   const orchestrator = new Orchestrator({ local: true });
+
   orchestrator.client.registerModel(MessengerModel);
 
   await orchestrator.start();
