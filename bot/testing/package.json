@@ -8,10 +8,7 @@
   "main": "dist/src/index.js",
   "private": true,
   "scripts": {
-    "build": "npm run clean && npm run dist",
-    "build:watch": "yarn run build --watch",
-    "clean": "rm -rf dist",
-    "dist": "tsc",
+    "build": "tsc",
     "lint": "semistandard",
     "prepublishOnly": "npm run build && npm run test",
     "test": "jest --rootDir ./test --passWithNoTests --verbose --forceExit"
@@ -59,7 +56,6 @@
     "process-exists": "^4.0.0",
     "pstree.remy": "^1.1.8",
     "semistandard": "14.2.0",
-    "ts-jest": "^26.4.4",
     "typescript": "^4.0.5"
   },
   "semistandard": {

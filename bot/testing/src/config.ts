@@ -4,7 +4,7 @@
 
 // TODO(egorgripasov): Factor out (use config from ~/.wire?).
 export const CONFIG = {
-  WIRE_SIGNAL_ENDPOINT: 'wss://apollo1.kube.moon.dxos.network/dxos/signal',
+  WIRE_SIGNAL_ENDPOINT: 'wss://apollo2.kube.moon.dxos.network/dxos/signal',
   WIRE_ICE_ENDPOINTS: '[{"urls":"stun:apollo1.kube.moon.dxos.network:3478"},{"urls":"turn:apollo1.kube.moon.dxos.network:3478","username":"dxos","credential":"dxos"},{"urls":"stun:apollo2.kube.moon.dxos.network:3478"},{"urls":"turn:apollo2.kube.moon.dxos.network:3478","username":"dxos","credential":"dxos"}]',
   WIRE_WNS_ENDPOINT: 'https://wns1.kube.moon.dxos.network/api',
   WIRE_WNS_USER_KEY: undefined,
