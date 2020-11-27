@@ -11,7 +11,9 @@ test('local source', async () => {
 
   await orchestrator.start();
 
+  console.log('Before start Agent');
   const agent = await orchestrator.startAgent({ botPath: './src/test-agent.ts' });
+  console.log('After start Agent');
 
   await orchestrator.party.database.createItem({ model: MessengerModel, type: 'dxos.org/type/testing/object' });
 

@@ -16,7 +16,6 @@ import { SIGNATURE_LENGTH, keyToBuffer, createKeyPair, keyToString, verify, sha2
 import { Agent } from './agent';
 import { CONFIG, FACTORY_OUT_DIR } from './config';
 import { buildAndPublishBot } from './distributor';
-import { Blob } from 'node-fetch';
 import { Party } from '@dxos/echo-db';
 import assert from 'assert';
 
@@ -100,11 +99,13 @@ export class Orchestrator {
     
     assert(botPath);
     if (this._localRun) {
+      console.log('[DEBUG] local run');
       options = {
         ...rest,
         botPath
       };
     } else {
+      console.log('[DEBUG] not local run');
       const buildId = `${botPath}-${env}`;
       let ipfsCID = this._builds.get(buildId);
       if (!ipfsCID) {
@@ -120,11 +121,15 @@ export class Orchestrator {
       };
     }
 
+    console.log('[DEBUG] Before sending spawn bot');
     log('Sending spawn bot command...');
     const botId = await this._spawnBot(botPath, options);
+
+    console.log('[DEBUG] After sending spawn bot');
     assert(botId);
     await this._inviteBot(botId);
 
+    console.log('[DEBUG] Before creating new Agent');
     return new Agent(this._factoryClient, botId);
   }
 
