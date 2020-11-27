@@ -2,13 +2,13 @@
 // Copyright 2020 DXOS.org
 //
 
-import { spawn } from 'child_process';
+import { spawn, ChildProcess } from 'child_process';
 import debug from 'debug';
 import path from 'path';
 import ram from 'random-access-memory';
 import kill from 'tree-kill';
 
-import { promiseTimeout } from '@dxos/async';
+import { runWithTimeout } from '@dxos/async';
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { Client } from '@dxos/client';
 import { SIGNATURE_LENGTH, keyToBuffer, createKeyPair, keyToString, verify, sha256 } from '@dxos/crypto';
@@ -135,17 +135,17 @@ export class Orchestrator {
     // await this._client.destroy();
   }
 
-  async _startBotFactory () {
-    const result = new Promise(resolve => {
+  async _startBotFactory (): Promise<{ topic: string, process: ChildProcess }> {
+    return runWithTimeout(async () => {
       const { publicKey, secretKey } = createKeyPair();
-
+  
       const topic = keyToString(publicKey);
 
       const env = {
         ...process.env,
         NODE_OPTIONS: '',
         ...CONFIG,
-        DEBUG: 'bot-factory,bot-factory:*,dxos:botkit*',
+        DEBUG: 'bot-factory,bot-factory:*,dxos:botkit*,dxos:testing*',
         WIRE_BOT_RESET: 'true',
         WIRE_BOT_TOPIC: topic,
         WIRE_BOT_SECRET_KEY: keyToString(secretKey),
@@ -155,28 +155,28 @@ export class Orchestrator {
 
       const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
 
+      factory.stderr.pipe(process.stderr);
       factory.stdout.pipe(process.stdout);
 
-      factory.stderr.on('data', (data: Buffer) => {
-        if (/"started":true/.test(data.toString())) {
-          log('Bot Factory started.');
+      await new Promise(resolve => {
+        factory.stderr.on('data', (data: Buffer) => {
+          if (/"started":true/.test(data.toString())) {
+            log('Bot Factory started.');
+            resolve();
+          }
+        });
+      });;
 
-          resolve({
-            topic,
-            process: factory
-          });
-        }
-
-        process.stderr.write(data);
-      });
-    });
-
-    return promiseTimeout(result, FACTORY_START_TIMEOUT);
+      return {
+        topic,
+        process: factory
+      }
+    }, FACTORY_START_TIMEOUT, new Error(`Failed to start bot factory: Timed out in ${FACTORY_START_TIMEOUT} ms.`))
   }
 
   async _spawnBot (botPath: string, options: Spawn.SpawnOptions) {
     const { env } = options;
-    const botId = await this._factoryClient.sendSpawnRequest('unnamed', {
+    const botId = await this._factoryClient.sendSpawnRequest(undefined, {
       ...getBotIdentifiers(botPath, env),
       ...options
     });
