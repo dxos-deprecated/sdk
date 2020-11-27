@@ -211,12 +211,12 @@ export class Bot extends EventEmitter {
           }
         });
       });
-  
+
       this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
         transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
-  
+
       await promise;
-    }, CONNECT_TIMEOUT, new Error(`Bot failed to connect to control topic: Timed out in ${CONNECT_TIMEOUT} ms.`))
+    }, CONNECT_TIMEOUT, new Error(`Bot failed to connect to control topic: Timed out in ${CONNECT_TIMEOUT} ms.`));
   }
 
   async _startHeartbeat () {
