@@ -176,7 +176,7 @@ export class Orchestrator {
 
   async _spawnBot (botPath: string, options: Spawn.SpawnOptions) {
     const { env } = options;
-    const botId = await this._factoryClient.sendSpawnRequest('unnamed', {
+    const botId = await this._factoryClient.sendSpawnRequest(undefined, {
       ...getBotIdentifiers(botPath, env),
       ...options
     });
