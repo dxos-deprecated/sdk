@@ -19,15 +19,19 @@ const Registration = () => {
   const client = useClient();
   const config = useConfig();
 
-  const handleFinish = async (username, seedPhrase) => {
+  const clearIdentity = async () => {
     setOpen(false);
 
     // TODO(telackey): Replace with feedStore.deleteAll() once that is published in @dxos/feed-store
     // cf. https://github.com/dxos/feed-store/pull/13
     await Promise.all(client.feedStore.getDescriptors().map(({ path }) => client.feedStore.deleteDescriptor(path)));
+  };
 
+  const handleFinishCreate = async (username, seedPhrase) => {
+    await clearIdentity();
     const identityKeyPair = keyPairFromSeedPhrase(seedPhrase);
     await client.createProfile({ ...identityKeyPair, username });
+
     // await client.partyManager.identityManager.initializeForNewIdentity({
     //   identityDisplayName: username || keyToString(client.partyManager.identityManager.publicKey),
     //   deviceDisplayName: keyToString(client.partyManager.identityManager.deviceManager.publicKey)
@@ -36,12 +40,19 @@ const Registration = () => {
     history.push(createUrl(redirectUrl, rest));
   };
 
+  const handleFinishRestore = async (seedPhrase) => {
+    await clearIdentity();
+    await client.echo.recoverHalo(seedPhrase);
+    history.push(createUrl(redirectUrl, rest));
+  };
+
   return (
     <FullScreen>
       <RegistrationDialog
         open={open}
         debug={config.debug.mode === 'development'}
-        onFinish={handleFinish}
+        onFinishCreate={handleFinishCreate}
+        onFinishRestore={handleFinishRestore}
       />
     </FullScreen>
   );
