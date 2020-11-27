@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
 import { keyPairFromSeedPhrase } from '@dxos/credentials';
+import { decrypt } from '@dxos/crypto';
 import { useClient, useConfig } from '@dxos/react-client';
 import { useQuery, createUrl } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';
@@ -51,9 +52,14 @@ const Registration = () => {
     history.push(createUrl(redirectUrl, rest));
   };
 
+  const keyringDecrypter = async (data, passphrase) => {
+    await client.echo.keyring.loadJSON(decrypt(data, passphrase));
+  };
+
   return (
     <FullScreen>
       <RegistrationDialog
+        keyringDecrypter={keyringDecrypter}
         open={open}
         debug={config.debug.mode === 'development'}
         onFinishCreate={handleFinishCreate}

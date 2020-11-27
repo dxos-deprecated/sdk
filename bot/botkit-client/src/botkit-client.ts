@@ -54,7 +54,7 @@ export class BotFactoryClient {
   /**
    * Send request for bot spawning.
    */
-  async sendSpawnRequest (botName: string | undefined, options: Spawn.SpawnOptions) {
+  async sendSpawnRequest (botName: string, options: Spawn.SpawnOptions) {
     if (!this._connected) {
       await this._connect();
     }
