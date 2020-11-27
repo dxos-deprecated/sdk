@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.20](https://www.github.com/dxos/sdk/compare/v2.7.19...v2.7.20) (2020-11-27)
+
+
+### Bug Fixes
+
+* Reimplement halo recovery ([#395](https://www.github.com/dxos/sdk/issues/395)) ([7ee9c31](https://www.github.com/dxos/sdk/commit/7ee9c31ad2c002e2d44a6505bc86882ca06f5c04))
+
 ### [2.7.19](https://www.github.com/dxos/sdk/compare/v2.7.18...v2.7.19) (2020-11-26)
 
 
