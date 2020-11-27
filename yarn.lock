@@ -1605,6 +1605,17 @@
     pump "^3.0.0"
     source-map-support "^0.5.12"
 
+"@dxos/protocol-plugin-bot@^2.7.17-alpha.0":
+  version "2.7.17-alpha.0"
+  resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-bot/-/protocol-plugin-bot-2.7.17-alpha.0.tgz#5da82aef2426cde3fac788504c5e0fe4bec4764b"
+  integrity sha512-bFDjFC8tF1Hzxv/ttiwYrxKbnMvoUJjKnJBw8rq7cpwqPyX1ZbHq6zRN89W7iL8/stSakE9ZL58X///T4cR2UA==
+  dependencies:
+    "@dxos/broadcast" "^1.0.0-beta.6"
+    "@dxos/codec-protobuf" "^0.2.2"
+    "@dxos/crypto" "1.0.5"
+    "@dxos/protocol" "^1.1.0-beta.19"
+    debug "^4.1.1"
+
 "@dxos/protocol-plugin-replicator@^1.1.0-alpha.4", "@dxos/protocol-plugin-replicator@^1.1.0-beta.14":
   version "1.1.0-beta.18"
   resolved "https://registry.yarnpkg.com/@dxos/protocol-plugin-replicator/-/protocol-plugin-replicator-1.1.0-beta.18.tgz#4b1c39bc27b35c0a05d9bf27c265fcdf5668d4da"

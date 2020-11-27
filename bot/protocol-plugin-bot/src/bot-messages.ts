@@ -78,7 +78,7 @@ export const createInvitationMessage = (topic: string, invitation: InvitationMes
 /**
  * Create arbitrary message to bot.
  */
-export const createBotCommand = (botId: string, command: Buffer): Message => {
+export const createBotCommand = (botId: string | undefined, command: Buffer): Message => {
   assert(botId);
   assert(command);
 
