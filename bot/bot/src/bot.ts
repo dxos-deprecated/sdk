@@ -97,8 +97,6 @@ export class Bot extends EventEmitter {
     await this._preInit();
     await this._client.initialize();
 
-    console.log({ restarted: this._restarted, persistent: this._persistent });
-
     if (!this._persistent || !this._client.getProfile()) {
       const { publicKey, secretKey } = createKeyPair();
       await this._client.createProfile({ publicKey, secretKey, username: this._name });
