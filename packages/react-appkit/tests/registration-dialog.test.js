@@ -17,7 +17,8 @@ describe('RegistrationDialog', () => {
     },
     onFinishRestore: () => {
       finished = true;
-    }
+    },
+    keyringDecrypter: () => console.warn('Not implemented in this test.')
   };
 
   const createInputValue = (val) => {
