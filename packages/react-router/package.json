@@ -24,7 +24,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@dxos/eslint-plugin": "^1.0.8",
+    "@dxos/eslint-plugin": "1.0.8",
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",
     "@storybook/react": "^6.0.21",
