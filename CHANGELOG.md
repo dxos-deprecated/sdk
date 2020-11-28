@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.22](https://www.github.com/dxos/sdk/compare/v2.7.21...v2.7.22) (2020-11-28)
+
+
+### Bug Fixes
+
+* use working codec version for now. ([#402](https://www.github.com/dxos/sdk/issues/402)) ([689ebbd](https://www.github.com/dxos/sdk/commit/689ebbd4bd16a4bb6402d518534930ca897af309))
+
 ### [2.7.21](https://www.github.com/dxos/sdk/compare/v2.7.20...v2.7.21) (2020-11-27)
 
 
