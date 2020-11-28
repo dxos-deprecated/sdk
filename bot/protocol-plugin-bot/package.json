@@ -30,7 +30,7 @@
     "> 5%"
   ],
   "dependencies": {
-    "@dxos/broadcast": "1.0.0-beta.10",
+    "@dxos/broadcast": "1.0.0-beta.11",
     "@dxos/codec-protobuf": "1.1.0-beta.11",
     "@dxos/crypto": "1.0.5",
     "@dxos/protocol": "1.1.0-beta.20",
