@@ -202,19 +202,9 @@ export class Bot extends EventEmitter {
 
   async _connectToControlTopic () {
     await runWithTimeout(async () => {
-      const promise = new Promise(resolve => {
-        // TODO(egorgripasov): Factor out.
-        this._plugin.on('peer:joined', (peerId: Buffer) => {
-          if (peerId.equals(this._botFactoryPeerKey)) {
-            log('Bot factory peer connected');
-            resolve();
-          }
-        });
-      });
-
+      const promise = this._plugin.waitForConnection(this._botFactoryPeerKey);
       this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
         transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
-
       await promise;
     }, CONNECT_TIMEOUT, new Error(`Bot failed to connect to control topic: Timed out in ${CONNECT_TIMEOUT} ms.`));
   }

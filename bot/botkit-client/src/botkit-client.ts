@@ -20,6 +20,7 @@ import {
   Spawn,
   BotCommandResponse
 } from '@dxos/protocol-plugin-bot';
+import { runWithTimeout } from '@dxos/async';
 
 const { log } = logs('botkit-client');
 
@@ -175,35 +176,12 @@ export class BotFactoryClient {
    * Connect to BotFactory.
    */
   async _connect () {
-    await timeout(async () => {
-      const promise = new Promise(resolve => {
-        // TODO(egorgripasov): Factor out.
-        this._botPlugin.on('peer:joined', (peerId: Buffer) => {
-          if (peerId.equals(this._botFactoryPeerId)) {
-            log('Bot factory peer connected');
-            this._connected = true;
-            resolve();
-          }
-        });
-      });
-
+    await runWithTimeout(async () => {
+      const promise = this._botPlugin.waitForConnection(this._botFactoryPeerId);
       await this._networkManager.joinProtocolSwarm(this._botFactoryTopic,
         transportProtocolProvider(this._botFactoryTopic, this._peerId, this._botPlugin));
-
       await promise;
-    }, CONNECT_TIMEOUT, () => new Error(`Failed to connect to bot factory: Timed out in ${CONNECT_TIMEOUT}ms.`));
+      this._connected = true;
+    }, CONNECT_TIMEOUT, new Error(`Failed to connect to bot factory: Timed out in ${CONNECT_TIMEOUT}ms.`));
   }
-}
-
-// TODO(marik-d): Move to async (replace existing implemetation).
-function timeout<T> (action: () => Promise<T>, timeout: number, getError?: () => Error) {
-  function throwOnTimeout (timeout: number, getError: () => Error) {
-    // eslint-disable-next-line promise/param-names
-    return new Promise((_, reject) => setTimeout(() => reject(getError()), timeout));
-  }
-
-  return Promise.race([
-    action(),
-    throwOnTimeout(timeout, getError ?? (() => new Error(`Timed out in ${timeout}ms.`)))
-  ]);
 }

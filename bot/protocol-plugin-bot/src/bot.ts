@@ -161,6 +161,16 @@ export class BotPlugin extends EventEmitter {
     return response;
   }
 
+  waitForConnection(peerId: Buffer): Promise<void> {
+    return new Promise(resolve => {
+      this.on('peer:joined', (connectedPeerId: Buffer) => {
+        if (connectedPeerId.equals(peerId)) {
+          resolve();
+        }
+      });
+    });
+  }
+
   /**
    * Add peer.
    */
