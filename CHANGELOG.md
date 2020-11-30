@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.23](https://www.github.com/dxos/sdk/compare/v2.7.22...v2.7.23) (2020-11-30)
+
+
+### Bug Fixes
+
+* Update deps. ([#409](https://www.github.com/dxos/sdk/issues/409)) ([c1516a1](https://www.github.com/dxos/sdk/commit/c1516a1742394e048e7c2e0618a1028b60296cfe))
+
 ### [2.7.22](https://www.github.com/dxos/sdk/compare/v2.7.21...v2.7.22) (2020-11-28)
 
 
