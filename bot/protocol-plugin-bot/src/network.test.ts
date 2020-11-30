@@ -3,6 +3,9 @@ import { NetworkManager, SwarmProvider, transportProtocolProvider } from '@dxos/
 import { createStorage } from '@dxos/random-access-multi-storage';
 import {BotPlugin} from './bot';
 import { randomBytes } from '@dxos/crypto';
+import debug from 'debug'
+
+const log = debug('dxos:protocol-plugin-bot:test')
 
 test('many bots connected to control topic', async () => {
   const createPeer = (controlTopic: Buffer, peerId: Buffer) => {
@@ -23,6 +26,8 @@ test('many bots connected to control topic', async () => {
   const controlPeer = createPeer(controlTopic, controlTopic);
   for(let i = 0; i < 15; i++) {
     const peer = createPeer(controlTopic, randomBytes());
+    const before = Date.now();
     await peer.waitForConnection(controlTopic);
+    log(`Peer #${i} took ${Date.now() - before} ms to connect`)
   }
 }, 60_000)
