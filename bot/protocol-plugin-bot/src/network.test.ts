@@ -17,14 +17,14 @@ test('many bots connected to control topic', async () => {
     }));
   
     const plugin = new BotPlugin(peerId, (protocol, message) => {});
-    networkManager.joinProtocolSwarm(controlTopic, transportProtocolProvider(controlTopic, controlTopic, plugin));
+    networkManager.joinProtocolSwarm(controlTopic, transportProtocolProvider(controlTopic, peerId, plugin));
 
     return plugin;
   }
 
   const controlTopic = randomBytes();
   const controlPeer = createPeer(controlTopic, controlTopic);
-  for(let i = 0; i < 15; i++) {
+  for(let i = 0; i < 5; i++) {
     const peer = createPeer(controlTopic, randomBytes());
     const before = Date.now();
     await peer.waitForConnection(controlTopic);
