@@ -30,7 +30,7 @@
   "dependencies": {
     "@dxos/botkit": "2.7.44",
     "@dxos/editor-core": "~1.0.0-beta.33",
-    "@dxos/text-model": "~1.0.0-beta.28",
+    "@dxos/text-model": "~2.6.6-alpha.0",
     "simple-git": "^2.20.1"
   },
   "devDependencies": {
