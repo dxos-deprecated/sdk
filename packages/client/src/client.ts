@@ -41,6 +41,10 @@ export interface ClientConfig {
     server: string,
     chainId: string,
   },
+  ipfs?: {
+    server: string,
+    gateway: string,
+  }
   snapshots?: boolean
   snapshotInterval?: number
 }

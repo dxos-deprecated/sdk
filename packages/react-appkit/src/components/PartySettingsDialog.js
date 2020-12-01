@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, displayName: initialDisplayName }) => {
+const PartySettingsDialog = ({ open, onClose, properties = {}, onExportToFile, onExportToIpfs, displayName: initialDisplayName }) => {
   const classes = useStyles();
   const [active, setActive] = useState(properties.active);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
@@ -64,7 +64,7 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, display
     setExportedCid(undefined);
 
     try {
-      const cid = await onExport(true);
+      const cid = await onExportToIpfs();
       setExportedCid(cid);
     } catch (e) {
       console.error(e);
@@ -151,15 +151,15 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExport, display
       </Snackbar>
 
       <DialogActions>
-        {onExport && (
-          <>
-            <Button onClick={handleExportToIPFS} color='secondary' disabled={inProgress}>
+        {handleExportToIPFS && (
+          <Button onClick={handleExportToIPFS} color='secondary' disabled={inProgress}>
               Export to IPFS
-            </Button>
-            <Button onClick={() => onExport(false)} color='secondary' disabled={inProgress}>
+          </Button>
+        )}
+        {onExportToFile && (
+          <Button onClick={onExportToFile} color='secondary' disabled={inProgress}>
               Export to file
-            </Button>
-          </>
+          </Button>
         )}
 
         <Button onClick={handleClose} color='primary'>

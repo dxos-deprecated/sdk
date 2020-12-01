@@ -8,15 +8,17 @@ import { keyToString } from '@dxos/crypto';
 import { useClient, useItems } from '@dxos/react-client';
 
 import { DefaultSettingsDialog, PartyCard } from '../components';
-import { useAppRouter, usePads } from '../hooks';
+import { download } from '../helpers';
+import { useAppRouter, usePads, usePartyRestore } from '../hooks';
 
-const PartyCardContainer = ({ party }) => {
+const PartyCardContainer = ({ party, ipfs }) => {
   const client = useClient();
   const router = useAppRouter();
   const [pads] = usePads();
   const items = useItems({ partyKey: party.key, type: pads.map(pad => pad.type) });
   const [newItemType, setNewItemType] = useState(undefined);
   const [itemSettingsOpen, setItemSettingsOpen] = useState(false);
+  const partyRestore = usePartyRestore(party.key, pads);
 
   const handleSavedSettings = async ({ name }, metadata = {}, callback) => {
     const pad = pads.find(p => p.type === newItemType);
@@ -36,6 +38,16 @@ const PartyCardContainer = ({ party }) => {
     setItemSettingsOpen(true);
   };
 
+  const handleExportToIpfs = async () => {
+    const data = partyRestore.export();
+    return ipfs.upload(data, 'text/plain');
+  };
+
+  const handleExportToFile = async () => {
+    const data = partyRestore.export();
+    download(data, `${party.displayName || 'party-contents'}.json`);
+  };
+
   const pad = newItemType ? pads.find(pad => pad.type === newItemType) : undefined;
   const Settings = (pad && pad.settings) ? pad.settings : DefaultSettingsDialog;
 
@@ -48,7 +60,8 @@ const PartyCardContainer = ({ party }) => {
         router={router}
         pads={pads}
         onNewItemRequested={handleNewItemRequested}
-        onExport={undefined} // not yet ported
+        onExportToFile={handleExportToFile}
+        onExport={ipfs ? handleExportToIpfs : undefined}
       />
       <Settings
         party={party}

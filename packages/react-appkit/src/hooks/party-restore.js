@@ -5,13 +5,13 @@
 import assert from 'assert';
 import { useEffect, useState } from 'react';
 
-import { useModel } from '@dxos/react-client';
+import { useItems } from '@dxos/react-client';
 
 /**
  * Provides a model for all the party contents,
  * can be used to download/save a party
  */
-export const usePartyRestore = (topic, pads) => {
+export const usePartyRestore = (partyKey, pads) => {
   const [items, setItems] = useState([]);
 
   const type = [
@@ -19,14 +19,15 @@ export const usePartyRestore = (topic, pads) => {
     ...pads.map(p => p.contentType).flat()
   ].filter(t => !!t);
 
-  const model = useModel({ model: undefined, options: { type, topic } });
+  const itemsModel = useItems({ partyKey: partyKey.asUint8Array(), type });
+  console.log('usePartyRestore itemsModel', itemsModel)
 
-  useEffect(() => {
-    if (!model) {
-      return;
-    }
-    setItems(model.messages);
-  }, [model]);
+  // useEffect(() => {
+  //   if (!model) {
+  //     return;
+  //   }
+  //   setItems(model.messages);
+  // }, [model]);
 
   return {
     export: () => {

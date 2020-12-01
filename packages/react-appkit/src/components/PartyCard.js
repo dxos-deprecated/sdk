@@ -123,7 +123,8 @@ const PartyCard = ({
   items,
   onNewItemRequested,
   onNewParty = undefined,
-  onExport = undefined
+  onExportToFile = undefined,
+  onExportToIpfs = undefined
 }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
@@ -311,7 +312,8 @@ const PartyCard = ({
             showDeleted,
             active: party.isActive()
           }}
-          onExport={onExport}
+          onExportToFile={onExportToFile}
+          onExportToIpfs={onExportToIpfs}
           displayName={displayName}
           onClose={async ({ showDeleted, displayName, active }) => {
             party.setProperty('displayName', displayName);
