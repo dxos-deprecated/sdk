@@ -280,7 +280,7 @@ const AppBar = ({
     action(ACTION_DEVICE_INVITATION)
   ];
 
-  menuItems.push(action(ACTION_EXPORT_KEYRING));
+  // menuItems.push(action(ACTION_EXPORT_KEYRING)); // ISSUE: https://github.com/dxos/echo/issues/339#issuecomment-735918728
 
   if (onSettingsOpened) {
     menuItems.push(action(ACTION_OPEN_SETTINGS));
