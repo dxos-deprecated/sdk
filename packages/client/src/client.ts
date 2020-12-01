@@ -18,6 +18,7 @@ import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
 import { isNode } from './platform';
+import { DevtoolsContext } from './devtools-context';
 
 export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
 export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown';
@@ -290,6 +291,16 @@ export class Client {
   // TODO(burdon): Separate wrapper for devtools?
   //
 
+  getDevtoolsContext (): DevtoolsContext {
+    const devtoolsContext: DevtoolsContext = {
+      client: this,
+      feedStore: this._echo.feedStore,
+      networkManager: this._echo.networkManager,
+      modelFactory: this._echo.modelFactory
+    };
+    return devtoolsContext;
+  }
+
   /**
    * @deprecated Use echo.keyring
    */
@@ -297,27 +308,27 @@ export class Client {
     return this._echo.keyring;
   }
 
-  /**
-   * @deprecated Use echo.feedStore
-   */
-  get feedStore (): FeedStore {
-    return this._echo.feedStore;
-  }
+  // /**
+  //  * @deprecated Use echo.feedStore
+  //  */
+  // get feedStore (): FeedStore {
+  //   return this._echo.feedStore;
+  // }
 
-  /**
-   * @deprecated Use echo.networkManager.
-   */
-  get networkManager (): NetworkManager {
-    return this._echo.networkManager;
-  }
+  // /**
+  //  * @deprecated Use echo.networkManager.
+  //  */
+  // get networkManager (): NetworkManager {
+  //   return this._echo.networkManager;
+  // }
 
-  /**
-   * @deprecated
-   */
-  get modelFactory () {
-    console.warn('client.modelFactory is deprecated.');
-    return this._echo.modelFactory;
-  }
+  // /**
+  //  * @deprecated
+  //  */
+  // get modelFactory () {
+  //   console.warn('client.modelFactory is deprecated.');
+  //   return this._echo.modelFactory;
+  // }
 }
 
 // TODO(burdon): Shouldn't be here.
