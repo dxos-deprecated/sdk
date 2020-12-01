@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -33,6 +33,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
     setStep(0);
     setInvitationCode('');
     setPinCode('');
+    setIsProcessing(false);
     onClose();
   };
 
@@ -49,6 +50,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
   const [step, setStep] = useState(0); // TODO(burdon): Const.
   const [invitationCode, setInvitationCode] = useState('');
   const [pinCode, setPinCode] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleEnterInvitationCode = async () => {
     redeemCode(invitationCode);
@@ -56,6 +58,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
   };
 
   const handleEnterPinCode = async () => {
+    setIsProcessing(true);
     setPin(pinCode);
   };
 
@@ -84,7 +87,12 @@ const RedeemDialog = ({ onClose, ...props }) => {
           </DialogContent>
           <DialogActions>
             <Button color='secondary' onClick={handleDone}>Cancel</Button>
-            <Button color='primary' onClick={handleEnterInvitationCode}>Submit</Button>
+            <Button
+              color='primary'
+              onClick={handleEnterInvitationCode}
+              disabled={isProcessing}>
+              Submit
+            </Button>
           </DialogActions>
         </>
       )}
@@ -104,11 +112,18 @@ const RedeemDialog = ({ onClose, ...props }) => {
               fullWidth
               label='PIN Code'
               autoFocus
+              disabled={isProcessing}
             />
+            {isProcessing && <LinearProgress/>}
           </DialogContent>
           <DialogActions>
             <Button color='secondary' onClick={handleDone}>Cancel</Button>
-            <Button color='primary' onClick={handleEnterPinCode}>Submit</Button>
+            <Button
+              color='primary'
+              onClick={handleEnterPinCode}
+              disabled={isProcessing}>
+              Submit
+            </Button>
           </DialogActions>
         </>
       )}
