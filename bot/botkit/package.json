@@ -1,6 +1,6 @@
 {
   "name": "@dxos/botkit",
-  "version": "2.7.14-alpha.0",
+  "version": "2.7.23-alpha.0",
   "description": "Botkit",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -14,14 +14,14 @@
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
   "dependencies": {
-    "@dxos/async": "1.0.0-beta.10",
-    "@dxos/client": "^2.7.14-alpha.0",
-    "@dxos/config": "^1.0.0-beta.73",
-    "@dxos/credentials": "^2.0.0",
-    "@dxos/crypto": "^1.0.0-beta.10",
-    "@dxos/network-manager": "^1.0.0-beta.108",
-    "@dxos/protocol-plugin-bot": "beta",
-    "@dxos/random-access-multi-storage": "^1.1.0-beta.7",
+    "@dxos/async": "1.0.2-alpha.0",
+    "@dxos/client": "^2.7.23-alpha.0",
+    "@dxos/config": "1.0.0-beta.74",
+    "@dxos/credentials": "2.1.12-alpha.0",
+    "@dxos/crypto": "1.0.5",
+    "@dxos/network-manager": "1.0.0-beta.113",
+    "@dxos/protocol-plugin-bot": "^2.7.23-alpha.0",
+    "@dxos/random-access-multi-storage": "1.1.0-beta.7",
     "@wirelineio/registry-client": "^1.1.0-beta.2",
     "assert": "^2.0.0",
     "chance": "^1.1.6",
@@ -38,6 +38,8 @@
     "memdown": "^5.1.0",
     "moment": "^2.24.0",
     "node-watch": "^0.6.4",
+    "pkg-up": "^3.1.0",
+    "playwright": "^1.6.1",
     "random-access-memory": "^3.1.1",
     "read-pkg-up": "^7.0.1",
     "tcp-port-used": "^1.0.1",
@@ -45,7 +47,7 @@
     "uuidv4": "^6.0.2"
   },
   "devDependencies": {
-    "@dxos/eslint-plugin": "^1.0.8",
+    "@dxos/eslint-plugin": "1.0.8",
     "@types/chance": "^1.1.0",
     "@types/download": "^6.2.4",
     "@types/fs-extra": "^9.0.4",

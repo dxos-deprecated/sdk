@@ -2,52 +2,39 @@
 // Copyright 2020 DXOS.org
 //
 
-import { Spawn } from '@dxos/protocol-plugin-bot';
+import { ReadOnlyEvent } from '@dxos/async';
 
-import { BotInfo } from '../bot-manager';
+import { BotId, BotInfo } from '../bot-manager';
 
-/**
- * Container specific attributes for bot startup.
- */
-export interface BotAttributes {
-  childDir: string,
-  command: string,
-  args: string[]
+export interface ContainerStartOptions {
+  controlTopic: Buffer
+}
+
+export interface BotExitEventArgs {
+  botId: BotId
+  exitCode: number
 }
 
 export interface BotContainer {
+  /**
+   * Start container.
+   */
+  start(options: ContainerStartOptions): Promise<void>
 
-  start(options: any): Promise<void>
+  /**
+   * Stop container.
+   */
+  stop(): Promise<void>;
 
-  on(event: 'bot-close', cb: (botId: string, code: number) => void): void;
-
-  getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<BotAttributes>;
+  botExit: ReadOnlyEvent<BotExitEventArgs>;
 
   /**
    * Start bot instance.
    */
-  startBot (botId: string, botInfo: BotInfo | undefined, options: any): Promise<BotInfo>;
-
-  stopBot (botInfo: BotInfo): Promise<void>
-
-  killBot (botInfo: BotInfo): Promise<void>;
+  startBot (botInfo: BotInfo): Promise<void>;
 
   /**
-   * Serializes BotInfo into JSON state that's gonna be persisted across restarts.
+   * Stop bot instance.
    */
-  serializeBot (botInfo: BotInfo): any;
-
-  stop(): Promise<void>;
+  stopBot (botInfo: BotInfo): Promise<void>
 }
-
-// Command to spawn to run a bot in local development mode.
-export const LOCAL_BOT_RUN_COMMAND = 'yarn';
-
-// Fixed arguments to pass to LOCAL_BOT_RUN_COMMAND.
-export const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
-
-// Binary file inside downloaded bot package to run.
-export const NATIVE_BOT_MAIN_FILE = 'main.bin';
-
-// Js file inside Node.js bot package.
-export const NODE_BOT_MAIN_FILE = 'main.js';

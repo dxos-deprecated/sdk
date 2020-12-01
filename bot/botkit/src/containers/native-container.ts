@@ -5,7 +5,9 @@
 import path from 'path';
 
 import { CommandInfo, ChildProcessContainer } from './child-process-container';
-import { NATIVE_BOT_MAIN_FILE } from './common';
+
+// Binary file inside downloaded bot package to run.
+const NATIVE_BOT_MAIN_FILE = 'main.bin';
 
 /**
  * Native Bot Container; Used for spawning bots as native binaries.

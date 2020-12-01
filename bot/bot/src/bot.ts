@@ -7,7 +7,7 @@ import debug from 'debug';
 import { EventEmitter } from 'events';
 import { join } from 'path';
 
-import { promiseTimeout } from '@dxos/async';
+import { runWithTimeout } from '@dxos/async';
 import { Client } from '@dxos/client';
 import { randomBytes, keyToBuffer, keyToString, createKeyPair } from '@dxos/crypto';
 import { InvitationDescriptor, Party } from '@dxos/echo-db';
@@ -52,7 +52,7 @@ export class Bot extends EventEmitter {
   private readonly _config: any;
 
   private _plugin?: any /* BotPlugin */;
-  private _client?: Client;
+  protected _client?: Client;
 
   private _leaveControlSwarm?: () => void;
 
@@ -97,7 +97,7 @@ export class Bot extends EventEmitter {
     await this._preInit();
     await this._client.initialize();
 
-    if (!this._restarted || !this._persistent) {
+    if (!this._persistent || !this._client.getProfile()) {
       const { publicKey, secretKey } = createKeyPair();
       await this._client.createProfile({ publicKey, secretKey, username: this._name });
       log(`Identity initialized: ${keyToString(publicKey)}`);
@@ -192,7 +192,7 @@ export class Bot extends EventEmitter {
 
   _onJoin (parties: Party[] = []) {
     parties.map(party => {
-      const topic = keyToString(party.key);
+      const topic = party.key.toString();
       if (!this._parties.has(topic)) {
         this._parties.add(topic);
         this.emit('party', party.key);
@@ -201,20 +201,22 @@ export class Bot extends EventEmitter {
   }
 
   async _connectToControlTopic () {
-    const connect = new Promise(resolve => {
-      // TODO(egorgripasov): Factor out.
-      this._plugin.on('peer:joined', (peerId: Buffer) => {
-        if (peerId.equals(this._botFactoryPeerKey)) {
-          log('Bot factory peer connected');
-          resolve();
-        }
+    await runWithTimeout(async () => {
+      const promise = new Promise(resolve => {
+        // TODO(egorgripasov): Factor out.
+        this._plugin.on('peer:joined', (peerId: Buffer) => {
+          if (peerId.equals(this._botFactoryPeerKey)) {
+            log('Bot factory peer connected');
+            resolve();
+          }
+        });
       });
-    });
 
-    this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
-      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
+      this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
+        transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
 
-    return promiseTimeout(connect, CONNECT_TIMEOUT);
+      await promise;
+    }, CONNECT_TIMEOUT, new Error(`Bot failed to connect to control topic: Timed out in ${CONNECT_TIMEOUT} ms.`));
   }
 
   async _startHeartbeat () {

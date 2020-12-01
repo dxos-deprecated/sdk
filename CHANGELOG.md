@@ -1,5 +1,69 @@
 # Changelog
 
+### [2.7.23](https://www.github.com/dxos/sdk/compare/v2.7.22...v2.7.23) (2020-11-30)
+
+
+### Bug Fixes
+
+* Update deps. ([#409](https://www.github.com/dxos/sdk/issues/409)) ([c1516a1](https://www.github.com/dxos/sdk/commit/c1516a1742394e048e7c2e0618a1028b60296cfe))
+
+### [2.7.22](https://www.github.com/dxos/sdk/compare/v2.7.21...v2.7.22) (2020-11-28)
+
+
+### Bug Fixes
+
+* use working codec version for now. ([#402](https://www.github.com/dxos/sdk/issues/402)) ([689ebbd](https://www.github.com/dxos/sdk/commit/689ebbd4bd16a4bb6402d518534930ca897af309))
+
+### [2.7.21](https://www.github.com/dxos/sdk/compare/v2.7.20...v2.7.21) (2020-11-27)
+
+
+### Bug Fixes
+
+* Keychain import and export ([#398](https://www.github.com/dxos/sdk/issues/398)) ([4cee55b](https://www.github.com/dxos/sdk/commit/4cee55b5f3cafd4557b629f61c9298dfe9bee95e))
+
+### [2.7.20](https://www.github.com/dxos/sdk/compare/v2.7.19...v2.7.20) (2020-11-27)
+
+
+### Bug Fixes
+
+* Reimplement halo recovery ([#395](https://www.github.com/dxos/sdk/issues/395)) ([7ee9c31](https://www.github.com/dxos/sdk/commit/7ee9c31ad2c002e2d44a6505bc86882ca06f5c04))
+
+### [2.7.19](https://www.github.com/dxos/sdk/compare/v2.7.18...v2.7.19) (2020-11-26)
+
+
+### Bug Fixes
+
+* Remove broken humanize ([8ad4f84](https://www.github.com/dxos/sdk/commit/8ad4f848f0b45f41392d3b5d6a627aa860d95d69))
+
+### [2.7.18](https://www.github.com/dxos/sdk/compare/v2.7.17...v2.7.18) (2020-11-26)
+
+
+### Bug Fixes
+
+* First version of party activation ([#390](https://www.github.com/dxos/sdk/issues/390)) ([84cc1f1](https://www.github.com/dxos/sdk/commit/84cc1f117c95c83af9d4683805a6127978614988)), closes [#387](https://www.github.com/dxos/sdk/issues/387) [#387](https://www.github.com/dxos/sdk/issues/387)
+* Initial attempt at party names ([#388](https://www.github.com/dxos/sdk/issues/388)) ([5c18e80](https://www.github.com/dxos/sdk/commit/5c18e80d7bb96b3b0ea881624176119afb50b0a9))
+
+### [2.7.17](https://www.github.com/dxos/sdk/compare/v2.7.16...v2.7.17) (2020-11-25)
+
+
+### Bug Fixes
+
+* Release SDK with ECHO 2.6.5 ([ca733a0](https://www.github.com/dxos/sdk/commit/ca733a01e78bf4655b2837e409c853259d36d2e1))
+
+### [2.7.16](https://www.github.com/dxos/sdk/compare/v2.7.15...v2.7.16) (2020-11-24)
+
+
+### Bug Fixes
+
+* Device invitation flow uniform with regular invitations ([#378](https://www.github.com/dxos/sdk/issues/378)) ([a436387](https://www.github.com/dxos/sdk/commit/a436387768077de6de415ebc01d373c1d400f694))
+
+### [2.7.15](https://www.github.com/dxos/sdk/compare/v2.7.14...v2.7.15) (2020-11-23)
+
+
+### Bug Fixes
+
+* Add first version of device invite ([#372](https://www.github.com/dxos/sdk/issues/372)) ([dec8ee4](https://www.github.com/dxos/sdk/commit/dec8ee4a045b975b4a6937a7802bb9490930d8df))
+
 ### [2.7.14](https://www.github.com/dxos/sdk/compare/v2.7.13...v2.7.14) (2020-11-20)
 
 

@@ -5,22 +5,20 @@
 import { useEffect, useState, useMemo } from 'react';
 
 import { trigger } from '@dxos/async';
-import { keyToString } from '@dxos/crypto';
+import { InvitationDescriptor } from '@dxos/echo-db';
 
 import { useClient } from './client';
 
 /**
  * Handles the invitation handshake.
- * @param {InvitationDescriptor} invitation
- * @returns {[Object, function]}
  */
-export const useAuthenticator = (invitation) => {
+export const useAuthenticator = (invitation: InvitationDescriptor) => {
   const client = useClient();
-  const [state, setState] = useState({});
+  const [state, setState] = useState<any>({});
   const hash = invitation ? invitation.hash : '';
 
-  // Memoize these functions by inivitation hash.
-  const [secretProvider, secretResolver] = useMemo(() => trigger(), [hash]);
+  // Memoize these functions by invitation hash.
+  const [secretProvider, secretResolver] = useMemo(() => trigger<Buffer>(), [hash]);
 
   useEffect(() => {
     if (!invitation) {
@@ -34,19 +32,15 @@ export const useAuthenticator = (invitation) => {
       if (invitation.identityKey) {
         // An invitation for this device to join an existing Identity.
         // Join the Identity
-        await client.admitDevice(invitation, secretProvider);
+        await client.echo.joinHalo(invitation, secretProvider);
         if (!signal.aborted) {
-          setState({ identity: keyToString(invitation.identityKey) });
-        }
-      } else {
-        const party = await client.database.joinParty(invitation, secretProvider);
-        if (!signal.aborted) {
-          setState({ topic: keyToString(party.key) });
+          setState({ identity: invitation.identityKey.toString() });
         }
       }
     }
 
     runEffect().catch(err => {
+      console.error(err);
       // TODO(burdon): Doesn't support retry. Provide hint (e.g., should retry/cancel).
       if (!signal.aborted) {
         setState({ error: String(err) });

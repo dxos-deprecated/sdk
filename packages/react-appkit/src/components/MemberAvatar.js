@@ -37,7 +37,7 @@ export const getAvatarStyle = (theme, publicKey) => {
 };
 
 const MemberAvatar = ({ member }) => (
-  <Avatar style={getAvatarStyle(useTheme(), member.publicKey)}>
+  <Avatar style={getAvatarStyle(useTheme(), member.publicKey.asUint8Array())}>
     {member.displayName ? member.displayName.slice(0, 1).toUpperCase() : <FaceIcon />}
   </Avatar>
 );

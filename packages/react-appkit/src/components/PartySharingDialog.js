@@ -31,7 +31,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useTheme } from '@material-ui/styles';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
-import { humanize, keyToBuffer, keyToString, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { useClient, useContacts, useInvitation, useOfflineInvitation } from '@dxos/react-client';
 
 import { useMembers } from '../hooks';
@@ -169,7 +169,6 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const [invitations, setInvitations] = useState([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
-  const topic = keyToString(party.key);
 
   const members = useMembers(party);
   const [contacts] = useContacts();
@@ -179,7 +178,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const createOfflineInvitation = (contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
 
   const handleBotInvite = async (botFactoryTopic, botId, spec = {}) => {
-    const botFactoryClient = new BotFactoryClient(client.networkManager, botFactoryTopic);
+    const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
 
     const secretProvider = () => {};
 
@@ -193,7 +192,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
     const invitation = await party.createInvitation({ secretValidator, secretProvider });
 
     const botUID = await botFactoryClient.sendSpawnRequest(botId);
-    await botFactoryClient.sendInvitationRequest(botUID, topic, spec, invitation.toQueryParameters());
+    await botFactoryClient.sendInvitationRequest(botUID, party.key.toHex(), spec, invitation.toQueryParameters());
     setBotDialogVisible(false);
   };
 
@@ -271,7 +270,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
                       <MemberAvatar member={member} />
                     </TableCell>
                     <TableCell>
-                      {member.displayName || humanize(member.publicKey)}
+                      {member.displayName || 'Loading...'}
                     </TableCell>
                     <TableCell />
                     <TableCell classes={{ root: classes.colStatus }}>
@@ -295,7 +294,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
                       <MemberAvatar member={contact} />
                     </TableCell>
                     <TableCell>
-                      {contact.displayName || humanize(contact.publicKey)}
+                      {contact.displayName || 'Loading...'}
                     </TableCell>
                     <TableCell />
                     <TableCell classes={{ root: classes.colStatus }}>

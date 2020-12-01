@@ -120,6 +120,7 @@ const Passcode = (props) => {
           onBlur={handleFocus}
           onFocus={handleFocus}
           autoFocus
+          data-testid="passcode-input"
         />
       )}
 
