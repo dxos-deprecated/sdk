@@ -157,6 +157,21 @@ const PartyCard = ({
     );
   }
 
+  if (!party.isOpen) {
+    console.log('party is closed, title: ', party.title);
+    // return null;
+  }
+
+  try {
+    console.log('party is ', party.isOpen ? 'open' : 'closed');
+    console.log('title is: ', party.title);
+  } catch (e) {
+    console.error(e.stack);
+    return null;
+  }
+
+  const displayName = party.title || 'Untitled';
+
   if (!party.isActive()) {
     return (
       <>
@@ -180,7 +195,7 @@ const PartyCard = ({
                 variant='h5'
                 className='party-header-title'
               >
-                Closed party
+                {displayName}
               </Typography>
             }
           />
@@ -198,8 +213,6 @@ const PartyCard = ({
       </>
     );
   }
-
-  const displayName = getPartyName(party) || 'Untitled';
 
   return (
     <>
@@ -312,9 +325,9 @@ const PartyCard = ({
             active: party.isActive()
           }}
           onExport={onExport}
-          displayName={displayName}
           onClose={async ({ showDeleted, displayName, active }) => {
-            party.setProperty('displayName', displayName);
+            // party.setProperty('displayName', displayName);
+            await party.setTitle(displayName);
             setShowDeleted(showDeleted);
             if (active && !party.isActive()) {
               await party.activate({ global: true });
