@@ -2,7 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Publish to NPM (main branch => x.x.x-alpha.x)
+name: Publish to NPM (main branch => x.x.x-alpha.0)
 
 on:
   push:
