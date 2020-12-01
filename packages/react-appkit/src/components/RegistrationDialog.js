@@ -247,9 +247,10 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
                 </Paper>
               </div>
             </DialogContent>
-            <DialogActions>
+            {/* ISSUE: https://github.com/dxos/echo/issues/339#issuecomment-735918728 */}
+            {/* <DialogActions>
               <Button variant='text' color='secondary' onClick={() => setStage(STAGE_IMPORT_KEYRING)}>Import Keyring</Button>
-            </DialogActions>
+            </DialogActions> */}
           </>
         );
       }
