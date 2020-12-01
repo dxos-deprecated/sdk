@@ -2,7 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Publish to NPM (from release branch)
+name: Publish to NPM (release branch => x.x.x)
 
 on:
   push:
@@ -20,8 +20,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Build and NPM publish
         run: |
-          git config --global user.email "npm@dxos.network"
-          git config --global user.name "DXOS"
+          git config --global user.email "devops@dxos.org"
+          git config --global user.name "DXOS.org"
           yarn
           yarn lint:lockfile
           yarn lint
