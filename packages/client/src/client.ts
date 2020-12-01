@@ -291,6 +291,9 @@ export class Client {
   // TODO(burdon): Separate wrapper for devtools?
   //
 
+  /**
+   * Returns devtools context
+   */
   getDevtoolsContext (): DevtoolsContext {
     const devtoolsContext: DevtoolsContext = {
       client: this,
