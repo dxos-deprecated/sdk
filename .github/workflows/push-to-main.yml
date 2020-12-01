@@ -2,7 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Trigger release-please
+name: Publish to NPM (main branch => x.x.x-alpha.0)
 
 on:
   push:
@@ -19,7 +19,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           package-name: '@dxos/sdk'
-      # NPM publishing.
       - uses: actions/checkout@v2
         # Only publish when a new release is created.
         if: ${{ steps.release.outputs.release_created }}
@@ -30,8 +29,8 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
       - name: Lerna Publish
         run: |
-          git config --global user.email "npm@dxos.network"
-          git config --global user.name "DXOS"
+          git config --global user.email "devops@dxos.org"
+          git config --global user.name "DXOS.org"
           yarn
           yarn lint:lockfile
           yarn build
