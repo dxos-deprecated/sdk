@@ -5,9 +5,9 @@
 import assert from 'assert';
 import { keyPair } from 'hypercore-crypto';
 
-import { promiseTimeout } from '@dxos/async';
+import { keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
-
+import { NetworkManager, transportProtocolProvider } from '@dxos/network-manager';
 import {
   BotPlugin,
   createSpawnCommand,
@@ -16,11 +16,10 @@ import {
   createBotManagementCommand,
   createResetCommand,
   createStopCommand,
-  createBotCommand
+  createBotCommand,
+  Spawn,
+  BotCommandResponse
 } from '@dxos/protocol-plugin-bot';
-
-import { keyToBuffer } from '@dxos/crypto';
-import { transportProtocolProvider } from '@dxos/network-manager';
 
 const { log } = logs('botkit-client');
 
@@ -30,12 +29,14 @@ const CONNECT_TIMEOUT = 30000;
  * BotFactory Client.
  */
 export class BotFactoryClient {
-  /**
-   * Constructor
-   * @param {NetworkManager} networkManager
-   * @param {String} botFactoryTopic
-   */
-  constructor (networkManager, botFactoryTopic) {
+  _botFactoryTopic: Buffer;
+  _botFactoryPeerId: Buffer;
+  _networkManager: NetworkManager;
+  _peerId: Buffer;
+  _botPlugin: BotPlugin;
+  _connected: Boolean;
+
+  constructor (networkManager: NetworkManager, botFactoryTopic: string) {
     assert(botFactoryTopic);
     assert(networkManager);
 
@@ -52,26 +53,25 @@ export class BotFactoryClient {
 
   /**
    * Send request for bot spawning.
-   * @param {String} botName
-   * @param {Object} options
    */
-  async sendSpawnRequest (botName, options) {
+  async sendSpawnRequest (botName: string | undefined, options: Spawn.SpawnOptions) {
     if (!this._connected) {
       await this._connect();
     }
 
     log(`Sending spawn request for bot ${botName}`);
-    const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
-      createSpawnCommand(botName, options));
+    const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic, createSpawnCommand(botName, options));
 
     assert(spawnResponse, `Unable to spawn bot ${botName}`);
+    // eslint-disable-next-line camelcase
+    assert(spawnResponse.message?.__type_url === 'dxos.protocol.bot.SpawnResponse', 'Invalid response type');
 
     const { message: { botId } } = spawnResponse;
 
     return botId;
   }
 
-  async sendBotManagementRequest (botId, command) {
+  async sendBotManagementRequest (botId: string, command: string) {
     if (!this._connected) {
       await this._connect();
     }
@@ -81,6 +81,8 @@ export class BotFactoryClient {
 
     const response =
       await this._botPlugin.sendCommand(this._botFactoryTopic, createBotManagementCommand(botId, command));
+    // eslint-disable-next-line camelcase
+    assert(response?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = response;
 
     if (error) {
@@ -90,12 +92,8 @@ export class BotFactoryClient {
 
   /**
    * Send request for bot invitation.
-   * @param {String} botId
-   * @param {String} partyToJoin
-   * @param {Object} spec
-   * @param {Object} invitation
    */
-  async sendInvitationRequest (botId, partyToJoin, spec, invitation) {
+  async sendInvitationRequest (botId: string, partyToJoin: string, spec: Object, invitation: Object) {
     if (!this._connected) {
       await this._connect();
     }
@@ -103,6 +101,8 @@ export class BotFactoryClient {
     log(`Sending spawn request for party: ${partyToJoin} with invitation id: ${invitation}`);
     const invitationResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
       createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation)));
+    // eslint-disable-next-line camelcase
+    assert(invitationResponse?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = invitationResponse;
 
     if (error) {
@@ -117,6 +117,8 @@ export class BotFactoryClient {
 
     log('Sending reset request.');
     const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createResetCommand(source));
+    // eslint-disable-next-line camelcase
+    assert(response?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = response;
 
     if (error) {
@@ -141,6 +143,8 @@ export class BotFactoryClient {
 
       const status = await this._botPlugin.sendCommand(this._botFactoryTopic, createStatusCommand());
       // TODO(egorgripasov): Use dxos/codec function.
+      assert(status?.message);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { message: { __type_url, ...data } } = status; // eslint-disable-line camelcase
       return { started: true, ...data };
     } catch (err) {
@@ -149,12 +153,15 @@ export class BotFactoryClient {
     }
   }
 
-  async sendBotCommand (botId, command) {
+  async sendBotCommand (botId: string, command: Buffer): Promise<{ message: BotCommandResponse; }> {
     if (!this._connected) {
       await this._connect();
     }
 
-    return this._botPlugin.sendCommand(this._botFactoryTopic, createBotCommand(botId, command));
+    const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createBotCommand(botId, command));
+    // eslint-disable-next-line camelcase
+    assert(response?.message?.__type_url === 'dxos.protocol.bot.BotCommandResponse');
+    return { message: response.message };
   }
 
   /**
@@ -168,20 +175,35 @@ export class BotFactoryClient {
    * Connect to BotFactory.
    */
   async _connect () {
-    const connect = new Promise(resolve => {
-      // TODO(egorgripasov): Factor out.
-      this._botPlugin.on('peer:joined', peerId => {
-        if (peerId.equals(this._botFactoryPeerId)) {
-          log('Bot factory peer connected');
-          this._connected = true;
-          resolve();
-        }
+    await timeout(async () => {
+      const promise = new Promise(resolve => {
+        // TODO(egorgripasov): Factor out.
+        this._botPlugin.on('peer:joined', (peerId: Buffer) => {
+          if (peerId.equals(this._botFactoryPeerId)) {
+            log('Bot factory peer connected');
+            this._connected = true;
+            resolve();
+          }
+        });
       });
-    });
 
-    await this._networkManager.joinProtocolSwarm(this._botFactoryTopic,
-      transportProtocolProvider(this._botFactoryTopic, this._peerId, this._botPlugin));
+      await this._networkManager.joinProtocolSwarm(this._botFactoryTopic,
+        transportProtocolProvider(this._botFactoryTopic, this._peerId, this._botPlugin));
 
-    return promiseTimeout(connect, CONNECT_TIMEOUT);
+      await promise;
+    }, CONNECT_TIMEOUT, () => new Error(`Failed to connect to bot factory: Timed out in ${CONNECT_TIMEOUT}ms.`));
   }
+}
+
+// TODO(marik-d): Move to async (replace existing implemetation).
+function timeout<T> (action: () => Promise<T>, timeout: number, getError?: () => Error) {
+  function throwOnTimeout (timeout: number, getError: () => Error) {
+    // eslint-disable-next-line promise/param-names
+    return new Promise((_, reject) => setTimeout(() => reject(getError()), timeout));
+  }
+
+  return Promise.race([
+    action(),
+    throwOnTimeout(timeout, getError ?? (() => new Error(`Timed out in ${timeout}ms.`)))
+  ]);
 }

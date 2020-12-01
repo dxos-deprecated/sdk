@@ -25,12 +25,15 @@ import RestoreIcon from '@material-ui/icons/Restore';
 
 import { generateSeedPhrase } from '@dxos/credentials';
 
+import ImportKeyringDialog from './ImportKeyringDialog';
+
 const STAGE_PENDING = -1;
 const STAGE_START = 0;
 const STAGE_RESTORE = 1;
 const STAGE_ENTER_USERNAME = 2;
 const STAGE_SHOW_SEED_PHRASE = 3;
 const STAGE_CHECK_SEED_PHRASE = 4;
+const STAGE_IMPORT_KEYRING = 5;
 
 // TODO(burdon): Factor out.
 const ordinal = n => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
@@ -107,11 +110,12 @@ const DialogActions = withStyles(theme => ({
 /**
  * Registration and recovery dialog.
  */
-const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
+const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFinishRestore, keyringDecrypter }) => {
   const classes = useStyles();
   const [stage, setStage] = useState(STAGE_START);
   const [seedPhrase] = useState(generateSeedPhrase());
   const [username, setUsername] = useState('');
+  const [recoveredSeedPhrase, setRecoveredSeedPhrase] = useState('');
 
   const words = seedPhrase.split(' ');
   const selected = [Math.floor(Math.random() * words.length), Math.floor(Math.random() * words.length)];
@@ -130,6 +134,8 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
     element.download = 'dxos-recovery-seedphrase.txt';
     element.click();
   };
+
+  const restoreSeedPhraseValid = () => recoveredSeedPhrase.trim().toLowerCase().split(/\s+/g).length === 12;
 
   const handleNext = async (ev) => {
     switch (stage) {
@@ -157,7 +163,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
         // TODO(burdon): Decide policy.
         if (match || skipMatch) {
           setStage(STAGE_PENDING);
-          await onFinish(username, seedPhrase);
+          await onFinishCreate(username, seedPhrase);
         } else {
           setStage(STAGE_SHOW_SEED_PHRASE);
         }
@@ -165,16 +171,15 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
       }
 
       case STAGE_RESTORE: {
-        const restoreSeedPhrase = seedPhraseRef.current.value.trim().toLowerCase();
+        const restoreSeedPhrase = recoveredSeedPhrase.trim().toLowerCase();
 
         // Sanity check that it looks like a seed phrase.
-        if (restoreSeedPhrase.split(/\s+/g).length !== 12) {
-          // TODO(burdon): Report invalid input to user.
-          console.log('Invalid seed phrase: ', restoreSeedPhrase);
+        if (!restoreSeedPhraseValid()) {
+          throw new Error('Invalid seed phrase.');
         } else {
           // TODO(dboreham): Do more checks on input (not all strings containing 12 words are valid seed phrases).
           setStage(STAGE_PENDING);
-          await onFinish(username, restoreSeedPhrase);
+          await onFinishRestore(restoreSeedPhrase);
         }
         break;
       }
@@ -242,7 +247,10 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
                 </Paper>
               </div>
             </DialogContent>
-            <DialogActions />
+            {/* ISSUE: https://github.com/dxos/echo/issues/339#issuecomment-735918728 */}
+            {/* <DialogActions>
+              <Button variant='text' color='secondary' onClick={() => setStage(STAGE_IMPORT_KEYRING)}>Import Keyring</Button>
+            </DialogActions> */}
           </>
         );
       }
@@ -253,11 +261,11 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
             <DialogTitle>Restoring your Wallet</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the seed phrase.</DialogContentText>
-              <TextField autoFocus fullWidth spellCheck={false} inputRef={seedPhraseRef} onKeyDown={handleKeyDown} />
+              <TextField autoFocus fullWidth spellCheck={false} value={recoveredSeedPhrase} onChange={e => setRecoveredSeedPhrase(e.target.value)} onKeyDown={handleKeyDown} />
             </DialogContent>
             <DialogActions>
               <Button color='primary' onClick={() => setStage(STAGE_START)}>Back</Button>
-              <Button variant='contained' color='primary' onClick={handleNext}>Restore</Button>
+              <Button variant='contained' color='primary' onClick={handleNext} disabled={!restoreSeedPhraseValid()}>Restore</Button>
             </DialogActions>
           </>
         );
@@ -336,6 +344,12 @@ const RegistrationDialog = ({ open = true, debug = false, onFinish }) => {
               <LinearProgress />
             </DialogContent>
           </>
+        );
+      }
+
+      case STAGE_IMPORT_KEYRING: {
+        return (
+          <ImportKeyringDialog open onClose={() => setStage(STAGE_START)} decrypter={keyringDecrypter} />
         );
       }
     }

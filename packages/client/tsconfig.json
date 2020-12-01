@@ -8,8 +8,5 @@
   },
   "include": [
     "src",
-  ],
-  "references": [
-    { "path": "../react-appkit" }
   ]
 }

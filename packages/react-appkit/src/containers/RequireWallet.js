@@ -5,7 +5,7 @@
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 
-import { useProfile } from '@dxos/react-client';
+import { useClient, useProfile } from '@dxos/react-client';
 import { createUrl, useQuery } from '@dxos/react-router';
 
 /**
@@ -20,9 +20,11 @@ import { createUrl, useQuery } from '@dxos/react-router';
 const RequireWallet = ({ children, redirect = '/', isRequired = () => true }) => {
   const query = useQuery();
   let { pathname } = useLocation();
+  const client = useClient();
   const profile = useProfile();
 
-  const hasIdentity = !!profile;
+  const hasIdentity = !!profile || !!client.getProfile(); // This covers an edge case when claiming device invitation, when the profile is there but `useProfile` has not updated yet.
+  // The 'useProfile' does update properly but the component issues a redirection already and has no chance of reacting to that
   if (!hasIdentity) {
     if (pathname === '/') {
       pathname = undefined;

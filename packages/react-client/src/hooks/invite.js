@@ -7,7 +7,7 @@ import { useEffect, useState, useMemo } from 'react';
 
 import { trigger } from '@dxos/async';
 import { generatePasscode } from '@dxos/credentials';
-import { keyToString } from '@dxos/crypto';
+import { PublicKey } from '@dxos/crypto';
 import { InvitationDescriptor } from '@dxos/echo-db';
 
 import { useClient } from './client';
@@ -68,11 +68,11 @@ export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {})
   const client = useClient();
   const [invitationCode, setInvitationCode] = useState();
   const [pin, setPin] = useState();
-  const key = keyToString(partyKey);
+  const key = partyKey.toString();
 
   useEffect(() => {
     client.createInvitation(
-      partyKey,
+      PublicKey.from(partyKey),
       () => {
         const pin = generatePasscode();
         setPin(pin);
@@ -104,11 +104,11 @@ export function useOfflineInvitation (partyKey, recipient, { onDone = noOp, onEr
   assert(recipient);
   const client = useClient();
   const [invitationCode, setInvitationCode] = useState();
-  const key = keyToString(partyKey);
-  const recipientKey = keyToString(recipient.publicKey);
+  const key = partyKey.toString();
+  const recipientKey = recipient.publicKey.toString();
 
   useEffect(() => {
-    client.createOfflineInvitation(partyKey, recipient.publicKey)
+    client.createOfflineInvitation(PublicKey.from(partyKey), recipient.publicKey)
       .then(invitation => {
         setInvitationCode(encodeInvitation(invitation));
       })

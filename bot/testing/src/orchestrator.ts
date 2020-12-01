@@ -2,28 +2,31 @@
 // Copyright 2020 DXOS.org
 //
 
-import { spawn } from 'child_process';
+import { spawn, ChildProcess } from 'child_process';
 import debug from 'debug';
-import fs from 'fs-extra';
 import path from 'path';
 import ram from 'random-access-memory';
 import kill from 'tree-kill';
 
-import { promiseTimeout } from '@dxos/async';
+import { runWithTimeout } from '@dxos/async';
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { Client } from '@dxos/client';
 import { SIGNATURE_LENGTH, keyToBuffer, createKeyPair, keyToString, verify, sha256 } from '@dxos/crypto';
 
 import { Agent } from './agent';
-import { CONFIG } from './config';
+import { CONFIG, FACTORY_OUT_DIR } from './config';
 import { buildAndPublishBot } from './distributor';
+import { Party } from '@dxos/echo-db';
+import assert from 'assert';
+
+import { Spawn } from '@dxos/protocol-plugin-bot';
+import { Invitation } from '@dxos/credentials';
 
 const log = debug('dxos:testing');
 
 const ORCHESTRATOR_NAME = 'Test';
 
 const FACTORY_START_TIMEOUT = 5 * 1000;
-const FACTORY_OUT_DIR = './out';
 
 export const NODE_ENV = 'node';
 export const BROWSER_ENV = 'browser';
@@ -31,8 +34,8 @@ export const BROWSER_ENV = 'browser';
 // Get Id information of bot.
 // Important: this regulates how often bot gets downloaded from ipfs.
 const testTime = Date.now();
-const getBotIdentifiers = botPath => {
-  const name = `wrn://dxos/bot/${path.basename(botPath)}`;
+const getBotIdentifiers = (botPath: string, env: string | undefined) => {
+  const name = `wrn://dxos/bot/${env}/${path.basename(botPath)}`;
   const id = sha256(`${name}${testTime}`);
   return {
     id,
@@ -42,8 +45,13 @@ const getBotIdentifiers = botPath => {
 
 export class Orchestrator {
   _builds = new Map();
+  _client: Client;
+  _localRun: boolean;
+  _party: Party;
+  _factoryClient: BotFactoryClient;
+  _factory: any;
 
-  constructor (options) {
+  constructor (options: {local: boolean}) {
     const { local = true } = options;
     this._client = new Client({
       storage: ram,
@@ -82,22 +90,26 @@ export class Orchestrator {
     return this._party;
   }
 
-  /**
-   * @param {{ botPath, env }} command.
-   */
-  async startAgent (options) {
+  get botFactoryPid () {
+    return this._factory.process.pid;
+  }
+
+  async startAgent (options: Spawn.SpawnOptions) {
     const { env = NODE_ENV, botPath, ...rest } = options;
+    
+    assert(botPath);
     if (this._localRun) {
       options = {
         ...rest,
         botPath
       };
     } else {
-      // TODO(egorgripasov): Browser support.
-      let ipfsCID = this._builds.get(botPath);
+      const buildId = `${botPath}-${env}`;
+      let ipfsCID = this._builds.get(buildId);
       if (!ipfsCID) {
-        ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath);
-        this._builds.set(botPath, ipfsCID);
+        log('Building & publishing bot package...');
+        ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath, env === 'browser');
+        this._builds.set(buildId, ipfsCID);
       }
       options = {
         ...rest,
@@ -107,7 +119,10 @@ export class Orchestrator {
       };
     }
 
+    log('Sending spawn bot command...');
     const botId = await this._spawnBot(botPath, options);
+
+    assert(botId);
     await this._inviteBot(botId);
 
     return new Agent(this._factoryClient, botId);
@@ -116,50 +131,53 @@ export class Orchestrator {
   async destroy () {
     kill(this._factory.process.pid, 'SIGKILL');
     await this._factoryClient.close();
-    await fs.remove(path.join(process.cwd(), FACTORY_OUT_DIR));
     // TODO(egorgripasov): Produced feed store errors.
     // await this._client.destroy();
   }
 
-  async _startBotFactory () {
-    const result = new Promise(resolve => {
+  async _startBotFactory (): Promise<{ topic: string, process: ChildProcess }> {
+    return runWithTimeout(async () => {
       const { publicKey, secretKey } = createKeyPair();
-
+  
       const topic = keyToString(publicKey);
 
       const env = {
         ...process.env,
         NODE_OPTIONS: '',
         ...CONFIG,
-        DEBUG: 'bot-factory, bot-factory:*,dxos:botkit',
-        WIRE_BOT_RESET: true,
+        DEBUG: 'bot-factory,bot-factory:*,dxos:botkit*,dxos:testing*',
+        WIRE_BOT_RESET: 'true',
         WIRE_BOT_TOPIC: topic,
         WIRE_BOT_SECRET_KEY: keyToString(secretKey),
-        WIRE_BOT_LOCAL_DEV: this._localRun
+        WIRE_BOT_LOCAL_DEV: this._localRun.toString(),
+        WIRE_BOT_DUMP_FILE: path.join(FACTORY_OUT_DIR, topic)
       };
 
       const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
 
-      factory.stderr.on('data', data => {
-        if (/"started":true/.test(data.toString())) {
-          log('Bot Factory started.');
+      factory.stderr.pipe(process.stderr);
+      factory.stdout.pipe(process.stdout);
 
-          resolve({
-            topic,
-            process: factory
-          });
-        }
+      await new Promise(resolve => {
+        factory.stderr.on('data', (data: Buffer) => {
+          if (/"started":true/.test(data.toString())) {
+            log('Bot Factory started.');
+            resolve();
+          }
+        });
+      });;
 
-        process.stderr.write(data);
-      });
-    });
-
-    return promiseTimeout(result, FACTORY_START_TIMEOUT);
+      return {
+        topic,
+        process: factory
+      }
+    }, FACTORY_START_TIMEOUT, new Error(`Failed to start bot factory: Timed out in ${FACTORY_START_TIMEOUT} ms.`))
   }
 
-  async _spawnBot (botPath, options) {
+  async _spawnBot (botPath: string, options: Spawn.SpawnOptions) {
+    const { env } = options;
     const botId = await this._factoryClient.sendSpawnRequest(undefined, {
-      ...getBotIdentifiers(botPath),
+      ...getBotIdentifiers(botPath, env),
       ...options
     });
 
@@ -169,8 +187,8 @@ export class Orchestrator {
   }
 
   // TODO(egorgripasov): Takes non-defined time; wait for node to appear in control party?
-  async _inviteBot (botId) {
-    const secretValidator = async (invitation, secret) => {
+  async _inviteBot (botId: string) {
+    const secretValidator = async (invitation: Invitation, secret: Buffer) => {
       const signature = secret.slice(0, SIGNATURE_LENGTH);
       const message = secret.slice(SIGNATURE_LENGTH);
       return verify(message, signature, keyToBuffer(this._factory.topic));
@@ -178,8 +196,8 @@ export class Orchestrator {
 
     const invitation = await this._party.createInvitation({ secretValidator });
 
-    await this._factoryClient.sendInvitationRequest(botId, keyToString(this._party.key), {}, invitation.toQueryParameters());
+    await this._factoryClient.sendInvitationRequest(botId, this._party.key.toHex(), {}, invitation.toQueryParameters());
 
-    // log(`Bot ${botId} invited.`);
+    log(`Bot ${botId} invited.`);
   }
 }

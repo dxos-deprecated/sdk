@@ -23,7 +23,7 @@ export const COMMAND_RESPONSE = 'dxos.protocol.bot.CommandResponse';
 /**
  * Creates a new spawn command message.
  */
-export const createSpawnCommand = (botName: string, options?: Spawn.SpawnOptions): Message => {
+export const createSpawnCommand = (botName: string | undefined, options?: Spawn.SpawnOptions): Message => {
   return {
     message: {
       __type_url: COMMAND_SPAWN,

@@ -73,8 +73,8 @@ export class BotFactory {
 
     this._botContainers = this._localDev
       ? {
-        [NODE_ENV]: new LocalDevBotContainer(config),
-        [NATIVE_ENV]: new LocalDevBotContainer(config)
+        [NODE_ENV]: new LocalDevBotContainer(config.get('cli.nodePath')),
+        [NATIVE_ENV]: new LocalDevBotContainer(config.get('cli.nodePath'))
       }
       : botContainers;
 

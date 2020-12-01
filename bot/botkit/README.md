@@ -13,6 +13,8 @@ $ npm install @dxos/botkit
 * The bot binary package is uploaded to IPFS, and the metadata is used to create a record in WNS.
 * Bot factories are capable of downloading and running bots from WNS/IPFS.
 
+<img src="../../docs/content/diagrams/bot.png" />
+
 ## Usage
 
 ```javascript

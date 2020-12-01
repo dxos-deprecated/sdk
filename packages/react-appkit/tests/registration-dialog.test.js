@@ -12,9 +12,13 @@ describe('RegistrationDialog', () => {
   let finished;
 
   const defaultProps = {
-    onFinish: () => {
+    onFinishCreate: () => {
       finished = true;
-    }
+    },
+    onFinishRestore: () => {
+      finished = true;
+    },
+    keyringDecrypter: () => console.warn('Not implemented in this test.')
   };
 
   const createInputValue = (val) => {

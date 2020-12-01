@@ -4,8 +4,6 @@
 
 import { useEffect, useState } from 'react';
 
-import { keyToString } from '@dxos/crypto';
-
 export const useMembers = (party) => {
   const [members, setMembers] = useState([]);
 
@@ -19,7 +17,7 @@ export const useMembers = (party) => {
     return result.subscribe(() => {
       setMembers(result.value);
     });
-  }, [party && keyToString(party.key)]);
+  }, [party && party.key.toString()]);
 
   return members;
 };
