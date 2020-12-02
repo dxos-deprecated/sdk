@@ -109,7 +109,7 @@ export class BotFactory {
     }
     await this._botManager.start();
 
-    this._leaveSwarm = await this._client.getDevtoolsContext().networkManager.joinProtocolSwarm(this._topic,
+    this._leaveSwarm = await this._client.networkManager.joinProtocolSwarm(this._topic,
       transportProtocolProvider(this._topic, this._peerKey, this._plugin)) as any;
 
     log(JSON.stringify(
@@ -245,7 +245,7 @@ export class BotFactory {
     for (const container of Object.values(this._botContainers)) {
       await container.stop();
     }
-    await this._client!.getDevtoolsContext().networkManager.close();
+    await this._client!.networkManager.close();
   }
 
   signChallenge (challenge: Buffer) {
