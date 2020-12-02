@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.24](https://www.github.com/dxos/sdk/compare/v2.7.23...v2.7.24) (2020-12-02)
+
+
+### Bug Fixes
+
+* Improve party properties usage ([#416](https://www.github.com/dxos/sdk/issues/416)) ([1e8db78](https://www.github.com/dxos/sdk/commit/1e8db78c6050e15cada20eb50e904d98e1b7492e))
+* Spinner and disabled submit in redeem dialog ([#413](https://www.github.com/dxos/sdk/issues/413)) ([6b3b548](https://www.github.com/dxos/sdk/commit/6b3b548557ba91fa4d73464a69685c1053b9ec6f))
+
 ### [2.7.23](https://www.github.com/dxos/sdk/compare/v2.7.22...v2.7.23) (2020-11-30)
 
 
