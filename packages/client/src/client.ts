@@ -7,9 +7,10 @@ import leveljs from 'level-js';
 import memdown from 'memdown';
 
 import { synchronized } from '@dxos/async';
-// import { Keyring } from '@dxos/credentials';
+import { Keyring } from '@dxos/credentials';
 import { humanize, PublicKey } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
+import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { createStorage } from '@dxos/random-access-multi-storage';
@@ -18,8 +19,6 @@ import { Registry } from '@wirelineio/registry-client';
 
 import { DevtoolsContext } from './devtools-context';
 import { isNode } from './platform';
-import { Keyring } from '@dxos/credentials';
-import { FeedStore } from '@dxos/feed-store';
 
 export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
 export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown';
