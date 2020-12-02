@@ -60,7 +60,13 @@ const PartyCardContainer = ({ party, ipfs }) => {
     console.log('snapshot', snapshot);
     const encodedSnapshot = schema.getCodecForType('dxos.echo.snapshot.DatabaseSnapshot').encode(snapshot);
     console.log('encodedSnapshot', encodedSnapshot);
-    download(keyToString(encodedSnapshot), 'party-contents.txt');
+
+    const encodedToString = encodedSnapshot.toString('hex')
+
+    // const decodedSnapshot = schema.getCodecForType('dxos.echo.snapshot.DatabaseSnapshot').decode(encodedSnapshot)
+    // console.log('decodedSnapshot', decodedSnapshot)
+    download(encodedToString, 'party-contents.txt');
+
     // try {
     //   const feedDescriptors = client.echo.feedStore.getDescriptors();
     //   console.log('feedDescriptors', feedDescriptors);

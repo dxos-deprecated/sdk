@@ -290,9 +290,9 @@ const AppBar = ({
   //   menuItems.push(action(ACTION_OPEN_PARTY_HOME));
   // }
 
-  // if (onPartyFromFile) {
-  //   menuItems.push(action(ACTION_PARTY_FROM_FILE));
-  // }
+  if (onPartyFromFile) {
+    menuItems.push(action(ACTION_PARTY_FROM_FILE));
+  }
 
   // if (onPartyFromIpfs) {
   //   menuItems.push(action(ACTION_PARTY_FROM_IPFS));

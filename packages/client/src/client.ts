@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import jsondown from 'jsondown';
 import leveljs from 'level-js';
 import memdown from 'memdown';
@@ -9,9 +10,10 @@ import memdown from 'memdown';
 import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
 import { humanize, PublicKey } from '@dxos/crypto';
-import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
+import { ECHO, InvitationOptions, SecretProvider, sortItemsTopologically, UnknownModel } from '@dxos/echo-db';
+import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
-import { ModelConstructor } from '@dxos/model-factory';
+import { Model, ModelConstructor } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
@@ -223,6 +225,30 @@ export class Client {
    */
   async createParty () {
     return this._echo.createParty();
+  }
+
+  async createPartyFromSnapshot (snapshot: DatabaseSnapshot) {
+    const party = await this._echo.createParty();
+    const items = snapshot.items ?? [];
+
+    for (const item of sortItemsTopologically(items)) {
+      assert(item.itemId);
+      assert(item.modelType);
+      assert(item.model);
+
+      const model = this.echo.modelFactory.getModel(item.modelType);
+      if (!model) {
+        console.warn('no model found: ', item.modelType);
+        continue;
+      }
+
+      await party.database.createItem({
+        model: model.constructor,
+        type: item.itemType,
+        parent: item.parentId,
+        
+      });
+    }
   }
 
   /**
