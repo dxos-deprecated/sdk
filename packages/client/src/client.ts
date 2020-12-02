@@ -17,6 +17,7 @@ import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
+import { DevtoolsContext } from './devtools-context';
 import { isNode } from './platform';
 
 export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
@@ -289,6 +290,20 @@ export class Client {
   // Deprecated
   // TODO(burdon): Separate wrapper for devtools?
   //
+
+  /**
+   * Returns devtools context
+   */
+  getDevtoolsContext (): DevtoolsContext {
+    const devtoolsContext: DevtoolsContext = {
+      client: this,
+      feedStore: this._echo.feedStore,
+      networkManager: this._echo.networkManager,
+      modelFactory: this._echo.modelFactory,
+      keyring: this._echo.keyring
+    };
+    return devtoolsContext;
+  }
 
   /**
    * @deprecated Use echo.keyring
