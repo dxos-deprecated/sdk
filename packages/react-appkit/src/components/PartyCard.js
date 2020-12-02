@@ -130,6 +130,8 @@ const PartyCard = ({
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [, setRerender] = useState(0);
+  const rerender = () => setRerender(value => value + 1);
 
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
@@ -156,6 +158,8 @@ const PartyCard = ({
       </Card>
     );
   }
+
+  party.update.on(rerender);
 
   if (!party.isOpen) {
     console.log('party is closed, title: ', party.title);
