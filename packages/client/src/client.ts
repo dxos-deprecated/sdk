@@ -299,7 +299,8 @@ export class Client {
       client: this,
       feedStore: this._echo.feedStore,
       networkManager: this._echo.networkManager,
-      modelFactory: this._echo.modelFactory
+      modelFactory: this._echo.modelFactory,
+      keyring: this._echo.keyring
     };
     return devtoolsContext;
   }
