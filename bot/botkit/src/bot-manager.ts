@@ -126,7 +126,7 @@ export class BotManager {
   async start () {
     this._plugin = new BotPlugin(this._controlPeerKey, (protocol: any, message: any) => this._botMessageHandler(protocol, message));
     // Join control swarm.
-    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
+    this._leaveControlSwarm = await this._client.getDevtoolsContext().networkManager.joinProtocolSwarm(this._controlTopic,
       transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
 
     await this._readBotsFromFile();

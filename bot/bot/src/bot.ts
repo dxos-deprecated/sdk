@@ -212,7 +212,7 @@ export class Bot extends EventEmitter {
         });
       });
 
-      this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
+      this._leaveControlSwarm = await this._client!.getDevtoolsContext().networkManager.joinProtocolSwarm(this._controlTopic,
         transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
 
       await promise;
