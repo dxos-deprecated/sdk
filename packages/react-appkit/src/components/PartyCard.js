@@ -160,20 +160,6 @@ const PartyCard = ({
   }
 
   party.update.on(rerender);
-
-  if (!party.isOpen) {
-    console.log('party is closed, title: ', party.title);
-    // return null;
-  }
-
-  try {
-    console.log('party is ', party.isOpen ? 'open' : 'closed');
-    console.log('title is: ', party.title);
-  } catch (e) {
-    console.error(e.stack);
-    return null;
-  }
-
   const displayName = party.title || 'Untitled';
 
   if (!party.isActive()) {
