@@ -316,7 +316,6 @@ const PartyCard = ({
           }}
           onExport={onExport}
           onClose={async ({ showDeleted, displayName, active }) => {
-            // party.setProperty('displayName', displayName);
             await party.setTitle(displayName);
             setShowDeleted(showDeleted);
             if (active && !party.isActive()) {
