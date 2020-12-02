@@ -5,7 +5,7 @@
 import React, { ReactNode, useEffect } from 'react';
 
 // import { Client } from '@dxos/client';
-import metrics from '@dxos/metrics';
+// import metrics from '@dxos/metrics';
 
 import { Client } from '../../../client';
 import { ClientContext } from '../hooks/context';
@@ -20,7 +20,7 @@ export interface ClientProviderProps {
  */
 export const ClientProvider = ({ client, children }: ClientProviderProps) => {
   useEffect(() => {
-    (window as any).__DXOS__ = { client: client.getDevtoolsContext(), metrics };
+    (window as any).__DXOS__ = client.getDevtoolsContext();
   }, []);
 
   return (

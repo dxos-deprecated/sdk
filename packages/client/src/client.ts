@@ -7,7 +7,7 @@ import leveljs from 'level-js';
 import memdown from 'memdown';
 
 import { synchronized } from '@dxos/async';
-import { Keyring } from '@dxos/credentials';
+// import { Keyring } from '@dxos/credentials';
 import { humanize, PublicKey } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
 import { ModelConstructor } from '@dxos/model-factory';
@@ -298,16 +298,10 @@ export class Client {
       client: this,
       feedStore: this._echo.feedStore,
       networkManager: this._echo.networkManager,
-      modelFactory: this._echo.modelFactory
+      modelFactory: this._echo.modelFactory,
+      keyring: this._echo.keyring
     };
     return devtoolsContext;
-  }
-
-  /**
-   * @deprecated Use echo.keyring
-   */
-  get keyring (): Keyring {
-    return this._echo.keyring;
   }
 }
 
