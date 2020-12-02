@@ -31,16 +31,6 @@ import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import { useAssets } from './util';
 
-// ISSUE: https://github.com/dxos/echo/issues/337
-// ISSUE: https://github.com/dxos/echo/issues/338
-const getPartyName = (party) => {
-  try {
-    return party.getProperty('displayName');
-  } catch {
-    return 'Loading...';
-  }
-};
-
 const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
