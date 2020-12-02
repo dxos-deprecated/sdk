@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.25](https://www.github.com/dxos/sdk/compare/v2.7.24...v2.7.25) (2020-12-02)
+
+
+### Bug Fixes
+
+* Trigger release-please ([63799bc](https://www.github.com/dxos/sdk/commit/63799bc0318b452e9783c4fbaae44b0af19de473))
+
 ### [2.7.24](https://www.github.com/dxos/sdk/compare/v2.7.23...v2.7.24) (2020-12-02)
 
 
