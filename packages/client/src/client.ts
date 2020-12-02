@@ -306,12 +306,33 @@ export class Client {
     return devtoolsContext;
   }
 
-  // keep it - bot uses it
+  /**
+   * @deprecated Use echo.keyring
+   */
+  get keyring (): Keyring {
+    return this._echo.keyring;
+  }
+
+  /**
+   * @deprecated Use echo.feedStore
+   */
+  get feedStore (): FeedStore {
+    return this._echo.feedStore;
+  }
+
   /**
    * @deprecated Use echo.networkManager.
    */
   get networkManager (): NetworkManager {
     return this._echo.networkManager;
+  }
+
+  /**
+   * @deprecated
+   */
+  get modelFactory () {
+    console.warn('client.modelFactory is deprecated.');
+    return this._echo.modelFactory;
   }
 }
 
