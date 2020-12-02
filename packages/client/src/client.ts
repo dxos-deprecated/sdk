@@ -10,15 +10,14 @@ import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
 import { humanize, PublicKey } from '@dxos/crypto';
 import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
-import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';
-import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
+import { SwarmProvider } from '@dxos/network-manager';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
-import { isNode } from './platform';
 import { DevtoolsContext } from './devtools-context';
+import { isNode } from './platform';
 
 export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
 export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown';
@@ -310,28 +309,6 @@ export class Client {
   get keyring (): Keyring {
     return this._echo.keyring;
   }
-
-  // /**
-  //  * @deprecated Use echo.feedStore
-  //  */
-  // get feedStore (): FeedStore {
-  //   return this._echo.feedStore;
-  // }
-
-  // /**
-  //  * @deprecated Use echo.networkManager.
-  //  */
-  // get networkManager (): NetworkManager {
-  //   return this._echo.networkManager;
-  // }
-
-  // /**
-  //  * @deprecated
-  //  */
-  // get modelFactory () {
-  //   console.warn('client.modelFactory is deprecated.');
-  //   return this._echo.modelFactory;
-  // }
 }
 
 // TODO(burdon): Shouldn't be here.
