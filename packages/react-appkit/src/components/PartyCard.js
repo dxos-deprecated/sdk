@@ -306,7 +306,9 @@ const PartyCard = ({
           }}
           onExport={onExport}
           onClose={async ({ showDeleted, displayName, active }) => {
-            await party.setTitle(displayName);
+            if (displayName !== undefined) {
+              await party.setTitle(displayName);
+            }
             setShowDeleted(showDeleted);
             if (active && !party.isActive()) {
               await party.activate({ global: true });
