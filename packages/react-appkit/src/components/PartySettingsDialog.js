@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartySettingsDialog = ({ open, onClose, properties = {}, onExportToFile, onExportToIpfs, displayName: initialDisplayName }) => {
+const PartySettingsDialog = ({ open, onClose, properties = {}, onExportToFile, onExportToIpfs, displayName: initialDisplayName, exportInProgress }) => {
   const classes = useStyles();
   const [active, setActive] = useState(properties.active);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
@@ -116,7 +116,7 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExportToFile, o
           </FormGroup>
         </FormControl>
 
-        {inProgress && <LinearProgress />}
+        {(inProgress || exportInProgress) && <LinearProgress />}
         {!!error && <Typography variant='body2' color='error'>Export unsuccessful</Typography>}
         {!!exportedCid && (
           <div className={classes.exportedCid}>
@@ -152,12 +152,12 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExportToFile, o
 
       <DialogActions>
         {handleExportToIPFS && (
-          <Button onClick={handleExportToIPFS} color='secondary' disabled={inProgress}>
+          <Button onClick={handleExportToIPFS} color='secondary' disabled={inProgress || exportInProgress}>
               Export to IPFS
           </Button>
         )}
         {onExportToFile && (
-          <Button onClick={onExportToFile} color='secondary' disabled={inProgress}>
+          <Button onClick={onExportToFile} color='secondary' disabled={inProgress || exportInProgress}>
               Export to file
           </Button>
         )}

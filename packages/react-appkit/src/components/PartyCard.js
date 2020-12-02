@@ -122,6 +122,7 @@ const PartyCard = ({
   pads,
   items,
   onNewItemRequested,
+  exportInProgress = false,
   onNewParty = undefined,
   onExportToFile = undefined,
   onExportToIpfs = undefined
@@ -312,6 +313,7 @@ const PartyCard = ({
             showDeleted,
             active: party.isActive()
           }}
+          exportInProgress={exportInProgress}
           onExportToFile={onExportToFile}
           onExportToIpfs={onExportToIpfs}
           displayName={displayName}
