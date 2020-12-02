@@ -20,7 +20,7 @@ export interface ClientProviderProps {
  */
 export const ClientProvider = ({ client, children }: ClientProviderProps) => {
   useEffect(() => {
-    (window as any).__DXOS__ = { context: client.getDevtoolsContext(), metrics };
+    (window as any).__DXOS__ = { client: client.getDevtoolsContext(), metrics };
   }, []);
 
   return (
