@@ -4,9 +4,6 @@
 
 import React, { ReactNode, useEffect } from 'react';
 
-// import { Client } from '@dxos/client';
-// import metrics from '@dxos/metrics';
-
 import { Client } from '../../../client';
 import { ClientContext } from '../hooks/context';
 
