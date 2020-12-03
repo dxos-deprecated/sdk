@@ -5,10 +5,15 @@
 import { TransferNames } from '@connext/vector-types';
 import { RestServerNodeService, getRandomBytes32 } from '@connext/vector-utils';
 import assert from 'assert';
+import debug from 'debug';
 import { Wallet, utils, providers } from 'ethers';
 import pino from 'pino';
 
+import { Registry } from '@wirelineio/registry-client';
+
 const DEFAULT_TIMEOUT = '360000';
+
+const log = debug('client');
 
 export const encodeObjToBase64 = (obj) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64');
@@ -36,35 +41,6 @@ export const getPaymentInfo = (transfer) => {
     channelAddress,
     transferId
   };
-};
-
-/**
- * Create payment utility.
- * @param {object} config
- * @param {string} coupon
- * @param {string} channel
- * @param {string} amount
- */
-export const createPayment = async (config, coupon, channel, amount) => {
-  assert(config, 'Invalid config.');
-
-  let payment;
-
-  if (coupon) {
-    payment = decodeBase64ToObj(coupon);
-  }
-
-  if (!payment) {
-    assert(channel, 'Invalid channel.');
-    assert(amount, 'Invalid amount.');
-
-    // Create payment, if not using coupon.
-    const paymentClient = new PaymentClient(config);
-    await paymentClient.connect();
-    payment = await paymentClient.createTransfer(channel, amount);
-  }
-
-  return payment;
 };
 
 /**
@@ -434,6 +410,68 @@ export class PaymentClient {
   }
 
   /**
+   * Create payment utility.
+   * @param {string} coupon
+   * @param {string} contractId
+   */
+  async createPayment (coupon, contractId) {
+    let payment;
+
+    if (coupon) {
+      payment = decodeBase64ToObj(coupon);
+    }
+
+    if (!payment) {
+      await this._connect();
+
+      const contract = await this._getContract(contractId);
+      const { attributes: { channel, amount } } = contract;
+
+      payment = await this.createTransfer(channel, amount);
+      payment.contractId = contractId;
+    }
+
+    return payment;
+  }
+
+  /**
+   * Resolve payment utility.
+   * @param {object} payment
+   */
+  async resolvePayment (payment) {
+    assert(payment, 'Invalid payment.');
+
+    const { contractId, transferId, preImage } = payment;
+
+    assert(contractId, 'Invalid contract.');
+    assert(transferId, 'Invalid transfer.');
+    assert(preImage, 'Invalid preImage.');
+
+    const contract = await this._getContract(contractId);
+    const { attributes: { channel: contractChannelAddress, amount: contractAmount } } = contract;
+
+    assert(contractChannelAddress, 'Invalid channel.');
+    assert(contractAmount, 'Invalid amount.');
+
+    await this._connect();
+    const transfer = await this.getTransfer(transferId);
+
+    const paymentInfo = getPaymentInfo(transfer);
+    log(`Validating received payment: ${JSON.stringify(paymentInfo)}`);
+
+    if (contractChannelAddress !== paymentInfo.channelAddress) {
+      throw new Error('Payment channel mismatch (contract/transfer).');
+    }
+
+    const paymentAmount = paymentInfo.balances[transfer.initiator];
+    if (contractAmount !== paymentAmount) {
+      throw new Error(`Payment amount mismatch (contract ${contractAmount} / transfer ${paymentAmount}).`);
+    }
+
+    await this.redeemTransfer(contractChannelAddress, transferId, preImage);
+  }
+
+  /**
    * Connect and cache server node handle.
    */
   async _connect () {
@@ -444,5 +482,30 @@ export class PaymentClient {
       this._service = await RestServerNodeService.connect(server, pino(), undefined, 0);
       this._connected = true;
     }
+  }
+
+  /**
+   * Get contract from Regstry.
+   * @param {string} contractId
+   */
+  async _getContract (contractId) {
+    assert(contractId, 'Invalid contractId.');
+
+    // Load contract from the registry.
+    const { server, chainId } = this._config.get('services.wns');
+
+    assert(server, 'Invalid WNS endpoint.');
+    assert(chainId, 'Invalid WNS Chain ID.');
+
+    const registry = new Registry(server, chainId);
+    const result = await registry.getRecordsByIds([contractId]);
+
+    if (!result.length) {
+      throw new Error(`Contract not found: ${contractId}`);
+    }
+
+    const [contract] = result;
+
+    return contract;
   }
 }

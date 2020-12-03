@@ -10,7 +10,7 @@ import yaml from 'js-yaml';
 import get from 'lodash.get';
 import path from 'path';
 
-import { Client, PaymentClient, getPaymentInfo } from '@dxos/client';
+import { Client, PaymentClient } from '@dxos/client';
 import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
 import { transportProtocolProvider } from '@dxos/network-manager';
 import {
@@ -176,7 +176,7 @@ export class BotManager {
     assert(displayName, 'Invalid Bot Name.');
     assert(payment, 'Invalid payment.');
 
-    await this._resolvePayment(payment);
+    await this._paymentClient.resolvePayment(payment);
 
     const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;
@@ -253,7 +253,7 @@ export class BotManager {
   async inviteBot (botId: string, topic: string, invitation: string, payment: Payment) {
     const botInfo = this._bots.get(botId);
 
-    await this._resolvePayment(payment);
+    await this._paymentClient.resolvePayment(payment);
 
     assert(botInfo, 'Invalid Bot Id');
     if (botInfo.parties.indexOf(topic) === -1) {
@@ -398,23 +398,5 @@ export class BotManager {
       throw new Error(`Invalid bot: ${botName}`);
     }
     return records[0];
-  }
-
-  private async _resolvePayment (payment: Payment) {
-    assert(payment, 'Invalid payment.');
-
-    const { channelAddress, transferId, preImage } = payment;
-
-    assert(transferId, 'Invalid transfer.');
-    assert(channelAddress, 'Invalid channel.');
-    assert(preImage, 'Invalid preImage.');
-
-    const transfer = await this._paymentClient.getTransfer(transferId);
-
-    assert(channelAddress === transfer.channelAddress, 'Channel address mismatch.');
-
-    log(`Validating received payment: ${JSON.stringify(getPaymentInfo(transfer))}`);
-
-    await this._paymentClient.redeemTransfer(channelAddress, transferId, preImage);
   }
 }

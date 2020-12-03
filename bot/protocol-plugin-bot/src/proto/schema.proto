@@ -17,6 +17,7 @@ message Payment {
   string channelAddress = 1;
   string transferId = 2;
   string preImage = 3;
+  string contractId = 4;
 }
 
 // Command to spawn a bot.
