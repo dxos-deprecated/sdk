@@ -103,7 +103,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
   useEffect(() => {
     if (Array.isArray(registryBotFactories)) {
       const botFactory = registryBotFactories.find(({ name }) => name === window.location.hostname) ||
-        registryBotFactories.find(({ name }) => name.endsWith(BOT_FACTORY_DOMAIN));
+        registryBotFactories.find(({ name }) => name?.endsWith(BOT_FACTORY_DOMAIN));
       if (botFactory) {
         setBotFactoryTopic(botFactory.topic);
         setAdvanced(false);

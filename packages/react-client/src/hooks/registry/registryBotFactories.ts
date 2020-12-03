@@ -9,7 +9,7 @@ import { QueryRecord, WRN_TYPE_BOT_FACTORY } from './types';
 
 interface RegistryBotFactoryRecord {
   topic: string,
-  name: string,
+  name?: string,
   names: string[]
 }
 
