@@ -246,9 +246,11 @@ export class Client {
         model: model.constructor,
         type: item.itemType,
         parent: item.parentId,
-        
+        // props: 
       });
     }
+
+    return party;
   }
 
   /**
