@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.26](https://www.github.com/dxos/sdk/compare/v2.7.25...v2.7.26) (2020-12-03)
+
+
+### Bug Fixes
+
+* Safeguard for bot factories without names ([#423](https://www.github.com/dxos/sdk/issues/423)) ([4fdb94f](https://www.github.com/dxos/sdk/commit/4fdb94f7abe26ad8a32ec6807f16e7d490e0db74))
+* support self signed cert in BF source manager. ([#421](https://www.github.com/dxos/sdk/issues/421)) ([0537bff](https://www.github.com/dxos/sdk/commit/0537bffd95f1510eac3db87ba620c37e15272756))
+
 ### [2.7.25](https://www.github.com/dxos/sdk/compare/v2.7.24...v2.7.25) (2020-12-02)
 
 
