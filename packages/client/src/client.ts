@@ -15,6 +15,7 @@ import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
 import { Model, ModelConstructor } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
+import { ValueUtil } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
@@ -242,12 +243,24 @@ export class Client {
         continue;
       }
 
-      await party.database.createItem({
+      const createdItem = await party.database.createItem({
         model: model.constructor,
         type: item.itemType,
-        parent: item.parentId,
-        // props: 
+        parent: item.parentId
+        // props: item.modelType === 'wrn://protocol.dxos.org/model/object' ?  : undefined
       });
+
+      if (item.modelType === 'wrn://protocol.dxos.org/model/object') {
+        assert(item?.model?.custom);
+        assert(model.meta.snapshotCodec);
+        assert(createdItem?.model);
+
+        const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
+        const obj: any = {};
+        assert(decodedItemSnapshot.root);
+        ValueUtil.applyValue(obj, 'root', decodedItemSnapshot.root);
+        await createdItem.model.setProperties(obj.root);
+      }
     }
 
     return party;
