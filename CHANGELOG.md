@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.27](https://www.github.com/dxos/sdk/compare/v2.7.26...v2.7.27) (2020-12-04)
+
+
+### Bug Fixes
+
+* Subscribe to party updates once ([#427](https://www.github.com/dxos/sdk/issues/427)) ([4748b91](https://www.github.com/dxos/sdk/commit/4748b91bb2c5e9ecd3bae9abd48912530850f907))
+
 ### [2.7.26](https://www.github.com/dxos/sdk/compare/v2.7.25...v2.7.26) (2020-12-03)
 
 
