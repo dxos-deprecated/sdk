@@ -10,10 +10,10 @@ import memdown from 'memdown';
 import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
 import { humanize, PublicKey } from '@dxos/crypto';
-import { ECHO, InvitationOptions, SecretProvider, sortItemsTopologically, UnknownModel } from '@dxos/echo-db';
+import { ECHO, InvitationOptions, SecretProvider, sortItemsTopologically } from '@dxos/echo-db';
 import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
-import { Model, ModelConstructor } from '@dxos/model-factory';
+import { ModelConstructor } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
 import { ValueUtil } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
@@ -228,6 +228,14 @@ export class Client {
     return this._echo.createParty();
   }
 
+  /**
+   * This is a minimal solution for party restoration functionality.
+   * It has limitations and hacks:
+   * - We have to treat some models in a special way, this is not a generic solution
+   * - We have to recreate relationship between old IDs in newly created IDs
+   * - This won't work when identities are required, e.g. in chess.
+   * This solution is appropriate only for short term, expected to work only in Teamwork
+   */
   async createPartyFromSnapshot (snapshot: DatabaseSnapshot) {
     const party = await this._echo.createParty();
     const items = snapshot.items ?? [];
@@ -243,7 +251,7 @@ export class Client {
 
       const model = this.echo.modelFactory.getModel(item.modelType);
       if (!model) {
-        console.warn('no model found: ', item.modelType);
+        console.warn('No model found in model factory (could need registering first): ', item.modelType);
         continue;
       }
 
@@ -285,6 +293,16 @@ export class Client {
         }
 
         await createdItem.model.setProperties(obj.root);
+      } else if (item.modelType === 'wrn://protocol.dxos.org/model/text') {
+        assert(item?.model?.custom);
+        assert(model.meta.snapshotCodec);
+        assert(createdItem?.model);
+
+        const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
+
+        await createdItem.model._handleDocUpdated(decodedItemSnapshot.data);
+      } else {
+        throw new Error(`Unhandled model type: ${item.modelType}`);
       }
     }
 
