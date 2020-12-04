@@ -74,7 +74,7 @@ export class SourceManager {
     log(`Downloading bot package: ${botPackageUrl}`);
     await fs.ensureDir(baseDirectory);
     try {
-      await download(botPackageUrl, baseDirectory, { extract: true, timeout: DOWNLOAD_TIMEOUT });
+      await download(botPackageUrl, baseDirectory, { extract: true, timeout: DOWNLOAD_TIMEOUT, rejectUnauthorized: false });
       log(`Bot package downloaded: ${baseDirectory}`);
     } catch (err) {
       await fs.remove(baseDirectory);

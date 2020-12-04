@@ -31,16 +31,6 @@ import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import { useAssets } from './util';
 
-// ISSUE: https://github.com/dxos/echo/issues/337
-// ISSUE: https://github.com/dxos/echo/issues/338
-const getPartyName = (party) => {
-  try {
-    return party.getProperty('displayName');
-  } catch {
-    return 'Loading...';
-  }
-};
-
 const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
@@ -132,6 +122,8 @@ const PartyCard = ({
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [, setRerender] = useState(0);
+  const rerender = () => setRerender(value => value + 1);
 
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
@@ -159,6 +151,9 @@ const PartyCard = ({
     );
   }
 
+  party.update.on(rerender);
+  const displayName = party.title || 'Untitled';
+
   if (!party.isActive()) {
     return (
       <>
@@ -182,7 +177,7 @@ const PartyCard = ({
                 variant='h5'
                 className='party-header-title'
               >
-                Closed party
+                {displayName}
               </Typography>
             }
           />
@@ -200,8 +195,6 @@ const PartyCard = ({
       </>
     );
   }
-
-  const displayName = getPartyName(party) || 'Untitled';
 
   return (
     <>
@@ -318,7 +311,9 @@ const PartyCard = ({
           onExportToIpfs={onExportToIpfs}
           displayName={displayName}
           onClose={async ({ showDeleted, displayName, active }) => {
-            party.setProperty('displayName', displayName);
+            if (displayName !== undefined) {
+              await party.setTitle(displayName);
+            }
             setShowDeleted(showDeleted);
             if (active && !party.isActive()) {
               await party.activate({ global: true });

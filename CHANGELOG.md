@@ -1,5 +1,28 @@
 # Changelog
 
+### [2.7.26](https://www.github.com/dxos/sdk/compare/v2.7.25...v2.7.26) (2020-12-03)
+
+
+### Bug Fixes
+
+* Safeguard for bot factories without names ([#423](https://www.github.com/dxos/sdk/issues/423)) ([4fdb94f](https://www.github.com/dxos/sdk/commit/4fdb94f7abe26ad8a32ec6807f16e7d490e0db74))
+* support self signed cert in BF source manager. ([#421](https://www.github.com/dxos/sdk/issues/421)) ([0537bff](https://www.github.com/dxos/sdk/commit/0537bffd95f1510eac3db87ba620c37e15272756))
+
+### [2.7.25](https://www.github.com/dxos/sdk/compare/v2.7.24...v2.7.25) (2020-12-02)
+
+
+### Bug Fixes
+
+* Trigger release-please ([63799bc](https://www.github.com/dxos/sdk/commit/63799bc0318b452e9783c4fbaae44b0af19de473))
+
+### [2.7.24](https://www.github.com/dxos/sdk/compare/v2.7.23...v2.7.24) (2020-12-02)
+
+
+### Bug Fixes
+
+* Improve party properties usage ([#416](https://www.github.com/dxos/sdk/issues/416)) ([1e8db78](https://www.github.com/dxos/sdk/commit/1e8db78c6050e15cada20eb50e904d98e1b7492e))
+* Spinner and disabled submit in redeem dialog ([#413](https://www.github.com/dxos/sdk/issues/413)) ([6b3b548](https://www.github.com/dxos/sdk/commit/6b3b548557ba91fa4d73464a69685c1053b9ec6f))
+
 ### [2.7.23](https://www.github.com/dxos/sdk/compare/v2.7.22...v2.7.23) (2020-11-30)
 
 

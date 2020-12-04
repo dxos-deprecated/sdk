@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { makeStyles } from '@material-ui/core';
@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartySettingsDialog = ({ open, onClose, properties = {}, onExportToFile, onExportToIpfs, displayName: initialDisplayName, exportInProgress }) => {
+const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExportToFile, onExportToIpfs, exportInProgress }) => {
   const classes = useStyles();
   const [active, setActive] = useState(properties.active);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
@@ -52,7 +52,11 @@ const PartySettingsDialog = ({ open, onClose, properties = {}, onExportToFile, o
   const [error, setError] = useState(undefined);
   const [exportedCid, setExportedCid] = useState(undefined);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
-  const [displayName, setDisplayName] = useState(initialDisplayName);
+  const [displayName, setDisplayName] = useState(party.title);
+
+  useEffect(() => {
+    setDisplayName(party.title);
+  }, [open]);
 
   const handleClose = () => {
     onClose({ active, showDeleted, displayName });

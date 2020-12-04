@@ -2,16 +2,17 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Publish to NPM (from release branch)
+name: Publish to NPM (beta branch => x.x.x-beta.0)
 
 on:
   push:
     branches:
-      - release
+      - beta
 
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -20,8 +21,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Build and NPM publish
         run: |
-          git config --global user.email "npm@dxos.network"
-          git config --global user.name "DXOS"
+          git config --global user.email "devops@dxos.org"
+          git config --global user.name "DXOS.org"
           yarn
           yarn lint:lockfile
           yarn lint
@@ -29,11 +30,11 @@ jobs:
           yarn test
           git reset --hard
           VERSION=`cat package.json | grep '"version":' | awk '{ print $2 }' | sed 's/[",]//g'`
-          yarn lerna version $VERSION --no-git-tag-version -y
-          git commit -am "v$VERSION"
+          yarn lerna version ${VERSION}-beta.0 --no-git-tag-version -y
+          git commit -am "v$VERSION-beta.0"
           git push
-          git tag -f "v$VERSION"
+          git tag -f "v$VERSION-beta.0"
           git push --tags -f
-          yarn lerna publish from-package --force-publish -y
+          yarn lerna publish from-package --force-publish -y --dist-tag="beta"
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
