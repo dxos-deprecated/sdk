@@ -232,6 +232,10 @@ export class Client {
     const party = await this._echo.createParty();
     const items = snapshot.items ?? [];
 
+    // We have a brand new item ids after creation, which breaks the old structure of id-parentId mapping.
+    // That's why we have a mapping of old ids to new ids, to be able to recover the child-parent relations.
+    const oldToNewIdMap = new Map<string, string>();
+
     for (const item of sortItemsTopologically(items)) {
       assert(item.itemId);
       assert(item.modelType);
@@ -243,14 +247,28 @@ export class Client {
         continue;
       }
 
+      let parentId: string | undefined;
+      if (item.parentId) {
+        parentId = oldToNewIdMap.get(item.parentId);
+        assert(parentId, 'Unable to recreate child-parent relationship - missing map record');
+        const parentItem = await party.database.getItem(parentId);
+        assert(parentItem, 'Unable to recreate child-parent relationship - parent not created');
+      }
+
       const createdItem = await party.database.createItem({
         model: model.constructor,
         type: item.itemType,
-        parent: item.parentId
-        // props: item.modelType === 'wrn://protocol.dxos.org/model/object' ?  : undefined
+        parent: parentId
       });
 
-      if (item.modelType === 'wrn://protocol.dxos.org/model/object') {
+      oldToNewIdMap.set(item.itemId, createdItem.id);
+
+      if (item.model.array) {
+        for (const mutation of (item.model.array.mutations || [])) {
+          const decodedMutation = model.meta.mutation.decode(mutation.mutation);
+          await (createdItem.model as any).write(decodedMutation);
+        }
+      } else if (item.modelType === 'wrn://protocol.dxos.org/model/object') {
         assert(item?.model?.custom);
         assert(model.meta.snapshotCodec);
         assert(createdItem?.model);
@@ -259,6 +277,13 @@ export class Client {
         const obj: any = {};
         assert(decodedItemSnapshot.root);
         ValueUtil.applyValue(obj, 'root', decodedItemSnapshot.root);
+
+        // The planner board models have a structure in the object model, which needs to be recreated on new ids
+        if (item.itemType === 'dxos.org/type/planner/card' && obj.root.listId) {
+          obj.root.listId = oldToNewIdMap.get(obj.root.listId);
+          assert(obj.root.listId, 'Failed to recreate child-parent structure of a planner card');
+        }
+
         await createdItem.model.setProperties(obj.root);
       }
     }
