@@ -12,8 +12,8 @@
     "test": "jest --rootDir ./src --verbose --forceExit"
   },
   "dependencies": {
-    "@connext/vector-types": "^0.0.12",
-    "@connext/vector-utils": "^0.0.11",
+    "@connext/vector-types": "^0.0.25",
+    "@connext/vector-utils": "^0.0.25",
     "@dxos/async": "1.0.0-beta.10",
     "@dxos/credentials": "^2.0.0",
     "@dxos/crypto": "^1.0.0-beta.10",
