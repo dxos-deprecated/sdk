@@ -47,11 +47,18 @@ const PartyCardContainer = ({ party, ipfs }) => {
     }
     setExportInProgress(true);
 
-    const snapshot = party.database.createSnapshot();
-    const encodedSnapshot = schema.getCodecForType('dxos.echo.snapshot.DatabaseSnapshot').encode(snapshot);
+    try {
+      const snapshot = party.database.createSnapshot();
+      const encodedSnapshot = schema.getCodecForType('dxos.echo.snapshot.DatabaseSnapshot').encode(snapshot);
 
-    const encodedToString = encodedSnapshot.toString('hex');
-    download(encodedToString, 'party-contents.txt');
+      const encodedToString = encodedSnapshot.toString('hex');
+      download(encodedToString, 'party-contents.txt');
+    } catch (e) {
+      console.error('Export unsuccessful');
+      console.error(e.stack);
+    } finally {
+      setExportInProgress(false);
+    }
   };
 
   const pad = newItemType ? pads.find(pad => pad.type === newItemType) : undefined;
