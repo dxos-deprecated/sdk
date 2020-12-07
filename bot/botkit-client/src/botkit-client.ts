@@ -57,7 +57,7 @@ export class BotFactoryClient {
    */
   async sendSpawnRequest (botName: string | undefined, options: SpawnOptions) {
     if (!this._connected) {
-      await this._connect();
+      await this.connect();
     }
 
     log(`Sending spawn request for bot ${botName}`);
@@ -77,7 +77,7 @@ export class BotFactoryClient {
    */
   async sendSpawnAndInviteRequest (botName: string | undefined, partyToJoin: string, invitation: Object, options: SpawnOptions) {
     if (!this._connected) {
-      await this._connect();
+      await this.connect();
     }
 
     log(`Sending spawn request and invitation for bot ${botName || ''}`);
@@ -94,7 +94,7 @@ export class BotFactoryClient {
 
   async sendBotManagementRequest (botId: string, command: string) {
     if (!this._connected) {
-      await this._connect();
+      await this.connect();
     }
 
     assert(botId, 'Invalid Bot Id');
@@ -116,7 +116,7 @@ export class BotFactoryClient {
    */
   async sendInvitationRequest (botId: string, partyToJoin: string, spec: Object, invitation: Object) {
     if (!this._connected) {
-      await this._connect();
+      await this.connect();
     }
 
     log(`Sending spawn request for party: ${partyToJoin} with invitation id: ${invitation}`);
@@ -133,7 +133,7 @@ export class BotFactoryClient {
 
   async sendResetRequest (source = false) {
     if (!this._connected) {
-      await this._connect();
+      await this.connect();
     }
 
     log('Sending reset request.');
@@ -149,7 +149,7 @@ export class BotFactoryClient {
 
   async sendStopRequest (code = 0) {
     if (!this._connected) {
-      await this._connect();
+      await this.connect();
     }
 
     log('Sending stop request.');
@@ -159,7 +159,7 @@ export class BotFactoryClient {
   async getStatus () {
     try {
       if (!this._connected) {
-        await this._connect();
+        await this.connect();
       }
 
       const status = await this._botPlugin.sendCommand(this._botFactoryTopic, createStatusCommand());
@@ -176,7 +176,7 @@ export class BotFactoryClient {
 
   async sendBotCommand (botId: string, command: Buffer): Promise<{ message: BotCommandResponse; }> {
     if (!this._connected) {
-      await this._connect();
+      await this.connect();
     }
 
     const response = await this._botPlugin.sendCommand(this._botFactoryTopic, createBotCommand(botId, command));
@@ -196,7 +196,7 @@ export class BotFactoryClient {
   /**
    * Connect to BotFactory.
    */
-  async _connect () {
+  async connect () {
     log('Joining in swarm with BotFactory.');
     await timeout(async () => {
       const promise = new Promise(resolve => {
