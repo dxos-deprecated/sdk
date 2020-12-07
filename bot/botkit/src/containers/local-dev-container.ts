@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import { Spawn } from '@dxos/protocol-plugin-bot';
+import { SpawnOptions } from '@dxos/protocol-plugin-bot';
 
 import { LOCAL_BOT_MAIN_FILE } from '../source-manager';
 import { CommandInfo, ChildProcessContainer } from './child-process-container';
@@ -26,7 +26,7 @@ export class LocalDevBotContainer extends ChildProcessContainer {
   /**
    * Get process command (to spawn).
    */
-  protected _getCommand (installDirectory: string, spawnOptions: Spawn.SpawnOptions): CommandInfo {
+  protected _getCommand (installDirectory: string, spawnOptions: SpawnOptions): CommandInfo {
     const { botPath } = spawnOptions;
     return {
       command: LOCAL_BOT_RUN_COMMAND,

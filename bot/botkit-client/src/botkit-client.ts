@@ -11,17 +11,18 @@ import { NetworkManager, transportProtocolProvider } from '@dxos/network-manager
 import {
   BotPlugin,
   createSpawnCommand,
+  createSpawnAndInviteCommand,
   createStatusCommand,
   createInvitationCommand,
   createBotManagementCommand,
   createResetCommand,
   createStopCommand,
   createBotCommand,
-  Spawn,
+  SpawnOptions,
   BotCommandResponse
 } from '@dxos/protocol-plugin-bot';
 
-const { log } = logs('botkit-client');
+const { log } = logs('dxos:botkit-client');
 
 const CONNECT_TIMEOUT = 30000;
 
@@ -54,7 +55,7 @@ export class BotFactoryClient {
   /**
    * Send request for bot spawning.
    */
-  async sendSpawnRequest (botName: string | undefined, options: Spawn.SpawnOptions) {
+  async sendSpawnRequest (botName: string | undefined, options: SpawnOptions) {
     if (!this._connected) {
       await this._connect();
     }
@@ -63,6 +64,26 @@ export class BotFactoryClient {
     const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic, createSpawnCommand(botName, options));
 
     assert(spawnResponse, `Unable to spawn bot ${botName}`);
+    // eslint-disable-next-line camelcase
+    assert(spawnResponse.message?.__type_url === 'dxos.protocol.bot.SpawnResponse', 'Invalid response type');
+
+    const { message: { botId } } = spawnResponse;
+
+    return botId;
+  }
+
+  /**
+   * Send request for bot spawning with invitation.
+   */
+  async sendSpawnAndInviteRequest (botName: string | undefined, partyToJoin: string, invitation: Object, options: SpawnOptions) {
+    if (!this._connected) {
+      await this._connect();
+    }
+
+    log(`Sending spawn request and invitation for bot ${botName || ''}`);
+    const spawnResponse = await this._botPlugin.sendCommand(this._botFactoryTopic, createSpawnAndInviteCommand(botName, keyToBuffer(partyToJoin), JSON.stringify(invitation), options));
+
+    assert(spawnResponse, `Unable to spawn or invite bot ${botName}`);
     // eslint-disable-next-line camelcase
     assert(spawnResponse.message?.__type_url === 'dxos.protocol.bot.SpawnResponse', 'Invalid response type');
 
@@ -168,6 +189,7 @@ export class BotFactoryClient {
    * Close network resources.
    */
   async close () {
+    log('Leaving swarm with BotFactory.');
     await this._networkManager.leaveProtocolSwarm(this._botFactoryTopic);
   }
 
@@ -175,6 +197,7 @@ export class BotFactoryClient {
    * Connect to BotFactory.
    */
   async _connect () {
+    log('Joining in swarm with BotFactory.');
     await timeout(async () => {
       const promise = new Promise(resolve => {
         // TODO(egorgripasov): Factor out.

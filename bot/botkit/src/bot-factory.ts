@@ -11,6 +11,7 @@ import { keyToBuffer, keyToString, sign } from '@dxos/crypto';
 import { transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SPAWN,
+  COMMAND_SPAWN_AND_INVITE,
   COMMAND_STATUS,
   COMMAND_INVITE,
   COMMAND_MANAGE,
@@ -24,7 +25,8 @@ import {
   createBotCommandResponse,
   createEvent,
   Message,
-  Invite
+  Invite,
+  SpawnOptions
 } from '@dxos/protocol-plugin-bot';
 
 import { BotManager } from './bot-manager';
@@ -136,13 +138,11 @@ export class BotFactory {
       case COMMAND_SPAWN: {
         try {
           const { botName, options } = message;
-          const botId = await this._botManager!.spawnBot(botName, options);
-          // TODO(egorgripasov): Move down.
-          await waitForCondition(() => this._botManager!.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
+          const botId = await this.spawnBot(botName, options);
           return createSpawnResponse(botId);
         } catch (err) {
           log(err);
-          return createSpawnResponse(undefined);
+          return createSpawnResponse(undefined, err.message);
         }
       }
 
@@ -151,6 +151,18 @@ export class BotFactory {
         assert(botId);
         runCommand = async () => this.inviteBot(botId, message);
         break;
+      }
+
+      case COMMAND_SPAWN_AND_INVITE: {
+        try {
+          const { botName, topic, invitation, options } = message;
+          const botId = await this.spawnBot(botName, options);
+          await this.inviteBot(botId, { topic, invitation });
+          return createSpawnResponse(botId);
+        } catch (err) {
+          log(err);
+          return createSpawnResponse(undefined, err.message);
+        }
       }
 
       case COMMAND_MANAGE: {
@@ -221,6 +233,13 @@ export class BotFactory {
       }
       return createCommandResponse(status, error.message);
     }
+  }
+
+  async spawnBot (botName: string | undefined, options?: SpawnOptions) {
+    const botId = await this._botManager!.spawnBot(botName, options);
+    // TODO(egorgripasov): Move down.
+    await waitForCondition(() => this._botManager!.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
+    return botId;
   }
 
   /**
