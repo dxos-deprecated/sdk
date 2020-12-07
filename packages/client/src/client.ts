@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import jsondown from 'jsondown';
 import leveljs from 'level-js';
 import memdown from 'memdown';
@@ -9,10 +10,12 @@ import memdown from 'memdown';
 import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
 import { humanize, PublicKey } from '@dxos/crypto';
-import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
+import { ECHO, InvitationOptions, SecretProvider, sortItemsTopologically } from '@dxos/echo-db';
+import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';
 import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
+import { ValueUtil } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
@@ -42,6 +45,10 @@ export interface ClientConfig {
     server: string,
     chainId: string,
   },
+  ipfs?: {
+    server: string,
+    gateway: string,
+  }
   snapshots?: boolean
   snapshotInterval?: number
 }
@@ -220,6 +227,87 @@ export class Client {
    */
   async createParty () {
     return this._echo.createParty();
+  }
+
+  /**
+   * This is a minimal solution for party restoration functionality.
+   * It has limitations and hacks:
+   * - We have to treat some models in a special way, this is not a generic solution
+   * - We have to recreate relationship between old IDs in newly created IDs
+   * - This won't work when identities are required, e.g. in chess.
+   * This solution is appropriate only for short term, expected to work only in Teamwork
+   */
+  async createPartyFromSnapshot (snapshot: DatabaseSnapshot) {
+    const party = await this._echo.createParty();
+    const items = snapshot.items ?? [];
+
+    // We have a brand new item ids after creation, which breaks the old structure of id-parentId mapping.
+    // That's why we have a mapping of old ids to new ids, to be able to recover the child-parent relations.
+    const oldToNewIdMap = new Map<string, string>();
+
+    for (const item of sortItemsTopologically(items)) {
+      assert(item.itemId);
+      assert(item.modelType);
+      assert(item.model);
+
+      const model = this.echo.modelFactory.getModel(item.modelType);
+      if (!model) {
+        console.warn('No model found in model factory (could need registering first): ', item.modelType);
+        continue;
+      }
+
+      let parentId: string | undefined;
+      if (item.parentId) {
+        parentId = oldToNewIdMap.get(item.parentId);
+        assert(parentId, 'Unable to recreate child-parent relationship - missing map record');
+        const parentItem = await party.database.getItem(parentId);
+        assert(parentItem, 'Unable to recreate child-parent relationship - parent not created');
+      }
+
+      const createdItem = await party.database.createItem({
+        model: model.constructor,
+        type: item.itemType,
+        parent: parentId
+      });
+
+      oldToNewIdMap.set(item.itemId, createdItem.id);
+
+      if (item.model.array) {
+        for (const mutation of (item.model.array.mutations || [])) {
+          const decodedMutation = model.meta.mutation.decode(mutation.mutation);
+          await (createdItem.model as any).write(decodedMutation);
+        }
+      } else if (item.modelType === 'wrn://protocol.dxos.org/model/object') {
+        assert(item?.model?.custom);
+        assert(model.meta.snapshotCodec);
+        assert(createdItem?.model);
+
+        const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
+        const obj: any = {};
+        assert(decodedItemSnapshot.root);
+        ValueUtil.applyValue(obj, 'root', decodedItemSnapshot.root);
+
+        // The planner board models have a structure in the object model, which needs to be recreated on new ids
+        if (item.itemType === 'dxos.org/type/planner/card' && obj.root.listId) {
+          obj.root.listId = oldToNewIdMap.get(obj.root.listId);
+          assert(obj.root.listId, 'Failed to recreate child-parent structure of a planner card');
+        }
+
+        await createdItem.model.setProperties(obj.root);
+      } else if (item.modelType === 'wrn://protocol.dxos.org/model/text') {
+        assert(item?.model?.custom);
+        assert(model.meta.snapshotCodec);
+        assert(createdItem?.model);
+
+        const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
+
+        await createdItem.model._handleDocUpdated(decodedItemSnapshot.data);
+      } else {
+        throw new Error(`Unhandled model type: ${item.modelType}`);
+      }
+    }
+
+    return party;
   }
 
   /**
