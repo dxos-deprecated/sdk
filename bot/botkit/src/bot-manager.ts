@@ -329,10 +329,9 @@ export class BotManager {
 
     await this._botContainers[botInfo.env].stopBot(botInfo);
 
-    if (stopped) {
-      botInfo.stopped = true;
-      await this._saveBotsToFile();
-    }
+    botInfo.stopped = stopped;
+    await this._saveBotsToFile();
+
     log(`Bot '${botId}' stopped.`);
   }
 
