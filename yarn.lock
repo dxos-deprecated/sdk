@@ -1350,23 +1350,23 @@
   dependencies:
     debug "^4.1.1"
 
-"@dxos/echo-db@2.6.8-alpha.0":
-  version "2.6.8-alpha.0"
-  resolved "https://registry.yarnpkg.com/@dxos/echo-db/-/echo-db-2.6.8-alpha.0.tgz#1c5ec0d0972d43c3553d948c826926e824cf1b5f"
-  integrity sha512-Qz/LDYb7mIq+v79mvNU4j2E2yEdsHeSGRnt65PWnmJ0G8nhSQlMuWM2nB5gJHNu8BBpJpySPU8iEigRGOn5X9g==
+"@dxos/echo-db@2.6.9-alpha.0":
+  version "2.6.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@dxos/echo-db/-/echo-db-2.6.9-alpha.0.tgz#2f82c8738a337098639b05200d76ae22318a160c"
+  integrity sha512-T0yCv1BmDVzM+9TF0yneh/QZ69uBSY6hdMi4rYzyreAfX2ElyFcNxIAUPbzQaCFasRnpmmUFYHLzSG2BzLkn9Q==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^0.2.2"
     "@dxos/credentials" "^2.1.12-alpha.0"
     "@dxos/crypto" "^1.0.5"
-    "@dxos/echo-protocol" "^2.6.8-alpha.0"
+    "@dxos/echo-protocol" "^2.6.9-alpha.0"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^2.6.8-alpha.0"
+    "@dxos/model-factory" "^2.6.9-alpha.0"
     "@dxos/network-manager" "^1.0.0-beta.108"
-    "@dxos/object-model" "^2.6.8-alpha.0"
+    "@dxos/object-model" "^2.6.9-alpha.0"
     "@dxos/protocol-plugin-replicator" "^1.1.0-beta.14"
     "@dxos/random-access-multi-storage" "^1.1.0-beta.7"
-    "@dxos/util" "^2.6.8-alpha.0"
+    "@dxos/util" "^2.6.9-alpha.0"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/json-stable-stringify" "^1.0.32"
@@ -1386,17 +1386,17 @@
     source-map-support "^0.5.12"
     stream-buffers "^3.0.2"
 
-"@dxos/echo-protocol@^2.6.8-alpha.0":
-  version "2.6.8-alpha.0"
-  resolved "https://registry.yarnpkg.com/@dxos/echo-protocol/-/echo-protocol-2.6.8-alpha.0.tgz#565ebea65466fd8ec5999ee9e315d56c60d199a4"
-  integrity sha512-V5En2ceT6x0B7Yix9MmzkZrQ3uwqTyXv5q5bmW9zGWUHeaERuY0YMHeXWolD9dDg1rTHa9zUPjMWqeI8sZHSJA==
+"@dxos/echo-protocol@^2.6.9-alpha.0":
+  version "2.6.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@dxos/echo-protocol/-/echo-protocol-2.6.9-alpha.0.tgz#e3d223440b98e9afdb32d5a2ba7d01dcd97b2126"
+  integrity sha512-/3NVmi5/7qq1GoAIxXazh1NeQcW55ayRV3nglWN1KapQny9ojzRJSp5VXXN5SLGUUVuWBG1xFugomE89uQR65Q==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^0.2.2"
     "@dxos/credentials" "^2.1.12-alpha.0"
     "@dxos/crypto" "^1.0.5"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^2.6.8-alpha.0"
+    "@dxos/util" "^2.6.9-alpha.0"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1484,10 +1484,10 @@
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
-"@dxos/messenger-model@1.2.0-alpha.18":
-  version "1.2.0-alpha.18"
-  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.18.tgz#688f7988e4a38dce418db3b77c771d445279b3e4"
-  integrity sha512-cnX4Gs/76qleWEiPinAO3Z7G267rVQOq1isWCMfTBfQIHKzYzDrByvqNLtKHsr3qpx++qLe29i8cl58l1+u1kg==
+"@dxos/messenger-model@1.2.0-alpha.23":
+  version "1.2.0-alpha.23"
+  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.23.tgz#616168b03e37097a7853d5b09f176ecfb5eac35d"
+  integrity sha512-6kTrgfxtnAHrMuDffdkeh7EEjrQd/VR9Mg3pWw1+5ZKGL8tnGQtGA3voOxGTGWLWijRkVHcJShDt5N4VGCXXYg==
   dependencies:
     "@dxos/codec-protobuf" "^0.2.0"
     "@dxos/util" "^2.1.0"
@@ -1506,17 +1506,17 @@
     lodash.set "^4.3.2"
     lodash.unset "^4.5.2"
 
-"@dxos/model-factory@2.6.8-alpha.0", "@dxos/model-factory@^2.6.8-alpha.0":
-  version "2.6.8-alpha.0"
-  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-2.6.8-alpha.0.tgz#f182ad65679e285d571d7e7ef94f35f87c335d24"
-  integrity sha512-/ZLLTk/qnuLC17xOOWVdSzrvBr2wr2x4rX8Q+PIgtLPE/LzG9DZ5wXkH3Y7So3/xISOT8cjjODTzdr4ty1PC+g==
+"@dxos/model-factory@2.6.9-alpha.0", "@dxos/model-factory@^2.6.9-alpha.0":
+  version "2.6.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@dxos/model-factory/-/model-factory-2.6.9-alpha.0.tgz#e2386da7ef2f3f1b1117f4305d2bdd25950dbde3"
+  integrity sha512-JL0Nv5C/NEgpdSk8+ZuRUNswQkKbKovpIh2Zsbf6G9Kc1dUH1P5AEOuJZ531L5ghDKVMZNtnmcU1Oj+eQ3xDWA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^0.2.2"
     "@dxos/crypto" "^1.0.5"
-    "@dxos/echo-protocol" "^2.6.8-alpha.0"
+    "@dxos/echo-protocol" "^2.6.9-alpha.0"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/util" "^2.6.8-alpha.0"
+    "@dxos/util" "^2.6.9-alpha.0"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1578,18 +1578,18 @@
     debug "^4.1.1"
     wrtc "^0.4.3"
 
-"@dxos/object-model@2.6.8-alpha.0", "@dxos/object-model@^2.6.8-alpha.0":
-  version "2.6.8-alpha.0"
-  resolved "https://registry.yarnpkg.com/@dxos/object-model/-/object-model-2.6.8-alpha.0.tgz#fc19d5e2d4bc71530aeb30383e3906aebae63c92"
-  integrity sha512-CRG++exxpg/Qt3uTQGddQwZkGLqrlS/PoC01gUtCRLXHUdiOravhmxqW0dwjb/JLzNxwx/wU9f8NthbIIB3zzg==
+"@dxos/object-model@2.6.9-alpha.0", "@dxos/object-model@^2.6.9-alpha.0":
+  version "2.6.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@dxos/object-model/-/object-model-2.6.9-alpha.0.tgz#13942d4c748228a0880800f53b9fea3dd733b929"
+  integrity sha512-2t8tm9RmTE6dC2yYZWf0al1Bm2fO67O3yfphrBQtKwCYat66vTsTHV8LjZoMGbYrF0oqTUDNRsM1u4Lz7S0hIA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^0.2.2"
     "@dxos/crypto" "^1.0.5"
-    "@dxos/echo-protocol" "^2.6.8-alpha.0"
+    "@dxos/echo-protocol" "^2.6.9-alpha.0"
     "@dxos/feed-store" "^1.2.0-beta.30"
-    "@dxos/model-factory" "^2.6.8-alpha.0"
-    "@dxos/util" "^2.6.8-alpha.0"
+    "@dxos/model-factory" "^2.6.9-alpha.0"
+    "@dxos/util" "^2.6.9-alpha.0"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1689,7 +1689,20 @@
     mutexify "^1.3.0"
     random-access-storage "^1.3.0"
 
-"@dxos/random-access-multi-storage@1.1.0-beta.7", "@dxos/random-access-multi-storage@^1.1.0-beta.7":
+"@dxos/random-access-multi-storage@1.1.0-beta.8":
+  version "1.1.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@dxos/random-access-multi-storage/-/random-access-multi-storage-1.1.0-beta.8.tgz#85bdad208428ce19b112923087073c29d09bd7af"
+  integrity sha512-bIm9WTeu/KN19+Q2OLn4Fw73mDGazyqhw/cAzM/EmGe1vr1YCcF1jL+MutE8L/T9bxphZnKlJbKcpqaxmBga3g==
+  dependencies:
+    "@dxos/random-access-chrome-file" "^2.0.0-beta.0"
+    del "^5.1.0"
+    pify "^4.0.1"
+    random-access-file "^2.1.3"
+    random-access-idb "^1.2.1"
+    random-access-memory "^3.1.1"
+    random-access-web "^2.0.3"
+
+"@dxos/random-access-multi-storage@^1.1.0-beta.7":
   version "1.1.0-beta.7"
   resolved "https://registry.yarnpkg.com/@dxos/random-access-multi-storage/-/random-access-multi-storage-1.1.0-beta.7.tgz#9940269c6e554b3b3ea9e73264f1cfa4378b332b"
   integrity sha512-m5vFPG4z5UjwmXjyZyhqnxsnS6HwZ6daCXCj79hfxthVRV70cKhw9hsnKiyeeUxgf7MF9ogfIbHD/I66OLpAYQ==
@@ -1718,10 +1731,10 @@
     "@dxos/model-factory" "^1.0.0-beta.28"
     yjs "^13.2.0"
 
-"@dxos/util@2.6.8-alpha.0", "@dxos/util@^2.6.8-alpha.0":
-  version "2.6.8-alpha.0"
-  resolved "https://registry.yarnpkg.com/@dxos/util/-/util-2.6.8-alpha.0.tgz#e144e539cf3f1251416329c515889bdac9764123"
-  integrity sha512-N7uObqLULr28vRrKLFQDsVtxm4QGicae/F73Z/dd85VXUXuilnByYuA6Xdpf1ZflAuG3+4cKY4GwlYOAmJXMGQ==
+"@dxos/util@2.6.9-alpha.0", "@dxos/util@^2.6.9-alpha.0":
+  version "2.6.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@dxos/util/-/util-2.6.9-alpha.0.tgz#3575e37283891584a8de1882cd7c062cb8dc0643"
+  integrity sha512-ouxRTonCjVkhlqJp91sptdSQN6kDI05azoNVyRzL5kgMgKj+tk2+QaIRWeqhAqPmhPpP3R+sdBx41g6P1qrxCg==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
     "@dxos/codec-protobuf" "^0.2.2"
