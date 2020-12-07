@@ -5,6 +5,7 @@
 import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { Button, DialogActions } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -69,8 +70,8 @@ const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onCl
 
   if (open) {
     return (
-      <Dialog open={open} onClose={onClose} classes={{ paper: classes.paper }}>
-        <InvitationContent link={link} title={title} message={message} passcode={passcode} />
+      <Dialog open={open} classes={{ paper: classes.paper }}>
+        <InvitationContent link={link} title={title} message={message} passcode={passcode} onClose={onClose} />
       </Dialog>
     );
   }
@@ -78,7 +79,7 @@ const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onCl
   return null;
 };
 
-const InvitationContent = ({ link, title, message, passcode }) => {
+const InvitationContent = ({ link, title, message, passcode, onClose }) => {
   const classes = useStyles();
 
   return (
@@ -108,6 +109,12 @@ const InvitationContent = ({ link, title, message, passcode }) => {
             </IconButton>
           </CopyToClipboard>
         </div>
+
+        <DialogActions>
+          <Button onClick={onClose} color='primary'>
+            Done
+          </Button>
+        </DialogActions>
       </DialogContent>
     </div>
   );
