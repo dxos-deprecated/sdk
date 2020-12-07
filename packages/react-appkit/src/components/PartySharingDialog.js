@@ -211,8 +211,14 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   // TODO(burdon): Columns in EACH section should have same content:
   // [SMALL AVATAR] [NAME] [INVITATION PIN] [MEMBER TYPE] [ACTIONS: e.g., refresh PIN/remove]
 
+  const onlineInvitationsInProgress = invitations.filter((invitation) => !invitation.done).length > 0;
+
   return (
-    <Dialog open={open} maxWidth='md' onClose={onClose}>
+    <Dialog
+      open={open}
+      maxWidth='md'
+      onClose={onlineInvitationsInProgress ? undefined : onClose} // No click away when in progress
+    >
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
           <PeopleIcon />

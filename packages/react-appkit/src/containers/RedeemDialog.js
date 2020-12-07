@@ -37,12 +37,20 @@ const RedeemDialog = ({ onClose, ...props }) => {
     onClose();
   };
 
+  const handleInvitationError = (error) => {
+    setStep(2);
+    if (error.includes('SyntaxError: Unexpected token') || error.includes('InvalidCharacterError')) {
+      setError('Invalid invitation code.');
+    } else if (error.includes('ERR_GREET_INVALID_INVITATION')) {
+      setError('Invitation not authorized.');
+    } else {
+      setError(error);
+    }
+  };
+
   const [redeemCode, setPin] = useInvitationRedeemer({
     onDone: handleDone,
-    onError: (ex) => {
-      setStep(2);
-      setError(String(ex));
-    },
+    onError: (ex) => handleInvitationError(String(ex)),
     isOffline
   });
 
@@ -63,7 +71,13 @@ const RedeemDialog = ({ onClose, ...props }) => {
   };
 
   return (
-    <Dialog fullWidth maxWidth='xs' open onClose={handleDone} {...props}>
+    <Dialog
+      fullWidth
+      maxWidth='xs'
+      open
+      onClose={step === 0 ? handleDone : undefined} // No click away when in the middle of a flow
+      {...props}
+    >
       <DialogTitle>Redeem Invitation</DialogTitle>
 
       {step === 0 && (
