@@ -113,8 +113,17 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
     }
   }, [registryBotFactories]);
 
+  const handleClose = () => {
+    setError(undefined);
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} onExit={() => setPending(false)} classes={{ paper: classes.paper }}>
+    <Dialog
+      open={open}
+      onClose={pending ? undefined : handleClose} // No click away when in progress
+      classes={{ paper: classes.paper }}
+    >
       <DialogTitle>Invite Bot</DialogTitle>
 
       <DialogContent>
@@ -195,7 +204,7 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={handleClose}>Cancel</Button>
         <Button
           disabled={pending || !botFactoryTopic || !botVersion}
           color='primary'
