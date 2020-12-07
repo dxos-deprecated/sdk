@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.28](https://www.github.com/dxos/sdk/compare/v2.7.27...v2.7.28) (2020-12-07)
+
+
+### Bug Fixes
+
+* Introduce recreating party from a snapshot ([#426](https://www.github.com/dxos/sdk/issues/426)) ([5462df0](https://www.github.com/dxos/sdk/commit/5462df015d55eed04d44ddd7ecb5fef325c382ff))
+
 ### [2.7.27](https://www.github.com/dxos/sdk/compare/v2.7.26...v2.7.27) (2020-12-04)
 
 
