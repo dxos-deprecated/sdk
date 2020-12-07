@@ -15,6 +15,8 @@ const DEFAULT_TIMEOUT = '360000';
 
 const log = debug('client');
 
+export const CHARGE_TYPE_PER_REQUEST = 'per-request';
+
 export const encodeObjToBase64 = (obj) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64');
 };
@@ -425,9 +427,9 @@ export class PaymentClient {
       await this._connect();
 
       const contract = await this._getContract(contractId);
-      const { attributes: { channel, amount } } = contract;
+      const { attributes: { channelAddress, amount } } = contract;
 
-      payment = await this.createTransfer(channel, amount);
+      payment = await this.createTransfer(channelAddress, amount);
       payment.contractId = contractId;
     }
 
@@ -448,16 +450,51 @@ export class PaymentClient {
     assert(preImage, 'Invalid preImage.');
 
     const contract = await this._getContract(contractId);
-    const { attributes: { channel: contractChannelAddress, amount: contractAmount } } = contract;
+    log(`Contract: ${JSON.stringify(contract)}`);
+
+    const {
+      attributes: {
+        channelAddress: contractChannelAddress,
+        amount: contractAmount,
+        chargeType,
+
+        // TODO(ashwin): Check assetId in contract.
+        // assetId,
+
+        // TODO(ashwin): Check that both consumer and provider have signed the contract.
+        consumerAddress,
+        providerAddress,
+
+        expiryTime
+      }
+    } = contract;
 
     assert(contractChannelAddress, 'Invalid channel.');
     assert(contractAmount, 'Invalid amount.');
+    assert(chargeType === CHARGE_TYPE_PER_REQUEST, 'Invalid chargeType.');
+    assert(consumerAddress, 'Invalid consumerId.');
+    assert(providerAddress, 'Invalid providerId.');
+    assert(expiryTime, 'Invalid expiryTime.');
+
+    // Check contract hasn't expired.
+    if (Date.now() > expiryTime) {
+      throw new Error(`Contract ${contractId} has expired.`);
+    }
 
     await this._connect();
     const transfer = await this.getTransfer(transferId);
-
     const paymentInfo = getPaymentInfo(transfer);
+
     log(`Validating received payment: ${JSON.stringify(paymentInfo)}`);
+
+    // Check consumer/provider in contract match transfer initiator/resolver.
+    if (consumerAddress !== transfer.initiator) {
+      throw new Error('Payment consumer/initiator mismatch.');
+    }
+
+    if (providerAddress !== transfer.responder) {
+      throw new Error('Payment provider/responder mismatch.');
+    }
 
     if (contractChannelAddress !== paymentInfo.channelAddress) {
       throw new Error('Payment channel mismatch (contract/transfer).');
