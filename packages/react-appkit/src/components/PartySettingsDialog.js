@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExport }) => {
+const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExportToFile, onExportToIpfs, exportInProgress }) => {
   const classes = useStyles();
   const [active, setActive] = useState(properties.active);
   const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
@@ -68,7 +68,7 @@ const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExport }
     setExportedCid(undefined);
 
     try {
-      const cid = await onExport(true);
+      const cid = await onExportToIpfs();
       setExportedCid(cid);
     } catch (e) {
       console.error(e);
@@ -120,7 +120,7 @@ const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExport }
           </FormGroup>
         </FormControl>
 
-        {inProgress && <LinearProgress />}
+        {(inProgress || exportInProgress) && <LinearProgress />}
         {!!error && <Typography variant='body2' color='error'>Export unsuccessful</Typography>}
         {!!exportedCid && (
           <div className={classes.exportedCid}>
@@ -155,15 +155,15 @@ const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExport }
       </Snackbar>
 
       <DialogActions>
-        {onExport && (
-          <>
-            <Button onClick={handleExportToIPFS} color='secondary' disabled={inProgress}>
+        {handleExportToIPFS && (
+          <Button onClick={handleExportToIPFS} color='secondary' disabled={inProgress || exportInProgress}>
               Export to IPFS
-            </Button>
-            <Button onClick={() => onExport(false)} color='secondary' disabled={inProgress}>
+          </Button>
+        )}
+        {onExportToFile && (
+          <Button onClick={onExportToFile} color='secondary' disabled={inProgress || exportInProgress}>
               Export to file
-            </Button>
-          </>
+          </Button>
         )}
 
         <Button onClick={handleClose} color='primary'>
