@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import { EditableText } from '@dxos/react-ux';
+import { Model } from '@dxos/model-factory';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,8 +29,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+type ItemSettingsDialogPropsType = {
+  open: boolean,
+  onClose: () => void,
+  itemModel: Model<any>,
+  itemId: string,
+  closingDisabled: boolean,
+  children: React.ReactNode
+}
+
 // TODO(burdon): Remove itemModel (pass in item and callbacks).
-const ItemSettingsDialog = ({ open, onClose, itemModel, itemId, closingDisabled, children }) => {
+const ItemSettingsDialog = ({ open, onClose, itemModel, itemId, closingDisabled, children }: ItemSettingsDialogPropsType) => {
   const classes = useStyles();
 
   // TODO(burdon): Pass in item (this doesn't need to know about all items).
@@ -62,7 +72,7 @@ const ItemSettingsDialog = ({ open, onClose, itemModel, itemId, closingDisabled,
             variant='outlined'
             value={item.displayName}
             className={classes.margin}
-            onUpdate={value => itemModel.renameItem(itemId, value)}
+            onUpdate={(value: string) => itemModel.renameItem(itemId, value)}
           />
         )}
 

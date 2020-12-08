@@ -27,7 +27,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const KeyMap = ({ keyMap, showKeyMap, onClose }) => {
+type KeyMapPropsType = {
+  keyMap: Record<string, { sequences: { sequence: string }[], name: string}>,
+  showKeyMap: boolean,
+  onClose: () => void
+}
+
+const KeyMap = ({ keyMap, showKeyMap, onClose }: KeyMapPropsType) => {
   const classes = useStyles();
 
   // https://github.com/greena13/react-hotkeys#Displaying-a-list-of-available-hot-keys
@@ -41,7 +47,7 @@ const KeyMap = ({ keyMap, showKeyMap, onClose }) => {
             <tr key={key}>
               <td>{name}</td>
               {/* eslint-disable-next-line react/no-array-index-key */}
-              <td className={classes.sequence}>
+              <td className={classes.key}>
                 {sequences.map(({ sequence }, i) => <div key={i} className={classes.key}>{sequence}</div>)}
               </td>
             </tr>
