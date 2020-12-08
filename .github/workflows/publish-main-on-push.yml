@@ -2,7 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Publish to NPM (main branch => x.x.x-alpha.0)
+name: Publish main branch to NPM (main branch => x.x.x-alpha.0)
 
 on:
   push:
@@ -28,22 +28,34 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
         if: ${{ steps.release.outputs.release_created }}
       - name: Lerna Publish
-        run: |
-          git config --global user.email "devops@dxos.org"
-          git config --global user.name "DXOS.org"
-          yarn
-          yarn lint:lockfile
-          yarn build
-          yarn lint
-          yarn test
-          git reset --hard
-          yarn lerna version `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`-alpha.0 --no-git-tag-version -y
-          git commit -am "${{ steps.release.outputs.tag_name }}"-alpha.0
-          git push
-          git tag -f "${{ steps.release.outputs.tag_name }}"-alpha.0
-          git push --tags -f
-          git push --delete origin "${{ steps.release.outputs.tag_name }}"
-          yarn lerna publish from-package --force-publish -y --dist-tag="alpha"
+        # configure git user
+        - run: git config --global user.email "devops@dxos.org"
+        - run: git config --global user.name "DXOS.org"
+
+        # build
+        - run: yarn
+        - run: yarn build
+
+        # lint and test
+        - run: yarn lint:lockfile
+        - run: yarn lint
+        - run: yarn test
+
+        # clean up the environment
+        - run: git reset --hard
+
+        # set the version
+        - run: yarn lerna version `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`-alpha.0 --no-git-tag-version -y
+        - run: git commit -am "${{ steps.release.outputs.tag_name }}"-alpha.0
+        - run: git push
+
+        # set the tag
+        - run: git tag -f "${{ steps.release.outputs.tag_name }}"-alpha.0
+        - run: git push --tags -f
+        - run: git push --delete origin "${{ steps.release.outputs.tag_name }}"
+
+        # publish to NPM
+        - run: yarn lerna publish from-package --force-publish -y --dist-tag="alpha"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: ${{ steps.release.outputs.release_created }}
