@@ -212,18 +212,15 @@ export class PaymentClient {
     }
 
     const channel = channelResult.getValue();
-
-    const { assetId } = this._config.get('services.payment');
-
-    assert(assetId, 'Invalid asset ID.');
-
-    const assetIdx = channel.assetIds.findIndex(id => id === assetId);
-
-    const assetBalances = channel.balances[assetIdx] || { to: [], amount: [] };
-
     const balances = {};
-    assetBalances.to.forEach((address, index) => {
-      balances[address] = utils.formatEther(assetBalances.amount[index]);
+
+    channel.assetIds.forEach(assetId => {
+      balances[assetId] = {};
+      const assetIdx = channel.assetIds.findIndex(id => id === assetId);
+      const assetBalances = channel.balances[assetIdx] || { to: [], amount: [] };
+      assetBalances.to.forEach((address, index) => {
+        balances[assetId][address] = utils.formatEther(assetBalances.amount[index]);
+      });
     });
 
     return balances;
@@ -232,15 +229,16 @@ export class PaymentClient {
   /**
    * Add funds to a payment channel.
    * @param {string} channelAddress
+   * @param {string} assetId
    * @param {string} amount
    */
-  async addFunds (channelAddress, amount) {
+  async addFunds (channelAddress, assetId, amount) {
     assert(channelAddress, 'Invalid channel.');
+    assert(assetId, 'Invalid asset ID.');
     assert(amount, 'Invalid amount.');
 
-    const { assetId, provider } = this._config.get('services.payment');
+    const { provider } = this._config.get('services.payment');
 
-    assert(assetId, 'Invalid asset ID.');
     assert(provider, 'Invalid payment provider endpoint.');
 
     await this._connect();
@@ -269,13 +267,14 @@ export class PaymentClient {
   /**
    * Reconcile on-chain deposit with payment channel balance.
    * @param {string} channelAddress
+   * @param {string} assetId
    */
-  async reconcileDeposit (channelAddress) {
+  async reconcileDeposit (channelAddress, assetId) {
     assert(channelAddress, 'Invalid channel.');
-
-    const { assetId, provider } = this._config.get('services.payment');
-
     assert(assetId, 'Invalid asset ID.');
+
+    const { provider } = this._config.get('services.payment');
+
     assert(provider, 'Invalid payment provider endpoint.');
 
     await this._connect();
@@ -299,17 +298,15 @@ export class PaymentClient {
   /**
    * Create a transfer to the counterparty (micropayment).
    * @param {string} channelAddress
+   * @param {string} assetId
    * @param {string} amount
    */
-  async createTransfer (channelAddress, amount) {
+  async createTransfer (channelAddress, assetId, amount) {
     assert(channelAddress, 'Invalid channel.');
+    assert(assetId, 'Invalid asset ID.');
     assert(amount, 'Invalid amount.');
 
     await this._connect();
-
-    const { assetId } = this._config.get('services.payment');
-
-    assert(assetId, 'Invalid asset ID.');
 
     const transferAmt = utils.parseEther(amount);
     const preImage = getRandomBytes32();
@@ -387,15 +384,13 @@ export class PaymentClient {
   /**
    * Withdraw funds from the channel (to on-chain address).
    * @param {string} channelAddress
+   * @param {string} assetId
    * @param {string} amount
    */
-  async withdrawFunds (channelAddress, amount) {
+  async withdrawFunds (channelAddress, assetId, amount) {
     assert(channelAddress, 'Invalid channel.');
-    assert(amount, 'Invalid amount.');
-
-    const { assetId } = this._config.get('services.payment');
-
     assert(assetId, 'Invalid asset ID.');
+    assert(amount, 'Invalid amount.');
 
     await this._connect();
     const result = await this._service.withdraw({
@@ -427,9 +422,9 @@ export class PaymentClient {
       await this._connect();
 
       const contract = await this._getContract(contractId);
-      const { attributes: { channelAddress, amount } } = contract;
+      const { attributes: { channelAddress, assetId, amount } } = contract;
 
-      payment = await this.createTransfer(channelAddress, amount);
+      payment = await this.createTransfer(channelAddress, assetId, amount);
       payment.contractId = contractId;
     }
 
@@ -457,9 +452,7 @@ export class PaymentClient {
         channelAddress: contractChannelAddress,
         amount: contractAmount,
         chargeType,
-
-        // TODO(ashwin): Check assetId in contract.
-        // assetId,
+        assetId: contractAssetId,
 
         // TODO(ashwin): Check that both consumer and provider have signed the contract.
         consumerAddress,
@@ -472,6 +465,7 @@ export class PaymentClient {
     assert(contractChannelAddress, 'Invalid channel.');
     assert(contractAmount, 'Invalid amount.');
     assert(chargeType === CHARGE_TYPE_PER_REQUEST, 'Invalid chargeType.');
+    assert(contractAssetId, 'Invalid assetId.');
     assert(consumerAddress, 'Invalid consumerId.');
     assert(providerAddress, 'Invalid providerId.');
     assert(expiryTime, 'Invalid expiryTime.');
@@ -498,6 +492,10 @@ export class PaymentClient {
 
     if (contractChannelAddress !== paymentInfo.channelAddress) {
       throw new Error('Payment channel mismatch (contract/transfer).');
+    }
+
+    if (contractAssetId !== paymentInfo.assetId) {
+      throw new Error('Payment assetId mismatch (contract/transfer).');
     }
 
     const paymentAmount = paymentInfo.balances[transfer.initiator];
