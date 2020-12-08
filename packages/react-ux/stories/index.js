@@ -33,8 +33,8 @@ storiesOf('UX', module)
   .add('EditableText', () => (
     <div>
       <EditableText _variant='h3' value='This is read-only.' disabled />
-      <EditableText _variant='h3' value='This is editable.' onUpdate={() => {}} />
-      <EditableText _variant='h3' placeholder='Enter text.' onUpdate={() => {}} />
+      <EditableText _variant='h3' value='This is editable.' onUpdate={() => null} />
+      <EditableText _variant='h3' placeholder='Enter text.' onUpdate={() => null} />
     </div>
   ))
   .add('Editable Secret', () => <Passcode editable onSubmit={value => console.log(value)} />)

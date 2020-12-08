@@ -15,7 +15,7 @@ export default {
 export const withNewPartyCard = () => {
   return (
     <Box m={2}>
-      <PartyCard onNewParty={() => {}} />
+      <PartyCard onNewParty={() => null} />
     </Box>
   );
 };

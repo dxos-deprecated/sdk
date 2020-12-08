@@ -30,7 +30,7 @@ import InvitationDialog from '../components/InvitationDialog';
 import { Action, useActionHandler, useAppRouter } from '../hooks';
 
 // TODO(telackey): This file is dead code, and these types no longer exist.
-const InviteDetails = () => {};
+const InviteDetails = () => null;
 const InviteType = null;
 
 const ACTION_USER_INVITATION = 1;
@@ -107,7 +107,7 @@ const AppBar = ({
     const { botId, ...rest } = spec;
     const botFactoryClient = new BotFactoryClient(client.networkManager, botFactoryTopic);
 
-    const secretProvider = () => {};
+    const secretProvider = () => null;
 
     // Provided by inviter node.
     const secretValidator = async (invitation, secret) => {

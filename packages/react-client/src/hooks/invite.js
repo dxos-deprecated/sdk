@@ -15,7 +15,7 @@ import { useClient } from './client';
 const encodeInvitation = (invitation) => btoa(JSON.stringify(invitation.toQueryParameters()));
 const decodeInvitation = (code) => InvitationDescriptor.fromQueryParameters(JSON.parse(atob(code)));
 
-const noOp = () => {};
+const noOp = () => null;
 
 /**
  * Hook to redeem an invitation Code and provide the PIN authentication if needed.
