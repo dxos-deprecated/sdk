@@ -11,8 +11,8 @@ const props = {
   attempt: 1,
   editable: true,
   length: 4,
-  onChange: () => {},
-  onSubmit: () => {}
+  onChange: () => null,
+  onSubmit: () => null
 };
 
 describe('Passcode', () => {

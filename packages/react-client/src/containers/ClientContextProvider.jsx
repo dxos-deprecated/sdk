@@ -99,7 +99,7 @@ const ClientContextProvider = ({ config, children }) => {
     };
 
     // TODO(burdon): Propagate errors?
-    runEffect().then(() => {}, error);
+    runEffect().then(() => null, error);
 
     return () => {
       mounted = false;

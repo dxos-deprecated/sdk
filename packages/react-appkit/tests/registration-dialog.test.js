@@ -123,8 +123,6 @@ describe('RegistrationDialog', () => {
     // TODO
     // });
 
-    test('Clicking "Next" leads to Verify Seed Phrase stage', async () => {
-
-    });
+    test.skip('Clicking "Next" leads to Verify Seed Phrase stage', async () => null);
   });
 });

@@ -180,7 +180,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const handleBotInvite = async (botFactoryTopic, botId, spec = {}) => {
     const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
 
-    const secretProvider = () => {};
+    const secretProvider = () => null;
 
     // Provided by inviter node.
     const secretValidator = async (invitation, secret) => {
