@@ -97,6 +97,7 @@ message Status {
     string lastActive = 5;
     bool stopped = 6;
     repeated string parties = 7;
+    string recordName = 8;
   }
 
   string version = 1;
