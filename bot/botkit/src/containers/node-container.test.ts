@@ -18,6 +18,7 @@ test('Start & stop bot', async () => {
   const botInfo: BotInfo = {
     botId: createId(),
     id: createId(),
+    recordName: createId(),
     env: NODE_ENV,
     installDirectory: path.join(path.dirname(findPkgJson({ cwd: __dirname })!), 'res/test/package'),
     name: 'bot',
