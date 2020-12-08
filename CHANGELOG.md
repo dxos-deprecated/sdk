@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.31](https://www.github.com/dxos/sdk/compare/v2.7.30...v2.7.31) (2020-12-08)
+
+
+### Bug Fixes
+
+* Upgrade eslint plugin ([#436](https://www.github.com/dxos/sdk/issues/436)) ([aefe8b1](https://www.github.com/dxos/sdk/commit/aefe8b1000b9a4d5441969d44ff50c45f5a91b72))
+
 ### [2.7.30](https://www.github.com/dxos/sdk/compare/v2.7.29...v2.7.30) (2020-12-08)
 
 
