@@ -24,6 +24,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import { useRegistryBots, useRegistryBotFactories } from '@dxos/react-client';
 
+import { useKeywords } from '../hooks';
+
 // TODO(egorgripasov): Factor out to config/client.
 const BOT_FACTORY_DOMAIN = 'dxos.network';
 
@@ -70,10 +72,11 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
   const [botVersion, setBotVersion] = useState();
   const [error, setError] = useState();
   const [advanced, setAdvanced] = useState(false);
+  const keywords = useKeywords();
 
   // TODO(burdon): Could have same topic?
   const registryBotFactories = useRegistryBotFactories();
-  const registryBots = useRegistryBots();
+  const registryBots = useRegistryBots({ sortByKeywords: keywords });
 
   const handleSubmit = async () => {
     setError(undefined);

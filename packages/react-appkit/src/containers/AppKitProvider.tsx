@@ -43,13 +43,14 @@ export interface AppKitProviderProps {
   errorHandler?: any,
   issuesLink?: string,
   router?: any,
+  keywords?: string[], // Used for sorting relevant registry records first
 }
 
 /**
  * Creates the AppKit framework context, which provides the global UX state.
  * Wraps children with a React ErrorBoundary component, which catches runtime errors and enables reset.
  */
-const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined }: AppKitProviderProps) => {
+const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined, keywords = [] }: AppKitProviderProps) => {
   const client = useClient();
   const [state, dispatch] = useReducer(appReducer, defaultsDeep({}, initialState, defaultState));
   const [padsRegistered, setPadsRegistered] = useState(false);
@@ -83,7 +84,7 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
   }, []);
 
   return (
-    <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink }}>
+    <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink, keywords }}>
       {padsRegistered && children}
     </AppKitContext.Provider>
   );
