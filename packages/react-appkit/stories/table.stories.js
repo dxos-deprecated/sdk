@@ -205,8 +205,7 @@ const Test = () => {
     // setRows(JSON.parse(JSON.stringify(rows)));
   };
 
-  const handleAddColumn = async () => {
-  };
+  const handleAddColumn = async () => null;
 
   return (
     <div className={classes.root}>
