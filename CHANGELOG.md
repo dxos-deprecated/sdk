@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.30](https://www.github.com/dxos/sdk/compare/v2.7.29...v2.7.30) (2020-12-08)
+
+
+### Bug Fixes
+
+* add missing fileds for bf status. ([#434](https://www.github.com/dxos/sdk/issues/434)) ([5e4d708](https://www.github.com/dxos/sdk/commit/5e4d70850634efe479165e7af5283ca664978964))
+
 ### [2.7.29](https://www.github.com/dxos/sdk/compare/v2.7.28...v2.7.29) (2020-12-08)
 
 
