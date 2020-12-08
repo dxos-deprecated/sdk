@@ -2,7 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Publish to NPM (release branch => x.x.x)
+name: Publish release branch to NPM (release branch => x.x.x)
 
 on:
   push:
@@ -12,6 +12,7 @@ on:
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
+    # checkout
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -19,21 +20,35 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - name: Build and NPM publish
-        run: |
-          git config --global user.email "devops@dxos.org"
-          git config --global user.name "DXOS.org"
-          yarn
-          yarn lint:lockfile
-          yarn lint
-          yarn build
-          yarn test
-          git reset --hard
-          VERSION=`cat package.json | grep '"version":' | awk '{ print $2 }' | sed 's/[",]//g'`
-          yarn lerna version $VERSION --no-git-tag-version -y
-          git commit -am "v$VERSION"
-          git push
-          git tag -f "v$VERSION"
-          git push --tags -f
-          yarn lerna publish from-package --force-publish -y
+        # configure git user
+        - run: git config --global user.email "devops@dxos.org"
+        - run: git config --global user.name "DXOS.org"
+
+        # lint
+        - run: yarn
+        - run: yarn lint:lockfile
+        - run: yarn lint
+
+        # build
+        - run: yarn build
+
+        # test
+        - run: yarn test
+
+        # clean up the environment
+        - run: git reset --hard
+
+        # set the version
+        - run: VERSION=`cat package.json | grep '"version":' | awk '{ print $2 }' | sed 's/[",]//g'`
+        - run: yarn lerna version $VERSION --no-git-tag-version -y
+        - run: git commit -am "v$VERSION"
+        - run: git push
+
+        # set the tag
+        - run: git tag -f "v$VERSION"
+        - run: git push --tags -f
+
+        # publish to NPM
+        - run: yarn lerna publish from-package --force-publish -y
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
