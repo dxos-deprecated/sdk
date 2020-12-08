@@ -8,6 +8,7 @@ import debug from 'debug';
 import fs, { ensureFileSync } from 'fs-extra';
 import yaml from 'js-yaml';
 import get from 'lodash.get';
+import moment from 'moment';
 import path from 'path';
 
 import { Client } from '@dxos/client';
@@ -51,6 +52,7 @@ export interface BotInfo {
   lastActive: any
   stopped: boolean
   name: string
+  recordName: string
   env: string
 }
 
@@ -183,6 +185,7 @@ export class BotManager {
     this._bots.set(botId, {
       botId,
       id,
+      recordName: botName || id,
       installDirectory,
       storageDirectory: path.join(process.cwd(), '.bots', botId),
       spawnOptions: options,
@@ -311,8 +314,10 @@ export class BotManager {
   private async _startBot (botId: string) {
     const botInfo = this._bots.get(botId);
     assert(botInfo);
+
     log(`_startBot ${JSON.stringify(botInfo)}`);
     await this._botContainers[botInfo.env].startBot(botInfo);
+    botInfo.started = moment.utc();
 
     await this._saveBotsToFile();
 
