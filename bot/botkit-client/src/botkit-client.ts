@@ -197,7 +197,7 @@ export class BotFactoryClient {
    * Connect to BotFactory.
    */
   async connect () {
-    log('Joining in swarm with BotFactory.');
+    log('Joining swarm with BotFactory.');
     await timeout(async () => {
       const promise = new Promise(resolve => {
         // TODO(egorgripasov): Factor out.

@@ -39,7 +39,7 @@ import { log } from './log';
 const botkitPackage = readPackageJson({ cwd: __dirname }) as any;
 
 const BOT_SPAWN_TIMEOUT = 50000;
-const BOT_SPAWN_CHECK_INTERVAL = 50;
+const BOT_SPAWN_CHECK_INTERVAL = 500;
 
 /**
  * Accepts bot control commands. Creates and manages bots using BotContainer.
