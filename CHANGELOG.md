@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.32](https://www.github.com/dxos/sdk/compare/v2.7.31...v2.7.32) (2020-12-08)
+
+
+### Bug Fixes
+
+* Exact versions for dxos packages ([#438](https://www.github.com/dxos/sdk/issues/438)) ([c86ec3c](https://www.github.com/dxos/sdk/commit/c86ec3c12df3019badd8ee6cbd411e2398b48c68))
+
 ### [2.7.31](https://www.github.com/dxos/sdk/compare/v2.7.30...v2.7.31) (2020-12-08)
 
 
