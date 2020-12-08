@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.29](https://www.github.com/dxos/sdk/compare/v2.7.28...v2.7.29) (2020-12-08)
+
+
+### Bug Fixes
+
+* botkit regressions fix & improvements. ([#429](https://www.github.com/dxos/sdk/issues/429)) ([1362a76](https://www.github.com/dxos/sdk/commit/1362a76c8aa0d12769a63f4d531bfe6af04ea272))
+* Safeguards for dialogs ([#432](https://www.github.com/dxos/sdk/issues/432)) ([32e7a3c](https://www.github.com/dxos/sdk/commit/32e7a3cf1d658991f280b8185fcfeae338159b11))
+
 ### [2.7.28](https://www.github.com/dxos/sdk/compare/v2.7.27...v2.7.28) (2020-12-07)
 
 
