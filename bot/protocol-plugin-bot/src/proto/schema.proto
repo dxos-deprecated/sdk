@@ -12,30 +12,39 @@ message Message {
   google.protobuf.Any message = 1;
 }
 
+message SpawnOptions {
+  string id = 1;
+  string name = 2;
+  string env = 3;
+  string ipfsCID = 4;
+  string ipfsEndpoint = 5;
+  string botPath = 6;
+}
+
 // Command to spawn a bot.
 message Spawn {
   // Bot WRN (e.g. wrn://example/bot/chess).
   string botName = 1;
-
-  message SpawnOptions {
-    string id = 1;
-    string name = 2;
-    string env = 3;
-    string ipfsCID = 4;
-    string ipfsEndpoint = 5;
-    string botPath = 6;
-  }
-
   SpawnOptions options = 2;
+}
+
+message SpawnAndInvite {
+  string botName = 1;
+  SpawnOptions options = 2;
+
+  // Topic the bot should swarm on to connect to peers (e.g. cd719a79f016e7de5250784e6db684d46589c3731a91a313810dc236bc8d8fe9).
+  string topic = 3;
+  string invitation = 4;
 }
 
 message SpawnResponse {
   string botId = 1;
+  string error = 2;
 }
 
 // Command to invite bot to a party.
 message Invite {
-  // Bot UID.
+  // Bot Id.
   string botId = 1;
 
   // Topic the bot should swarm on to connect to peers (e.g. cd719a79f016e7de5250784e6db684d46589c3731a91a313810dc236bc8d8fe9).

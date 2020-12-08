@@ -19,7 +19,7 @@ import { buildAndPublishBot } from './distributor';
 import { Party } from '@dxos/echo-db';
 import assert from 'assert';
 
-import { Spawn } from '@dxos/protocol-plugin-bot';
+import { SpawnOptions } from '@dxos/protocol-plugin-bot';
 import { Invitation } from '@dxos/credentials';
 
 const log = debug('dxos:testing');
@@ -94,7 +94,7 @@ export class Orchestrator {
     return this._factory.process.pid;
   }
 
-  async startAgent (options: Spawn.SpawnOptions) {
+  async startAgent (options: SpawnOptions) {
     const { env = NODE_ENV, botPath, ...rest } = options;
     
     assert(botPath);
@@ -174,7 +174,7 @@ export class Orchestrator {
     }, FACTORY_START_TIMEOUT, new Error(`Failed to start bot factory: Timed out in ${FACTORY_START_TIMEOUT} ms.`))
   }
 
-  async _spawnBot (botPath: string, options: Spawn.SpawnOptions) {
+  async _spawnBot (botPath: string, options: SpawnOptions) {
     const { env } = options;
     const botId = await this._factoryClient.sendSpawnRequest(undefined, {
       ...getBotIdentifiers(botPath, env),
