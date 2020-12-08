@@ -21,7 +21,7 @@ import {
   createInvitationMessage,
   createSignResponse,
   createBotCommand,
-  Spawn
+  SpawnOptions
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
 
@@ -45,7 +45,7 @@ export interface BotInfo {
   id: string
   installDirectory: string
   storageDirectory: string
-  spawnOptions: Spawn.SpawnOptions
+  spawnOptions: SpawnOptions
   parties: string[]
   started: any
   lastActive: any
@@ -146,7 +146,7 @@ export class BotManager {
   /**
    * Spawn bot instance.
    */
-  async spawnBot (botName: string | undefined, options: Spawn.SpawnOptions = {}) {
+  async spawnBot (botName: string | undefined, options: SpawnOptions = {}) {
     let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
     assert(botName || ipfsCID || this._localDev);
 
@@ -329,10 +329,9 @@ export class BotManager {
 
     await this._botContainers[botInfo.env].stopBot(botInfo);
 
-    if (stopped) {
-      botInfo.stopped = true;
-      await this._saveBotsToFile();
-    }
+    botInfo.stopped = stopped;
+    await this._saveBotsToFile();
+
     log(`Bot '${botId}' stopped.`);
   }
 
