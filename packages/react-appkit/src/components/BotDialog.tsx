@@ -54,14 +54,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+type propsType = { open: boolean, onSubmit: () => void, onClose: () => void }
+
 /**
  * Dialog to create and invite bot to party.
- *
- * @param open
- * @param onSubmit
- * @param onClose
  */
-const BotDialog = ({ open, onSubmit, onClose }) => {
+const BotDialog = ({ open, onSubmit, onClose }: propsType) => {
   const classes = useStyles();
   const [pending, setPending] = useState(false);
   const [bot, setBot] = useState('');
@@ -92,8 +90,8 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
     const versions = registryBots
       .filter(({ names }) => !!names.find(name => name.startsWith(`${bot}@`)))
       .map(({ names }) => names).flat()
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).reverse()
-      .filter(name => name !== bot);
+      .sort((a: string, b: string) => a.localeCompare(b, undefined, { numeric: true })).reverse()
+      .filter((name: string) => name !== bot);
 
     versions.unshift(bot);
     setBotVersions(versions);

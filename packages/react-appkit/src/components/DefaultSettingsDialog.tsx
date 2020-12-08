@@ -8,8 +8,10 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import ItemSettings from './ItemSettings';
 
-const DefaultSettingsDialog = ({ open, onClose, onCancel, item }) => {
-  const handleClose = ({ name }) => {
+type propsType = { open: boolean, onClose: () => void, onCancel: () => void, item: any}
+
+const DefaultSettingsDialog = ({ open, onClose, onCancel, item }: propsType) => {
+  const handleClose = ({ name }: { name: string }) => {
     if (item) {
       item.model.setProperty('title', name);
     }

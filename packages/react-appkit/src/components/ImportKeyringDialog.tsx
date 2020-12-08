@@ -21,6 +21,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+type propsType = { onClose: () => void, decrypter: (text: string | ArrayBuffer | null, passphrase: number) => string }
+
 /**
  * Dialog to import keyring from file.
  *
@@ -28,7 +30,7 @@ const useStyles = makeStyles(theme => ({
  * @param {function} onClose
  * @param {function} decrypter
  */
-const ImportKeyringDialog = ({ onClose, decrypter }) => {
+const ImportKeyringDialog = ({ onClose, decrypter }: propsType) => {
   const classes = useStyles();
   const config = useConfig();
   const buttonRef = useRef();
@@ -36,8 +38,8 @@ const ImportKeyringDialog = ({ onClose, decrypter }) => {
   const [passphrase, setPassphrase] = useState(0);
   const [error, setError] = useState(false);
 
-  const handlePassChange = (event) => {
-    setPassphrase(event.target.value);
+  const handlePassChange = (event: React.SyntheticEvent) => {
+    setPassphrase((event.target as HTMLTextAreaElement).value);
   };
 
   const handleFileChange = (event) => {
@@ -46,7 +48,7 @@ const ImportKeyringDialog = ({ onClose, decrypter }) => {
       const reader = new FileReader();
       reader.onload = async (event) => {
         try {
-          await decrypter(event.target.result, passphrase);
+          await decrypter((event.target as FileReader).result, passphrase);
           // TODO(burdon): Pass through global action handler from layout.
           reload(config.app.publicUrl);
         } catch (e) {

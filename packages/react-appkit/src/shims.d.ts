@@ -3,3 +3,4 @@
 //
 
 declare module '@dxos/react-ux';
+declare module 'react-copy-to-clipboard';

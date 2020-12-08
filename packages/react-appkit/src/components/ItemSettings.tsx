@@ -14,6 +14,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import { EditableText } from '@dxos/react-ux';
+import { SvgIconComponent } from '@material-ui/icons';
+import { Item } from '@dxos/echo-db';
+import { Model } from '@dxos/model-factory';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,7 +30,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, icon, children = null }) => {
+type ItemSettingsPropsType = {
+  open: boolean,
+  onClose: ({ name }: { name: string }) => void,
+  onCancel: () => void,
+  item: Item<M extends Model<any>>,
+  closingDisabled: boolean,
+  icon: SvgIconComponent,
+  children: React.ReactNode
+}
+
+const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, icon, children = null }: ItemSettingsPropsType) => {
   const classes = useStyles();
   const [name, setName] = useState('');
 
@@ -59,7 +72,7 @@ const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, icon, ch
           variant='outlined'
           value={name}
           className={classes.margin}
-          onUpdate={value => setName(value)}
+          onUpdate={(value: string) => setName(value)}
         />
 
         {/* Custom content. */}
