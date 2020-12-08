@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@dxos/echo-db": "2.6.9-alpha.0",
-    "@dxos/eslint-plugin": "1.0.8",
+    "@dxos/eslint-plugin": "1.0.9",
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",
     "@storybook/react": "^6.0.21",
