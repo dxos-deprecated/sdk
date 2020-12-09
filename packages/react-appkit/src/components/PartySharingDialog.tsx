@@ -38,6 +38,7 @@ import { useMembers } from '../hooks';
 import BotDialog from './BotDialog';
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 import { Contact, Party, PartyMember } from '@dxos/echo-db';
+import assert from 'assert';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -101,7 +102,7 @@ function PendingInvitation ({
   const classes = useStyles();
   const [inviteCode, pin] = useInvitation(party.key.asBuffer(), {
     onDone: () => onInvitationDone(pending.id),
-    onError: e => {
+    onError: (e) => {
       throw e;
     }
   });
@@ -148,14 +149,21 @@ function PendingInvitation ({
   );
 }
 
-type PendingOfflineInvitationPropsType = {
+function PendingOfflineInvitation ({
+  party,
+  invitation,
+  handleCopy
+}:{
   party: Party,
-  invitation: Record<string, any>,
-  handleCopy: (value: string) => ()
-}
+  invitation: Record<string, any> | undefined,
+  handleCopy: (value: string) => void
+}) {
+  if (!invitation) {
+    return;
+  }
 
-function PendingOfflineInvitation ({ party, invitation, handleCopy }: PendingOfflineInvitationPropsType) {
   const [inviteCode] = useOfflineInvitation(party.key.asBuffer(), invitation.contact, {
+    onDone: () => null,
     onError: e => {
       throw e;
     }
@@ -202,7 +210,7 @@ const PartySharingDialog = ({
   const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
   const createOfflineInvitation = (contact: Contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
 
-  const handleBotInvite = async (botFactoryTopic: string, botId: string, spec = {}) => {
+  const handleBotInvite = async (botFactoryTopic: string, botId: string | undefined, spec: Record<string, unknown> = {}) => {
     const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
 
     const secretProvider: any = () => null;
@@ -217,6 +225,7 @@ const PartySharingDialog = ({
     const invitation = await party.createInvitation({ secretValidator, secretProvider });
 
     const botUID = await botFactoryClient.sendSpawnRequest(botId);
+    assert(botUID);
     await botFactoryClient.sendInvitationRequest(botUID, party.key.toHex(), spec, invitation.toQueryParameters());
     setBotDialogVisible(false);
   };

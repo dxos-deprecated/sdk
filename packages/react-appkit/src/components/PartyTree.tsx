@@ -5,12 +5,12 @@
 import clsx from 'clsx';
 import React, { useState, useEffect, useCallback, forwardRef } from 'react';
 
-import { SvgIconTypeMap, Theme } from '@material-ui/core';
+import { SvgIconTypeMap } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { grey, green } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import ItemIcon from '@material-ui/icons/DescriptionOutlined';
 import FolderIcon from '@material-ui/icons/FolderOpen';
@@ -22,7 +22,7 @@ import { EditableText } from '@dxos/react-ux';
 import { MemberList } from './MemberList';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
-const treeItemBaseStyles = (theme: Theme) => ({
+const treeItemBaseStyles = (theme: Theme) => createStyles({
   root: {
     paddingTop: theme.spacing(1),
 
@@ -71,7 +71,7 @@ const treeItemBaseStyles = (theme: Theme) => ({
   }
 });
 
-const useTreeItemStyles = makeStyles(treeItemBaseStyles);
+const useTreeItemStyles: (props?: any) => Record<string, string> = makeStyles(treeItemBaseStyles);
 
 const treeAddItemBaseStyles = (theme: Theme) => ({
   ...treeItemBaseStyles(theme),
@@ -140,7 +140,7 @@ const ItemLabel = ({
   children
 }: {
   icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
-  className: string,
+  className?: string,
   classes: Record<string, string>,
   children: React.ReactNode
 }) => (
@@ -190,7 +190,6 @@ export const PartyTreeAddItemButton = forwardRef(({ onClick, children }, ref) =>
       ref={ref}
       classes={treeAddItemClasses}
       nodeId='__ADD__'
-      selected={false}
       onClick={handleClick}
       label={(
         <ItemLabel icon={AddIcon} className={classes.addItem} classes={classes}>
@@ -220,7 +219,6 @@ export const PartyTreeItem = ({ id, label, icon = ItemIcon, isSelected, onSelect
       className={clsx(isSelected && treeItemClasses.selected)}
       key={id}
       nodeId={id}
-      selected={isSelected}
       onClick={onSelect}
       label={onUpdate
         ? <EditableLabel icon={icon} classes={classes} label={label} onUpdate={onUpdate} />
@@ -229,13 +227,25 @@ export const PartyTreeItem = ({ id, label, icon = ItemIcon, isSelected, onSelect
   );
 };
 
-const PartyTree = ({ parties, items = () => <></>, selected, onSelect, onCreate }) => {
+const PartyTree = ({
+  parties,
+  items = () => <></>,
+  selected,
+  onSelect,
+  onCreate
+}: {
+  parties: any[],
+  items: (topic?: string) => React.ReactNode,
+  selected: string,
+  onSelect: (value: string) => void,
+  onCreate: () => void
+}) => {
   const classes = useStyles();
   const treeItemClasses = useTreeItemStyles();
-  const [expanded, setExpanded] = useState([]);
+  const [expanded, setExpanded] = useState<string[]>([]);
 
-  const createId = (type, id) => `${type}/${id}`;
-  const parseId = id => id.split('/');
+  const createId = (type: string, id: string) => `${type}/${id}`;
+  const parseId = (id: string) => id.split('/');
 
   useEffect(() => {
     if (!parties) {
@@ -249,7 +259,7 @@ const PartyTree = ({ parties, items = () => <></>, selected, onSelect, onCreate 
     return null;
   }
 
-  const handleSelect = (event, nodeId) => {
+  const handleSelect = (event: React.ChangeEvent<unknown>, nodeId: string) => {
     if (onSelect) {
       const [, topic] = parseId(nodeId);
       if (topic) {
@@ -258,7 +268,7 @@ const PartyTree = ({ parties, items = () => <></>, selected, onSelect, onCreate 
     }
   };
 
-  const handleToggle = (event, nodeIds) => {
+  const handleToggle = (event: React.ChangeEvent<unknown>, nodeIds: string[]) => {
     setExpanded(nodeIds);
   };
 

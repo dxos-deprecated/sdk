@@ -63,7 +63,7 @@ const BotDialog = ({
   onClose
 }: {
   open: boolean,
-  onSubmit: ({ topic, bot }: { topic: string, bot: string | undefined}) => void,
+  onSubmit: ({ topic, bot, spec }: { topic: string, bot: string | undefined, spec?: Record<string, unknown>}) => void,
   onClose: () => void
 }) => {
   const classes = useStyles();
