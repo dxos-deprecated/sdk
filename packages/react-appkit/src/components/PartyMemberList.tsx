@@ -42,7 +42,8 @@ const PartyMemberList = ({ party, onShare }: { party: Party, onShare: () => void
         ))}
       </AvatarGroup>
 
-      <Tooltip title='Share' name='share' placement='top'>
+      {/* name='share' removed as this attribute does not exist on Tooltip */}
+      <Tooltip title='Share' placement='top'>
         <Avatar style={getAvatarStyle(theme)} onClick={onShare}>
           <ShareIcon />
         </Avatar>

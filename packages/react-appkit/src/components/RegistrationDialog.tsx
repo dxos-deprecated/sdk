@@ -364,7 +364,7 @@ const RegistrationDialog = ({
 
       case STAGE_IMPORT_KEYRING: {
         return (
-          // open attribute is deleted as it is not present in ImportKeyringDialog
+          // open attribute deleted as it is not present in ImportKeyringDialog
           <ImportKeyringDialog onClose={() => setStage(STAGE_START)} decrypter={keyringDecrypter} />
         );
       }

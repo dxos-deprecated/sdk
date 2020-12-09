@@ -59,7 +59,9 @@ const ImportKeyringDialog = ({
         try {
           await decrypter((event.target as FileReader).result, passphrase);
           // TODO(burdon): Pass through global action handler from layout.
-          reload(config.app.publicUrl);
+
+          // app is not present on ClientConfig
+          // reload(config.app.publicUrl);
         } catch (e) {
           setError(e);
         }
@@ -99,7 +101,11 @@ const ImportKeyringDialog = ({
           color='primary'
           ref={buttonRef}
           disabled={!passphrase || !!error}
-          onClick={async () => fileRef.current.click()}
+          onClick={async () => {
+            // done in ugly way
+            assert(fileRef.current);
+            (fileRef.current as unknown as HTMLInputElement).click();
+          }}
         >
           Choose File
         </Button>

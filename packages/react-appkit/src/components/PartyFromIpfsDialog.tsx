@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import PeopleIcon from '@material-ui/icons/People';
+import { IpfsHelper } from '../helpers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -38,7 +39,7 @@ const PartyFromIpfsDialog = ({
   open: boolean,
   onClose: () => void,
   onImport: (content: ArrayBuffer | string | null) => void,
-  ipfs
+  ipfs: IpfsHelper
 }) => {
   const classes = useStyles();
   const [cid, setCid] = useState('');
@@ -57,8 +58,9 @@ const PartyFromIpfsDialog = ({
     setError(undefined);
     try {
       assert(cid);
-      const data = await ipfs.download(cid);
-      await onImport(data);
+      // data changed to { string }
+      const { string } = await ipfs.download(cid);
+      await onImport(string);
       handleClose();
     } catch (e) {
       console.error(e);
