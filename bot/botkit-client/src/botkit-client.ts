@@ -3,8 +3,10 @@
 //
 
 import assert from 'assert';
+import { EventEmitter } from 'events';
 import { keyPair } from 'hypercore-crypto';
 
+import { waitForCondition } from '@dxos/async';
 import { keyToBuffer } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
 import { NetworkManager, transportProtocolProvider } from '@dxos/network-manager';
@@ -25,19 +27,30 @@ import {
 const { log } = logs('dxos:botkit-client');
 
 const CONNECT_TIMEOUT = 30000;
+const WAIT_FOR_CONNECT_TIMEOUT = 10000;
+const CONNECTION_CHECK_INTERVAL = 100;
+
+enum SwarmingStatus {
+  NotConnected,
+  Connecting,
+  Connected
+}
 
 /**
  * BotFactory Client.
  */
-export class BotFactoryClient {
+export class BotFactoryClient extends EventEmitter {
   _botFactoryTopic: Buffer;
   _botFactoryPeerId: Buffer;
   _networkManager: NetworkManager;
   _peerId: Buffer;
   _botPlugin: BotPlugin;
   _connected: Boolean;
+  _swarm: SwarmingStatus;
 
   constructor (networkManager: NetworkManager, botFactoryTopic: string) {
+    super();
+
     assert(botFactoryTopic);
     assert(networkManager);
 
@@ -50,6 +63,7 @@ export class BotFactoryClient {
     this._botPlugin = new BotPlugin(this._peerId, () => {});
 
     this._connected = false;
+    this._swarm = SwarmingStatus.NotConnected;
   }
 
   /**
@@ -190,7 +204,18 @@ export class BotFactoryClient {
    */
   async close () {
     log('Leaving swarm with BotFactory.');
-    await this._networkManager.leaveProtocolSwarm(this._botFactoryTopic);
+    this.emit('close');
+    if (this._swarm === SwarmingStatus.Connecting) {
+      try {
+        await waitForCondition(() => this._swarm === SwarmingStatus.Connected, WAIT_FOR_CONNECT_TIMEOUT, CONNECTION_CHECK_INTERVAL);
+      } catch (err) {
+        log(`Connection was not established: ${err}`);
+      }
+    }
+    if (this._swarm === SwarmingStatus.Connected) {
+      await this._networkManager.leaveProtocolSwarm(this._botFactoryTopic);
+      this._swarm = SwarmingStatus.NotConnected;
+    }
   }
 
   /**
@@ -198,22 +223,28 @@ export class BotFactoryClient {
    */
   async connect () {
     log('Joining swarm with BotFactory.');
-    await timeout(async () => {
+    this._swarm = SwarmingStatus.Connecting;
+
+    return await timeout(async () => {
       const promise = new Promise(resolve => {
         // TODO(egorgripasov): Factor out.
         this._botPlugin.on('peer:joined', (peerId: Buffer) => {
           if (peerId.equals(this._botFactoryPeerId)) {
             log('Bot factory peer connected');
             this._connected = true;
-            resolve();
+            resolve(true);
           }
+        });
+        this.on('close', () => {
+          resolve(false);
         });
       });
 
       await this._networkManager.joinProtocolSwarm(this._botFactoryTopic,
         transportProtocolProvider(this._botFactoryTopic, this._peerId, this._botPlugin));
+      this._swarm = SwarmingStatus.Connected;
 
-      await promise;
+      return await promise;
     }, CONNECT_TIMEOUT, () => new Error(`Failed to connect to bot factory: Timed out in ${CONNECT_TIMEOUT}ms.`));
   }
 }
