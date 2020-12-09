@@ -63,15 +63,17 @@ const useStyles = makeStyles((theme) => ({
  * @param onSubmit
  * @param onClose
  */
-const BotDialog = ({ open, onSubmit, onClose }) => {
+const BotDialog = ({ open, invitationPending, onSubmit, onClose, onBotFactorySelect, invitationError }) => {
   const classes = useStyles();
-  const [pending, setPending] = useState(false);
   const [bot, setBot] = useState('');
   const [botFactoryTopic, setBotFactoryTopic] = useState('');
   const [botVersions, setBotVersions] = useState([]);
   const [botVersion, setBotVersion] = useState();
   const [error, setError] = useState();
+  const [botFactoryError, setBotFactoryError] = useState();
   const [advanced, setAdvanced] = useState(false);
+  const [pending, setPending] = useState();
+
   const keywords = useKeywords();
 
   // TODO(burdon): Could have same topic?
@@ -81,13 +83,22 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
   const handleSubmit = async () => {
     setError(undefined);
     setPending(true);
-    try {
-      await onSubmit({ topic: botFactoryTopic, bot: botVersion });
-    } catch (e) {
-      console.error(e);
-      setError(e);
-    } finally {
-      setPending(false);
+    if (botFactoryError) {
+      await handleBotFactorySelect(botFactoryTopic, true);
+    }
+    await onSubmit({ bot: botVersion });
+  };
+
+  const handleBotFactorySelect = async (botFactoryTopic, force) => {
+    if (botFactoryTopic && onBotFactorySelect) {
+      setBotFactoryError(undefined);
+      try {
+        await onBotFactorySelect(botFactoryTopic, force);
+      } catch (err) {
+        console.error(err);
+        setBotFactoryError(err);
+        setPending(false);
+      }
     }
   };
 
@@ -116,8 +127,26 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
     }
   }, [registryBotFactories]);
 
+  useEffect(() => {
+    if (open && botFactoryTopic && onBotFactorySelect) {
+      handleBotFactorySelect(botFactoryTopic);
+    }
+  }, [botFactoryTopic, open]);
+
+  useEffect(() => {
+    if (typeof invitationPending === 'boolean') {
+      setPending(invitationPending);
+    }
+  }, [invitationPending]);
+
+  useEffect(() => {
+    setError(invitationError);
+  }, [invitationError]);
+
   const handleClose = () => {
     setError(undefined);
+    setBotFactoryError(undefined);
+    setPending(false);
     onClose();
   };
 
@@ -220,6 +249,13 @@ const BotDialog = ({ open, onSubmit, onClose }) => {
         <DialogActions>
           <Typography variant='body1' className={classes.errorMessage}>
             Deploying failed. Please try again later.
+          </Typography>
+        </DialogActions>
+      )}
+      {botFactoryError && (
+        <DialogActions>
+          <Typography variant='body1' className={classes.errorMessage}>
+            Unable to connect to BotFactory. Please select another one.
           </Typography>
         </DialogActions>
       )}
