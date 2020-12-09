@@ -12,6 +12,8 @@ import errorsReducer, { SET_ERRORS } from '../hooks/errors';
 import filterReducer, { SET_FILTER } from '../hooks/filter';
 import layoutReducer, { SET_LAYOUT } from '../hooks/layout';
 
+const noop = () => {}; // eslint-disable-line
+
 const defaultState = {
   [SET_LAYOUT]: {
     showSidebar: true,
@@ -44,13 +46,14 @@ export interface AppKitProviderProps {
   issuesLink?: string,
   router?: any,
   keywords?: string[], // Used for sorting relevant registry records first
+  messageLog?: (message: string) => void, // Optional logger of message events, such us successful registration
 }
 
 /**
  * Creates the AppKit framework context, which provides the global UX state.
  * Wraps children with a React ErrorBoundary component, which catches runtime errors and enables reset.
  */
-const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined, keywords = [] }: AppKitProviderProps) => {
+const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined, keywords = [], messageLog = noop }: AppKitProviderProps) => {
   const client = useClient();
   const [state, dispatch] = useReducer(appReducer, defaultsDeep({}, initialState, defaultState));
   const [padsRegistered, setPadsRegistered] = useState(false);
@@ -84,7 +87,7 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
   }, []);
 
   return (
-    <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink, keywords }}>
+    <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink, keywords, messageLog }}>
       {padsRegistered && children}
     </AppKitContext.Provider>
   );
