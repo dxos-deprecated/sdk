@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.34](https://www.github.com/dxos/sdk/compare/v2.7.33...v2.7.34) (2020-12-09)
+
+
+### Bug Fixes
+
+* Fix resetting and add more logging ([0f25197](https://www.github.com/dxos/sdk/commit/0f25197705f9e27a6fee715e3c2ffc32ab7e8f8e))
+* Logging for invites ([1d20c79](https://www.github.com/dxos/sdk/commit/1d20c7972a3aa95f8fa00f5e1210a61b97715638))
+
 ### [2.7.33](https://www.github.com/dxos/sdk/compare/v2.7.32...v2.7.33) (2020-12-09)
 
 
