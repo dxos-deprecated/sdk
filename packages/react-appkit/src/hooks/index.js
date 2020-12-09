@@ -11,5 +11,6 @@ export * from './items';
 export * from './keywords';
 export * from './layout';
 export * from './members';
+export * from './message-log';
 export * from './router';
 export * from './pads';
