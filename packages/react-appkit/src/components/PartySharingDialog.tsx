@@ -37,6 +37,7 @@ import { useClient, useContacts, useInvitation, useOfflineInvitation } from '@dx
 import { useMembers } from '../hooks';
 import BotDialog from './BotDialog';
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
+import { Contact, Party, PartyMember } from '@dxos/echo-db';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -86,9 +87,16 @@ const TableCell = withStyles(theme => ({
   }
 }))(MuiTableCell);
 
-function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
+type PendingInvitationPropsType = {
+  party: Party,
+  pending: Record<string, any>,
+  handleCopy: (value: string) => void,
+  onInvitationDone: (value: string) => void
+}
+
+function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }: PendingInvitationPropsType) {
   const classes = useStyles();
-  const [inviteCode, pin] = useInvitation(party.key, {
+  const [inviteCode, pin] = useInvitation(party.key.asBuffer(), {
     onDone: () => onInvitationDone(pending.id),
     onError: e => {
       throw e;
@@ -137,8 +145,14 @@ function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
   );
 }
 
-function PendingOfflineInvitation ({ party, invitation, handleCopy }) {
-  const [inviteCode] = useOfflineInvitation(party.key, invitation.contact, {
+type PendingOfflineInvitationPropsType = {
+  party: Party,
+  invitation: Record<string, any>,
+  handleCopy: (value: string) => ()
+}
+
+function PendingOfflineInvitation ({ party, invitation, handleCopy }: PendingOfflineInvitationPropsType) {
+  const [inviteCode] = useOfflineInvitation(party.key.asBuffer(), invitation.contact, {
     onError: e => {
       throw e;
     }
@@ -162,28 +176,34 @@ function PendingOfflineInvitation ({ party, invitation, handleCopy }) {
   );
 }
 
-const PartySharingDialog = ({ party, open, onClose }) => {
+type PartySharingDialogPropsType = {
+  party: Party,
+  open: boolean,
+  onClose: () => void
+}
+
+const PartySharingDialog = ({ party, open, onClose }: PartySharingDialogPropsType) => {
   const classes = useStyles();
   const client = useClient();
-  const [contactsInvitations, setContactsInvitations] = useState([]);
-  const [invitations, setInvitations] = useState([]);
+  const [contactsInvitations, setContactsInvitations] = useState<Record<string, any>[]>([]);
+  const [invitations, setInvitations] = useState<Record<string, any>[]>([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
-  const members = useMembers(party);
+  const members: PartyMember[] = useMembers(party);
   const [contacts] = useContacts();
-  const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toString('hex') === c.publicKey.toString('hex'))); // contacts not already in this party
+  const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toHex() === c.publicKey.toHex())); // contacts not already in this party
 
   const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
-  const createOfflineInvitation = (contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
+  const createOfflineInvitation = (contact: Contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
 
-  const handleBotInvite = async (botFactoryTopic, botId, spec = {}) => {
+  const handleBotInvite = async (botFactoryTopic: string, botId: string, spec = {}) => {
     const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
 
-    const secretProvider = () => null;
+    const secretProvider: any = () => null;
 
     // Provided by inviter node.
-    const secretValidator = async (invitation, secret) => {
+    const secretValidator = async (invitation: any, secret: Buffer) => {
       const signature = secret.slice(0, SIGNATURE_LENGTH);
       const message = secret.slice(SIGNATURE_LENGTH);
       return verify(message, signature, keyToBuffer(botFactoryTopic));
@@ -196,12 +216,12 @@ const PartySharingDialog = ({ party, open, onClose }) => {
     setBotDialogVisible(false);
   };
 
-  const handleCopy = (value) => {
+  const handleCopy = (value: string) => {
     setCopiedSnackBarOpen(true);
     console.log(value);
   };
 
-  const handleInvitationDone = (invitationId) => {
+  const handleInvitationDone = (invitationId: string) => {
     setInvitations(old => ([
       ...old.filter(invite => invite.id !== invitationId),
       ...old.filter(invite => invite.id === invitationId).map(invite => ({ ...invite, done: true }))
@@ -271,7 +291,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
             {members.length > 0 && (
               <TableBody>
                 {members.map((member) => (
-                  <TableRow key={member.publicKey}>
+                  <TableRow key={member.publicKey.toString()}>
                     <TableCell classes={{ root: classes.colAvatar }}>
                       <MemberAvatar member={member} />
                     </TableCell>
@@ -295,7 +315,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
             {invitableContacts.length > 0 && (
               <TableBody>
                 {invitableContacts.map(contact => (
-                  <TableRow key={contact.publicKey}>
+                  <TableRow key={contact.publicKey.toString()}>
                     <TableCell classes={{ root: classes.colAvatar }}>
                       <MemberAvatar member={contact} />
                     </TableCell>

@@ -44,13 +44,36 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExportToFile, onExportToIpfs, exportInProgress }) => {
+type PartySettingsDialogPropsType = {
+  party: { title: string },
+  open: boolean,
+  onClose: (
+    { active, showDeleted, displayName }: {
+      active: boolean,
+      showDeleted: boolean,
+      displayName: string}
+  ) => void,
+  properties: Record<string, any>,
+  onExportToFile: () => void,
+  onExportToIpfs: () => string,
+  exportInProgress: boolean
+}
+
+const PartySettingsDialog = ({
+  party,
+  open,
+  onClose,
+  properties = {},
+  onExportToFile,
+  onExportToIpfs,
+  exportInProgress
+}: PartySettingsDialogPropsType) => {
   const classes = useStyles();
-  const [active, setActive] = useState(properties.active);
-  const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
+  const [active, setActive] = useState<boolean>(properties.active);
+  const [showDeleted, setShowDeleted] = useState<boolean>(properties.showDeleted);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
-  const [exportedCid, setExportedCid] = useState(undefined);
+  const [exportedCid, setExportedCid] = useState<string | undefined>(undefined);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
   const [displayName, setDisplayName] = useState(party.title);
 

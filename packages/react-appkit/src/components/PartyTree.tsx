@@ -5,6 +5,7 @@
 import clsx from 'clsx';
 import React, { useState, useEffect, useCallback, forwardRef } from 'react';
 
+import { SvgIconTypeMap, Theme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
@@ -19,8 +20,9 @@ import TreeView from '@material-ui/lab/TreeView';
 import { EditableText } from '@dxos/react-ux';
 
 import { MemberList } from './MemberList';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
-const treeItemBaseStyles = theme => ({
+const treeItemBaseStyles = (theme: Theme) => ({
   root: {
     paddingTop: theme.spacing(1),
 
@@ -71,7 +73,7 @@ const treeItemBaseStyles = theme => ({
 
 const useTreeItemStyles = makeStyles(treeItemBaseStyles);
 
-const treeAddItemBaseStyles = theme => ({
+const treeAddItemBaseStyles = (theme: Theme) => ({
   ...treeItemBaseStyles(theme),
   root: {
     ...treeItemBaseStyles(theme).root,
@@ -131,7 +133,14 @@ const useStyles = makeStyles(theme => ({
 
 const TYPE_PARTY = 'party';
 
-const ItemLabel = ({ icon: Icon, className, classes, children }) => (
+type ItemLabelPropsType = {
+  icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+  className: string,
+  classes: Record<string, string>,
+  children: React.ReactChildren
+}
+
+const ItemLabel = ({ icon: Icon, className, classes, children }: ItemLabelPropsType) => (
   <div className={clsx(classes.labelRoot, className)}>
     <Icon className={classes.labelIcon} />
     <Typography variant='body2' className={classes.labelText}>
@@ -140,7 +149,15 @@ const ItemLabel = ({ icon: Icon, className, classes, children }) => (
   </div>
 );
 
-const EditableLabel = ({ icon: Icon, className, classes, label, onUpdate }) => (
+type EditableLabelPropsType = {
+  icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+  className: string,
+  classes: Record<string, string>,
+  label: string,
+  onUpdate: () => void
+}
+
+const EditableLabel = ({ icon: Icon, className, classes, label, onUpdate }: EditableLabelPropsType) => (
   <div className={clsx(classes.labelRoot, className)}>
     <Icon className={classes.labelIcon} />
     <EditableText
@@ -177,7 +194,16 @@ export const PartyTreeAddItemButton = forwardRef(({ onClick, children }, ref) =>
   );
 });
 
-export const PartyTreeItem = ({ id, label, icon = ItemIcon, isSelected, onSelect, onUpdate }) => {
+type PartyTreeItemPropsType = {
+  id: string,
+  label: string,
+  icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+  isSelected: boolean,
+  onSelect: () => void,
+  onUpdate: () => void
+}
+
+export const PartyTreeItem = ({ id, label, icon = ItemIcon, isSelected, onSelect, onUpdate }: PartyTreeItemPropsType) => {
   const treeItemClasses = useTreeItemStyles();
   const classes = useStyles();
 

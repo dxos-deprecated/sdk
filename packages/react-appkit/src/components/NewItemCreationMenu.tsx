@@ -8,13 +8,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { SvgIconTypeMap } from '@material-ui/core';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 type NewItemCreationMenuPropsType = {
   anchorEl: Element | undefined,
   onSelect: (padType: string) => void,
   open: boolean,
   onClose: () => void,
-  pads: { type: string, displayName: string, description: string, icon: typeof React.Component}[]
+  pads: { type: string, displayName: string, description: string, icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>}[]
 }
 
 const NewItemCreationMenu = ({ anchorEl, onSelect, open, onClose, pads }: NewItemCreationMenuPropsType) => {
