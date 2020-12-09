@@ -15,7 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import { EditableText } from '@dxos/react-ux';
-import { Model } from '@dxos/model-factory';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 type ItemSettingsDialogPropsType = {
   open: boolean,
   onClose: () => void,
-  itemModel: Model<any>,
+  itemModel: any,
   itemId: string,
   closingDisabled: boolean,
   children: React.ReactNode
