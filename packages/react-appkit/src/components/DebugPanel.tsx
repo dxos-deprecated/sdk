@@ -17,6 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // import metrics from '@dxos/metrics';
 import { useConfig } from '@dxos/react-client';
 import { JsonTreeView } from '@dxos/react-ux';
+import assert from 'assert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const getConfig = (config, key = '') => {
+const getConfig = (config: Record<string, any>, key = '') => {
   let value;
 
   try {
@@ -80,7 +81,7 @@ const getConfig = (config, key = '') => {
   return value;
 };
 
-const updateConfig = (configObject, keys = [], value) => {
+const updateConfig = (configObject: Record<string, any>, keys: string[] = [], value: string) => {
   if (keys.length === 0) {
     return value;
   }
@@ -92,7 +93,7 @@ const updateConfig = (configObject, keys = [], value) => {
 };
 
 const canEditKey = (config = {}, key = '') => {
-  const loop = (config = {}, keys = []) => {
+  const loop = (config = {}, keys: string[] = []): boolean => {
     if (!config || keys.length === 0) {
       return false;
     }
@@ -138,9 +139,9 @@ const DebugPanel = () => {
   // const [values, setValues] = useState(metrics.value);
   // const [events, setEvents] = useState(metrics.events);
   const [editConfigOpen, setEditConfigOpen] = useState(false);
-  const [editConfigKey, setEditConfigKey] = useState();
+  const [editConfigKey, setEditConfigKey] = useState<string>();
   const [editConfigValue, setEditConfigValue] = useState();
-  const [visibleConfig, setVisibleConfig] = useState(config);
+  const [visibleConfig, setVisibleConfig] = useState<Record<string, any>>(config);
 
   useEffect(() => {
     setVisibleConfig({
@@ -183,7 +184,8 @@ const DebugPanel = () => {
   }, []);
 
   const handleEditConfigSave = useCallback(() => {
-    let newValue = editConfigInput.current.value.trim();
+    assert(editConfigInput.current);
+    let newValue: string | undefined = (editConfigInput.current as unknown as HTMLInputElement).value.trim();
     newValue = newValue.length === 0 ? undefined : newValue;
     const currentValue = getConfig(config, editConfigKey);
     const currentConfig = JSON.parse(localStorage.getItem('options') || '{}');
@@ -192,8 +194,10 @@ const DebugPanel = () => {
       return handleEditConfigClose();
     }
 
+    assert(editConfigKey);
     const keys = editConfigKey.split('.').filter(Boolean);
 
+    assert(newValue);
     const newConfig = updateConfig(currentConfig, keys, newValue);
 
     localStorage.setItem('options', JSON.stringify(newConfig));
@@ -203,6 +207,7 @@ const DebugPanel = () => {
     handleEditConfigClose();
   }, [editConfigKey]);
 
+  assert(editConfigKey);
   const editConfigKeyLabel = editConfigOpen && editConfigKey.split('.').filter(Boolean).join(' > ');
 
   return (
