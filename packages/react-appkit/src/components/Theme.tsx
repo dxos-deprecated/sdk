@@ -44,7 +44,7 @@ export const createTheme = (base: any) => createMuiTheme(
 );
 
 // TODO(burdon): Rename ThemeProvider or Remove.
-const Theme = ({ children, base }: { base: any, children: React.ReactChildren }) => (
+const Theme = ({ children, base }: { base: any, children: React.ReactNode }) => (
   <MuiThemeProvider theme={createTheme(base)}>
     <CssBaseline />
     {children}

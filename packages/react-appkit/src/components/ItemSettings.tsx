@@ -42,7 +42,7 @@ const ItemSettings = ({
   item: Record<string, any>,
   closingDisabled: boolean,
   icon: JSX.Element,
-  children?: React.ReactChildren | null
+  children?: React.ReactNode | null
 }) => {
   const classes = useStyles();
   const [name, setName] = useState('');

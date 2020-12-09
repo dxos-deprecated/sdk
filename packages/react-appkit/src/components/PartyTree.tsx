@@ -142,7 +142,7 @@ const ItemLabel = ({
   icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
   className: string,
   classes: Record<string, string>,
-  children: React.ReactChildren
+  children: React.ReactNode
 }) => (
   <div className={clsx(classes.labelRoot, className)}>
     <Icon className={classes.labelIcon} />
@@ -160,7 +160,7 @@ const EditableLabel = ({
   onUpdate
 }: {
   icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
-  className: string,
+  className?: string,
   classes: Record<string, string>,
   label: string,
   onUpdate: () => void

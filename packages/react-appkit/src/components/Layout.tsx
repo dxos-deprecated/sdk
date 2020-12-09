@@ -25,7 +25,7 @@ const Layout = ({
   rightSidebar: any[],
   appBar: React.ReactNode,
   statusBar: React.ReactNode,
-  children: React.ReactChildren
+  children: React.ReactNode
 }) => {
   const leftSidebarProps = { ...sidebarDefaults, ...leftSidebar };
   const rightSidebarProps = { ...sidebarDefaults, ...rightSidebar };

@@ -25,6 +25,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Alert from '@material-ui/lab/Alert';
 
 import { EditableText } from '@dxos/react-ux';
+import { Party } from '@dxos/echo-db';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,17 +54,18 @@ const PartySettingsDialog = ({
   onExportToIpfs,
   exportInProgress
 }: {
-  party: { title: string },
+  party: Party,
   open: boolean,
   onClose: (
     { active, showDeleted, displayName }: {
       active: boolean,
       showDeleted: boolean,
-      displayName: string}
+      displayName: string | undefined
+    }
   ) => void,
   properties: Record<string, any>,
-  onExportToFile: () => void,
-  onExportToIpfs: () => string,
+  onExportToFile: (() => void) | undefined,
+  onExportToIpfs: (() => string) | undefined,
   exportInProgress: boolean
 }) => {
   const classes = useStyles();

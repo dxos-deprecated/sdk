@@ -18,11 +18,16 @@ const NewItemCreationMenu = ({
   onClose,
   pads
 }: {
-  anchorEl: Element | undefined,
+  anchorEl: Element | null,
   onSelect: (padType: string) => void,
   open: boolean,
   onClose: () => void,
-  pads: { type: string, displayName: string, description: string, icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>}[]
+  pads: {
+    type: string,
+    displayName: string,
+    description: string,
+    icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>
+  }[]
 }) => {
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={onClose}>

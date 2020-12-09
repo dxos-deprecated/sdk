@@ -5,7 +5,7 @@
 import clsx from 'clsx';
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Button, ListItemSecondaryAction } from '@material-ui/core';
+import { Button, ListItemSecondaryAction, SvgIconTypeMap, Theme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -30,9 +30,9 @@ import PartyMemberList from './PartyMemberList';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import { useAssets } from './util';
-import { Theme } from '@material-ui/core';
-import { Item, Party } from '@dxos/echo-db';
+import { Party } from '@dxos/echo-db';
 import { Client } from '@dxos/client';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingRight: theme.spacing(2)
   },
 
-  listContainer: ({ rows }: { rows: Number }) => ({
+  listContainer: ({ rows }: { rows: number }) => ({
     height: rows * 36,
     marginBottom: theme.spacing(1),
     overflowY: 'scroll'
@@ -122,14 +122,19 @@ const PartyCard = ({
 }: {
   party: Party,
   client: Client,
-  router,
-  pads,
-  items,
+  router: Record<string, any>,
+  pads: {
+    type: string;
+    displayName: string;
+    description: string;
+    icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>;
+  }[],
+  items: Record<string, any>[],
   onNewItemRequested: ({ type }: { type: string }) => void,
   exportInProgress: boolean,
   onNewParty: (() => void) | undefined,
   onExportToFile: (() => void) | undefined,
-  onExportToIpfs: (() => void) | undefined
+  onExportToIpfs: (() => string) | undefined
 }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
@@ -141,7 +146,7 @@ const PartyCard = ({
 
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
-  const createItemAnchor = useRef();
+  const createItemAnchor = useRef(null);
 
   const topic = party ? party.key.toString() : '';
 
@@ -328,7 +333,7 @@ const PartyCard = ({
           onExportToIpfs={onExportToIpfs}
           displayName={displayName}
           onClose={async ({ showDeleted, displayName, active }:
-            { showDeleted: boolean, displayName: string, active: boolean }) => {
+            { showDeleted: boolean, displayName: string | undefined, active: boolean }) => {
             if (displayName !== undefined) {
               await party.setTitle(displayName);
             }

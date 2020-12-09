@@ -37,7 +37,7 @@ const STAGE_CHECK_SEED_PHRASE = 4;
 const STAGE_IMPORT_KEYRING = 5;
 
 // TODO(burdon): Factor out.
-const ordinal = n => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
+const ordinal = (n: number) => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
 
 // TODO(burdon): Factor out.
 const mobile = new MobileDetect(window.navigator.userAgent).mobile();
@@ -364,7 +364,8 @@ const RegistrationDialog = ({
 
       case STAGE_IMPORT_KEYRING: {
         return (
-          <ImportKeyringDialog open onClose={() => setStage(STAGE_START)} decrypter={keyringDecrypter} />
+          // open attribute is deleted as it is not present in ImportKeyringDialog
+          <ImportKeyringDialog onClose={() => setStage(STAGE_START)} decrypter={keyringDecrypter} />
         );
       }
     }
