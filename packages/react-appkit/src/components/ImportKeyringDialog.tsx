@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { useConfig } from '@dxos/react-client';
 import { reload } from '@dxos/react-router';
+import assert from 'assert';
 
 const useStyles = makeStyles(theme => ({
   marginTop: {
@@ -21,7 +22,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type propsType = { onClose: () => void, decrypter: (text: string | ArrayBuffer | null, passphrase: number) => string }
+type propsType = {
+  onClose: () => void,
+  decrypter: (
+    text: string | ArrayBuffer | null,
+    passphrase: number
+  ) => string
+}
 
 /**
  * Dialog to import keyring from file.
@@ -33,17 +40,22 @@ type propsType = { onClose: () => void, decrypter: (text: string | ArrayBuffer |
 const ImportKeyringDialog = ({ onClose, decrypter }: propsType) => {
   const classes = useStyles();
   const config = useConfig();
-  const buttonRef = useRef();
-  const fileRef = useRef();
+  const buttonRef = useRef(null);
+  const fileRef = useRef(null);
   const [passphrase, setPassphrase] = useState(0);
   const [error, setError] = useState(false);
 
   const handlePassChange = (event: React.SyntheticEvent) => {
-    setPassphrase((event.target as HTMLTextAreaElement).value);
+    setPassphrase(parseInt((event.target as HTMLTextAreaElement).value));
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: React.SyntheticEvent) => {
+    assert(event.target);
+    const input = event.target as HTMLInputElement;
+
+    assert(input.files);
+    const file = input.files[0];
+
     if (file) {
       const reader = new FileReader();
       reader.onload = async (event) => {

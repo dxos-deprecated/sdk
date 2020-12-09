@@ -50,7 +50,7 @@ type InvitationDialogPropsType = {
   title: string,
   message: string,
   passcode: string,
-  anchorEl: JSX.Element,
+  anchorEl: Element,
   open: boolean,
   onClose: () => void
 }
