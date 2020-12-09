@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.35](https://www.github.com/dxos/sdk/compare/v2.7.34...v2.7.35) (2020-12-09)
+
+
+### Bug Fixes
+
+* redo bot dialog; proper botkit-client destroy. ([#449](https://www.github.com/dxos/sdk/issues/449)) ([7c8058d](https://www.github.com/dxos/sdk/commit/7c8058da7a4d7bd67047f9ee338845c0163e76d4))
+
 ### [2.7.34](https://www.github.com/dxos/sdk/compare/v2.7.33...v2.7.34) (2020-12-09)
 
 
