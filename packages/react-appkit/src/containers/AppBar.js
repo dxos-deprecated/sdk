@@ -223,7 +223,7 @@ const AppBar = ({
       handler: async () => {
         localStorage.clear();
         await client.reset();
-        handleAction(Action.RELOAD);
+        window.location.reload()
       }
     },
 
