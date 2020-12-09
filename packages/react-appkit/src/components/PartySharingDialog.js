@@ -187,7 +187,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const createOfflineInvitation = (contact) => {
     setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
     if (sentry) {
-      sentry.addBreadcrumb({ message: `Created offline invitation for contact: '${contact.publicKey || 'Unknown'}', ${contact.publicKey.toString('hex')}` });
+      sentry.addBreadcrumb({ message: `Created offline invitation for contact: '${contact.displayName || 'Unknown'}', ${contact.publicKey.toHex()}` });
       sentry.captureMessage('Offline invitation initiated.');
     }
   };

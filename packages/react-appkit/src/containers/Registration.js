@@ -38,7 +38,7 @@ const Registration = () => {
     const identityKeyPair = keyPairFromSeedPhrase(seedPhrase);
     await client.createProfile({ ...identityKeyPair, username });
     if (sentry) {
-      sentry.setUser({ username, id: identityKeyPair.publicKey.toString('hex') });
+      sentry.setUser({ username: `${username}-${identityKeyPair.publicKey.toString('hex')}`, id: identityKeyPair.publicKey.toString('hex') });
       sentry.captureMessage('User registered.');
     }
 

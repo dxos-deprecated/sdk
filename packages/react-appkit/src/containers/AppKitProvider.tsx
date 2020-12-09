@@ -86,6 +86,11 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
     registerPadModels();
   }, []);
 
+  const profile = client.getProfile();
+  if (profile !== undefined && sentry !== undefined) {
+    sentry.setUser({ username: `${profile.username}-${profile.publicKey.toHex()}`, id: profile.publicKey.toHex() });
+  }
+
   return (
     <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink, keywords, sentry }}>
       {padsRegistered && children}
