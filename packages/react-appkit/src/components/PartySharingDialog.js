@@ -34,7 +34,7 @@ import { BotFactoryClient } from '@dxos/botkit-client';
 import { keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { useClient, useContacts, useInvitation, useOfflineInvitation } from '@dxos/react-client';
 
-import { useMembers } from '../hooks';
+import { useMembers, useSentry } from '../hooks';
 import BotDialog from './BotDialog';
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 
@@ -177,13 +177,20 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const [botInvitationPending, setBotInvitationPending] = useState(false);
   const [botInvitationError, setBotInvitationError] = useState();
   const [inviteRequestTime, setInviteRequestTime] = useState();
+  const sentry = useSentry();
 
   const members = useMembers(party);
   const [contacts] = useContacts();
   const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toString('hex') === c.publicKey.toString('hex'))); // contacts not already in this party
 
   const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
-  const createOfflineInvitation = (contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
+  const createOfflineInvitation = (contact) => {
+    setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
+    if (sentry) {
+      sentry.addBreadcrumb({ message: `Created offline invitation for contact: '${contact.publicKey || 'Unknown'}', ${contact.publicKey.toString('hex')}` });
+      sentry.captureMessage('Offline invitation initiated.');
+    }
+  };
 
   const handleBotInviteClick = () => {
     setBotDialogVisible(true);
