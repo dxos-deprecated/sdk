@@ -15,6 +15,7 @@ import { humanize } from '@dxos/crypto';
 
 import { useMembers } from '../hooks';
 import { getAvatarStyle } from './MemberAvatar';
+import { Party, PartyMember } from '@dxos/echo-db';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -23,11 +24,16 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+type PartyMemberListPropsType = {
+  party: Party,
+  onShare: () => void
+}
+
 // TODO(burdon): Pass in array (small UX data object) of processed members (don't apply humanize here).
-const PartyMemberList = ({ party, onShare }) => {
+const PartyMemberList = ({ party, onShare }: PartyMemberListPropsType) => {
   const classes = useStyles();
   const theme = useTheme();
-  const members = useMembers(party);
+  const members: PartyMember[] = useMembers(party);
 
   return (
     <div className={classes.root}>

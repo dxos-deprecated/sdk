@@ -29,7 +29,7 @@ const COLORS = [
 
 const getColor = (publicKey: PublicKeyLike) => COLORS[parseInt(publicKey.toString('hex').slice(0, 4), 16) % COLORS.length];
 
-export const getAvatarStyle = (theme: Theme, publicKey: PublicKeyLike): Record<string, unknown> => {
+export const getAvatarStyle = (theme: Theme, publicKey?: PublicKeyLike): Record<string, unknown> => {
   const color = publicKey ? getColor(publicKey) : theme.palette.grey[200];
   return {
     backgroundColor: color,

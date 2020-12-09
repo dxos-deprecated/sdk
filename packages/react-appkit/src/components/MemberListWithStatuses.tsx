@@ -14,9 +14,11 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+// type MemberListWithStatusesPropsType = { party: { presence: { peers: }} }
+
 // This will be used for party activity indicators
 // ISSUE: https://github.com/dxos/teamwork/issues/424
-export const MemberListWithStatuses = ({ party }) => {
+export const MemberListWithStatuses = ({ party }: MemberListWithStatusesPropsType) => {
   const [online, setOnline] = useState((party.presence.peers ?? []).length);
   const classes = useStyles();
 

@@ -9,7 +9,15 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const NewItemCreationMenu = ({ anchorEl, onSelect, open, onClose, pads }) => {
+type NewItemCreationMenuPropsType = {
+  anchorEl: Element | undefined,
+  onSelect: (padType: string) => void,
+  open: boolean,
+  onClose: () => void,
+  pads: { type: string, displayName: string, description: string, icon: typeof React.Component}[]
+}
+
+const NewItemCreationMenu = ({ anchorEl, onSelect, open, onClose, pads }: NewItemCreationMenuPropsType) => {
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={onClose}>
       {pads.map(pad => (

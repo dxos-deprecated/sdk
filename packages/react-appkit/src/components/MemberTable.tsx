@@ -17,6 +17,7 @@ import NoIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 import { humanize } from '@dxos/crypto';
 import { truncateString } from '@dxos/debug';
+import { Party } from '@dxos/credentials';
 
 // TODO(burdon): Move to dxos/react-ux.
 const BooleanIcon = ({ yes = false, error = false }) => {
@@ -58,7 +59,9 @@ const useStyle = makeStyles(() => ({
   }
 }));
 
-const MemberTable = ({ party, onMemberSelect }) => {
+type MemberTablePropsType = { party: Party, onMemberSelect: () => void }
+
+const MemberTable = ({ party, onMemberSelect }: MemberTablePropsType) => {
   const classes = useStyle();
 
   const sorter = (a, b) => (a.displayName < b.displayName ? -1 : a.displayName > b.displayName ? 1 : a.isMe ? -1 : 1);
@@ -73,9 +76,10 @@ const MemberTable = ({ party, onMemberSelect }) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {party.members.sort(sorter).map((member) => {
-          const formatDisplay = (key, name) => (key
-            ? `${name || humanize(key)} (${truncateString(key.toString(), 8)})` : '');
+        {party.memberKeys.sort(sorter).map((member) => {
+          const formatDisplay = (key: Buffer, name: string) => (
+            key ? `${name || humanize(key)} (${truncateString(key.toString(), 8)})` : ''
+          );
 
           const key = member.publicKey.toString();
           let admittedBy = '';
@@ -84,8 +88,7 @@ const MemberTable = ({ party, onMemberSelect }) => {
               admittedBy = formatDisplay(member.admittedBy, party.displayName);
             } else {
               const match = party.members.find(other => other.publicKey.equals(member.admittedBy));
-              admittedBy = match ? formatDisplay(member.admittedBy, match.displayName)
-                : formatDisplay(member.admittedBy);
+              admittedBy = match ? formatDisplay(member.admittedBy, match.displayName) : formatDisplay(member.admittedBy);
             }
           }
 

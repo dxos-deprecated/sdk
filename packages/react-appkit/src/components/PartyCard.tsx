@@ -30,8 +30,11 @@ import PartyMemberList from './PartyMemberList';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import { useAssets } from './util';
+import { Theme } from '@material-ui/core';
+import { Item, Party } from '@dxos/echo-db';
+import { Client } from '@dxos/client';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   card: {
     display: 'flex',
     flexDirection: 'column',
@@ -67,7 +70,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(2)
   },
 
-  listContainer: ({ rows }) => ({
+  listContainer: ({ rows }: { rows: Number }) => ({
     height: rows * 36,
     marginBottom: theme.spacing(1),
     overflowY: 'scroll'
@@ -103,6 +106,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+type PartyCardPropsType = {
+  party: Party,
+  client: Client,
+  router,
+  pads,
+  items,
+  onNewItemRequested: ({ type }: { type: string }) => void,
+  exportInProgress: boolean,
+  onNewParty: (() => void) | undefined,
+  onExportToFile: (() => void) | undefined,
+  onExportToIpfs: (() => void) | undefined
+}
+
 // TODO(burdon): Rename onCreateParty
 // TODO(burdon): Extract client, router and dialogs and inject actions.
 const PartyCard = ({
@@ -116,7 +132,7 @@ const PartyCard = ({
   onNewParty = undefined,
   onExportToFile = undefined,
   onExportToIpfs = undefined
-}) => {
+}: PartyCardPropsType) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);
@@ -131,12 +147,12 @@ const PartyCard = ({
 
   const topic = party ? party.key.toString() : '';
 
-  const handleNewItemSelected = (type) => {
+  const handleNewItemSelected = (type: string) => {
     setNewItemCreationMenuOpen(false);
     onNewItemRequested({ type });
   };
 
-  const handleSelect = (itemId) => {
+  const handleSelect = (itemId: string) => {
     router.push({ topic: keyToString(party.key.asUint8Array()), item: itemId });
   };
 
@@ -313,7 +329,8 @@ const PartyCard = ({
           onExportToFile={onExportToFile}
           onExportToIpfs={onExportToIpfs}
           displayName={displayName}
-          onClose={async ({ showDeleted, displayName, active }) => {
+          onClose={async ({ showDeleted, displayName, active }:
+            { showDeleted: boolean, displayName: string, active: boolean }) => {
             if (displayName !== undefined) {
               await party.setTitle(displayName);
             }
