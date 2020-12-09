@@ -22,22 +22,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type propsType = {
+/**
+ * Dialog to import keyring from file.
+ */
+const ImportKeyringDialog = ({
+  onClose,
+  decrypter
+}: {
   onClose: () => void,
   decrypter: (
     text: string | ArrayBuffer | null,
     passphrase: number
   ) => string
-}
-
-/**
- * Dialog to import keyring from file.
- *
- * @param {boolean} open
- * @param {function} onClose
- * @param {function} decrypter
- */
-const ImportKeyringDialog = ({ onClose, decrypter }: propsType) => {
+}) => {
   const classes = useStyles();
   const config = useConfig();
   const buttonRef = useRef(null);

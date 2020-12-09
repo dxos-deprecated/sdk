@@ -27,13 +27,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type KeyMapPropsType = {
+const KeyMap = ({
+  keyMap,
+  showKeyMap,
+  onClose
+}: {
   keyMap: Record<string, { sequences: { sequence: string }[], name: string}>,
   showKeyMap: boolean,
   onClose: () => void
-}
-
-const KeyMap = ({ keyMap, showKeyMap, onClose }: KeyMapPropsType) => {
+}) => {
   const classes = useStyles();
 
   // https://github.com/greena13/react-hotkeys#Displaying-a-list-of-available-hot-keys

@@ -29,14 +29,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-type PartyFromIpfsDialogPropsType = {
+const PartyFromIpfsDialog = ({
+  open,
+  onClose,
+  onImport,
+  ipfs
+}: {
   open: boolean,
   onClose: () => void,
   onImport: (content: ArrayBuffer | string | null) => void,
   ipfs
-}
-
-const PartyFromIpfsDialog = ({ open, onClose, onImport, ipfs }: PartyFromIpfsDialogPropsType) => {
+}) => {
   const classes = useStyles();
   const [cid, setCid] = useState('');
   const [inProgress, setInProgress] = useState(false);

@@ -48,13 +48,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-type PartyFromFileDialogPropsType = {
+const PartyFromFileDialog = ({
+  open,
+  onClose,
+  onImport
+}: {
   open: boolean,
   onClose: () => void,
   onImport: (content: ArrayBuffer | string | null) => void
-}
-
-const PartyFromFileDialog = ({ open, onClose, onImport }: PartyFromFileDialogPropsType) => {
+}) => {
   const classes = useStyles();
   const [files, setFiles] = useState<File[]>([]);
   const [inProgress, setInProgress] = useState(false);

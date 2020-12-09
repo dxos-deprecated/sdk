@@ -108,14 +108,6 @@ const DialogActions = withStyles(theme => ({
   }
 }))(MuiDialogActions);
 
-type RegistrationDialogPropsType = {
-  open: boolean,
-  debug: boolean,
-  onFinishCreate: (username: string, seedPhrase: string) => void,
-  onFinishRestore: (seedPhrase: string) => void,
-  keyringDecrypter: (text: string | ArrayBuffer | null, passphrase: number) => string
-}
-
 /**
  * Registration and recovery dialog.
  */
@@ -125,7 +117,13 @@ const RegistrationDialog = ({
   onFinishCreate,
   onFinishRestore,
   keyringDecrypter
-}: RegistrationDialogPropsType) => {
+}: {
+  open: boolean,
+  debug: boolean,
+  onFinishCreate: (username: string, seedPhrase: string) => void,
+  onFinishRestore: (seedPhrase: string) => void,
+  keyringDecrypter: (text: string | ArrayBuffer | null, passphrase: number) => string
+}) => {
   const classes = useStyles();
   const [stage, setStage] = useState(STAGE_START);
   const [seedPhrase] = useState(generateSeedPhrase());

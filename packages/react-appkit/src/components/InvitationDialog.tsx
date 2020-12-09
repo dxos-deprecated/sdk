@@ -89,15 +89,19 @@ const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onCl
   return null;
 };
 
-type InvitationContentPropsType = {
+const InvitationContent = ({
+  link,
+  title,
+  message,
+  passcode,
+  onClose
+}: {
   link: string,
   title: string,
   message: string,
   passcode: string,
   onClose?: () => void
-}
-
-const InvitationContent = ({ link, title, message, passcode, onClose }: InvitationContentPropsType) => {
+}) => {
   const classes = useStyles();
 
   return (

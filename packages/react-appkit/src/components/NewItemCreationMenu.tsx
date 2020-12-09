@@ -11,15 +11,19 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { SvgIconTypeMap } from '@material-ui/core';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
-type NewItemCreationMenuPropsType = {
+const NewItemCreationMenu = ({
+  anchorEl,
+  onSelect,
+  open,
+  onClose,
+  pads
+}: {
   anchorEl: Element | undefined,
   onSelect: (padType: string) => void,
   open: boolean,
   onClose: () => void,
   pads: { type: string, displayName: string, description: string, icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>}[]
-}
-
-const NewItemCreationMenu = ({ anchorEl, onSelect, open, onClose, pads }: NewItemCreationMenuPropsType) => {
+}) => {
   return (
     <Menu anchorEl={anchorEl} open={open} onClose={onClose}>
       {pads.map(pad => (

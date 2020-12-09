@@ -87,14 +87,17 @@ const TableCell = withStyles(theme => ({
   }
 }))(MuiTableCell);
 
-type PendingInvitationPropsType = {
+function PendingInvitation ({
+  party,
+  pending,
+  handleCopy,
+  onInvitationDone
+}: {
   party: Party,
   pending: Record<string, any>,
   handleCopy: (value: string) => void,
   onInvitationDone: (value: string) => void
-}
-
-function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }: PendingInvitationPropsType) {
+}) {
   const classes = useStyles();
   const [inviteCode, pin] = useInvitation(party.key.asBuffer(), {
     onDone: () => onInvitationDone(pending.id),

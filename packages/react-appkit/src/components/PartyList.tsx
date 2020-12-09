@@ -25,13 +25,15 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-type PartyListPropsType = {
+const PartyList = ({
+  parties = [],
+  selected,
+  onSelect
+}: {
   parties: { topic: string }[],
   selected: string,
   onSelect: (topic: string) => void
-}
-
-const PartyList = ({ parties = [], selected, onSelect }: PartyListPropsType) => {
+}) => {
   const classes = useStyles();
 
   const onSelectParty = (topic: string) => {

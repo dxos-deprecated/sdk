@@ -11,14 +11,6 @@ const sidebarDefaults = {
   width: 500
 };
 
-type LayoutPropsType = {
-  leftSidebar: any[],
-  rightSidebar: any[],
-  appBar: React.ReactNode,
-  statusBar: React.ReactNode,
-  children: React.ReactChildren
-}
-
 /**
  * Main layout.
  */
@@ -28,7 +20,13 @@ const Layout = ({
   appBar,
   statusBar,
   children
-}: LayoutPropsType) => {
+}: {
+  leftSidebar: any[],
+  rightSidebar: any[],
+  appBar: React.ReactNode,
+  statusBar: React.ReactNode,
+  children: React.ReactChildren
+}) => {
   const leftSidebarProps = { ...sidebarDefaults, ...leftSidebar };
   const rightSidebarProps = { ...sidebarDefaults, ...rightSidebar };
 

@@ -28,17 +28,22 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type ItemSettingsDialogPropsType = {
+// TODO(burdon): Remove itemModel (pass in item and callbacks).
+const ItemSettingsDialog = ({
+  open,
+  onClose,
+  itemModel,
+  itemId,
+  closingDisabled,
+  children
+}: {
   open: boolean,
   onClose: () => void,
   itemModel: any,
   itemId: string,
   closingDisabled: boolean,
   children: React.ReactNode
-}
-
-// TODO(burdon): Remove itemModel (pass in item and callbacks).
-const ItemSettingsDialog = ({ open, onClose, itemModel, itemId, closingDisabled, children }: ItemSettingsDialogPropsType) => {
+}) => {
   const classes = useStyles();
 
   // TODO(burdon): Pass in item (this doesn't need to know about all items).

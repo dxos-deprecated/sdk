@@ -106,19 +106,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-type PartyCardPropsType = {
-  party: Party,
-  client: Client,
-  router,
-  pads,
-  items,
-  onNewItemRequested: ({ type }: { type: string }) => void,
-  exportInProgress: boolean,
-  onNewParty: (() => void) | undefined,
-  onExportToFile: (() => void) | undefined,
-  onExportToIpfs: (() => void) | undefined
-}
-
 // TODO(burdon): Rename onCreateParty
 // TODO(burdon): Extract client, router and dialogs and inject actions.
 const PartyCard = ({
@@ -132,7 +119,18 @@ const PartyCard = ({
   onNewParty = undefined,
   onExportToFile = undefined,
   onExportToIpfs = undefined
-}: PartyCardPropsType) => {
+}: {
+  party: Party,
+  client: Client,
+  router,
+  pads,
+  items,
+  onNewItemRequested: ({ type }: { type: string }) => void,
+  exportInProgress: boolean,
+  onNewParty: (() => void) | undefined,
+  onExportToFile: (() => void) | undefined,
+  onExportToIpfs: (() => void) | undefined
+}) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
   const [newItemCreationMenuOpen, setNewItemCreationMenuOpen] = useState(false);

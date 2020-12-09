@@ -59,9 +59,7 @@ const useStyle = makeStyles(() => ({
   }
 }));
 
-type MemberTablePropsType = { party: Party, onMemberSelect: () => void }
-
-const MemberTable = ({ party, onMemberSelect }: MemberTablePropsType) => {
+const MemberTable = ({ party, onMemberSelect }: { party: Party, onMemberSelect: () => void }) => {
   const classes = useStyle();
 
   const sorter = (a, b) => (a.displayName < b.displayName ? -1 : a.displayName > b.displayName ? 1 : a.isMe ? -1 : 1);

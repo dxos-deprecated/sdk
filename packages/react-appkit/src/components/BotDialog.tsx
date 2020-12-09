@@ -54,16 +54,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type propsType = {
-  open: boolean,
-  onSubmit: ({ topic, bot }: { topic: string, bot: string | undefined}) => void,
-  onClose: () => void
-}
-
 /**
  * Dialog to create and invite bot to party.
  */
-const BotDialog = ({ open, onSubmit, onClose }: propsType) => {
+const BotDialog = ({
+  open,
+  onSubmit,
+  onClose
+}: {
+  open: boolean,
+  onSubmit: ({ topic, bot }: { topic: string, bot: string | undefined}) => void,
+  onClose: () => void
+}) => {
   const classes = useStyles();
   const [pending, setPending] = useState(false);
   const [bot, setBot] = useState<string>('');

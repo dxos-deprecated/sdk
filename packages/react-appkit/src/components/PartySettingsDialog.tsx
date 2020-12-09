@@ -44,7 +44,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type PartySettingsDialogPropsType = {
+const PartySettingsDialog = ({
+  party,
+  open,
+  onClose,
+  properties = {},
+  onExportToFile,
+  onExportToIpfs,
+  exportInProgress
+}: {
   party: { title: string },
   open: boolean,
   onClose: (
@@ -57,17 +65,7 @@ type PartySettingsDialogPropsType = {
   onExportToFile: () => void,
   onExportToIpfs: () => string,
   exportInProgress: boolean
-}
-
-const PartySettingsDialog = ({
-  party,
-  open,
-  onClose,
-  properties = {},
-  onExportToFile,
-  onExportToIpfs,
-  exportInProgress
-}: PartySettingsDialogPropsType) => {
+}) => {
   const classes = useStyles();
   const [active, setActive] = useState<boolean>(properties.active);
   const [showDeleted, setShowDeleted] = useState<boolean>(properties.showDeleted);

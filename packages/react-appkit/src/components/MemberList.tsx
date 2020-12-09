@@ -25,10 +25,9 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-type MemberListPropsType = { party: Party, children: ReactChildren }
 type Member = PartyMember & { isMe: boolean }
 
-export const MemberList = ({ party, children }: MemberListPropsType) => {
+export const MemberList = ({ party, children }: { party: Party, children: ReactChildren }) => {
   const sorter = (a: Member, b: Member) => {
     assert(a.displayName);
     assert(b.displayName);

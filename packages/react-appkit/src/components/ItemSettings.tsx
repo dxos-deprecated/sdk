@@ -27,7 +27,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type ItemSettingsPropsType = {
+const ItemSettings = ({
+  open,
+  onClose,
+  onCancel,
+  item,
+  closingDisabled,
+  icon,
+  children = null
+}: {
   open: boolean,
   onClose: ({ name }: { name: string }) => void,
   onCancel: () => void,
@@ -35,9 +43,7 @@ type ItemSettingsPropsType = {
   closingDisabled: boolean,
   icon: JSX.Element,
   children?: React.ReactChildren | null
-}
-
-const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, icon, children = null }: ItemSettingsPropsType) => {
+}) => {
   const classes = useStyles();
   const [name, setName] = useState('');
 

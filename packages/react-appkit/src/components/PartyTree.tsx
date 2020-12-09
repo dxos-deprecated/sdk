@@ -133,14 +133,17 @@ const useStyles = makeStyles(theme => ({
 
 const TYPE_PARTY = 'party';
 
-type ItemLabelPropsType = {
+const ItemLabel = ({
+  icon: Icon,
+  className,
+  classes,
+  children
+}: {
   icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
   className: string,
   classes: Record<string, string>,
   children: React.ReactChildren
-}
-
-const ItemLabel = ({ icon: Icon, className, classes, children }: ItemLabelPropsType) => (
+}) => (
   <div className={clsx(classes.labelRoot, className)}>
     <Icon className={classes.labelIcon} />
     <Typography variant='body2' className={classes.labelText}>
@@ -149,15 +152,19 @@ const ItemLabel = ({ icon: Icon, className, classes, children }: ItemLabelPropsT
   </div>
 );
 
-type EditableLabelPropsType = {
+const EditableLabel = ({
+  icon: Icon,
+  className,
+  classes,
+  label,
+  onUpdate
+}: {
   icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
   className: string,
   classes: Record<string, string>,
   label: string,
   onUpdate: () => void
-}
-
-const EditableLabel = ({ icon: Icon, className, classes, label, onUpdate }: EditableLabelPropsType) => (
+}) => (
   <div className={clsx(classes.labelRoot, className)}>
     <Icon className={classes.labelIcon} />
     <EditableText

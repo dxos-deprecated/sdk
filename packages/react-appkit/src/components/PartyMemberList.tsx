@@ -24,13 +24,8 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-type PartyMemberListPropsType = {
-  party: Party,
-  onShare: () => void
-}
-
 // TODO(burdon): Pass in array (small UX data object) of processed members (don't apply humanize here).
-const PartyMemberList = ({ party, onShare }: PartyMemberListPropsType) => {
+const PartyMemberList = ({ party, onShare }: { party: Party, onShare: () => void }) => {
   const classes = useStyles();
   const theme = useTheme();
   const members: PartyMember[] = useMembers(party);

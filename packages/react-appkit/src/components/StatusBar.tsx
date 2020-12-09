@@ -50,26 +50,25 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type StatusBarPropsType = {
-  actions: {
-    Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
-    handler: () => void,
-    isActive: () => boolean,
-    title: string
-  }[],
-  indicators: {
-    Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
-    isActive: () => boolean,
-  }[],
-  meta: string,
-  errors: string[],
-  onResetErrors: () => void
-}
-
 /**
  * Status bar.
  */
-const StatusBar = (props: StatusBarPropsType) => {
+const StatusBar = (
+  props: {
+    actions: {
+      Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+      handler: () => void,
+      isActive: () => boolean,
+      title: string
+    }[],
+    indicators: {
+      Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+      isActive: () => boolean,
+    }[],
+    meta: string,
+    errors: string[],
+    onResetErrors: () => void
+  }) => {
   const { actions = [], indicators = [], meta, errors = [], onResetErrors } = props;
   const classes = useStyles();
 
