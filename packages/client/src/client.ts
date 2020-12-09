@@ -138,12 +138,18 @@ export class Client {
    */
   @synchronized
   async destroy () {
+    return this._destroy();
+  }
+
+  /**
+   * Cleanup, release resources.
+   * (To be called from @synchronized method)
+   */
+  private async _destroy () {
     if (!this._initialized) {
       return;
     }
-
     await this._echo.close();
-
     this._initialized = false;
   }
 
@@ -156,7 +162,7 @@ export class Client {
   @synchronized
   async reset () {
     await this._echo.reset();
-    await this.destroy();
+    await this._destroy();
   }
 
   //
