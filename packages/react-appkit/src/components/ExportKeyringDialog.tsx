@@ -18,14 +18,19 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-type propsType = { open: boolean, topic: string, encrypter: (passphrase: string) => string, onClose: () => void }
+type propsType = {
+  open: boolean,
+  topic: string,
+  encrypter: (passphrase: string) => string,
+  onClose: () => void
+}
 
 /**
  * Dialog to export keyring to file.
  */
 const ExportKeyringDialog = ({ open, topic, encrypter, onClose }: propsType) => {
   const classes = useStyles();
-  const [error, setError] = useState();
+  const [error, setError] = useState<string>();
 
   let passphrase = '';
   const handleChange = (event: React.SyntheticEvent) => {
