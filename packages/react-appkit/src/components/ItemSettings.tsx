@@ -36,8 +36,8 @@ type ItemSettingsPropsType = {
   onCancel: () => void,
   item: Item<M extends Model<any>>,
   closingDisabled: boolean,
-  icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
-  children: React.ReactNode
+  icon: JSX.Element,
+  children?: React.ReactChildren
 }
 
 const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, icon, children = null }: ItemSettingsPropsType) => {
