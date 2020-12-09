@@ -314,15 +314,12 @@ const PartyCard = ({
       <PartySharingDialog
         open={shareDialogOpen}
         onClose={() => setShareDialogOpen(false)}
-        client={client}
         party={party}
-        router={router}
       />
 
       {(
         <PartySettingsDialog
           party={party}
-          client={client}
           open={settingsDialogOpen}
           properties={{
             showDeleted,
@@ -331,7 +328,6 @@ const PartyCard = ({
           exportInProgress={exportInProgress}
           onExportToFile={onExportToFile}
           onExportToIpfs={onExportToIpfs}
-          displayName={displayName}
           onClose={async ({ showDeleted, displayName, active }:
             { showDeleted: boolean, displayName: string | undefined, active: boolean }) => {
             if (displayName !== undefined) {

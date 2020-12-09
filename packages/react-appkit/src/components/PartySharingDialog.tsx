@@ -179,13 +179,15 @@ function PendingOfflineInvitation ({ party, invitation, handleCopy }: PendingOff
   );
 }
 
-type PartySharingDialogPropsType = {
+const PartySharingDialog = ({
+  party,
+  open,
+  onClose
+}: {
   party: Party,
   open: boolean,
   onClose: () => void
-}
-
-const PartySharingDialog = ({ party, open, onClose }: PartySharingDialogPropsType) => {
+}) => {
   const classes = useStyles();
   const client = useClient();
   const [contactsInvitations, setContactsInvitations] = useState<Record<string, any>[]>([]);
