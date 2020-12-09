@@ -145,7 +145,7 @@ export class Client {
    * Cleanup, release resources.
    * (To be called from @synchronized method)
    */
-  private async _destroy() {
+  private async _destroy () {
     if (!this._initialized) {
       return;
     }
