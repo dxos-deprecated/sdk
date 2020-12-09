@@ -39,12 +39,17 @@ export const defaultThemeProperties = {
   }
 };
 
-export const createTheme = (base) => createMuiTheme(
+export const createTheme = (base: any) => createMuiTheme(
   defaultsDeep(base, defaultThemeProperties)
 );
 
+type ThemePropsType = {
+  base: any,
+  children: React.ReactChildren
+}
+
 // TODO(burdon): Rename ThemeProvider or Remove.
-const Theme = ({ children, base }) => (
+const Theme = ({ children, base }: ThemePropsType) => (
   <MuiThemeProvider theme={createTheme(base)}>
     <CssBaseline />
     {children}

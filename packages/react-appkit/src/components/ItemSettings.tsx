@@ -4,7 +4,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, SvgIconTypeMap } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,9 +14,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import { EditableText } from '@dxos/react-ux';
-import { SvgIconComponent } from '@material-ui/icons';
 import { Item } from '@dxos/echo-db';
 import { Model } from '@dxos/model-factory';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,7 +36,7 @@ type ItemSettingsPropsType = {
   onCancel: () => void,
   item: Item<M extends Model<any>>,
   closingDisabled: boolean,
-  icon: SvgIconComponent,
+  icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
   children: React.ReactNode
 }
 

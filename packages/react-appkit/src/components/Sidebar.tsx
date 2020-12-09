@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Sidebar = ({ children }) => {
+const Sidebar = ({ children }: { children: React.ReactChildren }) => {
   const classes = useStyles();
 
   return (
