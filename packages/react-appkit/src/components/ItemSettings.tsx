@@ -14,9 +14,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import { EditableText } from '@dxos/react-ux';
-import { Item } from '@dxos/echo-db';
-import { Model } from '@dxos/model-factory';
-import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,10 +31,10 @@ type ItemSettingsPropsType = {
   open: boolean,
   onClose: ({ name }: { name: string }) => void,
   onCancel: () => void,
-  item: Item<M extends Model<any>>,
+  item: Record<string, any>,
   closingDisabled: boolean,
   icon: JSX.Element,
-  children?: React.ReactChildren
+  children?: React.ReactChildren | null
 }
 
 const ItemSettings = ({ open, onClose, onCancel, item, closingDisabled, icon, children = null }: ItemSettingsPropsType) => {
