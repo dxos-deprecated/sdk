@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { makeStyles, withStyles } from '@material-ui/core';
@@ -170,6 +170,14 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
+  const [botFactoryTopic, setBotFactoryTopic] = useState();
+  const [botFactoryClient, setBotFactoryClient] = useState();
+  const [botFactoryConnected, setBotFactoryConnected] = useState(false);
+  const [botToSpawn, setBotToSpawn] = useState();
+  const [botInvitationPending, setBotInvitationPending] = useState(false);
+  const [botInvitationError, setBotInvitationError] = useState();
+  const [inviteRequestTime, setInviteRequestTime] = useState();
+
   const members = useMembers(party);
   const [contacts] = useContacts();
   const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toString('hex') === c.publicKey.toString('hex'))); // contacts not already in this party
@@ -177,23 +185,69 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
   const createOfflineInvitation = (contact) => setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
 
-  const handleBotInvite = async (botFactoryTopic, botId, spec = {}) => {
-    const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
+  const handleBotInviteClick = () => {
+    setBotDialogVisible(true);
+    setBotInvitationError(undefined);
+  };
 
-    const secretProvider = () => null;
+  const handleBotInvite = async (botId, spec = {}) => {
+    setBotInvitationError(undefined);
+    setBotInvitationPending(true);
+    try {
+      const secretProvider = () => null;
+      // Provided by inviter node.
+      const secretValidator = async (invitation, secret) => {
+        const signature = secret.slice(0, SIGNATURE_LENGTH);
+        const message = secret.slice(SIGNATURE_LENGTH);
+        return verify(message, signature, keyToBuffer(botFactoryTopic));
+      };
 
-    // Provided by inviter node.
-    const secretValidator = async (invitation, secret) => {
-      const signature = secret.slice(0, SIGNATURE_LENGTH);
-      const message = secret.slice(SIGNATURE_LENGTH);
-      return verify(message, signature, keyToBuffer(botFactoryTopic));
-    };
+      const invitation = await party.createInvitation({ secretValidator, secretProvider });
 
-    const invitation = await party.createInvitation({ secretValidator, secretProvider });
+      const botUID = await botFactoryClient.sendSpawnRequest(botId);
+      await botFactoryClient.sendInvitationRequest(botUID, party.key.toHex(), spec, invitation.toQueryParameters());
+      // TODO(egorgripasov): Replace 2 calls above once protocol changes are on kube.
+      // await botFactoryClient.sendSpawnAndInviteRequest(botId, party.key.toHex(), invitation.toQueryParameters(), {});
+      setBotInvitationPending(false);
+      await handleBotInvitationEnd();
+    } catch (err) {
+      console.error(err);
+      setBotInvitationPending(false);
+      setBotInvitationError(err);
+    }
+  };
 
-    const botUID = await botFactoryClient.sendSpawnRequest(botId);
-    await botFactoryClient.sendInvitationRequest(botUID, party.key.toHex(), spec, invitation.toQueryParameters());
+  const handleBotFactorySelect = async (topic, force) => {
+    if (botFactoryTopic !== topic || force) {
+      setBotFactoryConnected(false);
+      setBotFactoryTopic(topic);
+      if (botFactoryTopic && botFactoryClient) {
+        await botFactoryClient.close();
+      }
+      const bfClient = new BotFactoryClient(client.echo.networkManager, topic);
+      setBotFactoryClient(bfClient);
+
+      const bfConnected = await bfClient.connect();
+      if (bfConnected) {
+        setBotFactoryConnected(true);
+      }
+    }
+  };
+
+  const handleBotInvitationEnd = async () => {
+    if (botFactoryClient) {
+      await botFactoryClient.close();
+    }
+    setBotFactoryClient(null);
+    setBotFactoryTopic(null);
+    setBotToSpawn(null);
+    setBotFactoryConnected(false);
     setBotDialogVisible(false);
+  };
+
+  const handleSubmit = (bot) => {
+    setInviteRequestTime(Date.now());
+    setBotToSpawn(bot);
   };
 
   const handleCopy = (value) => {
@@ -207,6 +261,12 @@ const PartySharingDialog = ({ party, open, onClose }) => {
       ...old.filter(invite => invite.id === invitationId).map(invite => ({ ...invite, done: true }))
     ]));
   };
+
+  useEffect(() => {
+    if (botFactoryConnected && botFactoryTopic && botToSpawn) {
+      handleBotInvite(botToSpawn);
+    }
+  }, [botFactoryConnected, botFactoryTopic, botToSpawn, inviteRequestTime]);
 
   // TODO(burdon): Columns in EACH section should have same content:
   // [SMALL AVATAR] [NAME] [INVITATION PIN] [MEMBER TYPE] [ACTIONS: e.g., refresh PIN/remove]
@@ -237,7 +297,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
             </Button>
             <Button
               size='small'
-              onClick={() => setBotDialogVisible(true)}
+              onClick={() => handleBotInviteClick()}
             >
               Invite Bot
             </Button>
@@ -246,8 +306,11 @@ const PartySharingDialog = ({ party, open, onClose }) => {
 
         <BotDialog
           open={botDialogVisible}
-          onSubmit={async ({ topic: bfTopic, bot, spec }) => handleBotInvite(bfTopic, bot, spec)}
-          onClose={() => setBotDialogVisible(false)}
+          invitationPending={botInvitationPending}
+          invitationError={botInvitationError}
+          onBotFactorySelect={async (bfTopic, force) => handleBotFactorySelect(bfTopic, force)}
+          onSubmit={async ({ bot }) => handleSubmit(bot)}
+          onClose={() => handleBotInvitationEnd()}
         />
 
         <Snackbar
