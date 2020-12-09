@@ -1,5 +1,14 @@
 # Changelog
 
+### [2.7.33](https://www.github.com/dxos/sdk/compare/v2.7.32...v2.7.33) (2020-12-09)
+
+
+### Bug Fixes
+
+* Introduce sorting by relevant keywords in bot registry ([#443](https://www.github.com/dxos/sdk/issues/443)) ([1d3c9d2](https://www.github.com/dxos/sdk/commit/1d3c9d2c091260b3d9beef2b4fddc574c0392b19))
+* locks are not re-entrant ([#446](https://www.github.com/dxos/sdk/issues/446)) ([5d83381](https://www.github.com/dxos/sdk/commit/5d83381696e2e939f7d588c99268498db5d0c2ec))
+* Use newest echo, add message logger ([#447](https://www.github.com/dxos/sdk/issues/447)) ([f1b4a7c](https://www.github.com/dxos/sdk/commit/f1b4a7c633b3a3da99fee317d6aa270165bb862c))
+
 ### [2.7.32](https://www.github.com/dxos/sdk/compare/v2.7.31...v2.7.32) (2020-12-08)
 
 
