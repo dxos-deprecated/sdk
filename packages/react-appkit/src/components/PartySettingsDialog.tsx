@@ -26,6 +26,7 @@ import Alert from '@material-ui/lab/Alert';
 
 import { EditableText } from '@dxos/react-ux';
 import { Party } from '@dxos/echo-db';
+import assert from 'assert';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -91,6 +92,7 @@ const PartySettingsDialog = ({
     setExportedCid(undefined);
 
     try {
+      assert(onExportToIpfs);
       const cid = await onExportToIpfs();
       setExportedCid(cid);
     } catch (e) {
