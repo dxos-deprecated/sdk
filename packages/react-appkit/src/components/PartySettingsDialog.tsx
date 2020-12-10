@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -24,9 +25,8 @@ import CopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Alert from '@material-ui/lab/Alert';
 
-import { EditableText } from '@dxos/react-ux';
 import { Party } from '@dxos/echo-db';
-import assert from 'assert';
+import { EditableText } from '@dxos/react-ux';
 
 const useStyles = makeStyles(theme => ({
   root: {

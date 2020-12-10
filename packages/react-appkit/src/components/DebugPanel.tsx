@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import clsx from 'clsx';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 
@@ -17,7 +18,6 @@ import { makeStyles } from '@material-ui/core/styles';
 // import metrics from '@dxos/metrics';
 import { useConfig } from '@dxos/react-client';
 import { JsonTreeView } from '@dxos/react-ux';
-import assert from 'assert';
 
 const useStyles = makeStyles((theme) => ({
   root: {

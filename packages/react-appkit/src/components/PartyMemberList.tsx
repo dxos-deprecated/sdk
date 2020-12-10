@@ -4,19 +4,19 @@
 
 import React from 'react';
 
+import { Theme } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import FaceIcon from '@material-ui/icons/Face';
 import ShareIcon from '@material-ui/icons/GroupAdd';
 import { AvatarGroup } from '@material-ui/lab';
-import { Theme } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 
 import { humanize } from '@dxos/crypto';
+import { Party, PartyMember } from '@dxos/echo-db';
 
 import { useMembers } from '../hooks';
 import { getAvatarStyle } from './MemberAvatar';
-import { Party, PartyMember } from '@dxos/echo-db';
 
 const useStyles = makeStyles(() => ({
   root: {

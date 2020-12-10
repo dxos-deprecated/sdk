@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import PeopleIcon from '@material-ui/icons/People';
+
 import { IpfsHelper } from '../helpers';
 
 const useStyles = makeStyles((theme: Theme) => ({

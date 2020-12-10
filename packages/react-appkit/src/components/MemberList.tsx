@@ -2,16 +2,16 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import React, { ReactNode } from 'react';
 
 import { List, ListItem, makeStyles } from '@material-ui/core';
 
-import { MemberAvatar } from '.';
-import { useMembers } from '../hooks';
 import { Party } from '@dxos/credentials';
 import { PartyMember } from '@dxos/echo-db';
 
-import assert from 'assert';
+import { MemberAvatar } from '.';
+import { useMembers } from '../hooks';
 
 const useStyles = makeStyles(() => ({
   membersList: {

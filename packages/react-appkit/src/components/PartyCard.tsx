@@ -15,6 +15,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -23,6 +24,7 @@ import RestoreIcon from '@material-ui/icons/RestoreFromTrash';
 import { makeStyles } from '@material-ui/styles';
 
 import { keyToString } from '@dxos/crypto';
+import { Party } from '@dxos/echo-db';
 
 import NewItemCreationMenu from './NewItemCreationMenu';
 import PadIcon from './PadIcon';
@@ -30,9 +32,6 @@ import PartyMemberList from './PartyMemberList';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import { useAssets } from './util';
-import { Party } from '@dxos/echo-db';
-import { Client } from '@dxos/client';
-import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 const useStyles = makeStyles((theme: Theme) => ({
   card: {
@@ -110,7 +109,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 // TODO(burdon): Extract client, router and dialogs and inject actions.
 const PartyCard = ({
   party,
-  client,
   router,
   pads,
   items,
@@ -121,7 +119,6 @@ const PartyCard = ({
   onExportToIpfs = undefined
 }: {
   party: Party,
-  client: Client,
   router: Record<string, any>,
   pads: {
     type: string;
