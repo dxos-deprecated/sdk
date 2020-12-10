@@ -4,6 +4,7 @@
 
 import React from 'react';
 
+import { Theme } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import FaceIcon from '@material-ui/icons/Face';
@@ -12,6 +13,7 @@ import { AvatarGroup } from '@material-ui/lab';
 import { makeStyles, useTheme } from '@material-ui/styles';
 
 import { humanize } from '@dxos/crypto';
+import { Party, PartyMember } from '@dxos/echo-db';
 
 import { useMembers } from '../hooks';
 import { getAvatarStyle } from './MemberAvatar';
@@ -24,10 +26,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 // TODO(burdon): Pass in array (small UX data object) of processed members (don't apply humanize here).
-const PartyMemberList = ({ party, onShare }) => {
+const PartyMemberList = ({ party, onShare }: { party: Party, onShare: () => void }) => {
   const classes = useStyles();
-  const theme = useTheme();
-  const members = useMembers(party);
+  const theme = useTheme() as Theme;
+  const members: PartyMember[] = useMembers(party);
 
   return (
     <div className={classes.root}>
@@ -41,7 +43,7 @@ const PartyMemberList = ({ party, onShare }) => {
         ))}
       </AvatarGroup>
 
-      <Tooltip title='Share' name='share' placement='top'>
+      <Tooltip title='Share' placement='top'>
         <Avatar style={getAvatarStyle(theme)} onClick={onShare}>
           <ShareIcon />
         </Avatar>

@@ -5,7 +5,9 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import { SvgIconTypeMap } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import Slide from '@material-ui/core/Slide';
 import Snackbar from '@material-ui/core/Snackbar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -51,7 +53,22 @@ const useStyles = makeStyles(theme => ({
 /**
  * Status bar.
  */
-const StatusBar = (props) => {
+const StatusBar = (
+  props: {
+    actions: {
+      Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+      handler: () => void,
+      isActive: () => boolean,
+      title: string
+    }[],
+    indicators: {
+      Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+      isActive: () => boolean,
+    }[],
+    meta: string,
+    errors: string[],
+    onResetErrors: () => void
+  }) => {
   const { actions = [], indicators = [], meta, errors = [], onResetErrors } = props;
   const classes = useStyles();
 

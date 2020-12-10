@@ -45,7 +45,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onClose }) => {
+type InvitationDialogPropsType = {
+  link: string,
+  title: string,
+  message: string,
+  passcode: string,
+  anchorEl: Element,
+  open: boolean,
+  onClose: () => void
+}
+
+const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onClose }: InvitationDialogPropsType) => {
   const classes = useStyles();
 
   if (anchorEl) {
@@ -79,7 +89,19 @@ const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onCl
   return null;
 };
 
-const InvitationContent = ({ link, title, message, passcode, onClose }) => {
+const InvitationContent = ({
+  link,
+  title,
+  message,
+  passcode,
+  onClose
+}: {
+  link: string,
+  title: string,
+  message: string,
+  passcode: string,
+  onClose?: () => void
+}) => {
   const classes = useStyles();
 
   return (
@@ -98,7 +120,7 @@ const InvitationContent = ({ link, title, message, passcode, onClose }) => {
         <div className={classes.link}>
           <TextField className={classes.input} value={link || ''} disabled />
 
-          <CopyToClipboard text={link} onCopy={value => console.log(value)}>
+          <CopyToClipboard text={link} onCopy={(value: string) => console.log(value)}>
             <IconButton
               color='inherit'
               aria-label='copy to clipboard'

@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import React, { useState, useRef } from 'react';
 
 import { DialogContentText } from '@material-ui/core';
@@ -12,9 +13,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useConfig } from '@dxos/react-client';
-import { reload } from '@dxos/react-router';
-
 const useStyles = makeStyles(theme => ({
   marginTop: {
     marginTop: theme.spacing(2)
@@ -23,32 +21,45 @@ const useStyles = makeStyles(theme => ({
 
 /**
  * Dialog to import keyring from file.
- *
- * @param {boolean} open
- * @param {function} onClose
- * @param {function} decrypter
  */
-const ImportKeyringDialog = ({ onClose, decrypter }) => {
+const ImportKeyringDialog = ({
+  onClose,
+  decrypter
+}: {
+  onClose: () => void,
+  decrypter: (
+    text: string | ArrayBuffer | null,
+    passphrase: number
+  ) => string
+}) => {
   const classes = useStyles();
-  const config = useConfig();
-  const buttonRef = useRef();
-  const fileRef = useRef();
+  // const config = useConfig();
+  const buttonRef = useRef(null);
+  const fileRef = useRef(null);
   const [passphrase, setPassphrase] = useState(0);
   const [error, setError] = useState(false);
 
-  const handlePassChange = (event) => {
-    setPassphrase(event.target.value);
+  const handlePassChange = (event: React.SyntheticEvent) => {
+    setPassphrase(parseInt((event.target as HTMLTextAreaElement).value));
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: React.SyntheticEvent) => {
+    assert(event.target);
+    const input = event.target as HTMLInputElement;
+
+    assert(input.files);
+    const file = input.files[0];
+
     if (file) {
       const reader = new FileReader();
       reader.onload = async (event) => {
         try {
-          await decrypter(event.target.result, passphrase);
+          await decrypter((event.target as FileReader).result, passphrase);
           // TODO(burdon): Pass through global action handler from layout.
-          reload(config.app.publicUrl);
+
+          // app is not present on ClientConfig
+          // reload(config.app.publicUrl);
+          window.location.reload();
         } catch (e) {
           setError(e);
         }
@@ -88,7 +99,10 @@ const ImportKeyringDialog = ({ onClose, decrypter }) => {
           color='primary'
           ref={buttonRef}
           disabled={!passphrase || !!error}
-          onClick={async () => fileRef.current.click()}
+          onClick={async () => {
+            assert(fileRef.current);
+            (fileRef.current as unknown as HTMLInputElement).click();
+          }}
         >
           Choose File
         </Button>

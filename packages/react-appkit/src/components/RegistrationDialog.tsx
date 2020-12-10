@@ -2,10 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import MobileDetect from 'mobile-detect';
 import React, { useRef, useState } from 'react';
 
-import { withStyles } from '@material-ui/core';
+import { withStyles, Theme } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -36,12 +37,12 @@ const STAGE_CHECK_SEED_PHRASE = 4;
 const STAGE_IMPORT_KEYRING = 5;
 
 // TODO(burdon): Factor out.
-const ordinal = n => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
+const ordinal = (n: number) => String(n) + ((n === 1) ? 'st' : (n === 2) ? 'nd' : (n === 3) ? 'rd' : 'th');
 
 // TODO(burdon): Factor out.
 const mobile = new MobileDetect(window.navigator.userAgent).mobile();
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   paper: {
     minWidth: 700,
     minHeight: 300
@@ -110,7 +111,19 @@ const DialogActions = withStyles(theme => ({
 /**
  * Registration and recovery dialog.
  */
-const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFinishRestore, keyringDecrypter }) => {
+const RegistrationDialog = ({
+  open = true,
+  debug = false,
+  onFinishCreate,
+  onFinishRestore,
+  keyringDecrypter
+}: {
+  open: boolean,
+  debug: boolean,
+  onFinishCreate: (username: string, seedPhrase: string) => void,
+  onFinishRestore: (seedPhrase: string) => void,
+  keyringDecrypter: (text: string | ArrayBuffer | null, passphrase: number) => string
+}) => {
   const classes = useStyles();
   const [stage, setStage] = useState(STAGE_START);
   const [seedPhrase] = useState(generateSeedPhrase());
@@ -127,7 +140,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
   const usernameRef = useRef();
   const seedPhraseRef = useRef();
 
-  const handleDownloadSeedPhrase = (seedPhrase) => {
+  const handleDownloadSeedPhrase = (seedPhrase: string) => {
     const file = new Blob([seedPhrase], { type: 'text/plain' });
     const element = document.createElement('a');
     element.href = URL.createObjectURL(file);
@@ -137,11 +150,13 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
 
   const restoreSeedPhraseValid = () => recoveredSeedPhrase.trim().toLowerCase().split(/\s+/g).length === 12;
 
-  const handleNext = async (ev) => {
+  const handleNext = async (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
     switch (stage) {
       case STAGE_ENTER_USERNAME: {
-        if (usernameRef.current.value.trim().length > 0) {
-          setUsername(usernameRef.current.value.trim());
+        assert(usernameRef.current);
+        const inputElement = (usernameRef.current as unknown as HTMLInputElement);
+        if (inputElement.value.trim().length > 0) {
+          setUsername(inputElement.value.trim());
           setStage(STAGE_SHOW_SEED_PHRASE);
         }
         break;
@@ -153,7 +168,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
       }
 
       case STAGE_CHECK_SEED_PHRASE: {
-        const testWords = seedPhraseRef.current.value.trim().toLowerCase().split(/\s+/);
+        const testWords = (seedPhraseRef.current as unknown as HTMLInputElement).value.trim().toLowerCase().split(/\s+/);
 
         const match = (testWords.length === 2 &&
           testWords[0] === words[selected[0]] && testWords[1] === words[selected[1]]);
@@ -189,13 +204,13 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
     }
   };
 
-  const handleKeyDown = async (event) => {
-    if (event.key === 'Enter') {
-      await handleNext(event);
+  const handleKeyDown = async (event: React.SyntheticEvent) => {
+    if ((event as React.KeyboardEvent).key === 'Enter') {
+      await handleNext(event as React.MouseEvent<HTMLButtonElement, MouseEvent>);
     }
   };
 
-  const SeedPhrasePanel = ({ value }) => {
+  const SeedPhrasePanel = ({ value }: { value: string }) => {
     const words = value.split(' ');
 
     return (
@@ -216,7 +231,7 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
   };
 
   // TODO(burdon): Configure title.
-  const getStage = stage => {
+  const getStage = (stage: number) => {
     // eslint-disable-next-line default-case
     switch (stage) {
       case STAGE_START: {
@@ -349,7 +364,8 @@ const RegistrationDialog = ({ open = true, debug = false, onFinishCreate, onFini
 
       case STAGE_IMPORT_KEYRING: {
         return (
-          <ImportKeyringDialog open onClose={() => setStage(STAGE_START)} decrypter={keyringDecrypter} />
+          // open attribute deleted as it is not present in ImportKeyringDialog
+          <ImportKeyringDialog onClose={() => setStage(STAGE_START)} decrypter={keyringDecrypter} />
         );
       }
     }

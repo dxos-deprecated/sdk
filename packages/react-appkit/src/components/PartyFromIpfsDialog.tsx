@@ -5,7 +5,7 @@
 import assert from 'assert';
 import React, { useState } from 'react';
 
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -17,7 +17,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import PeopleIcon from '@material-ui/icons/People';
 
-const useStyles = makeStyles(theme => ({
+import { IpfsHelper } from '../helpers';
+
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     minWidth: '400px'
   },
@@ -29,7 +31,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartyFromIpfsDialog = ({ open, onClose, onImport, ipfs }) => {
+const PartyFromIpfsDialog = ({
+  open,
+  onClose,
+  onImport,
+  ipfs
+}: {
+  open: boolean,
+  onClose: () => void,
+  onImport: (content: ArrayBuffer | string | null) => void,
+  ipfs: IpfsHelper
+}) => {
   const classes = useStyles();
   const [cid, setCid] = useState('');
   const [inProgress, setInProgress] = useState(false);
@@ -47,8 +59,8 @@ const PartyFromIpfsDialog = ({ open, onClose, onImport, ipfs }) => {
     setError(undefined);
     try {
       assert(cid);
-      const data = await ipfs.download(cid);
-      await onImport(data);
+      const { string } = await ipfs.download(cid);
+      await onImport(string);
       handleClose();
     } catch (e) {
       console.error(e);

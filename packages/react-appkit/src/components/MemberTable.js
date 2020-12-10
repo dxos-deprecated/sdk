@@ -2,6 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
+// THIS COMPONENT IS NOT USED ANYWHERE
+
 import React from 'react';
 
 import Table from '@material-ui/core/Table';
@@ -74,8 +76,9 @@ const MemberTable = ({ party, onMemberSelect }) => {
       </TableHead>
       <TableBody>
         {party.members.sort(sorter).map((member) => {
-          const formatDisplay = (key, name) => (key
-            ? `${name || humanize(key)} (${truncateString(key.toString(), 8)})` : '');
+          const formatDisplay = (key, name) => (
+            key ? `${name || humanize(key)} (${truncateString(key.toString(), 8)})` : ''
+          );
 
           const key = member.publicKey.toString();
           let admittedBy = '';
@@ -84,8 +87,7 @@ const MemberTable = ({ party, onMemberSelect }) => {
               admittedBy = formatDisplay(member.admittedBy, party.displayName);
             } else {
               const match = party.members.find(other => other.publicKey.equals(member.admittedBy));
-              admittedBy = match ? formatDisplay(member.admittedBy, match.displayName)
-                : formatDisplay(member.admittedBy);
+              admittedBy = match ? formatDisplay(member.admittedBy, match.displayName) : formatDisplay(member.admittedBy);
             }
           }
 

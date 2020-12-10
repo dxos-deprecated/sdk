@@ -54,7 +54,7 @@
     "wrtc": "^0.4.3"
   },
   "devDependencies": {
-    "@dxos/eslint-plugin": "1.0.9",
+    "@dxos/eslint-plugin": "1.0.10",
     "@dxos/random-access-multi-storage": "1.1.0-beta.8",
     "@types/jest": "^26.0.15",
     "@types/lodash.defaultsdeep": "^4.6.6",
