@@ -62,6 +62,7 @@ const ImportKeyringDialog = ({
 
           // app is not present on ClientConfig
           // reload(config.app.publicUrl);
+          window.location.reload();
         } catch (e) {
           setError(e);
         }
@@ -102,7 +103,6 @@ const ImportKeyringDialog = ({
           ref={buttonRef}
           disabled={!passphrase || !!error}
           onClick={async () => {
-            // done in ugly way
             assert(fileRef.current);
             (fileRef.current as unknown as HTMLInputElement).click();
           }}

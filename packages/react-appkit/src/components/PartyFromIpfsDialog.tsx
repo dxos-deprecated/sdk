@@ -58,7 +58,6 @@ const PartyFromIpfsDialog = ({
     setError(undefined);
     try {
       assert(cid);
-      // data changed to { string }
       const { string } = await ipfs.download(cid);
       await onImport(string);
       handleClose();
