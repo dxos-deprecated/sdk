@@ -5,7 +5,9 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import { SvgIconTypeMap } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import Slide from '@material-ui/core/Slide';
 import Snackbar from '@material-ui/core/Snackbar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,8 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import grey from '@material-ui/core/colors/grey';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
-import { SvgIconTypeMap } from '@material-ui/core';
-import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 const useStyles = makeStyles(theme => ({
   root: {

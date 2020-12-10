@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import MobileDetect from 'mobile-detect';
 import React, { useRef, useState } from 'react';
 
@@ -26,7 +27,6 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import { generateSeedPhrase } from '@dxos/credentials';
 
 import ImportKeyringDialog from './ImportKeyringDialog';
-import assert from 'assert';
 
 const STAGE_PENDING = -1;
 const STAGE_START = 0;

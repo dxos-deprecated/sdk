@@ -27,7 +27,7 @@ import { useClient, useConfig, useProfile } from '@dxos/react-client';
 import BotDialog from '../components/BotDialog';
 import ExportKeyringDialog from '../components/ExportKeyringDialog';
 import InvitationDialog from '../components/InvitationDialog';
-import { Action, useActionHandler, useAppRouter } from '../hooks';
+import { useActionHandler, useAppRouter } from '../hooks';
 
 // TODO(telackey): This file is dead code, and these types no longer exist.
 const InviteDetails = () => null;
@@ -78,6 +78,7 @@ const AppBar = ({
   const config = useConfig();
   const profile = useProfile();
   const router = useAppRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAction = useActionHandler();
 
   const [{ dialog, target } = {}, setDialog] = useState();

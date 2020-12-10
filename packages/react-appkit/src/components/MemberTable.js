@@ -19,7 +19,6 @@ import NoIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 import { humanize } from '@dxos/crypto';
 import { truncateString } from '@dxos/debug';
-import { Party } from '@dxos/echo-db';
 
 // TODO(burdon): Move to dxos/react-ux.
 const BooleanIcon = ({ yes = false, error = false }) => {
