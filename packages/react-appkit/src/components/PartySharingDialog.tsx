@@ -39,6 +39,7 @@ import BotDialog from './BotDialog';
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
 import { Contact, Party, PartyMember } from '@dxos/echo-db';
 import assert from 'assert';
+import { SignalCellularNullSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -153,13 +154,13 @@ function PendingOfflineInvitation ({
   party,
   invitation,
   handleCopy
-}:{
+}: {
   party: Party,
   invitation: Record<string, any> | undefined,
   handleCopy: (value: string) => void
 }) {
   if (!invitation) {
-    return;
+    return null;
   }
 
   const [inviteCode] = useOfflineInvitation(party.key.asBuffer(), invitation.contact, {
@@ -352,7 +353,6 @@ const PartySharingDialog = ({
                           handleCopy={handleCopy}
                           party={party}
                           invitation={contactsInvitations.find(p => p.contact === contact)}
-                          onInvitationDone={() => console.warn('not impl')}
                         />
                       )}
                     </TableCell>
