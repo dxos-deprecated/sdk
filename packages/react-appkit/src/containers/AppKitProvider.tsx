@@ -46,14 +46,14 @@ export interface AppKitProviderProps {
   issuesLink?: string,
   router?: any,
   keywords?: string[], // Used for sorting relevant registry records first
-  messageLog?: (message: string) => void, // Optional logger of message events, such us successful registration
+  sentry?: any,
 }
 
 /**
  * Creates the AppKit framework context, which provides the global UX state.
  * Wraps children with a React ErrorBoundary component, which catches runtime errors and enables reset.
  */
-const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined, keywords = [], messageLog = noop }: AppKitProviderProps) => {
+const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorHandler, pads = [], issuesLink = undefined, keywords = [], sentry = undefined }: AppKitProviderProps) => {
   const client = useClient();
   const [state, dispatch] = useReducer(appReducer, defaultsDeep({}, initialState, defaultState));
   const [padsRegistered, setPadsRegistered] = useState(false);
@@ -86,8 +86,13 @@ const AppKitProvider = ({ children, initialState, router = DefaultRouter, errorH
     registerPadModels();
   }, []);
 
+  const profile = client.getProfile();
+  if (profile !== undefined && sentry !== undefined) {
+    sentry.setUser({ username: `${profile.username}-${profile.publicKey.toHex()}`, id: profile.publicKey.toHex() });
+  }
+
   return (
-    <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink, keywords, messageLog }}>
+    <AppKitContext.Provider value={{ state, dispatch, router, pads, issuesLink, keywords, sentry }}>
       {padsRegistered && children}
     </AppKitContext.Provider>
   );

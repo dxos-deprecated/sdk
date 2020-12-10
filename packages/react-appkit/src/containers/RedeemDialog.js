@@ -19,7 +19,7 @@ import Alert from '@material-ui/lab/Alert';
 
 import { useInvitationRedeemer } from '@dxos/react-client';
 
-import { useMessageLog } from '../hooks';
+import { useSentry } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
   marginTop: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 const RedeemDialog = ({ onClose, ...props }) => {
   const classes = useStyles();
   const [isOffline, setIsOffline] = useState(false);
-  const messageLog = useMessageLog();
+  const sentry = useSentry();
 
   const handleDone = () => {
     setStep(0);
@@ -53,7 +53,9 @@ const RedeemDialog = ({ onClose, ...props }) => {
 
   const [redeemCode, setPin] = useInvitationRedeemer({
     onDone: () => {
-      messageLog(`${isOffline ? 'Offline' : 'Online'} invitation redeemed.`);
+      if (sentry) {
+        sentry.captureMessage(`${isOffline ? 'Offline' : 'Online'} invitation redeemed.`);
+      }
       handleDone();
     },
     onError: (ex) => handleInvitationError(String(ex)),

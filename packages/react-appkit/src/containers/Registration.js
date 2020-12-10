@@ -14,7 +14,7 @@ import { useQuery, createUrl } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';
 
 import RegistrationDialog from '../components/RegistrationDialog';
-import { useMessageLog } from '../hooks';
+import { useSentry } from '../hooks';
 
 const Registration = () => {
   const [open, setOpen] = useState(true);
@@ -23,7 +23,7 @@ const Registration = () => {
   const client = useClient();
   const config = useConfig();
   const [recovering, setRecovering] = useState(false);
-  const messageLog = useMessageLog();
+  const sentry = useSentry();
 
   const clearIdentity = async () => {
     setOpen(false);
@@ -37,7 +37,10 @@ const Registration = () => {
     await clearIdentity();
     const identityKeyPair = keyPairFromSeedPhrase(seedPhrase);
     await client.createProfile({ ...identityKeyPair, username });
-    messageLog(`User registered with username '${username}'`);
+    if (sentry) {
+      sentry.setUser({ username: `${username}-${identityKeyPair.publicKey.toString('hex')}`, id: identityKeyPair.publicKey.toString('hex') });
+      sentry.captureMessage('User registered.');
+    }
 
     // await client.partyManager.identityManager.initializeForNewIdentity({
     //   identityDisplayName: username || keyToString(client.partyManager.identityManager.publicKey),
