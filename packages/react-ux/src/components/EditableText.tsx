@@ -16,6 +16,11 @@ const EditableText = ({
   disabled = false,
   bareInput = false,
   ...rest
+}: {
+  value: string,
+  onUpdate: (value: string) => void,
+  disabled: boolean,
+  bareInput: boolean
 }) => {
   const [editable, setEditable] = useState(false);
   const [text, setText] = useState(value);
@@ -24,7 +29,7 @@ const EditableText = ({
     setText(value);
   }, [value]);
 
-  const handleUpdate = newValue => {
+  const handleUpdate = (newValue: string) => {
     if (value === undefined && !newValue) {
       return;
     }
@@ -34,11 +39,15 @@ const EditableText = ({
     }
   };
 
-  const handleChange = ({ target: { value } }) => {
+  const handleChange = ({ target: { value } }: { target: { value: string }}) => {
     setText(value);
   };
 
-  const handleKeyDown = ({ target: { value }, key }) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    const textField = event.target as HTMLTextAreaElement;
+    const { key } = event;
+    const { value } = textField;
+
     switch (key) {
       case 'Enter': {
         setText(value);
@@ -56,7 +65,7 @@ const EditableText = ({
     }
   };
 
-  const handleBlur = ({ target: { value } }) => {
+  const handleBlur = ({ target: { value } }: { target: { value: string }}) => {
     setText(value);
     setEditable(false);
     handleUpdate(value);
@@ -86,7 +95,7 @@ const EditableText = ({
         {...rest}
         value={text || ''}
         disabled={disabled}
-        onClick={disabled ? null : () => setEditable(true)}
+        onClick={disabled ? undefined : () => setEditable(true)}
         fullWidth
         inputProps={{
           inputprops: {
@@ -102,7 +111,7 @@ const EditableText = ({
       {...rest}
       value={text || ''}
       disabled={disabled}
-      onClick={disabled ? null : () => setEditable(true)}
+      onClick={disabled ? undefined : () => setEditable(true)}
       fullWidth
       inputProps={{
         inputprops: {

@@ -42,7 +42,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const ErrorView = ({ onRestart, onReset, error, config }) => {
+export const ErrorView = ({
+  onRestart,
+  onReset,
+  error,
+  config
+}: {
+  onRestart?: () => void,
+  onReset?: () => void,
+  error: Error | null,
+  config?: Record<string, string>
+}) => {
   const classes = useStyles();
   const isDev = process.env.NODE_ENV === 'development';
   const issuesLink = config?.issuesLink ?? 'https://github.com/dxos/sdk/issues/new';

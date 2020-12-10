@@ -46,7 +46,16 @@ const DEFAULT_PATTERN = /^[0-9]*$/;
 /**
  * Displays a multi-digit passcode, which may optionally be editable.
  */
-const Passcode = (props) => {
+const Passcode = (
+  props: {
+    attempt: number,
+    editable: boolean,
+    length: number,
+    value: string,
+    pattern: RegExp,
+    onChange: (value: string) => void,
+    onSubmit: (value: string) => void
+  }) => {
   const {
     attempt,
     editable = false,
@@ -59,7 +68,7 @@ const Passcode = (props) => {
   const classes = useStyles();
   const [value, setValue] = useState(initialValue || '');
   const [focused, setFocused] = useState(false);
-  const input = createRef();
+  const input = createRef<HTMLInputElement>();
 
   useEffect(() => {
     setValue(initialValue || '');
@@ -69,7 +78,7 @@ const Passcode = (props) => {
     setValue('');
   }, [attempt]);
 
-  const handleKeyDown = ({ key }) => {
+  const handleKeyDown = ({ key }: { key: string }) => {
     switch (key) {
       case 'Escape': {
         setValue('');
@@ -80,7 +89,7 @@ const Passcode = (props) => {
     }
   };
 
-  const handleChange = ({ target: { value } }) => {
+  const handleChange = ({ target: { value } }: { target: { value: string }}) => {
     if (!value.match(pattern) || value.length > length) {
       return;
     }
@@ -95,7 +104,7 @@ const Passcode = (props) => {
     }
   };
 
-  const handleFocus = (ev) => {
+  const handleFocus = (ev: React.SyntheticEvent) => {
     setFocused(ev.type === 'focus');
   };
 
@@ -107,7 +116,7 @@ const Passcode = (props) => {
   return (
     <div onClick={() => {
       if (input.current) {
-        input.current.focus();
+        (input.current as HTMLInputElement).focus();
       }
     }}>
       {editable && (

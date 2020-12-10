@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { Component } from 'react';
+import React, { Component, ErrorInfo } from 'react';
 
 import ErrorView from './ErrorView';
 
@@ -13,16 +13,35 @@ import ErrorView from './ErrorView';
  * NOTE: Must currently be a Component.
  * https://reactjs.org/docs/hooks-faq.html#do-hooks-cover-all-use-cases-for-classes
  */
-class ErrorBoundary extends Component {
+
+interface Props {
+  onError: (error: Error, errorInfo: ErrorInfo) => void,
+  onRestart?: () => void,
+  onReset?: () => void
+}
+
+interface State {
+  error: Error | null
+}
+
+class ErrorBoundary extends Component<Props, State> {
   state = {
     error: null
   };
 
-  static getDerivedStateFromError (error) {
+  static defaultProps = {
+    onError: console.warn,
+    onRestart: () => {
+      window.location.href = '/';
+    },
+    onReset: undefined
+  };
+
+  static getDerivedStateFromError (error: any) {
     return { error };
   }
 
-  componentDidCatch (error, errorInfo) {
+  componentDidCatch (error: Error, errorInfo: ErrorInfo) {
     const { onError } = this.props;
 
     // TODO(burdon): Show error indicator.
@@ -42,12 +61,12 @@ class ErrorBoundary extends Component {
   }
 }
 
-ErrorBoundary.defaultProps = {
-  onError: console.warn,
-  onRestart: () => {
-    window.location.href = '/';
-  },
-  onReset: undefined
-};
+// ErrorBoundary.defaultProps = {
+//   onError: console.warn,
+//   onRestart: () => {
+//     window.location.href = '/';
+//   },
+//   onReset: undefined
+// };
 
 export default ErrorBoundary;
