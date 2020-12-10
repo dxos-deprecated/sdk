@@ -103,7 +103,6 @@ const ImportKeyringDialog = ({
           ref={buttonRef}
           disabled={!passphrase || !!error}
           onClick={async () => {
-            // done in ugly way
             assert(fileRef.current);
             (fileRef.current as unknown as HTMLInputElement).click();
           }}
