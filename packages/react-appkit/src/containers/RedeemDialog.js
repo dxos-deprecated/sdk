@@ -31,6 +31,11 @@ const RedeemDialog = ({ onClose, ...props }) => {
   const classes = useStyles();
   const [isOffline, setIsOffline] = useState(false);
   const sentry = useSentry();
+  const [error, setError] = useState(undefined);
+  const [step, setStep] = useState(0); // TODO(burdon): Const.
+  const [invitationCode, setInvitationCode] = useState('');
+  const [pinCode, setPinCode] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDone = () => {
     setStep(0);
@@ -49,6 +54,10 @@ const RedeemDialog = ({ onClose, ...props }) => {
     } else {
       setError(error);
     }
+    if (sentry) {
+      sentry.addBreadcrumb({ message: String(error) });
+      sentry.captureMessage(`${isOffline ? 'Offline' : 'Online'} invitation redeem failed.`);
+    }
   };
 
   const [redeemCode, setPin] = useInvitationRedeemer({
@@ -61,12 +70,6 @@ const RedeemDialog = ({ onClose, ...props }) => {
     onError: (ex) => handleInvitationError(String(ex)),
     isOffline
   });
-
-  const [error, setError] = useState(undefined);
-  const [step, setStep] = useState(0); // TODO(burdon): Const.
-  const [invitationCode, setInvitationCode] = useState('');
-  const [pinCode, setPinCode] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleEnterInvitationCode = async () => {
     redeemCode(invitationCode);
