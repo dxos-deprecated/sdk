@@ -139,7 +139,7 @@ const BotDialog = ({
             value={bot}
             fullWidth
             disabled={pending}
-            onChange={event => setBot(event.target.value)}
+            onChange={event => setBot((event.target as HTMLSelectElement).value)}
           >
             {registryBots
               .filter(bots => bots.names && bots.names.length)
@@ -173,7 +173,7 @@ const BotDialog = ({
                 value={botVersion}
                 disabled={botVersions.length === 0 || pending}
                 fullWidth
-                onChange={event => setBotVersion(event.target.value)}
+                onChange={event => setBotVersion((event.target as HTMLSelectElement).value)}
               >
                 {botVersions.map(version => (
                   <MenuItem key={version} value={version}>
@@ -191,7 +191,7 @@ const BotDialog = ({
                 value={botFactoryTopic}
                 fullWidth
                 disabled={pending}
-                onChange={event => setBotFactoryTopic(event.target.value)}
+                onChange={event => setBotFactoryTopic((event.target as HTMLSelectElement).value)}
               >
                 {registryBotFactories
                   .filter(factories => factories.names && factories.names.length)
