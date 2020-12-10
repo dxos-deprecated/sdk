@@ -62,6 +62,7 @@ const ImportKeyringDialog = ({
 
           // app is not present on ClientConfig
           // reload(config.app.publicUrl);
+          window.location.reload();
         } catch (e) {
           setError(e);
         }
