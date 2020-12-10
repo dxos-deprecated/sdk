@@ -37,6 +37,9 @@ import { useClient, useContacts, useInvitation, useOfflineInvitation } from '@dx
 import { useMembers, useSentry } from '../hooks';
 import BotDialog from './BotDialog';
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
+import { Contact, Party, PartyMember } from '@dxos/echo-db';
+import assert from 'assert';
+import { SignalCellularNullSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -86,11 +89,21 @@ const TableCell = withStyles(theme => ({
   }
 }))(MuiTableCell);
 
-function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
+function PendingInvitation ({
+  party,
+  pending,
+  handleCopy,
+  onInvitationDone
+}: {
+  party: Party,
+  pending: Record<string, any>,
+  handleCopy: (value: string) => void,
+  onInvitationDone: (value: string) => void
+}) {
   const classes = useStyles();
   const [inviteCode, pin] = useInvitation(party.key, {
     onDone: () => onInvitationDone(pending.id),
-    onError: e => {
+    onError: (e) => {
       throw e;
     }
   });
@@ -137,8 +150,21 @@ function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
   );
 }
 
-function PendingOfflineInvitation ({ party, invitation, handleCopy }) {
-  const [inviteCode] = useOfflineInvitation(party.key, invitation.contact, {
+function PendingOfflineInvitation ({
+  party,
+  invitation,
+  handleCopy
+}: {
+  party: Party,
+  invitation: Record<string, any> | undefined,
+  handleCopy: (value: string) => void
+}) {
+  if (!invitation) {
+    return null;
+  }
+
+  const [inviteCode] = useOfflineInvitation(party.key.asBuffer(), invitation.contact, {
+    onDone: () => null,
     onError: e => {
       throw e;
     }
@@ -162,29 +188,41 @@ function PendingOfflineInvitation ({ party, invitation, handleCopy }) {
   );
 }
 
-const PartySharingDialog = ({ party, open, onClose }) => {
+const PartySharingDialog = ({
+  party,
+  open,
+  onClose
+}: {
+  party: Party,
+  open: boolean,
+  onClose: () => void
+}) => {
   const classes = useStyles();
   const client = useClient();
-  const [contactsInvitations, setContactsInvitations] = useState([]);
-  const [invitations, setInvitations] = useState([]);
+  const [contactsInvitations, setContactsInvitations] = useState<Record<string, any>[]>([]);
+  const [invitations, setInvitations] = useState<Record<string, any>[]>([]);
   const [botDialogVisible, setBotDialogVisible] = useState(false);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
 
-  const [botFactoryTopic, setBotFactoryTopic] = useState();
-  const [botFactoryClient, setBotFactoryClient] = useState();
+  const members: PartyMember[] = useMembers(party);
+  const [botFactoryTopic, setBotFactoryTopic] = useState<string | null>();
+  const [botFactoryClient, setBotFactoryClient] = useState<BotFactoryClient | null>();
   const [botFactoryConnected, setBotFactoryConnected] = useState(false);
-  const [botToSpawn, setBotToSpawn] = useState();
+  const [botToSpawn, setBotToSpawn] = useState<string | null>();
   const [botInvitationPending, setBotInvitationPending] = useState(false);
   const [botInvitationError, setBotInvitationError] = useState();
-  const [inviteRequestTime, setInviteRequestTime] = useState();
+  const [inviteRequestTime, setInviteRequestTime] = useState<number>();
   const sentry = useSentry();
 
-  const members = useMembers(party);
   const [contacts] = useContacts();
-  const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toString('hex') === c.publicKey.toString('hex'))); // contacts not already in this party
+  const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toHex() === c.publicKey.toHex())); // contacts not already in this party
 
   const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
-  const createOfflineInvitation = (contact) => {
+
+  // const handleBotInvite = async (botFactoryTopic: string, botId: string | undefined, spec: Record<string, unknown> = {}) => {
+  // const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
+
+  const createOfflineInvitation = (contact: Contact) => {
     setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
     if (sentry) {
       sentry.addBreadcrumb({ message: `Created offline invitation for contact: '${contact.displayName || 'Unknown'}', ${contact.publicKey.toHex()}` });
@@ -197,22 +235,27 @@ const PartySharingDialog = ({ party, open, onClose }) => {
     setBotInvitationError(undefined);
   };
 
-  const handleBotInvite = async (botId, spec = {}) => {
+  const handleBotInvite = async (botId: string | undefined, spec: Record<string, unknown> = {}) => {
     setBotInvitationError(undefined);
     setBotInvitationPending(true);
     try {
-      const secretProvider = () => null;
+      const secretProvider: any = () => null;
+
       // Provided by inviter node.
-      const secretValidator = async (invitation, secret) => {
+      const secretValidator = async (invitation: any, secret: Buffer) => {
         const signature = secret.slice(0, SIGNATURE_LENGTH);
         const message = secret.slice(SIGNATURE_LENGTH);
+        assert(botFactoryTopic);
         return verify(message, signature, keyToBuffer(botFactoryTopic));
       };
 
       const invitation = await party.createInvitation({ secretValidator, secretProvider });
 
+      assert(botFactoryClient);
       const botUID = await botFactoryClient.sendSpawnRequest(botId);
+      assert(botUID);
       await botFactoryClient.sendInvitationRequest(botUID, party.key.toHex(), spec, invitation.toQueryParameters());
+      setBotDialogVisible(false);
       // TODO(egorgripasov): Replace 2 calls above once protocol changes are on kube.
       // await botFactoryClient.sendSpawnAndInviteRequest(botId, party.key.toHex(), invitation.toQueryParameters(), {});
       setBotInvitationPending(false);
@@ -224,7 +267,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
     }
   };
 
-  const handleBotFactorySelect = async (topic, force) => {
+  const handleBotFactorySelect = async (topic: string, force?: boolean) => {
     if (botFactoryTopic !== topic || force) {
       setBotFactoryConnected(false);
       setBotFactoryTopic(topic);
@@ -252,17 +295,17 @@ const PartySharingDialog = ({ party, open, onClose }) => {
     setBotDialogVisible(false);
   };
 
-  const handleSubmit = (bot) => {
+  const handleSubmit = (bot: string | undefined) => {
     setInviteRequestTime(Date.now());
     setBotToSpawn(bot);
   };
 
-  const handleCopy = (value) => {
+  const handleCopy = (value: string) => {
     setCopiedSnackBarOpen(true);
     console.log(value);
   };
 
-  const handleInvitationDone = (invitationId) => {
+  const handleInvitationDone = (invitationId: string) => {
     setInvitations(old => ([
       ...old.filter(invite => invite.id !== invitationId),
       ...old.filter(invite => invite.id === invitationId).map(invite => ({ ...invite, done: true }))
@@ -341,7 +384,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
             {members.length > 0 && (
               <TableBody>
                 {members.map((member) => (
-                  <TableRow key={member.publicKey}>
+                  <TableRow key={member.publicKey.toString()}>
                     <TableCell classes={{ root: classes.colAvatar }}>
                       <MemberAvatar member={member} />
                     </TableCell>
@@ -365,7 +408,7 @@ const PartySharingDialog = ({ party, open, onClose }) => {
             {invitableContacts.length > 0 && (
               <TableBody>
                 {invitableContacts.map(contact => (
-                  <TableRow key={contact.publicKey}>
+                  <TableRow key={contact.publicKey.toString()}>
                     <TableCell classes={{ root: classes.colAvatar }}>
                       <MemberAvatar member={contact} />
                     </TableCell>
@@ -388,7 +431,6 @@ const PartySharingDialog = ({ party, open, onClose }) => {
                           handleCopy={handleCopy}
                           party={party}
                           invitation={contactsInvitations.find(p => p.contact === contact)}
-                          onInvitationDone={() => console.warn('not impl')}
                         />
                       )}
                     </TableCell>

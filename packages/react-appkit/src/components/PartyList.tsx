@@ -25,10 +25,18 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const PartyList = ({ parties = [], selected, onSelect }) => {
+const PartyList = ({
+  parties = [],
+  selected,
+  onSelect
+}: {
+  parties: { topic: string }[],
+  selected: string,
+  onSelect: (topic: string) => void
+}) => {
   const classes = useStyles();
 
-  const onSelectParty = topic => {
+  const onSelectParty = (topic: string) => {
     if (topic !== selected) {
       onSelect(topic);
     }

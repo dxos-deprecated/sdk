@@ -58,21 +58,31 @@ const useStyles = makeStyles((theme) => ({
 
 /**
  * Dialog to create and invite bot to party.
- *
- * @param open
- * @param onSubmit
- * @param onClose
  */
-const BotDialog = ({ open, invitationPending, onSubmit, onClose, onBotFactorySelect, invitationError }) => {
+const BotDialog = ({
+  open,
+  invitationPending,
+  onSubmit,
+  onClose,
+  onBotFactorySelect,
+  invitationError
+}: {
+  open: boolean,
+  onSubmit: ({ topic, bot, spec }: { topic?: string, bot: string | undefined, spec?: Record<string, unknown>}) => void,
+  onClose: () => void,
+  invitationPending: any,
+  onBotFactorySelect: (topic: string, force?: boolean) => void,
+  invitationError: string | undefined
+}) => {
   const classes = useStyles();
-  const [bot, setBot] = useState('');
+  const [pending, setPending] = useState(false);
+  const [bot, setBot] = useState<string>('');
   const [botFactoryTopic, setBotFactoryTopic] = useState('');
-  const [botVersions, setBotVersions] = useState([]);
-  const [botVersion, setBotVersion] = useState();
-  const [error, setError] = useState();
+  const [botVersions, setBotVersions] = useState<string[]>([]);
+  const [botVersion, setBotVersion] = useState<string>();
+  const [error, setError] = useState<string>();
   const [botFactoryError, setBotFactoryError] = useState();
   const [advanced, setAdvanced] = useState(false);
-  const [pending, setPending] = useState();
 
   const keywords = useKeywords();
 
@@ -89,7 +99,7 @@ const BotDialog = ({ open, invitationPending, onSubmit, onClose, onBotFactorySel
     await onSubmit({ bot: botVersion });
   };
 
-  const handleBotFactorySelect = async (botFactoryTopic, force) => {
+  const handleBotFactorySelect = async (botFactoryTopic: string, force?: boolean) => {
     if (botFactoryTopic && onBotFactorySelect) {
       setBotFactoryError(undefined);
       try {
@@ -106,8 +116,8 @@ const BotDialog = ({ open, invitationPending, onSubmit, onClose, onBotFactorySel
     const versions = registryBots
       .filter(({ names }) => !!names.find(name => name.startsWith(`${bot}@`)))
       .map(({ names }) => names).flat()
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).reverse()
-      .filter(name => name !== bot);
+      .sort((a: string, b: string) => a.localeCompare(b, undefined, { numeric: true })).reverse()
+      .filter((name: string) => name !== bot);
 
     versions.unshift(bot);
     setBotVersions(versions);
@@ -167,7 +177,7 @@ const BotDialog = ({ open, invitationPending, onSubmit, onClose, onBotFactorySel
             value={bot}
             fullWidth
             disabled={pending}
-            onChange={event => setBot(event.target.value)}
+            onChange={event => setBot((event.target as HTMLSelectElement).value)}
           >
             {registryBots
               .filter(bots => bots.names && bots.names.length)
@@ -201,7 +211,7 @@ const BotDialog = ({ open, invitationPending, onSubmit, onClose, onBotFactorySel
                 value={botVersion}
                 disabled={botVersions.length === 0 || pending}
                 fullWidth
-                onChange={event => setBotVersion(event.target.value)}
+                onChange={event => setBotVersion((event.target as HTMLSelectElement).value)}
               >
                 {botVersions.map(version => (
                   <MenuItem key={version} value={version}>
@@ -219,7 +229,7 @@ const BotDialog = ({ open, invitationPending, onSubmit, onClose, onBotFactorySel
                 value={botFactoryTopic}
                 fullWidth
                 disabled={pending}
-                onChange={event => setBotFactoryTopic(event.target.value)}
+                onChange={event => setBotFactoryTopic((event.target as HTMLSelectElement).value)}
               >
                 {registryBotFactories
                   .filter(factories => factories.names && factories.names.length)

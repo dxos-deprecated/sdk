@@ -25,6 +25,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Alert from '@material-ui/lab/Alert';
 
 import { EditableText } from '@dxos/react-ux';
+import { Party } from '@dxos/echo-db';
+import assert from 'assert';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,13 +46,35 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExportToFile, onExportToIpfs, exportInProgress }) => {
+const PartySettingsDialog = ({
+  party,
+  open,
+  onClose,
+  properties = {},
+  onExportToFile,
+  onExportToIpfs,
+  exportInProgress
+}: {
+  party: Party,
+  open: boolean,
+  onClose: (
+    { active, showDeleted, displayName }: {
+      active: boolean,
+      showDeleted: boolean,
+      displayName: string | undefined
+    }
+  ) => void,
+  properties: Record<string, any>,
+  onExportToFile: (() => void) | undefined,
+  onExportToIpfs: (() => string) | undefined,
+  exportInProgress: boolean
+}) => {
   const classes = useStyles();
-  const [active, setActive] = useState(properties.active);
-  const [showDeleted, setShowDeleted] = useState(properties.showDeleted);
+  const [active, setActive] = useState<boolean>(properties.active);
+  const [showDeleted, setShowDeleted] = useState<boolean>(properties.showDeleted);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
-  const [exportedCid, setExportedCid] = useState(undefined);
+  const [exportedCid, setExportedCid] = useState<string | undefined>(undefined);
   const [copiedSnackBarOpen, setCopiedSnackBarOpen] = useState(false);
   const [displayName, setDisplayName] = useState(party.title);
 
@@ -68,6 +92,7 @@ const PartySettingsDialog = ({ party, open, onClose, properties = {}, onExportTo
     setExportedCid(undefined);
 
     try {
+      assert(onExportToIpfs);
       const cid = await onExportToIpfs();
       setExportedCid(cid);
     } catch (e) {

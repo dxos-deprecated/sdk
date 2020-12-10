@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import grey from '@material-ui/core/colors/grey';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
+import { SvgIconTypeMap } from '@material-ui/core';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,7 +53,22 @@ const useStyles = makeStyles(theme => ({
 /**
  * Status bar.
  */
-const StatusBar = (props) => {
+const StatusBar = (
+  props: {
+    actions: {
+      Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+      handler: () => void,
+      isActive: () => boolean,
+      title: string
+    }[],
+    indicators: {
+      Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+      isActive: () => boolean,
+    }[],
+    meta: string,
+    errors: string[],
+    onResetErrors: () => void
+  }) => {
   const { actions = [], indicators = [], meta, errors = [], onResetErrors } = props;
   const classes = useStyles();
 
