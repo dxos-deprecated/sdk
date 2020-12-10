@@ -1,5 +1,20 @@
 # Changelog
 
+### [2.7.37](https://www.github.com/dxos/sdk/compare/v2.7.36...v2.7.37) (2020-12-10)
+
+
+### Bug Fixes
+
+* Observability ([d174b87](https://www.github.com/dxos/sdk/commit/d174b87afc2068b95e9053acabf621cc85341407))
+
+### [2.7.36](https://www.github.com/dxos/sdk/compare/v2.7.35...v2.7.36) (2020-12-10)
+
+
+### Bug Fixes
+
+* Convert react-appkit to TS ([#453](https://www.github.com/dxos/sdk/issues/453)) ([1993903](https://www.github.com/dxos/sdk/commit/199390318a957c391efa61fc9ae2d0bbefcce778))
+* More logging around invitations ([#451](https://www.github.com/dxos/sdk/issues/451)) ([b926590](https://www.github.com/dxos/sdk/commit/b92659024d7c9485d867efe8038246f2fc148c04))
+
 ### [2.7.35](https://www.github.com/dxos/sdk/compare/v2.7.34...v2.7.35) (2020-12-09)
 
 
