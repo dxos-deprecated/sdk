@@ -24,6 +24,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import { useRegistryBots, useRegistryBotFactories } from '@dxos/react-client';
 
+import { useKeywords } from '../hooks';
+
 // TODO(egorgripasov): Factor out to config/client.
 const BOT_FACTORY_DOMAIN = 'dxos.network';
 
@@ -59,12 +61,18 @@ const useStyles = makeStyles((theme) => ({
  */
 const BotDialog = ({
   open,
+  invitationPending,
   onSubmit,
-  onClose
+  onClose,
+  onBotFactorySelect,
+  invitationError
 }: {
   open: boolean,
-  onSubmit: ({ topic, bot, spec }: { topic: string, bot: string | undefined, spec?: Record<string, unknown>}) => void,
-  onClose: () => void
+  onSubmit: ({ topic, bot, spec }: { topic?: string, bot: string | undefined, spec?: Record<string, unknown>}) => void,
+  onClose: () => void,
+  invitationPending: any,
+  onBotFactorySelect: (topic: string, force?: boolean) => void,
+  invitationError: string | undefined
 }) => {
   const classes = useStyles();
   const [pending, setPending] = useState(false);
@@ -72,23 +80,35 @@ const BotDialog = ({
   const [botFactoryTopic, setBotFactoryTopic] = useState('');
   const [botVersions, setBotVersions] = useState<string[]>([]);
   const [botVersion, setBotVersion] = useState<string>();
-  const [error, setError] = useState();
+  const [error, setError] = useState<string>();
+  const [botFactoryError, setBotFactoryError] = useState();
   const [advanced, setAdvanced] = useState(false);
+
+  const keywords = useKeywords();
 
   // TODO(burdon): Could have same topic?
   const registryBotFactories = useRegistryBotFactories();
-  const registryBots = useRegistryBots();
+  const registryBots = useRegistryBots({ sortByKeywords: keywords });
 
   const handleSubmit = async () => {
     setError(undefined);
     setPending(true);
-    try {
-      await onSubmit({ topic: botFactoryTopic, bot: botVersion });
-    } catch (e) {
-      console.error(e);
-      setError(e);
-    } finally {
-      setPending(false);
+    if (botFactoryError) {
+      await handleBotFactorySelect(botFactoryTopic, true);
+    }
+    await onSubmit({ bot: botVersion });
+  };
+
+  const handleBotFactorySelect = async (botFactoryTopic: string, force?: boolean) => {
+    if (botFactoryTopic && onBotFactorySelect) {
+      setBotFactoryError(undefined);
+      try {
+        await onBotFactorySelect(botFactoryTopic, force);
+      } catch (err) {
+        console.error(err);
+        setBotFactoryError(err);
+        setPending(false);
+      }
     }
   };
 
@@ -117,8 +137,26 @@ const BotDialog = ({
     }
   }, [registryBotFactories]);
 
+  useEffect(() => {
+    if (open && botFactoryTopic && onBotFactorySelect) {
+      handleBotFactorySelect(botFactoryTopic);
+    }
+  }, [botFactoryTopic, open]);
+
+  useEffect(() => {
+    if (typeof invitationPending === 'boolean') {
+      setPending(invitationPending);
+    }
+  }, [invitationPending]);
+
+  useEffect(() => {
+    setError(invitationError);
+  }, [invitationError]);
+
   const handleClose = () => {
     setError(undefined);
+    setBotFactoryError(undefined);
+    setPending(false);
     onClose();
   };
 
@@ -221,6 +259,13 @@ const BotDialog = ({
         <DialogActions>
           <Typography variant='body1' className={classes.errorMessage}>
             Deploying failed. Please try again later.
+          </Typography>
+        </DialogActions>
+      )}
+      {botFactoryError && (
+        <DialogActions>
+          <Typography variant='body1' className={classes.errorMessage}>
+            Unable to connect to BotFactory. Please select another one.
           </Typography>
         </DialogActions>
       )}

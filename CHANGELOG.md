@@ -1,5 +1,36 @@
 # Changelog
 
+### [2.7.35](https://www.github.com/dxos/sdk/compare/v2.7.34...v2.7.35) (2020-12-09)
+
+
+### Bug Fixes
+
+* redo bot dialog; proper botkit-client destroy. ([#449](https://www.github.com/dxos/sdk/issues/449)) ([7c8058d](https://www.github.com/dxos/sdk/commit/7c8058da7a4d7bd67047f9ee338845c0163e76d4))
+
+### [2.7.34](https://www.github.com/dxos/sdk/compare/v2.7.33...v2.7.34) (2020-12-09)
+
+
+### Bug Fixes
+
+* Fix resetting and add more logging ([0f25197](https://www.github.com/dxos/sdk/commit/0f25197705f9e27a6fee715e3c2ffc32ab7e8f8e))
+* Logging for invites ([1d20c79](https://www.github.com/dxos/sdk/commit/1d20c7972a3aa95f8fa00f5e1210a61b97715638))
+
+### [2.7.33](https://www.github.com/dxos/sdk/compare/v2.7.32...v2.7.33) (2020-12-09)
+
+
+### Bug Fixes
+
+* Introduce sorting by relevant keywords in bot registry ([#443](https://www.github.com/dxos/sdk/issues/443)) ([1d3c9d2](https://www.github.com/dxos/sdk/commit/1d3c9d2c091260b3d9beef2b4fddc574c0392b19))
+* locks are not re-entrant ([#446](https://www.github.com/dxos/sdk/issues/446)) ([5d83381](https://www.github.com/dxos/sdk/commit/5d83381696e2e939f7d588c99268498db5d0c2ec))
+* Use newest echo, add message logger ([#447](https://www.github.com/dxos/sdk/issues/447)) ([f1b4a7c](https://www.github.com/dxos/sdk/commit/f1b4a7c633b3a3da99fee317d6aa270165bb862c))
+
+### [2.7.32](https://www.github.com/dxos/sdk/compare/v2.7.31...v2.7.32) (2020-12-08)
+
+
+### Bug Fixes
+
+* Exact versions for dxos packages ([#438](https://www.github.com/dxos/sdk/issues/438)) ([c86ec3c](https://www.github.com/dxos/sdk/commit/c86ec3c12df3019badd8ee6cbd411e2398b48c68))
+
 ### [2.7.31](https://www.github.com/dxos/sdk/compare/v2.7.30...v2.7.31) (2020-12-08)
 
 

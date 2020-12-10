@@ -223,7 +223,7 @@ const AppBar = ({
       handler: async () => {
         localStorage.clear();
         await client.reset();
-        handleAction(Action.RELOAD);
+        window.location.reload();
       }
     },
 
@@ -302,7 +302,7 @@ const AppBar = ({
     menuItems.push(action(ACTION_OPEN_REDEEM));
   }
 
-  // menuItems.push(action(ACTION_RESET_STORAGE)); // Use devtools https://github.com/dxos/devtools
+  menuItems.push(action(ACTION_RESET_STORAGE)); // Use devtools https://github.com/dxos/devtools
 
   //
   // Dialogs

@@ -11,7 +11,8 @@ export interface QueryRecord {
   attributes: {
     version: string,
     name: string,
-    topic: string
+    topic: string,
+    keywords?: string[]
   },
   names: string[]
 }
