@@ -8,6 +8,7 @@ import React, { useState, useEffect, useCallback, forwardRef } from 'react';
 import { SvgIconTypeMap } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import Typography from '@material-ui/core/Typography';
 import { grey, green } from '@material-ui/core/colors';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -20,7 +21,6 @@ import TreeView from '@material-ui/lab/TreeView';
 import { EditableText } from '@dxos/react-ux';
 
 import { MemberList } from './MemberList';
-import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 const treeItemBaseStyles = (theme: Theme) => createStyles({
   root: {

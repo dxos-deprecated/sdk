@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -32,14 +33,12 @@ import { useTheme } from '@material-ui/styles';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
+import { Contact, Party, PartyMember } from '@dxos/echo-db';
 import { useClient, useContacts, useInvitation, useOfflineInvitation } from '@dxos/react-client';
 
 import { useMembers, useSentry } from '../hooks';
 import BotDialog from './BotDialog';
 import MemberAvatar, { getAvatarStyle } from './MemberAvatar';
-import { Contact, Party, PartyMember } from '@dxos/echo-db';
-import assert from 'assert';
-import { SignalCellularNullSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   title: {

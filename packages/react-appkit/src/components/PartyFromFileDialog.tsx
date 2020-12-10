@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import React, { useState } from 'react';
 
 import { makeStyles, Theme } from '@material-ui/core';
@@ -15,7 +16,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import PeopleIcon from '@material-ui/icons/People';
-import assert from 'assert';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

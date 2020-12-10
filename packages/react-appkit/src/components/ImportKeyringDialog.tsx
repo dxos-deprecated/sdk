@@ -2,6 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import React, { useState, useRef } from 'react';
 
 import { DialogContentText } from '@material-ui/core';
@@ -11,10 +12,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-
-import { useConfig } from '@dxos/react-client';
-import { reload } from '@dxos/react-router';
-import assert from 'assert';
 
 const useStyles = makeStyles(theme => ({
   marginTop: {
@@ -36,7 +33,7 @@ const ImportKeyringDialog = ({
   ) => string
 }) => {
   const classes = useStyles();
-  const config = useConfig();
+  // const config = useConfig();
   const buttonRef = useRef(null);
   const fileRef = useRef(null);
   const [passphrase, setPassphrase] = useState(0);
