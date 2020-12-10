@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.38](https://www.github.com/dxos/sdk/compare/v2.7.37...v2.7.38) (2020-12-10)
+
+
+### Bug Fixes
+
+* not NetworkManager (yet) ([140fe3f](https://www.github.com/dxos/sdk/commit/140fe3f63ab36ed8cb431134471ca10e8aef05c9))
+* versions ([d1e18b7](https://www.github.com/dxos/sdk/commit/d1e18b7d4c8458b9d016b40556fbf7e00654652b))
+
 ### [2.7.37](https://www.github.com/dxos/sdk/compare/v2.7.36...v2.7.37) (2020-12-10)
 
 
