@@ -207,8 +207,7 @@ const DebugPanel = () => {
     handleEditConfigClose();
   }, [editConfigKey]);
 
-  assert(editConfigKey);
-  const editConfigKeyLabel = editConfigOpen && editConfigKey.split('.').filter(Boolean).join(' > ');
+  const editConfigKeyLabel = editConfigOpen && editConfigKey && editConfigKey.split('.').filter(Boolean).join(' > ');
 
   return (
     <div className={classes.root}>

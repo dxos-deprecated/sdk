@@ -100,9 +100,19 @@ function PendingInvitation ({
   onInvitationDone: (value: string) => void
 }) {
   const classes = useStyles();
+  const sentry = useSentry();
   const [inviteCode, pin] = useInvitation(party.key, {
-    onDone: () => onInvitationDone(pending.id),
+    onDone: () => {
+      if (sentry) {
+        sentry.captureMessage('Online invitation succeeded.');
+      }
+      onInvitationDone(pending.id);
+    },
     onError: (e) => {
+      if (sentry) {
+        sentry.addBreadcrumb({ message: String(e) });
+        sentry.captureMessage('Online invitation failed.');
+      }
       throw e;
     }
   });
@@ -154,17 +164,22 @@ function PendingOfflineInvitation ({
   invitation,
   handleCopy
 }: {
-  party: Party,
-  invitation: Record<string, any> | undefined,
-  handleCopy: (value: string) => void
-}) {
+    party: Party,
+    invitation: Record<string, any> | undefined,
+    handleCopy: (value: string) => void
+  }) {
+  const sentry = useSentry();
   if (!invitation) {
     return null;
   }
 
   const [inviteCode] = useOfflineInvitation(party.key.asBuffer(), invitation.contact, {
     onDone: () => null,
-    onError: e => {
+    onError: (e) => {
+      if (sentry) {
+        sentry.addBreadcrumb({ message: `Offline invitation for contact: '${invitation.contact.displayName || 'Unknown'}', ${invitation.contact.publicKey.toHex()}` });
+        sentry.captureMessage('Offline invitation failed.');
+      }
       throw e;
     }
   });
@@ -216,10 +231,12 @@ const PartySharingDialog = ({
   const [contacts] = useContacts();
   const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toHex() === c.publicKey.toHex())); // contacts not already in this party
 
-  const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
-
-  // const handleBotInvite = async (botFactoryTopic: string, botId: string | undefined, spec: Record<string, unknown> = {}) => {
-  // const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
+  const createInvitation = () => {
+    if (sentry) {
+      sentry.captureMessage('Online invitation initiated.');
+    }
+    setInvitations([{ id: Date.now() }, ...invitations]);
+  };
 
   const createOfflineInvitation = (contact: Contact) => {
     setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
