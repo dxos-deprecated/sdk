@@ -19,7 +19,19 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const DeleteConfirmation = props => {
+const DeleteConfirmation = (
+  props : {
+    isDeleted: boolean,
+    deleteLabel: string,
+    restoreLabel: string,
+    confirmLabel: string,
+    cancelLabel: string,
+    deletedMessage: string,
+    restoredMessage: string,
+    onDelete: () => void,
+    onRestore: () => void
+  }
+) => {
   const classes = useStyles();
   const [deleted, setDeleteed] = useState(false);
   const [restored, setRestored] = useState(false);
