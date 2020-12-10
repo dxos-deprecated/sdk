@@ -1,6 +1,6 @@
 {
   "name": "@dxos/sdk",
-  "version": "2.7.36",
+  "version": "2.7.37",
   "private": true,
   "description": "DXOS SDK monorepo.",
   "homepage": "https://github.com/dxos/sdk#readme",

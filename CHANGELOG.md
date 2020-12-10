@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.37](https://www.github.com/dxos/sdk/compare/v2.7.36...v2.7.37) (2020-12-10)
+
+
+### Bug Fixes
+
+* Observability ([d174b87](https://www.github.com/dxos/sdk/commit/d174b87afc2068b95e9053acabf621cc85341407))
+
 ### [2.7.36](https://www.github.com/dxos/sdk/compare/v2.7.35...v2.7.36) (2020-12-10)
 
 
