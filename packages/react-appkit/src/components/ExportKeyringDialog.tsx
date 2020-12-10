@@ -37,7 +37,7 @@ const ExportKeyringDialog = ({
 
   let passphrase = '';
   const handleChange = (event: React.SyntheticEvent) => {
-    passphrase = event.target.value.trim();
+    passphrase = (event.target as HTMLTextAreaElement).value.trim();
   };
 
   const handleExport = async () => {
