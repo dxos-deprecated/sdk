@@ -220,7 +220,7 @@ const PartySharingDialog = ({
   const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
 
   // const handleBotInvite = async (botFactoryTopic: string, botId: string | undefined, spec: Record<string, unknown> = {}) => {
-    // const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
+  // const botFactoryClient = new BotFactoryClient(client.echo.networkManager, botFactoryTopic);
 
   const createOfflineInvitation = (contact: Contact) => {
     setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
