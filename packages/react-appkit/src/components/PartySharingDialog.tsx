@@ -88,9 +88,19 @@ const TableCell = withStyles(theme => ({
 
 function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
   const classes = useStyles();
+  const sentry = useSentry();
   const [inviteCode, pin] = useInvitation(party.key, {
-    onDone: () => onInvitationDone(pending.id),
+    onDone: () => {
+      if (sentry) {
+        sentry.captureMessage('Online invitation succeeded.');
+      }
+      onInvitationDone(pending.id);
+    },
     onError: e => {
+      if (sentry) {
+        sentry.addBreadcrumb({ message: String(e) });
+        sentry.captureMessage('Online invitation failed.');
+      }
       throw e;
     }
   });
@@ -138,8 +148,14 @@ function PendingInvitation ({ party, pending, handleCopy, onInvitationDone }) {
 }
 
 function PendingOfflineInvitation ({ party, invitation, handleCopy }) {
+  const sentry = useSentry();
+
   const [inviteCode] = useOfflineInvitation(party.key, invitation.contact, {
     onError: e => {
+      if (sentry) {
+        sentry.addBreadcrumb({ message: `Offline invitation for contact: '${invitation.contact.displayName || 'Unknown'}', ${invitation.contact.publicKey.toHex()}` });
+        sentry.captureMessage('Offline invitation failed.');
+      }
       throw e;
     }
   });
@@ -183,7 +199,13 @@ const PartySharingDialog = ({ party, open, onClose }) => {
   const [contacts] = useContacts();
   const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toString('hex') === c.publicKey.toString('hex'))); // contacts not already in this party
 
-  const createInvitation = () => setInvitations([{ id: Date.now() }, ...invitations]);
+  const createInvitation = () => {
+    if (sentry) {
+      sentry.captureMessage('Online invitation initiated.');
+    }
+    setInvitations([{ id: Date.now() }, ...invitations]);
+  };
+
   const createOfflineInvitation = (contact) => {
     setContactsInvitations(old => [...old, { id: Date.now(), contact }]);
     if (sentry) {

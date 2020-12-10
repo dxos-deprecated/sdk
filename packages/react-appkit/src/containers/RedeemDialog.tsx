@@ -49,6 +49,10 @@ const RedeemDialog = ({ onClose, ...props }) => {
     } else {
       setError(error);
     }
+    if (sentry) {
+      sentry.addBreadcrumb({ message: String(error) });
+      sentry.captureMessage(`${isOffline ? 'Offline' : 'Online'} invitation redeem failed.`);
+    }
   };
 
   const [redeemCode, setPin] = useInvitationRedeemer({
