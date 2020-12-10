@@ -7,7 +7,7 @@ import React, { ReactElement } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import { red, pink, deepPurple, deepOrange, indigo, blue, cyan, teal, green, amber } from '@material-ui/core/colors';
 import FaceIcon from '@material-ui/icons/Face';
-import { useTheme } from '@material-ui/styles';
+import { useTheme, DefaultTheme } from '@material-ui/styles';
 import { Theme } from '@material-ui/core';
 import { PartyMember } from '@dxos/echo-db';
 import { PublicKeyLike } from '@dxos/crypto';

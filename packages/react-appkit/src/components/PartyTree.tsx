@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { grey, green } from '@material-ui/core/colors';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import ItemIcon from '@material-ui/icons/DescriptionOutlined';
 import FolderIcon from '@material-ui/icons/FolderOpen';
@@ -176,7 +176,7 @@ const EditableLabel = ({
   </div>
 );
 
-export const PartyTreeAddItemButton = forwardRef(({ onClick, children }, ref) => {
+export const PartyTreeAddItemButton = forwardRef<any, any>(({ onClick, children }, ref) => {
   const treeAddItemClasses = useTreeAddItemStyles();
   const classes = useStyles();
 
@@ -278,7 +278,7 @@ const PartyTree = ({
   return (
     <div className={classes.root}>
       <TreeView
-        selected={[]}
+        selected={''}
         expanded={expanded}
         onNodeSelect={handleSelect}
         onNodeToggle={handleToggle}

@@ -9,6 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FaceIcon from '@material-ui/icons/Face';
 import ShareIcon from '@material-ui/icons/GroupAdd';
 import { AvatarGroup } from '@material-ui/lab';
+import { Theme } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 
 import { humanize } from '@dxos/crypto';
@@ -27,7 +28,7 @@ const useStyles = makeStyles(() => ({
 // TODO(burdon): Pass in array (small UX data object) of processed members (don't apply humanize here).
 const PartyMemberList = ({ party, onShare }: { party: Party, onShare: () => void }) => {
   const classes = useStyles();
-  const theme = useTheme();
+  const theme = useTheme() as Theme;
   const members: PartyMember[] = useMembers(party);
 
   return (
