@@ -101,7 +101,7 @@ function PendingInvitation ({
   onInvitationDone: (value: string) => void
 }) {
   const classes = useStyles();
-  const [inviteCode, pin] = useInvitation(party.key.asBuffer(), {
+  const [inviteCode, pin] = useInvitation(party.key, {
     onDone: () => onInvitationDone(pending.id),
     onError: (e) => {
       throw e;
@@ -266,11 +266,6 @@ const PartySharingDialog = ({
       setBotInvitationError(err);
     }
   };
-
-  
-
-
-
 
   const handleBotFactorySelect = async (topic: string, force?: boolean) => {
     if (botFactoryTopic !== topic || force) {

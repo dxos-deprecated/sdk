@@ -57,7 +57,7 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp, isOfflin
 
 /**
  * Hook to create an Invitation for a given party
- * @param {Buffer} partyKey the Party to create invite for. Required.
+ * @param {PublicKey} partyKey the Party to create invite for. Required.
  * @param {Object} options
  * @param {() => void} options.onDone called once the invite flow finishes successfully.
  * @param {(error?: string) => void | never} options.onError called if the invite flow produces an error.
