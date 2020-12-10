@@ -6,11 +6,11 @@ import clsx from 'clsx';
 import React from 'react';
 
 import Drawer from '@material-ui/core/Drawer';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 const DRAWER_WIDTH = 300;
 
-const useStyles = makeStyles(theme => {
+const useStyles = makeStyles((theme: Theme) => {
   return {
     root: {
       display: 'flex',
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => {
       transition: `width ${theme.transitions.duration.enteringScreen}ms ${theme.transitions.easing.easeOut} 0ms`
     },
 
-    drawerOpen: ({ width }) => ({
+    drawerOpen: ({ width }: any) => ({
       width,
       transition: `width ${theme.transitions.duration.leavingScreen}ms ${theme.transitions.easing.sharp} 0ms`
     }),
@@ -42,7 +42,19 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-const DrawerBase = ({ open, position, component, width = DRAWER_WIDTH, children }) => {
+const DrawerBase = ({
+  open,
+  position,
+  component,
+  width = DRAWER_WIDTH,
+  children
+}: {
+  open: boolean,
+  position?: 'left' | 'top' | 'right' | 'bottom',
+  component: React.ReactNode,
+  width: number,
+  children: React.ReactNode
+}) => {
   const classes = useStyles({ width, open });
 
   const left = position === 'left';
@@ -83,7 +95,15 @@ const DrawerBase = ({ open, position, component, width = DRAWER_WIDTH, children 
 /**
  * Left-side drawer.
  */
-export const LeftDrawer = (props) => {
+export const LeftDrawer = (
+  props: {
+    open: boolean,
+    position?: 'left' | 'top' | 'right' | 'bottom',
+    component: React.ReactNode,
+    width: number,
+    children: React.ReactNode
+  }
+) => {
   return (
     <DrawerBase
       {...props}
@@ -95,7 +115,15 @@ export const LeftDrawer = (props) => {
 /**
  * Right-side drawer.
  */
-export const RightDrawer = (props) => {
+export const RightDrawer = (
+  props: {
+    open: boolean,
+    position?: 'left' | 'top' | 'right' | 'bottom',
+    component: React.ReactNode,
+    width: number,
+    children: React.ReactNode
+  }
+) => {
   return (
     <DrawerBase
       {...props}

@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 /**
  * Fullscreen container.
  */
-const FullScreen = ({ children }) => {
+const FullScreen = ({ children }: { children: React.ReactNode }) => {
   const classes = useStyles();
 
   return (

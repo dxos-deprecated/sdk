@@ -7,7 +7,7 @@ import isPlainObject from 'lodash.isplainobject';
 import React, { useEffect, useState } from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MuiTreeItem from '@material-ui/lab/TreeItem';
@@ -16,7 +16,7 @@ import MuiTreeView from '@material-ui/lab/TreeView';
 import { keyToString } from '@dxos/crypto';
 import { truncateString } from '@dxos/debug';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     overflowX: 'hidden'
   },
@@ -32,16 +32,15 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'hidden'
   },
 
-  label: ({ fontSize }) => ({
+  label: ({ fontSize }: { fontSize?: string }) => ({
     fontSize: fontSize === 'small' ? 14 : undefined
   }),
 
-  value: ({ fontSize }) => ({
+  value: ({ fontSize }: { fontSize?: string }) => ({
     overflowX: 'hidden',
     paddingLeft: 8,
     whiteSpace: 'pre-line',
     wordBreak: 'break-word',
-    // textOverflow: 'ellipses',
     fontSize: fontSize === 'small' ? 14 : undefined
   }),
 
@@ -58,7 +57,7 @@ const useStyles = makeStyles(theme => ({
 //
 // Calculate all IDs.
 //
-const visitor = (value, depth = 1, path = '', ids = [], i = 0) => {
+const visitor = (value: any, depth = 1, path = '', ids: string[] = [], i = 0) => {
   if (i >= depth) {
     return ids;
   }
@@ -77,7 +76,21 @@ const visitor = (value, depth = 1, path = '', ids = [], i = 0) => {
 /**
  * TreeItem wrapper.
  */
-const TreeItem = ({ className, nodeId, size, label, value, children }) => {
+const TreeItem = ({
+  className,
+  nodeId,
+  size,
+  label,
+  value,
+  children
+}: {
+  className?: string,
+  nodeId: string,
+  size: string,
+  label: string,
+  value?: any,
+  children?: React.ReactNode
+}) => {
   const classes = useStyles({ fontSize: size });
 
   return (
@@ -98,13 +111,27 @@ const TreeItem = ({ className, nodeId, size, label, value, children }) => {
   );
 };
 
-const JsonTreeView = ({ className, data = {}, depth = Infinity, onSelect, root, size }) => {
+const JsonTreeView = ({
+  className,
+  data = {},
+  depth = Infinity,
+  onSelect,
+  root,
+  size
+}: {
+  className?: string,
+  data: any,
+  depth: number,
+  onSelect: () => void,
+  root: string,
+  size: string
+}) => {
   const classes = useStyles();
   if (!data) {
     data = {};
   }
 
-  const [expanded, setExpanded] = useState([]);
+  const [expanded, setExpanded] = useState<string[]>([]);
 
   // Needed to determine if data has changed.
   const diff = JSON.stringify(data);
@@ -116,7 +143,7 @@ const JsonTreeView = ({ className, data = {}, depth = Infinity, onSelect, root, 
   //
   // Recursively render items.
   //
-  const renderNode = (value, key, level = 0, path = '') => {
+  const renderNode = (value: any, key: string, level = 0, path = ''): any => {
     if (value === undefined || value === '') {
       return;
     }
@@ -149,7 +176,7 @@ const JsonTreeView = ({ className, data = {}, depth = Infinity, onSelect, root, 
     );
   };
 
-  const handleToggle = (_event, nodeIds) => {
+  const handleToggle = (_event: React.ChangeEvent<unknown>, nodeIds: string[]) => {
     setExpanded(nodeIds);
   };
 
