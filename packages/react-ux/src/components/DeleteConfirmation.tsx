@@ -22,14 +22,14 @@ const useStyles = makeStyles(() => ({
 const DeleteConfirmation = (
   props : {
     isDeleted: boolean,
-    deleteLabel: string,
-    restoreLabel: string,
-    confirmLabel: string,
-    cancelLabel: string,
-    deletedMessage: string,
-    restoredMessage: string,
-    onDelete: () => void,
-    onRestore: () => void
+    deleteLabel?: string,
+    restoreLabel?: string,
+    confirmLabel?: string,
+    cancelLabel?: string,
+    deletedMessage?: string,
+    restoredMessage?: string,
+    onDelete?: () => void,
+    onRestore?: () => void
   }
 ) => {
   const classes = useStyles();
@@ -45,8 +45,8 @@ const DeleteConfirmation = (
     cancelLabel = 'Cancel',
     deletedMessage = 'Succesfully deleted!',
     restoredMessage = 'Succesfully restored!',
-    onDelete,
-    onRestore
+    onDelete = () => null,
+    onRestore = () => null
   } = props;
 
   const handleActualDelete = () => {

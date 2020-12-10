@@ -51,8 +51,8 @@ const Passcode = (
     attempt: number,
     editable: boolean,
     length: number,
-    value: string,
-    pattern: RegExp,
+    value?: string,
+    pattern?: RegExp,
     onChange: (value: string) => void,
     onSubmit: (value: string) => void
   }) => {
