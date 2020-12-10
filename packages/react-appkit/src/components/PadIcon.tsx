@@ -8,10 +8,10 @@ import AppIcon from '@material-ui/icons/Apps';
 
 import { usePads } from '../hooks';
 
-const PadIcon = ({ type }) => {
+const PadIcon = ({ type }: { type: string }) => {
   const [pads] = usePads();
 
-  const pad = pads.find(pad => pad.type === type);
+  const pad = pads.find((pad: { type: string }) => pad.type === type);
   return pad ? <pad.icon /> : <AppIcon />;
 };
 

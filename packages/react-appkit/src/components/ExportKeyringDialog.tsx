@@ -20,19 +20,24 @@ const useStyles = makeStyles(() => ({
 
 /**
  * Dialog to export keyring to file.
- *
- * @param {boolean} open
- * @param {function} encrypter
- * @param {string} topic
- * @param {function} onClose
  */
-const ExportKeyringDialog = ({ open, topic, encrypter, onClose }) => {
+const ExportKeyringDialog = ({
+  open,
+  topic,
+  encrypter,
+  onClose
+}: {
+  open: boolean,
+  topic: string,
+  encrypter: (passphrase: string) => string,
+  onClose: () => void
+}) => {
   const classes = useStyles();
-  const [error, setError] = useState();
+  const [error, setError] = useState<string>();
 
   let passphrase = '';
-  const handleChange = (event) => {
-    passphrase = event.target.value.trim();
+  const handleChange = (event: React.SyntheticEvent) => {
+    passphrase = (event.target as HTMLTextAreaElement).value.trim();
   };
 
   const handleExport = async () => {

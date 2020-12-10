@@ -5,7 +5,7 @@
 import clsx from 'clsx';
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Button, ListItemSecondaryAction } from '@material-ui/core';
+import { Button, ListItemSecondaryAction, SvgIconTypeMap, Theme } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -30,8 +30,11 @@ import PartyMemberList from './PartyMemberList';
 import PartySettingsDialog from './PartySettingsDialog';
 import PartySharingDialog from './PartySharingDialog';
 import { useAssets } from './util';
+import { Party } from '@dxos/echo-db';
+import { Client } from '@dxos/client';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   card: {
     display: 'flex',
     flexDirection: 'column',
@@ -67,7 +70,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(2)
   },
 
-  listContainer: ({ rows }) => ({
+  listContainer: ({ rows }: { rows: number }) => ({
     height: rows * 36,
     marginBottom: theme.spacing(1),
     overflowY: 'scroll'
@@ -116,6 +119,22 @@ const PartyCard = ({
   onNewParty = undefined,
   onExportToFile = undefined,
   onExportToIpfs = undefined
+}: {
+  party: Party,
+  client: Client,
+  router: Record<string, any>,
+  pads: {
+    type: string;
+    displayName: string;
+    description: string;
+    icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>;
+  }[],
+  items: Record<string, any>[],
+  onNewItemRequested: ({ type }: { type: string }) => void,
+  exportInProgress: boolean,
+  onNewParty: (() => void) | undefined,
+  onExportToFile: (() => void) | undefined,
+  onExportToIpfs: (() => string) | undefined
 }) => {
   const classes = useStyles({ rows: 3 });
   const assets = useAssets();
@@ -127,16 +146,16 @@ const PartyCard = ({
 
   // TODO(burdon): Where to store this information?
   const [showDeleted, setShowDeleted] = useState(false);
-  const createItemAnchor = useRef();
+  const createItemAnchor = useRef(null);
 
   const topic = party ? party.key.toString() : '';
 
-  const handleNewItemSelected = (type) => {
+  const handleNewItemSelected = (type: string) => {
     setNewItemCreationMenuOpen(false);
     onNewItemRequested({ type });
   };
 
-  const handleSelect = (itemId) => {
+  const handleSelect = (itemId: string) => {
     router.push({ topic: keyToString(party.key.asUint8Array()), item: itemId });
   };
 
@@ -295,15 +314,12 @@ const PartyCard = ({
       <PartySharingDialog
         open={shareDialogOpen}
         onClose={() => setShareDialogOpen(false)}
-        client={client}
         party={party}
-        router={router}
       />
 
       {(
         <PartySettingsDialog
           party={party}
-          client={client}
           open={settingsDialogOpen}
           properties={{
             showDeleted,
@@ -312,8 +328,8 @@ const PartyCard = ({
           exportInProgress={exportInProgress}
           onExportToFile={onExportToFile}
           onExportToIpfs={onExportToIpfs}
-          displayName={displayName}
-          onClose={async ({ showDeleted, displayName, active }) => {
+          onClose={async ({ showDeleted, displayName, active }:
+            { showDeleted: boolean, displayName: string | undefined, active: boolean }) => {
             if (displayName !== undefined) {
               await party.setTitle(displayName);
             }

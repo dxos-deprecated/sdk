@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,8 +15,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import PeopleIcon from '@material-ui/icons/People';
+import assert from 'assert';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     minWidth: '400px'
   },
@@ -47,25 +48,34 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PartyFromFileDialog = ({ open, onClose, onImport }) => {
+const PartyFromFileDialog = ({
+  open,
+  onClose,
+  onImport
+}: {
+  open: boolean,
+  onClose: () => void,
+  onImport: (content: ArrayBuffer | string | null) => void
+}) => {
   const classes = useStyles();
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState(undefined);
 
-  const addFiles = (filesList) => {
+  const addFiles = (filesList: FileList | null) => {
     setError(undefined);
     const selectedFiles = Array.from(filesList ?? []);
     setFiles(selectedFiles.splice(0, 1));
   };
 
-  const onDrop = (event) => {
+  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    assert(event.dataTransfer);
     addFiles(event.dataTransfer.files);
   };
 
-  const onFilesSelect = (event) => {
-    const { target } = event;
+  const onFilesSelect = (event: React.SyntheticEvent) => {
+    const target = (event.target as HTMLInputElement);
     addFiles(target.files);
     target.value = '';
   };
@@ -80,11 +90,11 @@ const PartyFromFileDialog = ({ open, onClose, onImport }) => {
   const handleImport = () => {
     setInProgress(true);
     const file = files[0];
-    var reader = new FileReader();
+    const reader = new FileReader();
 
     reader.onload = async () => {
       try {
-        var content = reader.result;
+        const content = reader.result;
         await onImport(content);
         handleClose();
       } catch (e) {
