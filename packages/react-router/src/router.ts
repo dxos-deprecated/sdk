@@ -31,7 +31,7 @@ export const reload = (path = '/') => {
  */
 // eslint-disable-next-line prefer-template
 export const joinPaths = (...parts: (string | undefined)[]): string => (
-  parts.filter(Boolean).map(part => (!part ? '' : part).replace(/^\/+/, '')).join('/')
+  parts.filter(Boolean).map(part => (part || '').replace(/^\/+/, '')).join('/')
 );
 
 /**
