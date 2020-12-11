@@ -38,7 +38,8 @@ const AppContainer = ({
   onHomeNavigation,
   onPartyHomeNavigation,
   onPartyFromFile,
-  onPartyFromIpfs
+  onPartyFromIpfs,
+  onPartiesSettingsOpen
 }) => {
   const classes = useStyles();
   const config = useConfig();
@@ -123,6 +124,7 @@ const AppContainer = ({
               onPartyFromFile={onPartyFromFile}
               onPartyFromIpfs={onPartyFromIpfs}
               onRedeemOpen={() => setRedeemOpen(true)}
+              onPartiesSettingsOpen={onPartiesSettingsOpen}
             >
               {appBarContent}
             </AppBar>
