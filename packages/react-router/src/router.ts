@@ -28,25 +28,23 @@ export const reload = (path = '/') => {
 
 /**
  * Safely joins the paths to create a valid URL.
- * @param {...string} parts
- * @return {string}
  */
 // eslint-disable-next-line prefer-template
-export const joinPaths = (...parts) => parts.filter(Boolean).map(part => part.replace(/^\/+/, '')).join('/');
+export const joinPaths = (...parts: (string | undefined)[]): string => (
+  parts.filter(Boolean).map(part => {
+    (part || '').replace(/^\/+/, '');
+  }).join('/')
+);
 
 /**
  * Creates a canoncial URL (permalink).
- * @param {string} path
- * @returns {string}
  */
-export const createCanonicalUrl = (path = '') => joinPaths(window.location.origin, path);
+export const createCanonicalUrl = (path = ''): string => joinPaths(window.location.origin, path);
 
 /**
  * Creates a URL with well formed query params.
- * @param {string} path
- * @param {Object} [query]
  */
-export const createUrl = (path, query = {}) => {
+export const createUrl = (path: string, query: Record<string, any> = {}): string => {
   if (!query || Object.keys(query).length === 0) {
     return path;
   }
@@ -66,7 +64,12 @@ export const createUrl = (path, query = {}) => {
  * @param {Object} [options]
  * @returns {string}
  */
-export const createPath = (path = '', params, query, options = { partial: false }) => {
+export const createPath = (
+  path = '',
+  params?: Record<string, any>,
+  query?: Record<string, any>,
+  options: Record<string, any> = { partial: false }
+): string => {
   if (!params) {
     params = {};
   }
@@ -80,6 +83,7 @@ export const createPath = (path = '', params, query, options = { partial: false 
 
     const [, key,, optional = false] = match;
 
+    assert(params);
     const value = params[key];
     if (value === undefined) {
       if (options.partial) {
@@ -93,7 +97,7 @@ export const createPath = (path = '', params, query, options = { partial: false 
     return value ? value.replace(/^\//, '') : undefined;
   });
 
-  return createUrl(`/${joinPaths(...parts)}`, query);
+  return createUrl(`/${joinPaths(...parts)}`, query || undefined);
 };
 
 /**
@@ -102,6 +106,6 @@ export const createPath = (path = '', params, query, options = { partial: false 
  * @param {Object} params
  * @returns {string}
  */
-export const createRoute = (path = '', params) => {
-  return createPath(path, params, null, { partial: true });
+export const createRoute = (path = '', params: Record<string, any>): string => {
+  return createPath(path, params, undefined, { partial: true });
 };
