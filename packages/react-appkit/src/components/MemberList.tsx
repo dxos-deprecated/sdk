@@ -2,7 +2,6 @@
 // Copyright 2020 DXOS.org
 //
 
-import assert from 'assert';
 import React, { ReactNode } from 'react';
 
 import { List, ListItem, makeStyles } from '@material-ui/core';
@@ -29,8 +28,9 @@ type Member = PartyMember & { isMe: boolean }
 
 export const MemberList = ({ party, children }: { party: Party, children?: ReactNode }) => {
   const sorter = (a: Member, b: Member) => {
-    assert(a.displayName);
-    assert(b.displayName);
+    if (!a.displayName || !b.displayName) {
+      return 0;
+    }
     return a.displayName < b.displayName ? -1 : a.displayName > b.displayName ? 1 : a.isMe ? -1 : 1;
   };
   const classes = useStyles();
