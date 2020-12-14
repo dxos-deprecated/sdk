@@ -6,7 +6,8 @@ import { TransferNames } from '@connext/vector-types';
 import { RestServerNodeService, getRandomBytes32 } from '@connext/vector-utils';
 import assert from 'assert';
 import debug from 'debug';
-import { Wallet, utils, providers } from 'ethers';
+import { Wallet, utils, providers, ethers } from 'ethers';
+import tokenABI from 'human-standard-token-abi';
 import pino from 'pino';
 
 import { Registry } from '@wirelineio/registry-client';
@@ -106,8 +107,9 @@ export class PaymentClient {
 
   /**
    * Get wallet balance (uses mnemonic in profile, not server node).
+   * @param {string} assetId
    */
-  async getWalletBalance () {
+  async getWalletBalance (assetId) {
     const { mnemonic, provider } = this._config.get('services.payment');
 
     assert(mnemonic, 'Invalid account mnemonic.');
@@ -116,17 +118,29 @@ export class PaymentClient {
     const rpcProvider = new providers.JsonRpcProvider(provider);
     const wallet = Wallet.fromMnemonic(mnemonic).connect(rpcProvider);
 
-    const balance = await rpcProvider.getBalance(wallet.address);
+    const balance = {};
 
-    return utils.formatEther(balance);
+    if (assetId === ethers.constants.AddressZero) {
+      const ethBalance = await rpcProvider.getBalance(wallet.address);
+      balance[ethers.constants.AddressZero] = utils.formatEther(ethBalance);
+
+      return balance;
+    }
+
+    const erc20Contract = new ethers.Contract(assetId, tokenABI, rpcProvider);
+    const assetBalance = await erc20Contract.balanceOf(wallet.address);
+    balance[assetId] = utils.formatEther(assetBalance);
+
+    return balance;
   }
 
   /**
    * Sends funds to an address.
    * @param {string} address
+   * @param {string} assetId
    * @param {string} amount
    */
-  async sendFunds (address, amount) {
+  async sendFunds (address, assetId, amount) {
     const { mnemonic, provider } = this._config.get('services.payment');
 
     assert(mnemonic, 'Invalid account mnemonic.');
@@ -135,7 +149,13 @@ export class PaymentClient {
     const rpcProvider = new providers.JsonRpcProvider(provider);
     const wallet = Wallet.fromMnemonic(mnemonic).connect(rpcProvider);
 
-    const tx = await wallet.sendTransaction({ to: address, value: utils.parseEther(amount) });
+    if (assetId === ethers.constants.AddressZero) {
+      const tx = await wallet.sendTransaction({ to: address, value: utils.parseEther(amount) });
+      return tx.wait();
+    }
+
+    const erc20Contract = new ethers.Contract(assetId, tokenABI, rpcProvider).connect(rpcProvider.getSigner());
+    const tx = await erc20Contract.transfer(address, utils.parseEther(amount));
     return tx.wait();
   }
 

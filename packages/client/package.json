@@ -36,6 +36,7 @@
     "del": "^5.1.0",
     "end-of-stream": "^1.4.4",
     "ethers": "^5.0.20",
+    "human-standard-token-abi": "^2.0.0",
     "hypertrie": "^3.8.0",
     "jsondown": "dxos/jsondown",
     "level-js": "^5.0.2",
