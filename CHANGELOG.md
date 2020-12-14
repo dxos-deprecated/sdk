@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.39](https://www.github.com/dxos/sdk/compare/v2.7.38...v2.7.39) (2020-12-14)
+
+
+### Bug Fixes
+
+* Possible undefined member display name ([#462](https://www.github.com/dxos/sdk/issues/462)) ([b3a5725](https://www.github.com/dxos/sdk/commit/b3a572582989c00716294dd5d1398a6fcaec2e94))
+* Refactor react-router to TS ([#459](https://www.github.com/dxos/sdk/issues/459)) ([422d1bf](https://www.github.com/dxos/sdk/commit/422d1bf702437e1830a1e7affb06d40fa1743738))
+
 ### [2.7.38](https://www.github.com/dxos/sdk/compare/v2.7.37...v2.7.38) (2020-12-10)
 
 
