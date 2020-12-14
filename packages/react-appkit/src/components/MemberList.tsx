@@ -2,7 +2,6 @@
 // Copyright 2020 DXOS.org
 //
 
-import assert from 'assert';
 import React, { ReactNode } from 'react';
 
 import { List, ListItem, makeStyles } from '@material-ui/core';
