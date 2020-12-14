@@ -26,6 +26,7 @@ import { isNode } from './platform';
 export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
 export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown';
 
+// CAUTION: Breaking changes to this interface require corresponding changes in https://github.com/dxos/kube/blob/main/remote.yml
 export interface ClientConfig {
   storage?: {
     persistent?: boolean,
