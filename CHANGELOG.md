@@ -1,5 +1,22 @@
 # Changelog
 
+### [2.7.41](https://www.github.com/dxos/sdk/compare/v2.7.40...v2.7.41) (2020-12-15)
+
+
+### Bug Fixes
+
+* Trigger publish ([9971831](https://www.github.com/dxos/sdk/commit/99718319c451f28375516362a3e52b6c1239b715))
+
+### [2.7.40](https://www.github.com/dxos/sdk/compare/v2.7.39...v2.7.40) (2020-12-15)
+
+
+### Bug Fixes
+
+* Add pending invitations names ([#465](https://www.github.com/dxos/sdk/issues/465)) ([c2dc2bf](https://www.github.com/dxos/sdk/commit/c2dc2bfedcc31b208742df5ec167b3ca4b36158a))
+* Create parties settings dialog ([#463](https://www.github.com/dxos/sdk/issues/463)) ([3724f4b](https://www.github.com/dxos/sdk/commit/3724f4b5959efb10242d2a0124b6c09c741251d7))
+* Dialogs icon and title ([#468](https://www.github.com/dxos/sdk/issues/468)) ([f332a02](https://www.github.com/dxos/sdk/commit/f332a0245bb098b6308c912eda7041ec4e5fe22a))
+* Upgrade to new networking ([#467](https://www.github.com/dxos/sdk/issues/467)) ([11f3e93](https://www.github.com/dxos/sdk/commit/11f3e93d05003f81233b174d580706fc567e7702))
+
 ### [2.7.39](https://www.github.com/dxos/sdk/compare/v2.7.38...v2.7.39) (2020-12-14)
 
 

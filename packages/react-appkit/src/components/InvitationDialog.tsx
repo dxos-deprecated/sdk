@@ -5,14 +5,17 @@
 import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { Button, DialogActions } from '@material-ui/core';
+import { Button, DialogActions, SvgIconTypeMap } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import Popover from '@material-ui/core/Popover';
 import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar/Toolbar';
+import Typography from '@material-ui/core/Typography/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LinkIcon from '@material-ui/icons/Link';
 
@@ -42,20 +45,32 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flex: 1,
     marginRight: theme.spacing(2)
+  },
+
+  title: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
-type InvitationDialogPropsType = {
+const InvitationDialog = ({
+  link,
+  title,
+  Icon,
+  message,
+  passcode,
+  anchorEl,
+  open,
+  onClose
+}: {
   link: string,
   title: string,
+  Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
   message: string,
   passcode: string,
   anchorEl: Element,
   open: boolean,
   onClose: () => void
-}
-
-const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onClose }: InvitationDialogPropsType) => {
+}) => {
   const classes = useStyles();
 
   if (anchorEl) {
@@ -73,7 +88,7 @@ const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onCl
           horizontal: 'right'
         }}
       >
-        <InvitationContent link={link} title={title} message={message} passcode={passcode} />
+        <InvitationContent link={link} title={title} Icon={Icon} message={message} passcode={passcode} />
       </Popover>
     );
   }
@@ -81,7 +96,7 @@ const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onCl
   if (open) {
     return (
       <Dialog open={open} classes={{ paper: classes.paper }}>
-        <InvitationContent link={link} title={title} message={message} passcode={passcode} onClose={onClose} />
+        <InvitationContent link={link} title={title} Icon={Icon} message={message} passcode={passcode} onClose={onClose} />
       </Dialog>
     );
   }
@@ -92,12 +107,14 @@ const InvitationDialog = ({ link, title, message, passcode, anchorEl, open, onCl
 const InvitationContent = ({
   link,
   title,
+  Icon,
   message,
   passcode,
   onClose
 }: {
   link: string,
   title: string,
+  Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
   message: string,
   passcode: string,
   onClose?: () => void
@@ -106,7 +123,12 @@ const InvitationContent = ({
 
   return (
     <div className={classes.root}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>
+        <Toolbar variant='dense' disableGutters>
+          <Icon/>
+          <Typography variant='h5' className={classes.title}>{title}</Typography>
+        </Toolbar>
+      </DialogTitle>
 
       <DialogContent>
         {message && (

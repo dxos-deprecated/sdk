@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 // import metrics from '@dxos/metrics';
-import { useConfig } from '@dxos/react-client';
+import { useConfig, useProfile } from '@dxos/react-client';
 import { JsonTreeView } from '@dxos/react-ux';
 
 const useStyles = makeStyles((theme) => ({
@@ -136,6 +136,8 @@ const DebugPanel = () => {
   const editConfigInput = useRef(null);
   const classes = useStyles();
   const config = useConfig();
+  const profile = useProfile();
+  assert(profile);
   // const [values, setValues] = useState(metrics.value);
   // const [events, setEvents] = useState(metrics.events);
   const [editConfigOpen, setEditConfigOpen] = useState(false);
@@ -145,6 +147,10 @@ const DebugPanel = () => {
 
   useEffect(() => {
     setVisibleConfig({
+      profile: {
+        username: profile.username,
+        id: profile.publicKey.toHex()
+      },
       ...config,
       editable: undefined
     });

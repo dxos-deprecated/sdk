@@ -14,9 +14,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import ProfileIcon from '@material-ui/icons/AccountCircle';
+import DevicesIcon from '@material-ui/icons/Devices';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import PersonIcon from '@material-ui/icons/Person';
 import ShareIcon from '@material-ui/icons/Share';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
@@ -332,6 +334,7 @@ const AppBar = ({
           link={invitation && router.createInvitationUrl(invitation)}
           passcode={passcode}
           title='Invitation User'
+          Icon={PersonIcon}
           message={passcode ? 'The peer has connected.' : 'A passcode will be generated once the remote peer connects.'}
           onClose={handleClose}
         />
@@ -345,6 +348,7 @@ const AppBar = ({
           link={invitation && router.createInvitationUrl(invitation)}
           passcode={passcode}
           title='Authorize Device'
+          Icon={DevicesIcon}
           message={passcode ? 'The peer has connected.' : 'A passcode will be generated once the remote peer connects.'}
           onClose={handleClose}
         />
