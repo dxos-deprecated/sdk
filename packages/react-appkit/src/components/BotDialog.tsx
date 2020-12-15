@@ -17,10 +17,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import Alert from '@material-ui/lab/Alert';
 
 import { useRegistryBots, useRegistryBotFactories } from '@dxos/react-client';
 
@@ -37,9 +36,6 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     width: '100%',
     marginBottom: theme.spacing(2)
-  },
-  errorMessage: {
-    color: red[300]
   },
   advanced: {
     border: 0,
@@ -245,6 +241,8 @@ const BotDialog = ({
           </AccordionDetails>
         </Accordion>
         {pending && (<LinearProgress />)}
+        {error && (<Alert severity='error'>Deploying failed.</Alert>)}
+        {botFactoryError && (<Alert severity='error'>Unable to connect to BotFactory.</Alert>)}
       </DialogContent>
 
       <DialogActions>
@@ -257,7 +255,7 @@ const BotDialog = ({
           Invite
         </Button>
       </DialogActions>
-      {error && (
+      {/* {error && (
         <DialogActions>
           <Typography variant='body1' className={classes.errorMessage}>
             Deploying failed. Please try again later.
@@ -270,7 +268,7 @@ const BotDialog = ({
             Unable to connect to BotFactory. Please select another one.
           </Typography>
         </DialogActions>
-      )}
+      )} */}
     </Dialog>
   );
 };
