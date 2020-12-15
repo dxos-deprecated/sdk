@@ -196,6 +196,17 @@ function PendingInvitation ({
               </IconButton>
             </CopyToClipboard>
           </>)}
+        {(expired) && (
+          <IconButton
+            size='small'
+            color='inherit'
+            title='Remove'
+            edge='start'
+            onClick={() => onInvitationDone(pending.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        )}
       </TableCell>
     </TableRow>
   );
