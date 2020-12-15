@@ -170,6 +170,7 @@ const EditableLabel = ({
     <EditableText
       variant='body2'
       value={label}
+      autoFocus={true}
       onUpdate={onUpdate}
       className={classes.labelText}
     />

@@ -116,6 +116,7 @@ const PartySettingsDialog = ({
         <EditableText
           label='Name'
           value={displayName}
+          autoFocus={true}
           onUpdate={setDisplayName}
         />
 
