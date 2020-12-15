@@ -13,8 +13,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import RedeemIcon from '@material-ui/icons/Redeem';
 import Alert from '@material-ui/lab/Alert';
 
 import { useInvitationRedeemer } from '@dxos/react-client';
@@ -24,6 +26,9 @@ import { useSentry } from '../hooks';
 const useStyles = makeStyles(theme => ({
   marginTop: {
     marginTop: theme.spacing(2)
+  },
+  title: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
@@ -89,7 +94,12 @@ const RedeemDialog = ({ onClose, ...props }) => {
       onClose={step === 0 ? handleDone : undefined} // No click away when in the middle of a flow
       {...props}
     >
-      <DialogTitle>Redeem Invitation</DialogTitle>
+      <DialogTitle>
+        <Toolbar variant='dense' disableGutters>
+          <RedeemIcon />
+          <Typography variant='h5' className={classes.title}>Redeem invitation</Typography>
+        </Toolbar>
+      </DialogTitle>
 
       {step === 0 && (
         <>
