@@ -24,7 +24,7 @@
     "@dxos/object-model": "2.6.14-alpha.0",
     "@dxos/protocol": "1.1.0-beta.21",
     "@dxos/protocol-plugin-replicator": "1.1.0-beta.21",
-    "@dxos/util": "2.6.13-alpha.0",
+    "@dxos/util": "2.6.14-alpha.0",
     "@geut/discovery-swarm-webrtc": "^3.0.0-beta.3",
     "@wirelineio/registry-client": "^1.1.0-beta.2",
     "assert": "^2.0.0",

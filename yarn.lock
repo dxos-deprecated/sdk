@@ -1489,10 +1489,10 @@
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
-"@dxos/messenger-model@1.2.0-alpha.29":
-  version "1.2.0-alpha.29"
-  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.29.tgz#a6e119d422afdd570df1d4c57a60b736746620da"
-  integrity sha512-3JpDIrJJ/mBxpvqgMit/CM4OgyQNb7s67RLPjptJXLUuTe7I2sywdPFER7GZQKXeBCOUZwKb+WHveYR5/0Hjzg==
+"@dxos/messenger-model@1.2.0-alpha.36":
+  version "1.2.0-alpha.36"
+  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.36.tgz#9a80dc2907417b78977d946fb8b283b07fd9b37d"
+  integrity sha512-VczHxkId3hwGCj5rBVJLicUTzo0GaW7Op0AiiDhtI4lUW3W8PS8nPQdA6Rot6cju0dweGwoLGj9WCuu611sygw==
   dependencies:
     "@dxos/codec-protobuf" "1.1.1"
     "@dxos/util" "2.4.0"
@@ -1784,28 +1784,7 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/util@2.6.13-alpha.0":
-  version "2.6.13-alpha.0"
-  resolved "https://registry.npmjs.org/@dxos/util/-/util-2.6.13-alpha.0.tgz#4ffc90c17d7f0272ef5eef79c2170612ec7dc0e9"
-  integrity sha512-7PBW/XtJcUIjv7xZ+QzNlJvIzAfnUmQppmXuM6yYeEvFqN/zp0Cj0C04Tqo6yCNaQKNwnm1XmZNnAREv9ccbrg==
-  dependencies:
-    "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.2"
-    "@dxos/crypto" "1.0.7"
-    "@types/debug" "^4.1.1"
-    "@types/end-of-stream" "^1.4.0"
-    "@types/lodash" "^4.14.159"
-    "@types/node" "^14.0.9"
-    "@types/stream-buffers" "^3.0.2"
-    "@types/through2" "^2.0.36"
-    debug "^4.1.1"
-    hypercore "^7.7.1"
-    js-data-structs "^1.1.2"
-    lodash.merge "^4.6.2"
-    protobufjs "^6.9.0"
-    source-map-support "^0.5.12"
-
-"@dxos/util@^2.6.14-alpha.0":
+"@dxos/util@2.6.14-alpha.0", "@dxos/util@^2.6.14-alpha.0":
   version "2.6.14-alpha.0"
   resolved "https://registry.npmjs.org/@dxos/util/-/util-2.6.14-alpha.0.tgz#1699f9d0fe65bba482eba5107da6b35fe14bd484"
   integrity sha512-br0h9az0E8/hOFDp3mmRTujtX6Hgu1ODCWLBsIgcmM33GplO9c48Z0IhEYogCDSOLw0mUzy0/YSpZgS+teLL4Q==
