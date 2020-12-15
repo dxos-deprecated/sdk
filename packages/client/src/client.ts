@@ -35,7 +35,7 @@ export interface ClientConfig {
     path?: string
   },
   swarm?: {
-    signal?: string,
+    signal?: string | string[],
     ice?: {
       urls: string,
       username?: string,
@@ -91,8 +91,8 @@ export class Client {
       keyStorage,
       snapshotStorage,
       networkManagerOptions: {
-        // TODO(marik-d): Pass ICE config.
-        signal: swarm?.signal ? [swarm.signal] : undefined,
+        signal: swarm?.signal ? (Array.isArray(swarm.signal) ? swarm.signal : [swarm.signal]) : undefined, 
+        ice: swarm?.ice,
       },
       snapshots,
       snapshotInterval
