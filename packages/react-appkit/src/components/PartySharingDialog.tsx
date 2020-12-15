@@ -127,6 +127,7 @@ function PendingInvitation ({
 
   const [inviteCode, pin] = useInvitation(party.key, {
     onDone: () => {
+      // ISSUE: https://github.com/dxos/echo/issues/361
       if (pending.expiration && Date.now() >= pending.expiration) {
         if (sentry) {
           sentry.captureMessage('Online invitation expired.');
