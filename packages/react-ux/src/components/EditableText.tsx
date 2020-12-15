@@ -15,12 +15,14 @@ const EditableText = ({
   onUpdate,
   disabled = false,
   bareInput = false,
+  autoFocus = false,
   ...rest
 }: {
   value: string,
   onUpdate: (value: string) => void,
   disabled: boolean,
-  bareInput: boolean
+  bareInput: boolean,
+  autoFocus: boolean
 }) => {
   const [editable, setEditable] = useState(false);
   const [text, setText] = useState(value);
@@ -80,6 +82,7 @@ const EditableText = ({
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
         fullWidth
+        autoFocus={autoFocus}
         inputProps={{
           inputprops: {
             spellCheck: false
@@ -97,6 +100,7 @@ const EditableText = ({
         disabled={disabled}
         onClick={disabled ? undefined : () => setEditable(true)}
         fullWidth
+        autoFocus={autoFocus}
         inputProps={{
           inputprops: {
             spellCheck: false
@@ -113,6 +117,7 @@ const EditableText = ({
       disabled={disabled}
       onClick={disabled ? undefined : () => setEditable(true)}
       fullWidth
+      autoFocus={autoFocus}
       inputProps={{
         inputprops: {
           spellCheck: false

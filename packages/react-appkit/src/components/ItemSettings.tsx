@@ -74,6 +74,7 @@ const ItemSettings = ({
           label='Name'
           variant='outlined'
           value={name}
+          autoFocus={true}
           className={classes.margin}
           onUpdate={(value: string) => setName(value)}
         />

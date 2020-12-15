@@ -75,6 +75,7 @@ const ItemSettingsDialog = ({
             label='Name'
             variant='outlined'
             value={item.displayName}
+            autoFocus={true}
             className={classes.margin}
             onUpdate={(value: string) => itemModel.renameItem(itemId, value)}
           />
