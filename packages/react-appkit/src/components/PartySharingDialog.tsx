@@ -241,7 +241,7 @@ const PartySharingDialog = ({
     if (sentry) {
       sentry.captureMessage('Online invitation initiated.');
     }
-    setInvitations([{ id: Date.now(), name: `Invitation ${counter}` }, ...invitations]);
+    setInvitations([{ id: Date.now(), name: `Invitation ${invitationIndex}` }, ...invitations]);
     setInvitationIndex(old => old + 1);
   };
 
