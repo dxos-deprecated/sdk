@@ -255,20 +255,6 @@ const BotDialog = ({
           Invite
         </Button>
       </DialogActions>
-      {/* {error && (
-        <DialogActions>
-          <Typography variant='body1' className={classes.errorMessage}>
-            Deploying failed. Please try again later.
-          </Typography>
-        </DialogActions>
-      )}
-      {botFactoryError && (
-        <DialogActions>
-          <Typography variant='body1' className={classes.errorMessage}>
-            Unable to connect to BotFactory. Please select another one.
-          </Typography>
-        </DialogActions>
-      )} */}
     </Dialog>
   );
 };
