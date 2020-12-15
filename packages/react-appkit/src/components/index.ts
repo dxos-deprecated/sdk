@@ -16,6 +16,7 @@ import MemberAvatar from './MemberAvatar';
 import MemberList from './MemberList';
 import MemberTable from './MemberTable';
 import NewItemCreationMenu from './NewItemCreationMenu';
+import PartiesSettingsDialog from './PartiesSettingsDialog';
 import PartyCard from './PartyCard';
 import PartyFromFileDialog from './PartyFromFileDialog';
 import PartyFromIpfsDialog from './PartyFromIpfsDialog';
@@ -45,6 +46,7 @@ export {
   MemberList,
   MemberTable,
   NewItemCreationMenu,
+  PartiesSettingsDialog,
   PartyCard,
   PartyList,
   PartyMemberList,
