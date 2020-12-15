@@ -27,7 +27,7 @@ import { useClient, useConfig, useProfile } from '@dxos/react-client';
 import BotDialog from '../components/BotDialog';
 import ExportKeyringDialog from '../components/ExportKeyringDialog';
 import InvitationDialog from '../components/InvitationDialog';
-import { Action, useActionHandler, useAppRouter } from '../hooks';
+import { useActionHandler, useAppRouter } from '../hooks';
 
 // TODO(telackey): This file is dead code, and these types no longer exist.
 const InviteDetails = () => null;
@@ -43,6 +43,7 @@ const ACTION_OPEN_PARTY_HOME = 8;
 const ACTION_PARTY_FROM_FILE = 9;
 const ACTION_PARTY_FROM_IPFS = 10;
 const ACTION_OPEN_REDEEM = 11;
+const ACTION_PARTIES_SETTINGS = 12;
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -71,13 +72,15 @@ const AppBar = ({
   onPartyHomeNavigation,
   onPartyFromFile,
   onPartyFromIpfs,
-  onRedeemOpen
+  onRedeemOpen,
+  onPartiesSettingsOpen
 }) => {
   const classes = useStyles();
   const client = useClient();
   const config = useConfig();
   const profile = useProfile();
   const router = useAppRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAction = useActionHandler();
 
   const [{ dialog, target } = {}, setDialog] = useState();
@@ -260,6 +263,13 @@ const AppBar = ({
       handler: async () => {
         onRedeemOpen && onRedeemOpen();
       }
+    },
+
+    [ACTION_PARTIES_SETTINGS]: {
+      label: 'Parties settings',
+      handler: async () => {
+        onPartiesSettingsOpen && onPartiesSettingsOpen();
+      }
     }
   };
 
@@ -300,6 +310,10 @@ const AppBar = ({
 
   if (onRedeemOpen) {
     menuItems.push(action(ACTION_OPEN_REDEEM));
+  }
+
+  if (onPartiesSettingsOpen) {
+    menuItems.push(action(ACTION_PARTIES_SETTINGS));
   }
 
   menuItems.push(action(ACTION_RESET_STORAGE)); // Use devtools https://github.com/dxos/devtools

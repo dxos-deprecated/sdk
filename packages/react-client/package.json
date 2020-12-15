@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-client",
-  "version": "2.7.35-alpha.0",
+  "version": "2.7.39-alpha.0",
   "description": "React client API",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@dxos/async": "1.0.2-alpha.0",
-    "@dxos/client": "2.7.35-alpha.0",
+    "@dxos/client": "2.7.39-alpha.0",
     "@dxos/credentials": "2.1.16-alpha.0",
     "@dxos/crypto": "1.0.7",
     "@dxos/debug": "1.0.0-beta.73",
@@ -38,7 +38,7 @@
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.7",
     "@babel/preset-react": "^7.0.0",
-    "@dxos/eslint-plugin": "1.0.9",
+    "@dxos/eslint-plugin": "1.0.10",
     "@dxos/random-access-multi-storage": "1.1.0-beta.8",
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",

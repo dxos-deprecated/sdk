@@ -1207,7 +1207,7 @@
 
 "@dxos/async@1.0.0-beta.10":
   version "1.0.0-beta.10"
-  resolved "https://registry.npmjs.org/@dxos/async/-/async-1.0.0-beta.10.tgz#a1247891cbdee3b84614c92d6790a7d7695e9260"
+  resolved "https://registry.yarnpkg.com/@dxos/async/-/async-1.0.0-beta.10.tgz#a1247891cbdee3b84614c92d6790a7d7695e9260"
   integrity sha512-U3f1afmdl8KNjK8y89E89G+Cd2l52+Wjww92hZ9IfiU6wOvNsNG9WRruAYCOoRpBMYaEv/QJq+UuLhgD5o8iSQ==
 
 "@dxos/async@1.0.2-alpha.0", "@dxos/async@^1.0.2-alpha.0":
@@ -1259,7 +1259,7 @@
   dependencies:
     protobufjs "^6.10.1"
 
-"@dxos/codec-protobuf@^0.2.0", "@dxos/codec-protobuf@^0.2.2":
+"@dxos/codec-protobuf@^0.2.2":
   version "0.2.2"
   resolved "https://registry.npmjs.org/@dxos/codec-protobuf/-/codec-protobuf-0.2.2.tgz#364a24e83cb70497dbcec0defe42016348fcabd6"
   integrity sha512-DkFkkciaSLbn6jnD8wwfpzyEOhwMHRQHHNJziN+NmfEWbhmvgyUAWsB4cVmvaGfaYWEhOrmloBtBZMMn6XDilw==
@@ -1283,7 +1283,7 @@
 
 "@dxos/credentials@2.1.16-alpha.0":
   version "2.1.16-alpha.0"
-  resolved "https://registry.npmjs.org/@dxos/credentials/-/credentials-2.1.16-alpha.0.tgz#9f8595cc5eb82be3ccf8c9e175999c9babf1922c"
+  resolved "https://registry.yarnpkg.com/@dxos/credentials/-/credentials-2.1.16-alpha.0.tgz#9f8595cc5eb82be3ccf8c9e175999c9babf1922c"
   integrity sha512-cD2aYP/W7lm0bkzEwWGzzO+rd2gPdGExCKvoymJ2corhX40hY+ywZOMnBrx1OL08+k/bR5pDkfzyasfRoVmryQ==
   dependencies:
     "@dxos/async" "1.0.0-beta.10"
@@ -1325,14 +1325,14 @@
 
 "@dxos/crypto@1.0.7", "@dxos/crypto@^1.0.7":
   version "1.0.7"
-  resolved "https://registry.npmjs.org/@dxos/crypto/-/crypto-1.0.7.tgz#7f80f2712302037e0a29bb1f6d023fdab899c14b"
+  resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-1.0.7.tgz#7f80f2712302037e0a29bb1f6d023fdab899c14b"
   integrity sha512-ED+AChA9N8hIMgTcuopNhe81xICykEAP0dKILiTJpBCqiEXyzRClLBkdIY4n6UJUpBmVvrnBLRxw8IU/+jVijg==
   dependencies:
     crypto-js "^3.1.9-1"
     humanhash "^1.0.4"
     hypercore-crypto "^1.0.0"
 
-"@dxos/crypto@^1.0.0-beta.1", "@dxos/crypto@^1.0.0-beta.7":
+"@dxos/crypto@^1.0.0-beta.1":
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@dxos/crypto/-/crypto-1.0.0-beta.12.tgz#6459639ac717d2c5c83db930ee754b470f23df85"
   integrity sha512-dq6b0RJ92EzpxO5i0kyXstNWGjlHjtL13Ef2vWS+ROB+om6jZ/zVRC7+WIwgCbA7re1aIME3os0T/dY2sjGVIA==
@@ -1432,10 +1432,10 @@
     unified "^9.2.0"
     yjs "^13.3.2"
 
-"@dxos/eslint-plugin@1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@dxos/eslint-plugin/-/eslint-plugin-1.0.9.tgz#36e32ee0b22a50e85cb5e334f7732186eb0aa9d6"
-  integrity sha512-Smk3kLXAeSxCL035Q5YkORY8wlvKkG8BOZIqUyAaD/cdifBzjwkQApK4NFokgPWf12YX/7E0PcALJxuu9p1XSQ==
+"@dxos/eslint-plugin@1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@dxos/eslint-plugin/-/eslint-plugin-1.0.10.tgz#165105a271996c1feb47db87e81ac84d8d03b655"
+  integrity sha512-SRWuN1uOojfZbhSqV+ViQLgZuONxHGLsSObmLJU+HtjX7x2XLg0DiCsSbbOKLd7tO6r9uHIK4PcmhbLYlNGh9Q==
   dependencies:
     "@rushstack/eslint-patch" "^1.0.6"
     "@typescript-eslint/eslint-plugin" "^3.10.1"
@@ -1489,13 +1489,13 @@
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
-"@dxos/messenger-model@1.2.0-alpha.27":
-  version "1.2.0-alpha.27"
-  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.27.tgz#9663913f15f8401aa2aad467cfcdbae4972b78f2"
-  integrity sha512-u4MYdPvW0ErsQum8q4YkY39YRudDGDONDyXjrEL+Z+L5nnZUHlSAWATOd/xzFdrQnEEWiuYqEWAdR5w/l0QviA==
+"@dxos/messenger-model@1.2.0-alpha.29":
+  version "1.2.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.29.tgz#a6e119d422afdd570df1d4c57a60b736746620da"
+  integrity sha512-3JpDIrJJ/mBxpvqgMit/CM4OgyQNb7s67RLPjptJXLUuTe7I2sywdPFER7GZQKXeBCOUZwKb+WHveYR5/0Hjzg==
   dependencies:
-    "@dxos/codec-protobuf" "^0.2.0"
-    "@dxos/util" "^2.1.0"
+    "@dxos/codec-protobuf" "1.1.1"
+    "@dxos/util" "2.4.0"
     debug "^4.2.0"
 
 "@dxos/metrics@1.0.0-beta.9", "@dxos/metrics@^1.0.0-beta.6", "@dxos/metrics@^1.0.0-beta.8":
@@ -1763,14 +1763,14 @@
     "@dxos/model-factory" "^1.0.0-beta.28"
     yjs "^13.2.0"
 
-"@dxos/util@2.6.13-alpha.0", "@dxos/util@^2.6.13-alpha.0":
-  version "2.6.13-alpha.0"
-  resolved "https://registry.npmjs.org/@dxos/util/-/util-2.6.13-alpha.0.tgz#4ffc90c17d7f0272ef5eef79c2170612ec7dc0e9"
-  integrity sha512-7PBW/XtJcUIjv7xZ+QzNlJvIzAfnUmQppmXuM6yYeEvFqN/zp0Cj0C04Tqo6yCNaQKNwnm1XmZNnAREv9ccbrg==
+"@dxos/util@2.4.0", "@dxos/util@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@dxos/util/-/util-2.4.0.tgz#4b71e34ca8bf17a1a0b904718f732c4fdbc7e4b7"
+  integrity sha512-lXYAUoFFsFQhyWdoQfLQVl1rKXzs3q/EJqIti7KadaBQfyL7VvxRM7ecXBFMX2GsMfq2lASUSdvQmIHqyKQMGA==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.2"
-    "@dxos/crypto" "1.0.7"
+    "@dxos/codec-protobuf" "^0.2.0"
+    "@dxos/crypto" "^1.0.0-beta.7"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"
@@ -1784,14 +1784,14 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/util@^2.1.0", "@dxos/util@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@dxos/util/-/util-2.4.0.tgz#4b71e34ca8bf17a1a0b904718f732c4fdbc7e4b7"
-  integrity sha512-lXYAUoFFsFQhyWdoQfLQVl1rKXzs3q/EJqIti7KadaBQfyL7VvxRM7ecXBFMX2GsMfq2lASUSdvQmIHqyKQMGA==
+"@dxos/util@2.6.13-alpha.0", "@dxos/util@^2.6.13-alpha.0":
+  version "2.6.13-alpha.0"
+  resolved "https://registry.npmjs.org/@dxos/util/-/util-2.6.13-alpha.0.tgz#4ffc90c17d7f0272ef5eef79c2170612ec7dc0e9"
+  integrity sha512-7PBW/XtJcUIjv7xZ+QzNlJvIzAfnUmQppmXuM6yYeEvFqN/zp0Cj0C04Tqo6yCNaQKNwnm1XmZNnAREv9ccbrg==
   dependencies:
     "@dxos/async" "^1.0.0-beta.8"
-    "@dxos/codec-protobuf" "^0.2.0"
-    "@dxos/crypto" "^1.0.0-beta.7"
+    "@dxos/codec-protobuf" "^0.2.2"
+    "@dxos/crypto" "1.0.7"
     "@types/debug" "^4.1.1"
     "@types/end-of-stream" "^1.4.0"
     "@types/lodash" "^4.14.159"

@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-ux",
-  "version": "2.7.35-alpha.0",
+  "version": "2.7.39-alpha.0",
   "description": "React components",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -25,7 +25,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@dxos/eslint-plugin": "1.0.9",
+    "@dxos/eslint-plugin": "1.0.10",
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",
     "@storybook/react": "^6.0.21",

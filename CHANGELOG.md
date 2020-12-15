@@ -1,5 +1,36 @@
 # Changelog
 
+### [2.7.39](https://www.github.com/dxos/sdk/compare/v2.7.38...v2.7.39) (2020-12-14)
+
+
+### Bug Fixes
+
+* Possible undefined member display name ([#462](https://www.github.com/dxos/sdk/issues/462)) ([b3a5725](https://www.github.com/dxos/sdk/commit/b3a572582989c00716294dd5d1398a6fcaec2e94))
+* Refactor react-router to TS ([#459](https://www.github.com/dxos/sdk/issues/459)) ([422d1bf](https://www.github.com/dxos/sdk/commit/422d1bf702437e1830a1e7affb06d40fa1743738))
+
+### [2.7.38](https://www.github.com/dxos/sdk/compare/v2.7.37...v2.7.38) (2020-12-10)
+
+
+### Bug Fixes
+
+* not NetworkManager (yet) ([140fe3f](https://www.github.com/dxos/sdk/commit/140fe3f63ab36ed8cb431134471ca10e8aef05c9))
+* versions ([d1e18b7](https://www.github.com/dxos/sdk/commit/d1e18b7d4c8458b9d016b40556fbf7e00654652b))
+
+### [2.7.37](https://www.github.com/dxos/sdk/compare/v2.7.36...v2.7.37) (2020-12-10)
+
+
+### Bug Fixes
+
+* Observability ([d174b87](https://www.github.com/dxos/sdk/commit/d174b87afc2068b95e9053acabf621cc85341407))
+
+### [2.7.36](https://www.github.com/dxos/sdk/compare/v2.7.35...v2.7.36) (2020-12-10)
+
+
+### Bug Fixes
+
+* Convert react-appkit to TS ([#453](https://www.github.com/dxos/sdk/issues/453)) ([1993903](https://www.github.com/dxos/sdk/commit/199390318a957c391efa61fc9ae2d0bbefcce778))
+* More logging around invitations ([#451](https://www.github.com/dxos/sdk/issues/451)) ([b926590](https://www.github.com/dxos/sdk/commit/b92659024d7c9485d867efe8038246f2fc148c04))
+
 ### [2.7.35](https://www.github.com/dxos/sdk/compare/v2.7.34...v2.7.35) (2020-12-09)
 
 
