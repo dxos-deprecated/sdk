@@ -7,9 +7,9 @@ import { EventEmitter } from 'events';
 import { keyPair } from 'hypercore-crypto';
 
 import { waitForCondition } from '@dxos/async';
-import { keyToBuffer } from '@dxos/crypto';
+import { keyToBuffer, PublicKey } from '@dxos/crypto';
 import { logs } from '@dxos/debug';
-import { NetworkManager, transportProtocolProvider } from '@dxos/network-manager';
+import { NetworkManager, StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
   BotPlugin,
   createSpawnCommand,
@@ -213,7 +213,7 @@ export class BotFactoryClient extends EventEmitter {
       }
     }
     if (this._swarm === SwarmingStatus.Connected) {
-      await this._networkManager.leaveProtocolSwarm(this._botFactoryTopic);
+      await this._networkManager.leaveProtocolSwarm(PublicKey.from(this._botFactoryTopic));
       this._swarm = SwarmingStatus.NotConnected;
     }
   }
@@ -240,8 +240,12 @@ export class BotFactoryClient extends EventEmitter {
         });
       });
 
-      await this._networkManager.joinProtocolSwarm(this._botFactoryTopic,
-        transportProtocolProvider(this._botFactoryTopic, this._peerId, this._botPlugin));
+      await this._networkManager.joinProtocolSwarm({
+        topic: PublicKey.from(this._botFactoryTopic),
+        protocol: transportProtocolProvider(this._botFactoryTopic, this._peerId, this._botPlugin),
+        peerId: PublicKey.from(this._peerId),
+        topology: new StarTopology(PublicKey.from(this._botFactoryPeerId))
+      });
       this._swarm = SwarmingStatus.Connected;
 
       return await promise;

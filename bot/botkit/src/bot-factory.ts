@@ -7,8 +7,8 @@ import { sync as readPackageJson } from 'read-pkg-up';
 
 import { waitForCondition } from '@dxos/async';
 import { Client } from '@dxos/client';
-import { keyToBuffer, keyToString, sign } from '@dxos/crypto';
-import { transportProtocolProvider } from '@dxos/network-manager';
+import { keyToBuffer, keyToString, PublicKey, sign } from '@dxos/crypto';
+import { StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SPAWN,
   COMMAND_SPAWN_AND_INVITE,
@@ -111,8 +111,12 @@ export class BotFactory {
     }
     await this._botManager.start();
 
-    this._leaveSwarm = await this._client.networkManager.joinProtocolSwarm(this._topic,
-      transportProtocolProvider(this._topic, this._peerKey, this._plugin)) as any;
+    this._leaveSwarm = await this._client.networkManager.joinProtocolSwarm({
+      topic: PublicKey.from(this._topic),
+      protocol: transportProtocolProvider(this._topic, this._peerKey, this._plugin),
+      peerId: PublicKey.from(this._peerKey),
+      topology: new StarTopology(PublicKey.from(this._peerKey))
+    });
 
     log(JSON.stringify(
       {
@@ -264,7 +268,8 @@ export class BotFactory {
     for (const container of Object.values(this._botContainers)) {
       await container.stop();
     }
-    await this._client!.networkManager.close();
+    // TODO(marik-d): Network-manager clean-up.
+    // await this._client!.networkManager.close();
   }
 
   signChallenge (challenge: Buffer) {
