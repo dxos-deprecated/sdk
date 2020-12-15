@@ -1489,10 +1489,10 @@
     source-map-support "^0.5.12"
     through2 "^3.0.1"
 
-"@dxos/messenger-model@1.2.0-alpha.36":
-  version "1.2.0-alpha.36"
-  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.36.tgz#9a80dc2907417b78977d946fb8b283b07fd9b37d"
-  integrity sha512-VczHxkId3hwGCj5rBVJLicUTzo0GaW7Op0AiiDhtI4lUW3W8PS8nPQdA6Rot6cju0dweGwoLGj9WCuu611sygw==
+"@dxos/messenger-model@1.2.0-alpha.37":
+  version "1.2.0-alpha.37"
+  resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-alpha.37.tgz#badce19d5886b7cf4649e1d6ff94c954dd78fc6f"
+  integrity sha512-GSxSs6whJp9L/mcejtqo75KOfaSLvxBNDqqZ6BnX9vg0HLV4cH7pNLSxCN0YsMRv6XCzZB5RfM4o3rr9gDOSkg==
   dependencies:
     "@dxos/codec-protobuf" "1.1.1"
     "@dxos/util" "2.4.0"
