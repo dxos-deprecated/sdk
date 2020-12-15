@@ -105,13 +105,15 @@ function PendingInvitation ({
   pending,
   invitationName,
   handleCopy,
-  onInvitationDone
+  onInvitationDone,
+  onRenew
 }: {
   party: Party,
   pending: Record<string, any>,
   invitationName: string,
   handleCopy: (value: string) => void,
-  onInvitationDone: (value: string) => void
+  onInvitationDone: (value: string) => void,
+  onRenew?: () => void,
 }) {
   const classes = useStyles();
   const sentry = useSentry();
@@ -137,7 +139,7 @@ function PendingInvitation ({
         onInvitationDone(pending.id);
       }
     },
-    onError: (e) => {
+    onError: (e: any) => {
       if (sentry) {
         sentry.addBreadcrumb({ message: String(e) });
         sentry.captureMessage('Online invitation failed.');
@@ -169,17 +171,18 @@ function PendingInvitation ({
         <span className={classes.label}>{expired ? 'Expired' : status}</span>
       </TableCell>
       <TableCell classes={{ root: classes.colActions }}>
-        {expired && (
+        {(expired && onRenew) && (
           <IconButton
             size='small'
             color='inherit'
             title='Regenerate'
             edge='start'
+            onClick={onRenew}
           >
             <AutorenewIcon />
           </IconButton>
         )}
-        {(!expired && pin) && (
+        {(!expired && !pin) && (
           <>
             <CopyToClipboard
               text={inviteCode}
@@ -464,7 +467,21 @@ const PartySharingDialog = ({
                     pending={pending}
                     invitationName={pending.name}
                     handleCopy={handleCopy}
-                    onInvitationDone={handleInvitationDone}/>
+                    onInvitationDone={handleInvitationDone}
+                    onRenew={() => {
+                      if (sentry) {
+                        sentry.captureMessage('Online invitation renewed.');
+                      }
+                      setInvitations(old => [
+                        {
+                          id: Date.now(),
+                          expiration: client.config.invitationExpiration && (Date.now() + client.config.invitationExpiration),
+                          name: pending.name
+                        },
+                        ...old.filter(invite => invite.id !== pending.id)
+                      ]);
+                    }}
+                  />
                 ))}
             </TableBody>
 
