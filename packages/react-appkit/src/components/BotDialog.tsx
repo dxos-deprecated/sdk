@@ -52,7 +52,9 @@ const useStyles = makeStyles((theme) => ({
     padding: 0
   },
   advancedBody: {
-    display: 'block'
+    display: 'block',
+    paddingLeft: 0,
+    paddingRight: 0
   }
 }));
 
