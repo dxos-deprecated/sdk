@@ -235,14 +235,14 @@ const PartySharingDialog = ({
   const [contacts] = useContacts();
   const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toHex() === c.publicKey.toHex())); // contacts not already in this party
 
-  const [invitationIndex, setCounter] = useState(1);
+  const [invitationIndex, setInvitationIndex] = useState(1);
 
   const createInvitation = () => {
     if (sentry) {
       sentry.captureMessage('Online invitation initiated.');
     }
     setInvitations([{ id: Date.now(), name: `Invitation ${counter}` }, ...invitations]);
-    setCounter(old => old + 1);
+    setInvitationIndex(old => old + 1);
   };
 
   const createOfflineInvitation = (contact: Contact) => {
