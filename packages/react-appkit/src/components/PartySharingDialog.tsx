@@ -91,11 +91,13 @@ const TableCell = withStyles(theme => ({
 function PendingInvitation ({
   party,
   pending,
+  invitationName,
   handleCopy,
   onInvitationDone
 }: {
   party: Party,
   pending: Record<string, any>,
+  invitationName: string,
   handleCopy: (value: string) => void,
   onInvitationDone: (value: string) => void
 }) {
@@ -124,7 +126,9 @@ function PendingInvitation ({
           <FaceIcon />
         </Avatar>
       </TableCell>
-      <TableCell />
+      <TableCell>
+        {invitationName}
+      </TableCell>
       <TableCell classes={{ root: classes.colPasscode }}>
         {pin && (
           <>
@@ -394,7 +398,15 @@ const PartySharingDialog = ({
             <TableBody>
               {invitations
                 .filter((invitation) => !invitation.done)
-                .map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} onInvitationDone={handleInvitationDone} />)}
+                .map((pending, index) => (
+                  <PendingInvitation
+                    key={pending.id}
+                    party={party}
+                    pending={pending}
+                    invitationName={`Invitation ${index}`}
+                    handleCopy={handleCopy}
+                    onInvitationDone={handleInvitationDone}/>
+                ))}
             </TableBody>
 
             {members.length > 0 && (

@@ -17,6 +17,7 @@ import RegistrationDialog from '../components/RegistrationDialog';
 import { useSentry } from '../hooks';
 
 const Registration = () => {
+  console.log('I am here');
   const [open, setOpen] = useState(true);
   const history = useHistory();
   const { redirectUrl = '/', ...rest } = useQuery();
