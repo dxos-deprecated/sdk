@@ -91,11 +91,13 @@ const TableCell = withStyles(theme => ({
 function PendingInvitation ({
   party,
   pending,
+  invitationName,
   handleCopy,
   onInvitationDone
 }: {
   party: Party,
   pending: Record<string, any>,
+  invitationName: string,
   handleCopy: (value: string) => void,
   onInvitationDone: (value: string) => void
 }) {
@@ -124,7 +126,9 @@ function PendingInvitation ({
           <FaceIcon />
         </Avatar>
       </TableCell>
-      <TableCell />
+      <TableCell>
+        {invitationName}
+      </TableCell>
       <TableCell classes={{ root: classes.colPasscode }}>
         {pin && (
           <>
@@ -231,11 +235,14 @@ const PartySharingDialog = ({
   const [contacts] = useContacts();
   const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toHex() === c.publicKey.toHex())); // contacts not already in this party
 
+  const [invitationIndex, setInvitationIndex] = useState(1);
+
   const createInvitation = () => {
     if (sentry) {
       sentry.captureMessage('Online invitation initiated.');
     }
-    setInvitations([{ id: Date.now() }, ...invitations]);
+    setInvitations([{ id: Date.now(), name: `Invitation ${invitationIndex}` }, ...invitations]);
+    setInvitationIndex(old => old + 1);
   };
 
   const createOfflineInvitation = (contact: Contact) => {
@@ -394,7 +401,15 @@ const PartySharingDialog = ({
             <TableBody>
               {invitations
                 .filter((invitation) => !invitation.done)
-                .map((pending) => <PendingInvitation key={pending.id} party={party} pending={pending} handleCopy={handleCopy} onInvitationDone={handleInvitationDone} />)}
+                .map((pending) => (
+                  <PendingInvitation
+                    key={pending.id}
+                    party={party}
+                    pending={pending}
+                    invitationName={pending.name}
+                    handleCopy={handleCopy}
+                    onInvitationDone={handleInvitationDone}/>
+                ))}
             </TableBody>
 
             {members.length > 0 && (
