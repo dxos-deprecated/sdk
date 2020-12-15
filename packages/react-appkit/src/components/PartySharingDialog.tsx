@@ -235,7 +235,7 @@ const PartySharingDialog = ({
   const [contacts] = useContacts();
   const invitableContacts = contacts?.filter(c => !members.some(m => m.publicKey.toHex() === c.publicKey.toHex())); // contacts not already in this party
 
-  const [counter, setCounter] = useState(1);
+  const [invitationIndex, setCounter] = useState(1);
 
   const createInvitation = () => {
     if (sentry) {
