@@ -2,8 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import assert from 'assert';
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   Dialog,
@@ -53,7 +52,7 @@ const PartiesSettingsDialog = ({
       <DialogTitle>
         <Toolbar variant='dense' disableGutters>
           <SettingsIcon />
-          <Typography variant='h5' className={classes.title}>Import Party</Typography>
+          <Typography variant='h5' className={classes.title}>Parties settings</Typography>
         </Toolbar>
       </DialogTitle>
 
