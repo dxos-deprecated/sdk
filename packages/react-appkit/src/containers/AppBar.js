@@ -43,6 +43,7 @@ const ACTION_OPEN_PARTY_HOME = 8;
 const ACTION_PARTY_FROM_FILE = 9;
 const ACTION_PARTY_FROM_IPFS = 10;
 const ACTION_OPEN_REDEEM = 11;
+const ACTION_PARTIES_SETTINGS = 12;
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -71,7 +72,8 @@ const AppBar = ({
   onPartyHomeNavigation,
   onPartyFromFile,
   onPartyFromIpfs,
-  onRedeemOpen
+  onRedeemOpen,
+  onPartiesSettingsOpen
 }) => {
   const classes = useStyles();
   const client = useClient();
@@ -261,6 +263,13 @@ const AppBar = ({
       handler: async () => {
         onRedeemOpen && onRedeemOpen();
       }
+    },
+
+    [ACTION_PARTIES_SETTINGS]: {
+      label: 'Parties settings',
+      handler: async () => {
+        onPartiesSettingsOpen && onPartiesSettingsOpen();
+      }
     }
   };
 
@@ -301,6 +310,10 @@ const AppBar = ({
 
   if (onRedeemOpen) {
     menuItems.push(action(ACTION_OPEN_REDEEM));
+  }
+
+  if (onPartiesSettingsOpen) {
+    menuItems.push(action(ACTION_PARTIES_SETTINGS));
   }
 
   menuItems.push(action(ACTION_RESET_STORAGE)); // Use devtools https://github.com/dxos/devtools
