@@ -12,8 +12,8 @@ import moment from 'moment';
 import path from 'path';
 
 import { Client } from '@dxos/client';
-import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
-import { transportProtocolProvider } from '@dxos/network-manager';
+import { keyToString, keyToBuffer, createKeyPair, sha256, PublicKey } from '@dxos/crypto';
+import { StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SIGN,
   MESSAGE_CONFIRM,
@@ -128,8 +128,12 @@ export class BotManager {
   async start () {
     this._plugin = new BotPlugin(this._controlPeerKey, (protocol: any, message: any) => this._botMessageHandler(protocol, message));
     // Join control swarm.
-    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
-      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
+    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm({
+      topic: PublicKey.from(this._controlTopic),
+      protocol: transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin),
+      peerId: PublicKey.from(this._controlPeerKey),
+      topology: new StarTopology(PublicKey.from(this._controlPeerKey))
+    });
 
     await this._readBotsFromFile();
 

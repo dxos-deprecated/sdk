@@ -14,7 +14,7 @@ import { ECHO, InvitationOptions, SecretProvider, sortItemsTopologically } from 
 import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';
-import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
+import { NetworkManager } from '@dxos/network-manager';
 import { ValueUtil } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
@@ -35,7 +35,7 @@ export interface ClientConfig {
     path?: string
   },
   swarm?: {
-    signal?: string,
+    signal?: string | string[],
     ice?: {
       urls: string,
       username?: string,
@@ -90,7 +90,10 @@ export class Client {
       feedStorage,
       keyStorage,
       snapshotStorage,
-      swarmProvider: new SwarmProvider(swarm),
+      networkManagerOptions: {
+        signal: swarm?.signal ? (Array.isArray(swarm.signal) ? swarm.signal : [swarm.signal]) : undefined,
+        ice: swarm?.ice
+      },
       snapshots,
       snapshotInterval
     });
