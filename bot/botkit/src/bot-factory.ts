@@ -115,7 +115,7 @@ export class BotFactory {
       topic: PublicKey.from(this._topic),
       protocol: transportProtocolProvider(this._topic, this._peerKey, this._plugin),
       peerId: PublicKey.from(this._peerKey),
-      topology: new StarTopology(PublicKey.from(this._peerKey)),
+      topology: new StarTopology(PublicKey.from(this._peerKey))
     });
 
     log(JSON.stringify(

@@ -91,8 +91,8 @@ export class Client {
       keyStorage,
       snapshotStorage,
       networkManagerOptions: {
-        signal: swarm?.signal ? (Array.isArray(swarm.signal) ? swarm.signal : [swarm.signal]) : undefined, 
-        ice: swarm?.ice,
+        signal: swarm?.signal ? (Array.isArray(swarm.signal) ? swarm.signal : [swarm.signal]) : undefined,
+        ice: swarm?.ice
       },
       snapshots,
       snapshotInterval

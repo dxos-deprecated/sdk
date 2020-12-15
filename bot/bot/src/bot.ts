@@ -216,7 +216,7 @@ export class Bot extends EventEmitter {
         topic: PublicKey.from(this._controlTopic),
         protocol: transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin),
         peerId: PublicKey.from(this._controlPeerKey),
-        topology: new StarTopology(PublicKey.from(this._botFactoryPeerKey)),
+        topology: new StarTopology(PublicKey.from(this._botFactoryPeerKey))
       });
 
       await promise;

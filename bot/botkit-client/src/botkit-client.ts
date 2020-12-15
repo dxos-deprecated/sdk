@@ -244,7 +244,7 @@ export class BotFactoryClient extends EventEmitter {
         topic: PublicKey.from(this._botFactoryTopic),
         protocol: transportProtocolProvider(this._botFactoryTopic, this._peerId, this._botPlugin),
         peerId: PublicKey.from(this._peerId),
-        topology: new StarTopology(PublicKey.from(this._botFactoryPeerId)),
+        topology: new StarTopology(PublicKey.from(this._botFactoryPeerId))
       });
       this._swarm = SwarmingStatus.Connected;
 

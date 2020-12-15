@@ -13,7 +13,7 @@ import path from 'path';
 
 import { Client } from '@dxos/client';
 import { keyToString, keyToBuffer, createKeyPair, sha256, PublicKey } from '@dxos/crypto';
-import { FullyConnectedTopology, StarTopology, transportProtocolProvider } from '@dxos/network-manager';
+import { StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SIGN,
   MESSAGE_CONFIRM,
@@ -132,7 +132,7 @@ export class BotManager {
       topic: PublicKey.from(this._controlTopic),
       protocol: transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin),
       peerId: PublicKey.from(this._controlPeerKey),
-      topology: new StarTopology(PublicKey.from(this._controlPeerKey)),
+      topology: new StarTopology(PublicKey.from(this._controlPeerKey))
     });
 
     await this._readBotsFromFile();
