@@ -86,7 +86,7 @@ const ClientContextProvider = ({ config, children }) => {
 
           // Console access.
           if (config.debug.mode === 'development' || clientConfig.devtools) {
-            window.__DXOS__ = { client, metrics, debug };
+            window.__DXOS__ = client.getDevtoolsContext();
           }
 
           setClient(client);
