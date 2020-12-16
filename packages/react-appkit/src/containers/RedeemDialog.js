@@ -12,6 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import RedeemIcon from '@material-ui/icons/Redeem';
@@ -25,6 +26,9 @@ import { useSentry } from '../hooks';
 const useStyles = makeStyles(theme => ({
   marginTop: {
     marginTop: theme.spacing(2)
+  },
+  title: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
