@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField';
 const EditableText = ({
   value,
   onUpdate,
+  onChange,
   disabled = false,
   bareInput = false,
   autoFocus = false,
@@ -20,6 +21,7 @@ const EditableText = ({
 }: {
   value: string,
   onUpdate: (value: string) => void,
+  onChange?: (value: string) => void,
   disabled: boolean,
   bareInput: boolean,
   autoFocus: boolean
@@ -33,7 +35,7 @@ const EditableText = ({
   }, [value]);
 
   useEffect(() => {
-    (textInput.current as HTMLInputElement).click();
+    autoFocus && (textInput.current as HTMLInputElement).click();
   }, [textInput.current]);
 
   const handleUpdate = (newValue: string) => {
@@ -48,6 +50,7 @@ const EditableText = ({
 
   const handleChange = ({ target: { value } }: { target: { value: string }}) => {
     setText(value);
+    onChange && onChange(value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
