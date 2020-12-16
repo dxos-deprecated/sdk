@@ -11,14 +11,11 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import MemoryIcon from '@material-ui/icons/Memory';
@@ -27,6 +24,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useRegistryBots, useRegistryBotFactories } from '@dxos/react-client';
 
 import { useKeywords } from '../hooks';
+import DialogHeading from './DialogHeading';
 
 // TODO(egorgripasov): Factor out to config/client.
 const BOT_FACTORY_DOMAIN = 'dxos.network';
@@ -170,12 +168,7 @@ const BotDialog = ({
       onClose={pending ? undefined : handleClose} // No click away when in progress
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle>
-        <Toolbar variant='dense' disableGutters>
-          <MemoryIcon />
-          <Typography variant='h5' className={classes.title}>Invite bot</Typography>
-        </Toolbar>
-      </DialogTitle>
+      <DialogHeading title='Invite bot' icon={MemoryIcon}/>
 
       <DialogContent>
         <FormControl className={classes.formControl}>

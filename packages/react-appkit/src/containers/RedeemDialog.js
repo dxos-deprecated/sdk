@@ -9,16 +9,17 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import RedeemIcon from '@material-ui/icons/Redeem';
 import Alert from '@material-ui/lab/Alert';
 
 import { useInvitationRedeemer } from '@dxos/react-client';
 
+import DialogHeading from '../components/DialogHeading';
 import { useSentry } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
@@ -89,7 +90,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
       onClose={step === 0 ? handleDone : undefined} // No click away when in the middle of a flow
       {...props}
     >
-      <DialogTitle>Redeem Invitation</DialogTitle>
+      <DialogHeading title='Redeem Invitation' icon={RedeemIcon}/>
 
       {step === 0 && (
         <>

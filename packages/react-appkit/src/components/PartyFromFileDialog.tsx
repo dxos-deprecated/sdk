@@ -16,6 +16,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import PeopleIcon from '@material-ui/icons/People';
+import DialogHeading from './DialogHeading';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -109,12 +110,8 @@ const PartyFromFileDialog = ({
 
   return (
     <Dialog classes={{ paper: classes.root }} maxWidth='lg' open={open} onClose={handleClose}>
-      <DialogTitle>
-        <Toolbar variant='dense' disableGutters>
-          <PeopleIcon />
-          <Typography variant='h5' className={classes.title}>Import Party</Typography>
-        </Toolbar>
-      </DialogTitle>
+
+      <DialogHeading title='Import Party' icon={PeopleIcon}/>
 
       <DialogContent
         onDrop={onDrop}
