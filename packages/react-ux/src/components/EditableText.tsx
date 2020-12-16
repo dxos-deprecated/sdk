@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import InputBase from '@material-ui/core/InputBase';
 import TextField from '@material-ui/core/TextField';
@@ -26,10 +26,15 @@ const EditableText = ({
 }) => {
   const [editable, setEditable] = useState(false);
   const [text, setText] = useState(value);
+  const textInput = useRef<HTMLInputElement>();
 
   useEffect(() => {
     setText(value);
   }, [value]);
+
+  useEffect(() => {
+    (textInput.current as HTMLInputElement).click();
+  }, [textInput.current]);
 
   const handleUpdate = (newValue: string) => {
     if (value === undefined && !newValue) {
@@ -88,6 +93,7 @@ const EditableText = ({
             spellCheck: false
           }
         }}
+        inputRef={textInput}
       />
     );
   }
@@ -106,6 +112,7 @@ const EditableText = ({
             spellCheck: false
           }
         }}
+        inputRef={textInput}
       />
     );
   }
@@ -123,6 +130,7 @@ const EditableText = ({
           spellCheck: false
         }
       }}
+      inputRef={textInput}
     />
   );
 };
