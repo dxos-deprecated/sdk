@@ -127,18 +127,10 @@ function PendingInvitation ({
 
   const [inviteCode, pin] = useInvitation(party.key, {
     onDone: () => {
-      // ISSUE: https://github.com/dxos/echo/issues/361
-      if (pending.expiration && Date.now() >= pending.expiration) {
-        if (sentry) {
-          sentry.captureMessage('Online invitation expired.');
-        }
-        setExpired(true);
-      } else {
-        if (sentry) {
-          sentry.captureMessage('Online invitation succeeded.');
-        }
-        onInvitationDone(pending.id);
+      if (sentry) {
+        sentry.captureMessage('Online invitation succeeded.');
       }
+      onInvitationDone(pending.id);
     },
     onError: (e: any) => {
       if (sentry) {
@@ -147,6 +139,12 @@ function PendingInvitation ({
       }
       throw e;
     },
+    onExpiration: pending.expiration ? () => {
+      if (sentry) {
+        sentry.captureMessage('Online invitation expired.');
+      }
+      setExpired(true);
+    } : undefined,
     expiration: pending.expiration
   });
 

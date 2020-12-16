@@ -54,7 +54,7 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.7",
-    "@dxos/messenger-model": "1.2.0-alpha.29",
+    "@dxos/messenger-model": "1.2.0-alpha.38",
     "@types/tar": "^4.0.4",
     "babel-plugin-add-module-exports": "^1.0.4",
     "babel-plugin-inline-import": "^3.0.0",
