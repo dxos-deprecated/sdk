@@ -118,6 +118,7 @@ const PartySettingsDialog = ({
           value={displayName}
           autoFocus={true}
           onUpdate={setDisplayName}
+          onEnterKey={handleClose}
         />
 
         {/* TODO(burdon): Implement state and handlers. */}

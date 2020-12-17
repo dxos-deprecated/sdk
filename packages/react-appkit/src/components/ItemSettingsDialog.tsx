@@ -57,6 +57,11 @@ const ItemSettingsDialog = ({
     onClose();
   };
 
+  const handleEnterKey = (value: string) => {
+    itemModel.renameItem(itemId, value);
+    handleClose();
+  };
+
   return (
     <Dialog classes={{ paper: classes.root }} open={open} maxWidth='md' onClose={handleClose}>
       <DialogTitle>
@@ -78,6 +83,7 @@ const ItemSettingsDialog = ({
             autoFocus={true}
             className={classes.margin}
             onUpdate={(value: string) => itemModel.renameItem(itemId, value)}
+            onEnterKey={(value: string) => handleEnterKey(value)}
           />
         )}
 

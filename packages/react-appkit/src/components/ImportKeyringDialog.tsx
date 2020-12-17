@@ -96,6 +96,7 @@ const ImportKeyringDialog = ({
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button
+          variant='contained'
           color='primary'
           ref={buttonRef}
           disabled={!passphrase || !!error}
