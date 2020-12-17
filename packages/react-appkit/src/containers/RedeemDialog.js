@@ -76,6 +76,9 @@ const RedeemDialog = ({ onClose, ...props }) => {
   });
 
   const handleEnterInvitationCode = async () => {
+    if (isProcessing) {
+      return;
+    }
     redeemCode(invitationCode);
     setStep(1);
   };
@@ -86,7 +89,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && !isProcessing) {
+    if (event.key === 'Enter') {
       handleEnterInvitationCode();
     }
   };

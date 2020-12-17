@@ -63,6 +63,9 @@ const DeviceAuthenticator = () => {
   }
 
   const handleSubmit = async () => {
+    if (inProgress || cancelling) {
+      return;
+    }
     setInProgress(true);
     setSecret(Buffer.from(pinCode));
   };
@@ -74,7 +77,7 @@ const DeviceAuthenticator = () => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' && !(inProgress || cancelling)) {
+    if (event.key === 'Enter') {
       handleSubmit();
     }
   };
