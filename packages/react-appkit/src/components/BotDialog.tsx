@@ -253,6 +253,7 @@ const BotDialog = ({
         <Button onClick={handleClose}>Cancel</Button>
         <Button
           disabled={pending || !botFactoryTopic || !botVersion}
+          variant='contained'
           color='primary'
           onClick={handleSubmit}
         >

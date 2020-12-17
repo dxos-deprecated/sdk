@@ -134,7 +134,7 @@ const DeviceAuthenticator = () => {
       <DialogActions>
         {/* <Button color='secondary' onClick={handleCancel} disabled={inProgress || cancelling}>Cancel</Button> */}
         {/* ISSUE: https://github.com/dxos/echo/issues/331 */}
-        <Button color='primary' onClick={handleSubmit} disabled={inProgress || cancelling}>Submit</Button>
+        <Button variant='contained' color='primary' onClick={handleSubmit} disabled={inProgress || cancelling}>Submit</Button>
       </DialogActions>
     </TitledDialog>
   );

@@ -117,6 +117,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
           <DialogActions>
             <Button color='secondary' onClick={handleDone}>Cancel</Button>
             <Button
+              variant='contained'
               color='primary'
               onClick={handleEnterInvitationCode}
               disabled={isProcessing}>
@@ -148,6 +149,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
           <DialogActions>
             <Button color='secondary' onClick={handleDone}>Cancel</Button>
             <Button
+              variant='contained'
               color='primary'
               onClick={handleEnterPinCode}
               disabled={isProcessing}>

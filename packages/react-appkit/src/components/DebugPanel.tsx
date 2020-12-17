@@ -276,7 +276,7 @@ const DebugPanel = () => {
           <Button onClick={handleEditConfigClose} color='primary'>
             Cancel
           </Button>
-          <Button onClick={handleEditConfigSave} color='primary'>
+          <Button onClick={handleEditConfigSave} variant='contained' color='primary'>
             Save
           </Button>
         </DialogActions>

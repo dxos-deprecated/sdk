@@ -89,7 +89,7 @@ const ItemSettings = ({
         <Button onClick={onCancel} color='primary'>
           Cancel
         </Button>
-        <Button onClick={handleClose} color='primary' disabled={closingDisabled}>
+        <Button onClick={handleClose} variant='contained' color='primary' disabled={closingDisabled}>
           Done
         </Button>
       </DialogActions>
