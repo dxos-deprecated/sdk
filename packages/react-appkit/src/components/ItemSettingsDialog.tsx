@@ -58,12 +58,9 @@ const ItemSettingsDialog = ({
   };
 
   const handleEnterKey = (value: string) => {
-    console.log('EnterKey');
     itemModel.renameItem(itemId, value);
     handleClose();
   };
-
-  console.log('Rendering ItemSettingsDialog...');
 
   return (
     <Dialog classes={{ paper: classes.root }} open={open} maxWidth='md' onClose={handleClose}>
