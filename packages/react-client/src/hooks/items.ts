@@ -25,7 +25,7 @@ export const useItems = ({ partyKey, ...filter }: UseItemsProps) => {
 
   useDeepCompareEffect(() => {
     if (!party.isActive()) {
-      return () => {};
+      return () => null;
     }
     const result = party.database.queryItems(filter);
 

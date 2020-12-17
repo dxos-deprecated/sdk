@@ -7,10 +7,11 @@ import { sync as readPackageJson } from 'read-pkg-up';
 
 import { waitForCondition } from '@dxos/async';
 import { Client } from '@dxos/client';
-import { keyToBuffer, keyToString, sign } from '@dxos/crypto';
-import { transportProtocolProvider } from '@dxos/network-manager';
+import { keyToBuffer, keyToString, PublicKey, sign } from '@dxos/crypto';
+import { StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SPAWN,
+  COMMAND_SPAWN_AND_INVITE,
   COMMAND_STATUS,
   COMMAND_INVITE,
   COMMAND_MANAGE,
@@ -24,7 +25,8 @@ import {
   createBotCommandResponse,
   createEvent,
   Message,
-  Invite
+  Invite,
+  SpawnOptions
 } from '@dxos/protocol-plugin-bot';
 
 import { BotManager } from './bot-manager';
@@ -37,7 +39,7 @@ import { log } from './log';
 const botkitPackage = readPackageJson({ cwd: __dirname }) as any;
 
 const BOT_SPAWN_TIMEOUT = 50000;
-const BOT_SPAWN_CHECK_INTERVAL = 50;
+const BOT_SPAWN_CHECK_INTERVAL = 500;
 
 /**
  * Accepts bot control commands. Creates and manages bots using BotContainer.
@@ -109,8 +111,12 @@ export class BotFactory {
     }
     await this._botManager.start();
 
-    this._leaveSwarm = await this._client.networkManager.joinProtocolSwarm(this._topic,
-      transportProtocolProvider(this._topic, this._peerKey, this._plugin)) as any;
+    this._leaveSwarm = await this._client.networkManager.joinProtocolSwarm({
+      topic: PublicKey.from(this._topic),
+      protocol: transportProtocolProvider(this._topic, this._peerKey, this._plugin),
+      peerId: PublicKey.from(this._peerKey),
+      topology: new StarTopology(PublicKey.from(this._peerKey))
+    });
 
     log(JSON.stringify(
       {
@@ -136,13 +142,11 @@ export class BotFactory {
       case COMMAND_SPAWN: {
         try {
           const { botName, options } = message;
-          const botId = await this._botManager!.spawnBot(botName, options);
-          // TODO(egorgripasov): Move down.
-          await waitForCondition(() => this._botManager!.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
+          const botId = await this.spawnBot(botName, options);
           return createSpawnResponse(botId);
         } catch (err) {
           log(err);
-          return createSpawnResponse(undefined);
+          return createSpawnResponse(undefined, err.message);
         }
       }
 
@@ -151,6 +155,18 @@ export class BotFactory {
         assert(botId);
         runCommand = async () => this.inviteBot(botId, message);
         break;
+      }
+
+      case COMMAND_SPAWN_AND_INVITE: {
+        try {
+          const { botName, topic, invitation, options } = message;
+          const botId = await this.spawnBot(botName, options);
+          await this.inviteBot(botId, { topic, invitation });
+          return createSpawnResponse(botId);
+        } catch (err) {
+          log(err);
+          return createSpawnResponse(undefined, err.message);
+        }
       }
 
       case COMMAND_MANAGE: {
@@ -223,6 +239,13 @@ export class BotFactory {
     }
   }
 
+  async spawnBot (botName: string | undefined, options?: SpawnOptions) {
+    const botId = await this._botManager!.spawnBot(botName, options);
+    // TODO(egorgripasov): Move down.
+    await waitForCondition(() => this._botManager!.botReady(botId), BOT_SPAWN_TIMEOUT, BOT_SPAWN_CHECK_INTERVAL);
+    return botId;
+  }
+
   /**
    * Invite bot to a party.
    */
@@ -245,7 +268,8 @@ export class BotFactory {
     for (const container of Object.values(this._botContainers)) {
       await container.stop();
     }
-    await this._client!.networkManager.close();
+    // TODO(marik-d): Network-manager clean-up.
+    // await this._client!.networkManager.close();
   }
 
   signChallenge (challenge: Buffer) {

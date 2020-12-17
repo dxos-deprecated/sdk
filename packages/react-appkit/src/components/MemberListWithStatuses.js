@@ -2,6 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
+// THIS COMPONENT IS NOT USED ANYWHERE
+
 import React, { useEffect, useState } from 'react';
 
 import { makeStyles, Typography } from '@material-ui/core';

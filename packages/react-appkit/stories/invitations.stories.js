@@ -37,7 +37,7 @@ const BotDialogComponent = () => {
   const handleSubmit = async ({ bot }) => {
     await sleep(1000);
     if (bot.includes('will-hang')) {
-      return new Promise(() => {});
+      return new Promise(() => null);
     }
     if (bot.includes('will-fail')) {
       throw new Error('Failed deploy');
@@ -103,7 +103,7 @@ export const withPartySharing = () => {
 export const withRedeemInvitation = () => {
   return (
     <Theme>
-      <RedeemDialog onClose={() => {}} />
+      <RedeemDialog onClose={() => null} />
     </Theme>
   );
 };

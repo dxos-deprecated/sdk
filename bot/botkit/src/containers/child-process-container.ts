@@ -8,7 +8,7 @@ import kill from 'tree-kill';
 
 import { Event } from '@dxos/async';
 import { keyToString } from '@dxos/crypto';
-import { Spawn } from '@dxos/protocol-plugin-bot';
+import { SpawnOptions as BotSpawnOptions } from '@dxos/protocol-plugin-bot';
 
 import { BotId, BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
@@ -37,7 +37,7 @@ export abstract class ChildProcessContainer implements BotContainer {
   /**
    * Get process command (to spawn).
    */
-  protected abstract _getCommand (installDirectory: string, spawnOptions: Spawn.SpawnOptions): CommandInfo;
+  protected abstract _getCommand (installDirectory: string, spawnOptions: BotSpawnOptions): CommandInfo;
 
   async start ({ controlTopic }: ContainerStartOptions) {
     this._controlTopic = controlTopic;
