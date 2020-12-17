@@ -14,12 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: dxos/release-please-action@v0.0.100
+      - uses: dxos/release-please-action@v0.0.105
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           package-name: '@dxos/sdk'
+          bump-minor-on-breaking: true
       - uses: actions/checkout@v2
         # Only publish when a new release is created.
         if: ${{ steps.release.outputs.release_created }}
