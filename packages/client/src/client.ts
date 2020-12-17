@@ -52,7 +52,8 @@ export interface ClientConfig {
     gateway: string,
   }
   snapshots?: boolean
-  snapshotInterval?: number
+  snapshotInterval?: number,
+  invitationExpiration?: number,
 }
 
 export interface CreateProfileOptions {

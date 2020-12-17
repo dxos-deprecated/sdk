@@ -5,6 +5,7 @@
 import BotDialog from './BotDialog';
 import DebugPanel from './DebugPanel';
 import DefaultSettingsDialog from './DefaultSettingsDialog';
+import DialogHeading from './DialogHeading';
 import ExportKeyringDialog from './ExportKeyringDialog';
 import ImportKeyringDialog from './ImportKeyringDialog';
 import InvitationDialog from './InvitationDialog';
@@ -36,6 +37,7 @@ export {
   BotDialog,
   DebugPanel,
   DefaultSettingsDialog,
+  DialogHeading,
   ExportKeyringDialog,
   ImportKeyringDialog,
   InvitationDialog,

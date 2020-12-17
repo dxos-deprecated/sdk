@@ -1,5 +1,19 @@
 # Changelog
 
+### [2.7.43](https://www.github.com/dxos/sdk/compare/v2.7.42...v2.7.43) (2020-12-16)
+
+
+### Bug Fixes
+
+* Trigger version update ([31b9a0b](https://www.github.com/dxos/sdk/commit/31b9a0b5d1bad9d02434a1d7c1473ff508e55c68))
+
+### [2.7.42](https://www.github.com/dxos/sdk/compare/v2.7.41...v2.7.42) (2020-12-16)
+
+
+### Bug Fixes
+
+* Improve bot dialog ([#471](https://www.github.com/dxos/sdk/issues/471)) ([11f3c26](https://www.github.com/dxos/sdk/commit/11f3c26e5427ee66fc1ef38601005619f69beff2))
+
 ### [2.7.41](https://www.github.com/dxos/sdk/compare/v2.7.40...v2.7.41) (2020-12-15)
 
 
