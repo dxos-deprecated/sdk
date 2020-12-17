@@ -1215,7 +1215,7 @@
   resolved "https://registry.yarnpkg.com/@dxos/async/-/async-1.0.0.tgz#691f5b6908e09942c62e603c7a6abc0e9010c92a"
   integrity sha512-8yoPxp86GvPBTWBSnbOYwcPouml2G2V3tyFNZXqhPaZ7EfDFKUSWdoN4wzqJ/FdGWbc/vaMBPdx9ufGXgqeh/A==
 
-"@dxos/async@^1.0.2-alpha.0", "@dxos/async@~1.0.2-alpha.0":
+"@dxos/async@~1.0.2-alpha.0":
   version "1.0.2-alpha.0"
   resolved "https://registry.npmjs.org/@dxos/async/-/async-1.0.2-alpha.0.tgz#cb46d597567a178225e8a67b71cf5e3e5e257a68"
   integrity sha512-d9UgIaLbmuYHP24WASQX8OI1GJbJVy2021VqczIuDF0m3C5tHIqC7yr75L5eC4BAalEQoPGYcpWnzgD6ZpjiBw==
@@ -1498,7 +1498,7 @@
     "@dxos/util" "2.4.0"
     debug "^4.2.0"
 
-"@dxos/metrics@^1.0.0-beta.6", "@dxos/metrics@^1.0.0-beta.8", "@dxos/metrics@~1.0.0-beta.9":
+"@dxos/metrics@^1.0.0-beta.8", "@dxos/metrics@~1.0.0-beta.9":
   version "1.0.0-beta.9"
   resolved "https://registry.yarnpkg.com/@dxos/metrics/-/metrics-1.0.0-beta.9.tgz#1ed14a0c2b9890a71ba4f1091b80d9cac9c6d080"
   integrity sha512-ZVLAYJHPKgjJFh3pn52MC90MhkUGnbADFtFT5bQwondI5c5Dv9TVelfL5PoJ/WN5jPNRzxxXCa/tMdwjI2b5xw==
@@ -1568,29 +1568,6 @@
     ngraph.generators "^18.0.1"
     ngraph.graph "^19.0.3"
     source-map-support "^0.5.12"
-
-"@dxos/network-manager@~1.0.0-beta.119":
-  version "1.0.0-beta.119"
-  resolved "https://registry.npmjs.org/@dxos/network-manager/-/network-manager-1.0.0-beta.119.tgz#2ca032fd5aa06897fc8aad0d7bef341ef70c3938"
-  integrity sha512-NV3YzlckVoHnU/Z523HDIl105uvX0yOReGeKutTeg0FbNUO6jXBF7ZdOFV93+gHCEKDwvUahuE7Wic3W9x5xrg==
-  dependencies:
-    "@dxos/async" "^1.0.2-alpha.0"
-    "@dxos/crypto" "1.0.7"
-    "@dxos/metrics" "^1.0.0-beta.6"
-    "@dxos/protocol" "^1.0.0-beta.119"
-    "@dxos/util" "^2.4.0"
-    "@geut/discovery-swarm-webrtc" "^4.0.1"
-    "@types/mocha" "^8.0.4"
-    "@types/simple-peer" "^9.6.1"
-    "@types/ws" "^7.4.0"
-    "@wirelineio/discovery-swarm-memory" "^0.2.17"
-    assert "^2.0.0"
-    debug "^4.1.1"
-    isomorphic-ws "^4.0.1"
-    nanomessage-rpc "^3.0.0"
-    simple-peer "^9.9.3"
-    wrtc "^0.4.6"
-    xor-distance "^2.0.0"
 
 "@dxos/network-manager@~1.0.4":
   version "1.0.4"
@@ -1716,24 +1693,6 @@
     signal-promise "^1.0.3"
     source-map-support "^0.5.12"
 
-"@dxos/protocol@^1.0.0-beta.119":
-  version "1.0.0-beta.119"
-  resolved "https://registry.npmjs.org/@dxos/protocol/-/protocol-1.0.0-beta.119.tgz#cae3133d6310916dd626881ad8d19a3ac5a565e2"
-  integrity sha512-FK2JjqepACntLFbI+ajh2k4BUZqmaUieWt+dDpk8j5Iyk/MB5gltX9LjO4kawcisPs8SrwydPMioLEJeKjFA/A==
-  dependencies:
-    "@dxos/codec-protobuf" "1.1.0-beta.10"
-    assert "^2.0.0"
-    buffer-json-encoding "^1.0.2"
-    debug "^4.1.1"
-    end-of-stream "^1.4.4"
-    humanhash "^1.0.4"
-    hypercore-protocol "^6.11.1"
-    nanoerror "^1.2.1"
-    nanomessage "^5.4.0"
-    nanoresource-promise "^2.0.0"
-    signal-promise "^1.0.3"
-    source-map-support "^0.5.12"
-
 "@dxos/random-access-chrome-file@^2.0.0-beta.0":
   version "2.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/@dxos/random-access-chrome-file/-/random-access-chrome-file-2.0.0-beta.3.tgz#4fbfcfb3048452e1e39febfe509bcb5a7222948f"
@@ -1771,7 +1730,7 @@
     "@dxos/model-factory" "^1.0.0-beta.28"
     yjs "^13.2.0"
 
-"@dxos/util@2.4.0", "@dxos/util@^2.4.0", "@dxos/util@~2.4.0":
+"@dxos/util@2.4.0", "@dxos/util@~2.4.0":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@dxos/util/-/util-2.4.0.tgz#4b71e34ca8bf17a1a0b904718f732c4fdbc7e4b7"
   integrity sha512-lXYAUoFFsFQhyWdoQfLQVl1rKXzs3q/EJqIti7KadaBQfyL7VvxRM7ecXBFMX2GsMfq2lASUSdvQmIHqyKQMGA==
@@ -2037,20 +1996,6 @@
     nanoerror "^1.1.0"
     pump "^3.0.0"
     socket-signal-websocket "^4.0.0"
-
-"@geut/discovery-swarm-webrtc@^4.0.1":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@geut/discovery-swarm-webrtc/-/discovery-swarm-webrtc-4.0.2.tgz#f08a8302aedcf3ddab66ce4f94efaae6299fc53a"
-  integrity sha512-T4cYPZRaHuxJoZP3Qa9RDZQO/8Jn2i9JxoNwbW85b1Fch6bydHUJL/vBCBJo1JRPoJdTeCpmONwVLzIzf2Ftsg==
-  dependencies:
-    debug "^4.1.1"
-    end-of-stream "^1.4.4"
-    minimist "^1.2.0"
-    mostly-minimal-spanning-tree "^1.0.2"
-    nanocustomassert "^1.0.0"
-    nanoerror "^1.1.0"
-    pump "^3.0.0"
-    socket-signal-websocket "^9.0.0"
 
 "@graphql-tools/schema@^6.0.16":
   version "6.2.4"
@@ -17134,17 +17079,6 @@ simple-websocket@^8.1.1:
     readable-stream "^3.1.1"
     ws "^7.0.0"
 
-simple-websocket@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/simple-websocket/-/simple-websocket-9.0.0.tgz#fda93b9cdeb106e57e5fcc436ee0d1d8eb8836fc"
-  integrity sha512-Q+u1BJ06/FR30xS1Sf6zDuL+vAdAA7VFqZ0TdKpmQKB2uNTAPKWQFFhUDV4YD7TDi7gSRJXoxv21WprNPR0ykQ==
-  dependencies:
-    debug "^4.1.1"
-    queue-microtask "^1.1.0"
-    randombytes "^2.0.3"
-    readable-stream "^3.1.1"
-    ws "^7.0.0"
-
 siphash24@^1.0.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/siphash24/-/siphash24-1.1.1.tgz#94ad021a2b2c62de381b546ee02df0cf778acd50"
@@ -17238,19 +17172,6 @@ socket-signal-websocket@^4.0.0:
     socket-signal "^4.0.0"
     ws "^7.2.3"
 
-socket-signal-websocket@^9.0.0:
-  version "9.0.2"
-  resolved "https://registry.yarnpkg.com/socket-signal-websocket/-/socket-signal-websocket-9.0.2.tgz#4bfa7b323e32130b22dee447bf096308d8a9a81d"
-  integrity sha512-oEZDCvmDCsI3fmJBXiATBUk3n0UZ6p5Q3OneWTJGk2QHghdtuiaRIUIW+VRD7okDXco8+O3h1qJ3R7g1o4QPBw==
-  dependencies:
-    isomorphic-ws "^4.0.1"
-    minimist "^1.2.5"
-    nanocustomassert "^1.0.0"
-    reconnecting-websocket "^4.4.0"
-    simple-websocket "^9.0.0"
-    socket-signal "^9.0.0"
-    ws "^7.2.3"
-
 socket-signal@^4.0.0:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/socket-signal/-/socket-signal-4.0.2.tgz#08c8cb791f5d4dc96134bd1a547c73fd37780f87"
@@ -17267,22 +17188,6 @@ socket-signal@^4.0.0:
     p-queue "^6.3.0"
     simple-peer "^9.6.2"
     varint "^5.0.0"
-
-socket-signal@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/socket-signal/-/socket-signal-9.0.0.tgz#baf51e7e2b57e9b21aef939dab8935c63ca4adc9"
-  integrity sha512-tnyvDFYI2+VgboN2oeCRCikyBmZwiZeXuQgt/th4PkyEcC+npGxOONfS9LGX9UH+/UEBDjnbW1ziRIs78Qn2jQ==
-  dependencies:
-    debug "^4.1.1"
-    end-of-stream "^1.4.4"
-    fastq "^1.8.0"
-    nanocustomassert "^1.0.0"
-    nanoerror "^1.0.0"
-    nanomessage-rpc "^3.0.0"
-    nanoresource-promise "^2.0.0"
-    p-event "^4.1.0"
-    p-limit "^3.0.2"
-    simple-peer "^9.6.2"
 
 socks-proxy-agent@^4.0.0:
   version "4.0.2"
