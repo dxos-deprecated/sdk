@@ -88,7 +88,7 @@ const InvitationDialog = ({
           horizontal: 'right'
         }}
       >
-        <InvitationContent link={link} title={title} Icon={Icon} message={message} passcode={passcode} />
+        <InvitationContent link={link} title={title} icon={Icon} message={message} passcode={passcode} />
       </Popover>
     );
   }
@@ -96,7 +96,7 @@ const InvitationDialog = ({
   if (open) {
     return (
       <Dialog open={open} classes={{ paper: classes.paper }}>
-        <InvitationContent link={link} title={title} Icon={Icon} message={message} passcode={passcode} onClose={onClose} />
+        <InvitationContent link={link} title={title} icon={Icon} message={message} passcode={passcode} onClose={onClose} />
       </Dialog>
     );
   }
@@ -107,14 +107,14 @@ const InvitationDialog = ({
 const InvitationContent = ({
   link,
   title,
-  Icon,
+  icon: Icon,
   message,
   passcode,
   onClose
 }: {
   link: string,
   title: string,
-  Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
+  icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>,
   message: string,
   passcode: string,
   onClose?: () => void

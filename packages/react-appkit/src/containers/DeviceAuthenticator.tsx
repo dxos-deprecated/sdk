@@ -5,7 +5,7 @@
 import React, { ReactNode, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { DialogTitle, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,6 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import DevicesIcon from '@material-ui/icons/Devices';
 import Alert from '@material-ui/lab/Alert';
 
 import { InvitationDescriptor } from '@dxos/echo-db';
@@ -20,6 +21,7 @@ import { useAuthenticator } from '@dxos/react-client';
 import { createPath, useQuery } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';
 
+import DialogHeading from '../components/DialogHeading';
 import { useAppRouter } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +34,7 @@ const TitledDialog = ({ children }: {children?: ReactNode}) => {
   return (
     <FullScreen>
       <Dialog open>
-        <DialogTitle>Authenticate Device</DialogTitle>
+        <DialogHeading title='Authenticate Device' icon={DevicesIcon}/>
         {children}
       </Dialog>
     </FullScreen>
@@ -61,6 +63,9 @@ const DeviceAuthenticator = () => {
   }
 
   const handleSubmit = async () => {
+    if (inProgress || cancelling) {
+      return;
+    }
     setInProgress(true);
     setSecret(Buffer.from(pinCode));
   };
@@ -69,6 +74,12 @@ const DeviceAuthenticator = () => {
     setCancelling(true);
     // await client.reset(); // ISSUE: https://github.com/dxos/echo/issues/331
     window.location.replace(createPath());
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleSubmit();
+    }
   };
 
   const recognisedError = error &&
@@ -119,6 +130,7 @@ const DeviceAuthenticator = () => {
             <TextField
               value={pinCode}
               onChange={(event) => setPinCode(event.target.value)}
+              onKeyDown={handleKeyDown}
               variant='outlined'
               margin='normal'
               required
@@ -132,7 +144,7 @@ const DeviceAuthenticator = () => {
       <DialogActions>
         {/* <Button color='secondary' onClick={handleCancel} disabled={inProgress || cancelling}>Cancel</Button> */}
         {/* ISSUE: https://github.com/dxos/echo/issues/331 */}
-        <Button color='primary' onClick={handleSubmit} disabled={inProgress || cancelling}>Submit</Button>
+        <Button variant='contained' color='primary' onClick={handleSubmit} disabled={inProgress || cancelling}>Submit</Button>
       </DialogActions>
     </TitledDialog>
   );

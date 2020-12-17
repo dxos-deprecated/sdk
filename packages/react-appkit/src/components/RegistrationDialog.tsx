@@ -276,7 +276,13 @@ const RegistrationDialog = ({
             <DialogTitle>Restoring your Wallet</DialogTitle>
             <DialogContent>
               <DialogContentText>Enter the seed phrase.</DialogContentText>
-              <TextField autoFocus fullWidth spellCheck={false} value={recoveredSeedPhrase} onChange={e => setRecoveredSeedPhrase(e.target.value)} onKeyDown={handleKeyDown} />
+              <TextField
+                autoFocus
+                fullWidth
+                spellCheck={false}
+                value={recoveredSeedPhrase}
+                onChange={e => setRecoveredSeedPhrase(e.target.value)}
+                onKeyDown={handleKeyDown}/>
             </DialogContent>
             <DialogActions>
               <Button color='primary' onClick={() => setStage(STAGE_START)}>Back</Button>

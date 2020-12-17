@@ -1,6 +1,6 @@
 {
   "name": "@dxos/botkit",
-  "version": "2.7.41-alpha.0",
+  "version": "2.7.44",
   "description": "Botkit",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -14,14 +14,14 @@
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
   "dependencies": {
-    "@dxos/async": "1.0.2-alpha.0",
-    "@dxos/client": "2.7.41-alpha.0",
-    "@dxos/config": "1.0.0-beta.74",
-    "@dxos/credentials": "2.1.16-alpha.0",
-    "@dxos/crypto": "1.0.7",
-    "@dxos/network-manager": "1.0.0-beta.119",
-    "@dxos/protocol-plugin-bot": "2.7.41-alpha.0",
-    "@dxos/random-access-multi-storage": "1.1.0-beta.8",
+    "@dxos/async": "~1.0.2-alpha.0",
+    "@dxos/client": "2.7.44",
+    "@dxos/config": "~1.0.0-beta.74",
+    "@dxos/credentials": "~2.1.16-alpha.0",
+    "@dxos/crypto": "~1.0.7",
+    "@dxos/network-manager": "~1.0.4",
+    "@dxos/protocol-plugin-bot": "2.7.44",
+    "@dxos/random-access-multi-storage": "~1.1.0-beta.8",
     "@wirelineio/registry-client": "^1.1.0-beta.2",
     "assert": "^2.0.0",
     "chance": "^1.1.6",
@@ -47,7 +47,7 @@
     "uuidv4": "^6.0.2"
   },
   "devDependencies": {
-    "@dxos/eslint-plugin": "1.0.10",
+    "@dxos/eslint-plugin": "~1.0.10",
     "@types/chance": "^1.1.0",
     "@types/download": "^6.2.4",
     "@types/fs-extra": "^9.0.4",
