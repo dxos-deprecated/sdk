@@ -78,6 +78,7 @@ const ItemSettingsDialog = ({
             autoFocus={true}
             className={classes.margin}
             onUpdate={(value: string) => itemModel.renameItem(itemId, value)}
+            onEnterKey={() => !closingDisabled && handleClose()}
           />
         )}
 

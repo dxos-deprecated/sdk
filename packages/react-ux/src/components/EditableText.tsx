@@ -23,7 +23,7 @@ const EditableText = ({
   value: string,
   onUpdate: (value: string) => void,
   onChange?: (value: string) => void,
-  onEnterKey: (value: string) => void,
+  onEnterKey?: (value: string) => void,
   disabled: boolean,
   bareInput: boolean,
   autoFocus: boolean
@@ -65,7 +65,7 @@ const EditableText = ({
         setText(value);
         setEditable(false);
         handleUpdate(value);
-        onEnterKey(value);
+        onEnterKey && onEnterKey(value);
         break;
       }
 
