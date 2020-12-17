@@ -61,9 +61,11 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp, isOfflin
  * @param {Object} options
  * @param {() => void} options.onDone called once the invite flow finishes successfully.
  * @param {(error?: string) => void | never} options.onError called if the invite flow produces an error.
+ * @param {(() => void) | undefined} options.onExpiration called if the invite flow expired.
+ * @param {number | undefined} options.expiration Optional expiration
  * @returns {[invitationCode: String, pin: String ]}
  */
-export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {}) {
+export function useInvitation (partyKey, { onDone = noOp, onError = noOp, onExpiration = noOp, expiration } = {}) {
   assert(partyKey);
   const client = useClient();
   const [invitationCode, setInvitationCode] = useState();
@@ -78,7 +80,12 @@ export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {})
         setPin(pin);
         return Buffer.from(pin);
       },
-      { onFinish: () => onDone() })
+      {
+        onFinish: ({ expired }) => {
+          expired ? onExpiration() : onDone();
+        },
+        expiration
+      })
       .then(invitation => setInvitationCode(encodeInvitation(invitation)))
       .catch(error => onError(error));
   }, [key]);

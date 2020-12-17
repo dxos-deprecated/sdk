@@ -11,20 +11,20 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import MemoryIcon from '@material-ui/icons/Memory';
+import Alert from '@material-ui/lab/Alert';
 
 import { useRegistryBots, useRegistryBotFactories } from '@dxos/react-client';
 
 import { useKeywords } from '../hooks';
+import DialogHeading from './DialogHeading';
 
 // TODO(egorgripasov): Factor out to config/client.
 const BOT_FACTORY_DOMAIN = 'dxos.network';
@@ -38,9 +38,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginBottom: theme.spacing(2)
   },
-  errorMessage: {
-    color: red[300]
-  },
   advanced: {
     border: 0,
     boxShadow: 'none',
@@ -52,7 +49,12 @@ const useStyles = makeStyles((theme) => ({
     padding: 0
   },
   advancedBody: {
-    display: 'block'
+    display: 'block',
+    paddingLeft: 0,
+    paddingRight: 0
+  },
+  title: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
@@ -166,7 +168,7 @@ const BotDialog = ({
       onClose={pending ? undefined : handleClose} // No click away when in progress
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle>Invite Bot</DialogTitle>
+      <DialogHeading title='Invite bot' icon={MemoryIcon}/>
 
       <DialogContent>
         <FormControl className={classes.formControl}>
@@ -243,32 +245,21 @@ const BotDialog = ({
           </AccordionDetails>
         </Accordion>
         {pending && (<LinearProgress />)}
+        {error && (<Alert severity='error'>Deploying failed.</Alert>)}
+        {botFactoryError && (<Alert severity='error'>Unable to connect to BotFactory.</Alert>)}
       </DialogContent>
 
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button
           disabled={pending || !botFactoryTopic || !botVersion}
+          variant='contained'
           color='primary'
           onClick={handleSubmit}
         >
           Invite
         </Button>
       </DialogActions>
-      {error && (
-        <DialogActions>
-          <Typography variant='body1' className={classes.errorMessage}>
-            Deploying failed. Please try again later.
-          </Typography>
-        </DialogActions>
-      )}
-      {botFactoryError && (
-        <DialogActions>
-          <Typography variant='body1' className={classes.errorMessage}>
-            Unable to connect to BotFactory. Please select another one.
-          </Typography>
-        </DialogActions>
-      )}
     </Dialog>
   );
 };

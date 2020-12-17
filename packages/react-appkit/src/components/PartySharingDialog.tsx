@@ -3,6 +3,7 @@
 //
 
 import assert from 'assert';
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -23,6 +24,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import InviteIcon from '@material-ui/icons/Add';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 import DeleteIcon from '@material-ui/icons/Clear';
 import FaceIcon from '@material-ui/icons/Face';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -72,13 +74,23 @@ const useStyles = makeStyles(theme => ({
     width: 160
   },
   colStatus: {
-    width: 100
+    width: 150
   },
   colActions: {
     width: 60,
     textAlign: 'right'
   }
 }));
+
+const getInvitationStatus = (invitation: Record<string, any>) => {
+  if (invitation.done) {
+    return 'Done';
+  }
+  if (invitation.expiration) {
+    return (`Expires ${moment(invitation.expiration).fromNow(false)}`);
+  }
+  return 'Pending';
+};
 
 const TableCell = withStyles(theme => ({
   root: {
@@ -93,16 +105,26 @@ function PendingInvitation ({
   pending,
   invitationName,
   handleCopy,
-  onInvitationDone
+  onInvitationDone,
+  onRenew
 }: {
   party: Party,
   pending: Record<string, any>,
   invitationName: string,
   handleCopy: (value: string) => void,
-  onInvitationDone: (value: string) => void
+  onInvitationDone: (value: string) => void,
+  onRenew?: () => void,
 }) {
   const classes = useStyles();
   const sentry = useSentry();
+  const [expired, setExpired] = useState(false);
+  const [status, setStatus] = useState(getInvitationStatus(pending));
+
+  useEffect(() => {
+    const interval = setInterval(() => setStatus(getInvitationStatus(pending)), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const [inviteCode, pin] = useInvitation(party.key, {
     onDone: () => {
       if (sentry) {
@@ -110,13 +132,20 @@ function PendingInvitation ({
       }
       onInvitationDone(pending.id);
     },
-    onError: (e) => {
+    onError: (e: any) => {
       if (sentry) {
         sentry.addBreadcrumb({ message: String(e) });
         sentry.captureMessage('Online invitation failed.');
       }
       throw e;
-    }
+    },
+    onExpiration: pending.expiration ? () => {
+      if (sentry) {
+        sentry.captureMessage('Online invitation expired.');
+      }
+      setExpired(true);
+    } : undefined,
+    expiration: pending.expiration
   });
 
   return (
@@ -138,10 +167,21 @@ function PendingInvitation ({
         )}
       </TableCell>
       <TableCell classes={{ root: classes.colStatus }}>
-        <span className={classes.label}>{pending.done ? 'Done' : 'Pending'}</span>
+        <span className={classes.label}>{expired ? 'Expired' : status}</span>
       </TableCell>
       <TableCell classes={{ root: classes.colActions }}>
-        {pin ? null : (
+        {(expired && onRenew) && (
+          <IconButton
+            size='small'
+            color='inherit'
+            title='Regenerate'
+            edge='start'
+            onClick={onRenew}
+          >
+            <AutorenewIcon />
+          </IconButton>
+        )}
+        {(!expired && !pin) && (
           <>
             <CopyToClipboard
               text={inviteCode}
@@ -158,6 +198,17 @@ function PendingInvitation ({
               </IconButton>
             </CopyToClipboard>
           </>)}
+        {(expired) && (
+          <IconButton
+            size='small'
+            color='inherit'
+            title='Remove'
+            edge='start'
+            onClick={() => onInvitationDone(pending.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        )}
       </TableCell>
     </TableRow>
   );
@@ -241,7 +292,14 @@ const PartySharingDialog = ({
     if (sentry) {
       sentry.captureMessage('Online invitation initiated.');
     }
-    setInvitations([{ id: Date.now(), name: `Invitation ${invitationIndex}` }, ...invitations]);
+    setInvitations([
+      {
+        id: Date.now(),
+        expiration: client.config.invitationExpiration && (Date.now() + client.config.invitationExpiration),
+        name: `Invitation ${invitationIndex}`
+      },
+      ...invitations
+    ]);
     setInvitationIndex(old => old + 1);
   };
 
@@ -408,7 +466,21 @@ const PartySharingDialog = ({
                     pending={pending}
                     invitationName={pending.name}
                     handleCopy={handleCopy}
-                    onInvitationDone={handleInvitationDone}/>
+                    onInvitationDone={handleInvitationDone}
+                    onRenew={() => {
+                      if (sentry) {
+                        sentry.captureMessage('Online invitation renewed.');
+                      }
+                      setInvitations(old => [
+                        {
+                          id: Date.now(),
+                          expiration: client.config.invitationExpiration && (Date.now() + client.config.invitationExpiration),
+                          name: pending.name
+                        },
+                        ...old.filter(invite => invite.id !== pending.id)
+                      ]);
+                    }}
+                  />
                 ))}
             </TableBody>
 

@@ -9,11 +9,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import RedeemIcon from '@material-ui/icons/Redeem';
@@ -21,6 +19,7 @@ import Alert from '@material-ui/lab/Alert';
 
 import { useInvitationRedeemer } from '@dxos/react-client';
 
+import DialogHeading from '../components/DialogHeading';
 import { useSentry } from '../hooks';
 
 const useStyles = makeStyles(theme => ({
@@ -77,6 +76,9 @@ const RedeemDialog = ({ onClose, ...props }) => {
   });
 
   const handleEnterInvitationCode = async () => {
+    if (isProcessing) {
+      return;
+    }
     redeemCode(invitationCode);
     setStep(1);
   };
@@ -84,6 +86,12 @@ const RedeemDialog = ({ onClose, ...props }) => {
   const handleEnterPinCode = async () => {
     setIsProcessing(true);
     setPin(pinCode);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleEnterInvitationCode();
+    }
   };
 
   return (
@@ -94,12 +102,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
       onClose={step === 0 ? handleDone : undefined} // No click away when in the middle of a flow
       {...props}
     >
-      <DialogTitle>
-        <Toolbar variant='dense' disableGutters>
-          <RedeemIcon />
-          <Typography variant='h5' className={classes.title}>Redeem invitation</Typography>
-        </Toolbar>
-      </DialogTitle>
+      <DialogHeading title='Redeem Invitation' icon={RedeemIcon}/>
 
       {step === 0 && (
         <>
@@ -112,6 +115,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
               spellCheck={false}
               value={invitationCode}
               onChange={(event) => setInvitationCode(event.target.value)}
+              onKeyDown={handleKeyDown}
               rows={6}
             />
             <FormControlLabel
@@ -123,6 +127,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
           <DialogActions>
             <Button color='secondary' onClick={handleDone}>Cancel</Button>
             <Button
+              variant='contained'
               color='primary'
               onClick={handleEnterInvitationCode}
               disabled={isProcessing}>
@@ -154,6 +159,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
           <DialogActions>
             <Button color='secondary' onClick={handleDone}>Cancel</Button>
             <Button
+              variant='contained'
               color='primary'
               onClick={handleEnterPinCode}
               disabled={isProcessing}>

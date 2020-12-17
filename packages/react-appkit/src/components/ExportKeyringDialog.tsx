@@ -75,7 +75,7 @@ const ExportKeyringDialog = ({
 
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button color='primary' onClick={handleExport}>Export</Button>
+        <Button variant='contained' color='primary' onClick={handleExport}>Export</Button>
       </DialogActions>
     </Dialog>
   );

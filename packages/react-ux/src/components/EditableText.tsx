@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import InputBase from '@material-ui/core/InputBase';
 import TextField from '@material-ui/core/TextField';
@@ -13,6 +13,8 @@ import TextField from '@material-ui/core/TextField';
 const EditableText = ({
   value,
   onUpdate,
+  onChange,
+  onEnterKey,
   disabled = false,
   bareInput = false,
   autoFocus = false,
@@ -20,16 +22,23 @@ const EditableText = ({
 }: {
   value: string,
   onUpdate: (value: string) => void,
+  onChange?: (value: string) => void,
+  onEnterKey?: (value: string) => void,
   disabled: boolean,
   bareInput: boolean,
   autoFocus: boolean
 }) => {
   const [editable, setEditable] = useState(false);
   const [text, setText] = useState(value);
+  const textInput = useRef<HTMLInputElement>();
 
   useEffect(() => {
     setText(value);
   }, [value]);
+
+  useEffect(() => {
+    autoFocus && (textInput.current as HTMLInputElement).click();
+  }, [textInput.current]);
 
   const handleUpdate = (newValue: string) => {
     if (value === undefined && !newValue) {
@@ -43,6 +52,7 @@ const EditableText = ({
 
   const handleChange = ({ target: { value } }: { target: { value: string }}) => {
     setText(value);
+    onChange && onChange(value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -55,6 +65,7 @@ const EditableText = ({
         setText(value);
         setEditable(false);
         handleUpdate(value);
+        onEnterKey && onEnterKey(value);
         break;
       }
 
@@ -88,6 +99,7 @@ const EditableText = ({
             spellCheck: false
           }
         }}
+        inputRef={textInput}
       />
     );
   }
@@ -106,6 +118,7 @@ const EditableText = ({
             spellCheck: false
           }
         }}
+        inputRef={textInput}
       />
     );
   }
@@ -123,6 +136,7 @@ const EditableText = ({
           spellCheck: false
         }
       }}
+      inputRef={textInput}
     />
   );
 };
