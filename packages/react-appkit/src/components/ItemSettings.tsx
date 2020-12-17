@@ -77,6 +77,7 @@ const ItemSettings = ({
           autoFocus={true}
           className={classes.margin}
           onUpdate={(value: string) => setName(value)}
+          onEnterKey={(name: string) => !closingDisabled && onClose({ name })}
         />
 
         {/* Custom content. */}
