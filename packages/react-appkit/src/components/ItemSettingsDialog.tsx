@@ -58,7 +58,6 @@ const ItemSettingsDialog = ({
   };
 
   const handleEnterKey = (value: string) => {
-    console.log('EnterKey');
     itemModel.renameItem(itemId, value);
     handleClose();
   };
