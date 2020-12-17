@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
+import DevicesIcon from '@material-ui/icons/Devices';
 import Alert from '@material-ui/lab/Alert';
 
 import { InvitationDescriptor } from '@dxos/echo-db';
@@ -34,7 +34,7 @@ const TitledDialog = ({ children }: {children?: ReactNode}) => {
   return (
     <FullScreen>
       <Dialog open>
-        <DialogHeading title='Authenticate Device' icon={ImportantDevicesIcon}/>
+        <DialogHeading title='Authenticate Device' icon={DevicesIcon}/>
         {children}
       </Dialog>
     </FullScreen>
