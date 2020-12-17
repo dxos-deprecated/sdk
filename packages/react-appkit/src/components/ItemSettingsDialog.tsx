@@ -62,8 +62,6 @@ const ItemSettingsDialog = ({
     handleClose();
   };
 
-  console.log('Rendering ItemSettingsDialog...');
-
   return (
     <Dialog classes={{ paper: classes.root }} open={open} maxWidth='md' onClose={handleClose}>
       <DialogTitle>
