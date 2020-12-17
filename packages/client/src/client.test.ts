@@ -92,3 +92,20 @@ test('creating profile twice throws an error', async () => {
 
   await client.destroy();
 });
+
+test('recreating party based on snapshot does not fail', async () => {
+  const client = new Client();
+  await client.initialize();
+
+  const keypair = createKeyPair();
+  await client.createProfile({ ...keypair, username: 'test-user' });
+
+  const party = await client.echo.createParty();
+
+  const recreatedParty = await client.createPartyFromSnapshot(party.database.createSnapshot());
+
+  expect(recreatedParty).toBeDefined();
+  // More extensive tests on actual Teamwork models are in Teamwork repo.
+
+  await client.destroy();
+});

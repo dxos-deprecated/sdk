@@ -15,8 +15,8 @@ export const WithErrorBoundary = () => {
   return (
     <ErrorBoundary
       onError={handleError}
-      onRestart={() => {}}
-      onReset={() => {}}
+      onRestart={() => null}
+      onReset={() => null}
     >
       <FaultyComponent />
     </ErrorBoundary>

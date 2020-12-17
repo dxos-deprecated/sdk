@@ -15,13 +15,13 @@ import { useClient } from './client';
 const encodeInvitation = (invitation) => btoa(JSON.stringify(invitation.toQueryParameters()));
 const decodeInvitation = (code) => InvitationDescriptor.fromQueryParameters(JSON.parse(atob(code)));
 
-const noOp = () => {};
+const noOp = () => null;
 
 /**
  * Hook to redeem an invitation Code and provide the PIN authentication if needed.
  * @param {Object} options
  * @param {(party: Party) => void} options.onDone called once the redeem flow finishes successfully.
- * @param {() => void} options.onError called if the invite flow produces an error.
+ * @param {(error?: string) => void | never} options.onError called if the invite flow produces an error.
  * @returns {[redeemCode: (code: String) => void, setPin: (pin: String) => void ]}
  */
 export function useInvitationRedeemer ({ onDone = noOp, onError = noOp, isOffline = false } = {}) {
@@ -57,10 +57,10 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp, isOfflin
 
 /**
  * Hook to create an Invitation for a given party
- * @param {Buffer} partyKey the Party to create invite for. Required.
+ * @param {PublicKey} partyKey the Party to create invite for. Required.
  * @param {Object} options
  * @param {() => void} options.onDone called once the invite flow finishes successfully.
- * @param {() => void} options.onError called if the invite flow produces an error.
+ * @param {(error?: string) => void | never} options.onError called if the invite flow produces an error.
  * @returns {[invitationCode: String, pin: String ]}
  */
 export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {}) {
@@ -95,7 +95,7 @@ export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {})
  * @param {Contact|{ publicKey: {Buffer} }} recipient the recipient for the invitation. Required.
  * @param {Object} options
  * @param {() => void} options.onDone called once the invite flow finishes successfully.
- * @param {() => void} options.onError called if the invite flow produces an error.
+ * @param {(error?: string) => void | never} options.onError called if the invite flow produces an error.
  * @returns {[invitationCode: String ]}
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

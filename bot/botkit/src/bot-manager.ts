@@ -8,11 +8,12 @@ import debug from 'debug';
 import fs, { ensureFileSync } from 'fs-extra';
 import yaml from 'js-yaml';
 import get from 'lodash.get';
+import moment from 'moment';
 import path from 'path';
 
 import { Client } from '@dxos/client';
-import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
-import { transportProtocolProvider } from '@dxos/network-manager';
+import { keyToString, keyToBuffer, createKeyPair, sha256, PublicKey } from '@dxos/crypto';
+import { StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SIGN,
   MESSAGE_CONFIRM,
@@ -21,7 +22,7 @@ import {
   createInvitationMessage,
   createSignResponse,
   createBotCommand,
-  Spawn
+  SpawnOptions
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
 
@@ -45,12 +46,13 @@ export interface BotInfo {
   id: string
   installDirectory: string
   storageDirectory: string
-  spawnOptions: Spawn.SpawnOptions
+  spawnOptions: SpawnOptions
   parties: string[]
   started: any
   lastActive: any
   stopped: boolean
   name: string
+  recordName: string
   env: string
 }
 
@@ -126,8 +128,12 @@ export class BotManager {
   async start () {
     this._plugin = new BotPlugin(this._controlPeerKey, (protocol: any, message: any) => this._botMessageHandler(protocol, message));
     // Join control swarm.
-    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
-      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
+    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm({
+      topic: PublicKey.from(this._controlTopic),
+      protocol: transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin),
+      peerId: PublicKey.from(this._controlPeerKey),
+      topology: new StarTopology(PublicKey.from(this._controlPeerKey))
+    });
 
     await this._readBotsFromFile();
 
@@ -146,7 +152,7 @@ export class BotManager {
   /**
    * Spawn bot instance.
    */
-  async spawnBot (botName: string | undefined, options: Spawn.SpawnOptions = {}) {
+  async spawnBot (botName: string | undefined, options: SpawnOptions = {}) {
     let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
     assert(botName || ipfsCID || this._localDev);
 
@@ -183,6 +189,7 @@ export class BotManager {
     this._bots.set(botId, {
       botId,
       id,
+      recordName: botName || id,
       installDirectory,
       storageDirectory: path.join(process.cwd(), '.bots', botId),
       spawnOptions: options,
@@ -311,8 +318,10 @@ export class BotManager {
   private async _startBot (botId: string) {
     const botInfo = this._bots.get(botId);
     assert(botInfo);
+
     log(`_startBot ${JSON.stringify(botInfo)}`);
     await this._botContainers[botInfo.env].startBot(botInfo);
+    botInfo.started = moment.utc();
 
     await this._saveBotsToFile();
 
@@ -329,10 +338,9 @@ export class BotManager {
 
     await this._botContainers[botInfo.env].stopBot(botInfo);
 
-    if (stopped) {
-      botInfo.stopped = true;
-      await this._saveBotsToFile();
-    }
+    botInfo.stopped = stopped;
+    await this._saveBotsToFile();
+
     log(`Bot '${botId}' stopped.`);
   }
 

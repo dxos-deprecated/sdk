@@ -13,21 +13,34 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import RedeemIcon from '@material-ui/icons/Redeem';
 import Alert from '@material-ui/lab/Alert';
 
 import { useInvitationRedeemer } from '@dxos/react-client';
 
+import { useSentry } from '../hooks';
+
 const useStyles = makeStyles(theme => ({
   marginTop: {
     marginTop: theme.spacing(2)
+  },
+  title: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
 const RedeemDialog = ({ onClose, ...props }) => {
   const classes = useStyles();
   const [isOffline, setIsOffline] = useState(false);
+  const sentry = useSentry();
+  const [error, setError] = useState(undefined);
+  const [step, setStep] = useState(0); // TODO(burdon): Const.
+  const [invitationCode, setInvitationCode] = useState('');
+  const [pinCode, setPinCode] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDone = () => {
     setStep(0);
@@ -37,20 +50,31 @@ const RedeemDialog = ({ onClose, ...props }) => {
     onClose();
   };
 
+  const handleInvitationError = (error) => {
+    setStep(2);
+    if (error.includes('SyntaxError: Unexpected token') || error.includes('InvalidCharacterError')) {
+      setError('Invalid invitation code.');
+    } else if (error.includes('ERR_GREET_INVALID_INVITATION')) {
+      setError('Invitation not authorized.');
+    } else {
+      setError(error);
+    }
+    if (sentry) {
+      sentry.addBreadcrumb({ message: String(error) });
+      sentry.captureMessage(`${isOffline ? 'Offline' : 'Online'} invitation redeem failed.`);
+    }
+  };
+
   const [redeemCode, setPin] = useInvitationRedeemer({
-    onDone: handleDone,
-    onError: (ex) => {
-      setStep(2);
-      setError(String(ex));
+    onDone: () => {
+      if (sentry) {
+        sentry.captureMessage(`${isOffline ? 'Offline' : 'Online'} invitation redeemed.`);
+      }
+      handleDone();
     },
+    onError: (ex) => handleInvitationError(String(ex)),
     isOffline
   });
-
-  const [error, setError] = useState(undefined);
-  const [step, setStep] = useState(0); // TODO(burdon): Const.
-  const [invitationCode, setInvitationCode] = useState('');
-  const [pinCode, setPinCode] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleEnterInvitationCode = async () => {
     redeemCode(invitationCode);
@@ -63,8 +87,19 @@ const RedeemDialog = ({ onClose, ...props }) => {
   };
 
   return (
-    <Dialog fullWidth maxWidth='xs' open onClose={handleDone} {...props}>
-      <DialogTitle>Redeem Invitation</DialogTitle>
+    <Dialog
+      fullWidth
+      maxWidth='xs'
+      open
+      onClose={step === 0 ? handleDone : undefined} // No click away when in the middle of a flow
+      {...props}
+    >
+      <DialogTitle>
+        <Toolbar variant='dense' disableGutters>
+          <RedeemIcon />
+          <Typography variant='h5' className={classes.title}>Redeem invitation</Typography>
+        </Toolbar>
+      </DialogTitle>
 
       {step === 0 && (
         <>

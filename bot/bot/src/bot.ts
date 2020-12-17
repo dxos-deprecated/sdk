@@ -9,9 +9,9 @@ import { join } from 'path';
 
 import { runWithTimeout } from '@dxos/async';
 import { Client } from '@dxos/client';
-import { randomBytes, keyToBuffer, keyToString, createKeyPair } from '@dxos/crypto';
+import { randomBytes, keyToBuffer, keyToString, createKeyPair, PublicKey } from '@dxos/crypto';
 import { InvitationDescriptor, Party } from '@dxos/echo-db';
-import { transportProtocolProvider } from '@dxos/network-manager';
+import { StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_BOT_INVITE,
   BOT_COMMAND,
@@ -212,8 +212,12 @@ export class Bot extends EventEmitter {
         });
       });
 
-      this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm(this._controlTopic,
-        transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
+      this._leaveControlSwarm = await this._client!.networkManager.joinProtocolSwarm({
+        topic: PublicKey.from(this._controlTopic),
+        protocol: transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin),
+        peerId: PublicKey.from(this._controlPeerKey),
+        topology: new StarTopology(PublicKey.from(this._botFactoryPeerKey))
+      });
 
       await promise;
     }, CONNECT_TIMEOUT, new Error(`Bot failed to connect to control topic: Timed out in ${CONNECT_TIMEOUT} ms.`));

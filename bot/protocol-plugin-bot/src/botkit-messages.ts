@@ -6,9 +6,10 @@ import assert from 'assert';
 
 import { keyToString } from '@dxos/crypto';
 
-import { Message, Spawn, Status } from './proto';
+import { Message, SpawnOptions, Status } from './proto';
 
 export const COMMAND_SPAWN = 'dxos.protocol.bot.Spawn';
+export const COMMAND_SPAWN_AND_INVITE = 'dxos.protocol.bot.SpawnAndInvite';
 export const SPAWN_RESPONSE = 'dxos.protocol.bot.SpawnResponse';
 
 export const COMMAND_STATUS = 'dxos.protocol.bot.GetStatus';
@@ -23,11 +24,23 @@ export const COMMAND_RESPONSE = 'dxos.protocol.bot.CommandResponse';
 /**
  * Creates a new spawn command message.
  */
-export const createSpawnCommand = (botName: string | undefined, options?: Spawn.SpawnOptions): Message => {
+export const createSpawnCommand = (botName: string | undefined, options?: SpawnOptions): Message => {
   return {
     message: {
       __type_url: COMMAND_SPAWN,
       botName,
+      options
+    }
+  };
+};
+
+export const createSpawnAndInviteCommand = (botName: string | undefined, topic: Buffer, invitation: string, options?: SpawnOptions): Message => {
+  return {
+    message: {
+      __type_url: COMMAND_SPAWN_AND_INVITE,
+      botName,
+      topic: keyToString(topic),
+      invitation,
       options
     }
   };
@@ -102,11 +115,12 @@ export const createStatusResponse = (version: string, platform: string, uptime: 
 /**
  * Creates spawn response message.
  */
-export const createSpawnResponse = (botId?: string): Message => {
+export const createSpawnResponse = (botId?: string, error?: string): Message => {
   return {
     message: {
       __type_url: SPAWN_RESPONSE,
-      botId
+      botId,
+      error
     }
   };
 };

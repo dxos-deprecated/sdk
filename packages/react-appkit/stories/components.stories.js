@@ -57,7 +57,7 @@ export const withStatusBar = () => {
   const actions = [
     {
       isActive: () => false,
-      handler: () => {},
+      handler: () => null,
       title: 'Mock debug',
       Icon: DebugIcon
     }
@@ -93,8 +93,8 @@ export const withNewItemCreationMenu = () => {
       {initialized && (
         <NewItemCreationMenu
           open
-          onClose={() => {}}
-          onSelect={() => {}}
+          onClose={() => null}
+          onSelect={() => null}
           pads={pads}
           anchorEl={anchorEl.current}
         />
