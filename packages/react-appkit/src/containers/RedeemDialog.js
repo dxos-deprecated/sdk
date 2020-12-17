@@ -85,6 +85,12 @@ const RedeemDialog = ({ onClose, ...props }) => {
     setPin(pinCode);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !isProcessing) {
+      handleEnterInvitationCode();
+    }
+  };
+
   return (
     <Dialog
       fullWidth
@@ -106,6 +112,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
               spellCheck={false}
               value={invitationCode}
               onChange={(event) => setInvitationCode(event.target.value)}
+              onKeyDown={handleKeyDown}
               rows={6}
             />
             <FormControlLabel

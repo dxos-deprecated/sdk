@@ -73,6 +73,12 @@ const DeviceAuthenticator = () => {
     window.location.replace(createPath());
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !(inProgress || cancelling)) {
+      handleSubmit();
+    }
+  };
+
   const recognisedError = error &&
     error.includes('ERR_GREET_INVALID_INVITATION') &&
     'The invitation does not exist or the attempted access to it was unauthorized.';
@@ -121,6 +127,7 @@ const DeviceAuthenticator = () => {
             <TextField
               value={pinCode}
               onChange={(event) => setPinCode(event.target.value)}
+              onKeyDown={handleKeyDown}
               variant='outlined'
               margin='normal'
               required
