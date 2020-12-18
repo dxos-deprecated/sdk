@@ -84,7 +84,7 @@ export class GitHubBot extends Bot {
     await this.readDocuments(result.value, topic);
   }
 
-  async readDocuments(documents, topic) {
+  async readDocuments (documents, topic) {
     for await (const doc of documents) {
       const documentId = doc.id;
 
