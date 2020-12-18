@@ -66,10 +66,10 @@ export class GitHubBot extends Bot {
 
   /**
    * Join party.
-   * @param {Buffer} key
+   * @param {PublicKey} key
    */
   async joinParty (key) {
-    const topic = keyToString(key);
+    const topic = key.toHex();
 
     console.log(`Joining party '${topic}'.`);
     this._botParties.set(topic, { topic });
@@ -78,21 +78,6 @@ export class GitHubBot extends Bot {
 
     const result = party.database.queryItems({ type: EDITOR_TYPE_DOCUMENT });
 
-    // model.on('update', async () => {
-    //   if (model.messages) {
-    //     for (const message of model.messages) {
-    //       const { itemId, displayName } = message;
-    //       if (!this._docs.has(itemId)) {
-    //         console.log(`Opening doc '${itemId}'.`);
-    //         const docModel = await this._client.modelFactory.createModel(TextModel, { type: [TYPE_TEXT_MODEL_UPDATE], topic, documentId: itemId });
-    //         this._docs.set(itemId, { documentId: itemId, displayName, docModel, topic });
-
-    //         docModel.on('update', async () => this._handleDocUpdate(itemId));
-    //       }
-    //     }
-    //   }
-    // });
-
     result.subscribe(async () => {
       await this.readDocuments(result.value, topic);
     });
@@ -100,19 +85,11 @@ export class GitHubBot extends Bot {
   }
 
   async readDocuments(documents, topic) {
-    console.log('>>>>>>>>DOCS>>>>>>>', documents);
     for await (const doc of documents) {
       const documentId = doc.id;
-      if (!this._docs.has(documentId)) {
-        console.log(`Opening doc '${documentId}'.`);
 
-        this._docs.set(itemId, { documentId, doc, topic });
-  
-        doc.subscribe(async () => {
-          await this._handleDocUpdate(documentId);
-        });
-        await this._handleDocUpdate(documentId);
-      }
+      this._docs.set(documentId, { documentId, doc, topic });
+      this._handleDocUpdate(documentId);
     }
   }
 
@@ -156,7 +133,7 @@ export class GitHubBot extends Bot {
 
     if (repo) {
       const updateDoc = async () => {
-        const text = docToMarkdown(doc.doc);
+        const text = docToMarkdown(doc.children[0].model.doc);
         const docPath = path.join(repo.repoPath, `${documentId}.md`);
 
         docInfo.lastSave = Date.now();
@@ -189,10 +166,10 @@ export class GitHubBot extends Bot {
           const [, documentId] = match;
           const docInfo = this._docs.get(documentId);
           if (docInfo) {
-            const { docModel } = docInfo;
+            const { doc } = docInfo;
             const text = await fs.readFile(path.join(repoPath, file), 'utf8');
 
-            markdownToDoc(text, docModel.doc);
+            markdownToDoc(text, doc.children[0].model.doc);
           } else {
             // TODO(egorgripasov): Create new doc.
           }
