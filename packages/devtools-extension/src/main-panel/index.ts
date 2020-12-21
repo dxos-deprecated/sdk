@@ -2,12 +2,10 @@
 // Copyright 2020 DXOS.org
 //
 
-/* global chrome */
-
 import { initDevTool } from '../../../devtools/dist/src';
 import BridgeProxy from './bridge';
 
-declare var chrome: any;
+declare let chrome: any;
 
 const injected = false;
 

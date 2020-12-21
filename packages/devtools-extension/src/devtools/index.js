@@ -9,20 +9,28 @@ let checkCount = 0;
 
 function createPanel () {
   // stop trying if above 120 seconds or already made
-  if (panelCreated || checkCount++ > 120) return;
+  if (panelCreated || checkCount++ > 120) {
+    return;
+  }
 
   // Other dev tools may not have easy access to client, so they can set display flag to true manually.
   chrome.devtools.inspectedWindow.eval(
     '!!(window.__DXOS__);',
     (result, isException) => {
       // TODO(elmasse) How should we better handle this error?
-      if (isException) console.log('DXOS devtools', isException);
+      if (isException) {
+        console.log('DXOS devtools', isException);
+      }
 
       // already created or no client
-      if (!result || panelCreated) return;
+      if (!result || panelCreated) {
+        return;
+      }
 
       // clear watcher
-      if (loadCheckInterval) clearInterval(loadCheckInterval);
+      if (loadCheckInterval) {
+        clearInterval(loadCheckInterval);
+      }
       panelCreated = true;
 
       chrome.devtools.panels.create(
