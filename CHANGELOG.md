@@ -1,5 +1,18 @@
 # Changelog
 
+### [2.7.46](https://www.github.com/dxos/sdk/compare/v2.7.45...v2.7.46) (2020-12-22)
+
+
+### Features
+
+* Add initialization loader ([30988b1](https://www.github.com/dxos/sdk/commit/30988b135162e7826e995b8a46686792546b54fc))
+* Control logging output in devtools ([#490](https://www.github.com/dxos/sdk/issues/490)) ([badcb99](https://www.github.com/dxos/sdk/commit/badcb9925a55cfdf1bd06226ba814cafe51000d7))
+
+
+### Bug Fixes
+
+* Fix failing tests ([#491](https://www.github.com/dxos/sdk/issues/491)) ([7eab290](https://www.github.com/dxos/sdk/commit/7eab2904e1d4edc44ded58109abfe60e641a615a))
+
 ### [2.7.45](https://www.github.com/dxos/sdk/compare/v2.7.44...v2.7.45) (2020-12-22)
 
 
