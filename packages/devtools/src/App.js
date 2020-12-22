@@ -18,12 +18,14 @@ import FeedIcon from '@material-ui/icons/Pageview';
 import SwarmIcon from '@material-ui/icons/Router';
 import ConfigIcon from '@material-ui/icons/Settings';
 import StoreIcon from '@material-ui/icons/Storage';
+import LoggingIcon from '@material-ui/icons/Subject';
 import EventsIcon from '@material-ui/icons/Timer';
 import KeyIcon from '@material-ui/icons/VpnKey';
 
 import { JsonTreeView } from '@dxos/react-ux';
 
 import { ConfigView } from './containers/ConfigView';
+import { DebugLoggingView } from './containers/DebugLoggingView';
 import FeedStore from './containers/FeedStore';
 import FeedViewer from './containers/FeedViewer';
 import ItemsViewer from './containers/ItemsViewer';
@@ -135,6 +137,16 @@ const items = [
         icon: SwarmIcon
       }
     ]
+  },
+  {
+    title: 'DEBUG',
+    items: [
+      {
+        id: 'debug.logging',
+        title: 'Logging',
+        icon: LoggingIcon
+      }
+    ]
   }
 ];
 
@@ -219,6 +231,9 @@ const App = () => {
       </div>
       <div className={className('mesh.swarm')}>
         <SwarmGraph />
+      </div>
+      <div className={className('debug.logging')}>
+        <DebugLoggingView />
       </div>
     </div>
   );
