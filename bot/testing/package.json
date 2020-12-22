@@ -40,7 +40,7 @@
     "lodash.get": "^4.4.2",
     "lodash.isempty": "^4.4.0",
     "memdown": "^5.1.0",
-    "moment": "^2.24.0",
+    "moment": "^2.26.0",
     "node-fetch": "^2.6.0",
     "node-libs-browser": "^2.2.1",
     "node-watch": "^0.6.4",
