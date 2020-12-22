@@ -10,7 +10,7 @@ import ConnectedIcon from '@material-ui/icons/Wifi';
 
 import { createKeyPair, PublicKey } from '@dxos/crypto';
 
-import { MemberAvatar, useAssets, StatusBar, NewItemCreationMenu } from '../src';
+import { MemberAvatar, useAssets, StatusBar, NewItemCreationMenu, InitializeLoader } from '../src';
 import { pads } from './common';
 
 export default {
@@ -99,6 +99,14 @@ export const withNewItemCreationMenu = () => {
           anchorEl={anchorEl.current}
         />
       )}
+    </Box>
+  );
+};
+
+export const withInitializeLoader = () => {
+  return (
+    <Box m={2}>
+      <InitializeLoader progress={{ haloOpened: false }} />
     </Box>
   );
 };
