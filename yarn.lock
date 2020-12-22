@@ -1582,7 +1582,7 @@
     react-hotkeys "^2.0.0"
     react-resize-aware "^3.0.0"
 
-"@dxos/messenger-model@~1.2.0-alpha.43":
+"@dxos/messenger-model@~1.2.0-alpha.48":
   version "1.2.0-beta.36"
   resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-beta.36.tgz#afc5784a76e05f15fe1df30842c16e4a44e176b7"
   integrity sha512-a7cqk8JWkT2C1iyzCM+VO+nM2eNOqn4yLbMJ8lbcVEsB0Rq0KYhOXK4y++FTPXrhXFbj3L8C0vNEhSLHMMnixA==
@@ -1628,7 +1628,7 @@
     protobufjs "^6.9.0"
     source-map-support "^0.5.12"
 
-"@dxos/network-devtools@~1.0.5":
+"@dxos/network-devtools@~1.0.6":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@dxos/network-devtools/-/network-devtools-1.0.6.tgz#1bb4e8a1010fc5be4f609c99fe5ced3e00b249a7"
   integrity sha512-2gRIUx2TUu1K6u75dVUy4Z/NLEDyIChPAKsQ1GEPoYVPAMOLrgDtn6YIHKcACOXv8tf7/fHkUJj57St/INb+qw==
