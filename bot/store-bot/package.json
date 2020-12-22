@@ -1,6 +1,6 @@
 {
   "name": "@dxos/store-bot",
-  "version": "2.7.45",
+  "version": "2.7.46",
   "private": true,
   "description": "Store Bot",
   "keywords": [],
@@ -28,7 +28,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@dxos/botkit": "~2.7.45"
+    "@dxos/botkit": "2.7.46"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
