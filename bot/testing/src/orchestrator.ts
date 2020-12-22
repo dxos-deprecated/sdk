@@ -159,7 +159,7 @@ export class Orchestrator {
       factory.stdout.pipe(process.stdout);
 
       await new Promise(resolve => {
-        factory.stderr.on('data', (data: Buffer) => {
+        factory.stdout.on('data', (data: Buffer) => {
           if (/"started":true/.test(data.toString())) {
             log('Bot Factory started.');
             resolve();

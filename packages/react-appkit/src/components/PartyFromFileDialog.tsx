@@ -124,7 +124,7 @@ const PartyFromFileDialog = ({
             id='file-input'
             type='file'
             name='file'
-            accept='.json'
+            accept='.json,.txt'
             onChange={onFilesSelect}
             className={classes.uploadInput}
           />
