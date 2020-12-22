@@ -1,5 +1,15 @@
 # Changelog
 
+### [2.7.44](https://www.github.com/dxos/sdk/compare/v2.7.43...v2.7.44) (2020-12-17)
+
+
+### Bug Fixes
+
+* Export devtools context interface ([#478](https://www.github.com/dxos/sdk/issues/478)) ([94d2775](https://www.github.com/dxos/sdk/commit/94d277579199096e85810327092a61a155146950))
+* Update dependencies actions ([#479](https://www.github.com/dxos/sdk/issues/479)) ([3eb9257](https://www.github.com/dxos/sdk/commit/3eb92575e3e44fe154219fd35fe5c71cf1dc83b2))
+* Update ECHO and Mesh ([#481](https://www.github.com/dxos/sdk/issues/481)) ([76758d4](https://www.github.com/dxos/sdk/commit/76758d4786484d63900b228b7e62e46408cb1ae9))
+* UX improvements ([#482](https://www.github.com/dxos/sdk/issues/482)) ([21a9b5e](https://www.github.com/dxos/sdk/commit/21a9b5ef37bcbabc6d965eab3e37b856c88f5038))
+
 ### [2.7.43](https://www.github.com/dxos/sdk/compare/v2.7.42...v2.7.43) (2020-12-16)
 
 

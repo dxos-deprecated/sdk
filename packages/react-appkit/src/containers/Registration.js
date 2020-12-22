@@ -5,7 +5,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Dialog, DialogContent, DialogContentText, LinearProgress } from '@material-ui/core';
+import RestoreIcon from '@material-ui/icons/Restore';
+import { makeStyles } from '@material-ui/styles';
 
 import { keyPairFromSeedPhrase } from '@dxos/credentials';
 import { decrypt } from '@dxos/crypto';
@@ -13,10 +15,19 @@ import { useClient, useConfig } from '@dxos/react-client';
 import { useQuery, createUrl } from '@dxos/react-router';
 import { FullScreen } from '@dxos/react-ux';
 
+import DialogHeading from '../components/DialogHeading';
 import RegistrationDialog from '../components/RegistrationDialog';
 import { useSentry } from '../hooks';
 
+const useStyles = makeStyles((theme) => ({
+  progressBar: {
+    marginBottom: theme.spacing(2)
+  }
+}));
+
 const Registration = () => {
+  const classes = useStyles();
+
   const [open, setOpen] = useState(true);
   const history = useHistory();
   const { redirectUrl = '/', ...rest } = useQuery();
@@ -73,8 +84,9 @@ const Registration = () => {
       />
       {recovering && (
         <Dialog open maxWidth='sm'>
-          <DialogTitle>Recovering...</DialogTitle>
+          <DialogHeading title='Recovering wallet' icon={RestoreIcon}/>
           <DialogContent>
+            <LinearProgress className={classes.progressBar} />
             <DialogContentText>One of your other devices needs to be online.</DialogContentText>
           </DialogContent>
         </Dialog>

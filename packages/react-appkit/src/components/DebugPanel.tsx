@@ -215,6 +215,12 @@ const DebugPanel = () => {
 
   const editConfigKeyLabel = editConfigOpen && editConfigKey && editConfigKey.split('.').filter(Boolean).join(' > ');
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleEditConfigSave();
+    }
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.container}>
@@ -270,13 +276,14 @@ const DebugPanel = () => {
             type='text'
             fullWidth
             inputRef={editConfigInput}
+            onKeyDown={handleKeyDown}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditConfigClose} color='primary'>
             Cancel
           </Button>
-          <Button onClick={handleEditConfigSave} color='primary'>
+          <Button onClick={handleEditConfigSave} variant='contained' color='primary'>
             Save
           </Button>
         </DialogActions>

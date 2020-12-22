@@ -97,7 +97,7 @@ const PartyFromIpfsDialog = ({
         <Button onClick={handleClose} color='secondary'>
           Cancel
         </Button>
-        <Button onClick={handleImport} disabled={!cid || inProgress} color='primary'>
+        <Button onClick={handleImport} disabled={!cid || inProgress} variant='contained' color='primary'>
           Import
         </Button>
       </DialogActions>

@@ -124,7 +124,7 @@ const PartyFromFileDialog = ({
             id='file-input'
             type='file'
             name='file'
-            accept='.json'
+            accept='.json,.txt'
             onChange={onFilesSelect}
             className={classes.uploadInput}
           />
@@ -151,7 +151,12 @@ const PartyFromFileDialog = ({
         <Button onClick={handleClose} color='secondary'>
           Cancel
         </Button>
-        <Button onClick={handleImport} disabled={!files || files.length !== 1 || inProgress} color='primary'>
+        <Button
+          onClick={handleImport}
+          disabled={!files || files.length !== 1 || inProgress}
+          variant='contained'
+          color='primary'
+        >
           Import
         </Button>
       </DialogActions>

@@ -76,6 +76,9 @@ const RedeemDialog = ({ onClose, ...props }) => {
   });
 
   const handleEnterInvitationCode = async () => {
+    if (isProcessing) {
+      return;
+    }
     redeemCode(invitationCode);
     setStep(1);
   };
@@ -83,6 +86,12 @@ const RedeemDialog = ({ onClose, ...props }) => {
   const handleEnterPinCode = async () => {
     setIsProcessing(true);
     setPin(pinCode);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleEnterInvitationCode();
+    }
   };
 
   return (
@@ -106,6 +115,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
               spellCheck={false}
               value={invitationCode}
               onChange={(event) => setInvitationCode(event.target.value)}
+              onKeyDown={handleKeyDown}
               rows={6}
             />
             <FormControlLabel
@@ -117,6 +127,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
           <DialogActions>
             <Button color='secondary' onClick={handleDone}>Cancel</Button>
             <Button
+              variant='contained'
               color='primary'
               onClick={handleEnterInvitationCode}
               disabled={isProcessing}>
@@ -148,6 +159,7 @@ const RedeemDialog = ({ onClose, ...props }) => {
           <DialogActions>
             <Button color='secondary' onClick={handleDone}>Cancel</Button>
             <Button
+              variant='contained'
               color='primary'
               onClick={handleEnterPinCode}
               disabled={isProcessing}>
