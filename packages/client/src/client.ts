@@ -10,6 +10,7 @@ import memdown from 'memdown';
 import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
 import { humanize, PublicKey } from '@dxos/crypto';
+import * as debug from '@dxos/debug';
 import { ECHO, InvitationOptions, SecretProvider, sortItemsTopologically } from '@dxos/echo-db';
 import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
@@ -399,7 +400,8 @@ export class Client {
       feedStore: this._echo.feedStore,
       networkManager: this._echo.networkManager,
       modelFactory: this._echo.modelFactory,
-      keyring: this._echo.keyring
+      keyring: this._echo.keyring,
+      debug
     };
     return devtoolsContext;
   }
