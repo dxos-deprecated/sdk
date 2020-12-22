@@ -8,6 +8,7 @@ import DefaultSettingsDialog from './DefaultSettingsDialog';
 import DialogHeading from './DialogHeading';
 import ExportKeyringDialog from './ExportKeyringDialog';
 import ImportKeyringDialog from './ImportKeyringDialog';
+import InitializeLoader from './InitializeLoader';
 import InvitationDialog from './InvitationDialog';
 import ItemSettings from './ItemSettings';
 import ItemSettingsDialog from './ItemSettingsDialog';
@@ -40,6 +41,7 @@ export {
   DialogHeading,
   ExportKeyringDialog,
   ImportKeyringDialog,
+  InitializeLoader,
   InvitationDialog,
   ItemSettings,
   KeyMap,

@@ -15,5 +15,6 @@ export interface DevtoolsContext
   feedStore: FeedStore,
   networkManager: NetworkManager,
   modelFactory: ModelFactory,
-  keyring: Keyring
+  keyring: Keyring,
+  debug: any
 }

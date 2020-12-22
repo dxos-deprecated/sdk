@@ -10,7 +10,7 @@ test('initialize and destroy in a reasonable time', async () => {
   const client = new Client();
   await client.initialize();
   await client.destroy();
-}, 100);
+}, 200);
 
 test('initialize and destroy are idempotent', async () => {
   const client = new Client();
