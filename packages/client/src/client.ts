@@ -401,8 +401,7 @@ export class Client {
       networkManager: this._echo.networkManager,
       modelFactory: this._echo.modelFactory,
       keyring: this._echo.keyring,
-      // TODO(dboreham): figure out why this weirdness is needed
-      debug: debug
+      debug
     };
     return devtoolsContext;
   }
