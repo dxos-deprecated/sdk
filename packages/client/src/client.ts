@@ -11,7 +11,7 @@ import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
 import { humanize, PublicKey } from '@dxos/crypto';
 import * as debug from '@dxos/debug';
-import { ECHO, InvitationOptions, SecretProvider, sortItemsTopologically } from '@dxos/echo-db';
+import { ECHO, InvitationOptions, OpenProgress, SecretProvider, sortItemsTopologically } from '@dxos/echo-db';
 import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';
@@ -123,7 +123,7 @@ export class Client {
    * Initializes internal resources.
    */
   @synchronized
-  async initialize () {
+  async initialize (onProgressCallback?: (progress: OpenProgress) => void) {
     if (this._initialized) {
       return;
     }
@@ -133,7 +133,7 @@ export class Client {
       throw new Error(`Initialize timed out after ${t}s.`);
     }, t * 1000);
 
-    await this._echo.open();
+    await this._echo.open(onProgressCallback);
 
     this._initialized = true;
     clearInterval(timeout);
