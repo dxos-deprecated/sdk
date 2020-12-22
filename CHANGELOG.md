@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.45](https://www.github.com/dxos/sdk/compare/v2.7.44...v2.7.45) (2020-12-22)
+
+
+### Bug Fixes
+
+* Accept textual party contents for import ([#487](https://www.github.com/dxos/sdk/issues/487)) ([9cd22ae](https://www.github.com/dxos/sdk/commit/9cd22ae11fa293ee7e423b64fce22cca5af3507d))
+
 ### [2.7.44](https://www.github.com/dxos/sdk/compare/v2.7.43...v2.7.44) (2020-12-17)
 
 

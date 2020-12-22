@@ -1,6 +1,6 @@
 {
   "name": "@dxos/github-bot",
-  "version": "2.7.44",
+  "version": "2.7.45",
   "private": true,
   "description": "Store Bot",
   "keywords": [],
@@ -28,7 +28,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@dxos/botkit": "2.7.44",
+    "@dxos/botkit": "2.7.45",
     "@dxos/editor-core": "~1.0.0-beta.33",
     "@dxos/text-model": "~2.6.6-alpha.0",
     "simple-git": "^2.20.1"

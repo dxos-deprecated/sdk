@@ -126,7 +126,7 @@ const JsonTreeView = ({
   root: string,
   size: string
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ fontSize: size });
   if (!data) {
     data = {};
   }

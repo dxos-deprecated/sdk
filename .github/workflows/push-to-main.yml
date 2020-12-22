@@ -48,3 +48,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: ${{ steps.release.outputs.release_created }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dxos-devtools
+          path: packages/devtools-extension/dist
