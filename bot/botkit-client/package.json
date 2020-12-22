@@ -1,6 +1,6 @@
 {
   "name": "@dxos/botkit-client",
-  "version": "2.7.45",
+  "version": "2.7.46",
   "description": "Botkit client",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -21,7 +21,7 @@
     "@dxos/crypto": "~1.0.7",
     "@dxos/debug": "~1.0.0-beta.75",
     "@dxos/network-manager": "~1.0.6",
-    "@dxos/protocol-plugin-bot": "~2.7.45",
+    "@dxos/protocol-plugin-bot": "2.7.46",
     "assert": "^2.0.0",
     "debug": "^4.1.1",
     "hypercore-crypto": "^1.0.0"
