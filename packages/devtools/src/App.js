@@ -18,9 +18,9 @@ import FeedIcon from '@material-ui/icons/Pageview';
 import SwarmIcon from '@material-ui/icons/Router';
 import ConfigIcon from '@material-ui/icons/Settings';
 import StoreIcon from '@material-ui/icons/Storage';
+import LoggingIcon from '@material-ui/icons/Subject';
 import EventsIcon from '@material-ui/icons/Timer';
 import KeyIcon from '@material-ui/icons/VpnKey';
-import LoggingIcon from '@material-ui/icons/Subject';
 
 import { JsonTreeView } from '@dxos/react-ux';
 
