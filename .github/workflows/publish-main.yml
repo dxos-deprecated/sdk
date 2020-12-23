@@ -38,6 +38,7 @@ jobs:
 
           # build
           yarn install --frozen-lockfile
+          node packages/devtools-extension/scripts/update-version.js `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`
           yarn build
 
           # lint and test
@@ -49,7 +50,6 @@ jobs:
           git reset --hard
 
           # set the version
-          node packages/devtools-extension/scripts/update-version.js `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`
           yarn lerna version `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'` --no-git-tag-version -y
           git commit -am "${{ steps.release.outputs.tag_name }}"
           git push
