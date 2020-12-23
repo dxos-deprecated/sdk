@@ -49,7 +49,7 @@ jobs:
           git reset --hard
 
           # set the version
-          node packages/extension/scripts/update-version.js `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`
+          node packages/devtools-extension/scripts/update-version.js `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`
           yarn lerna version `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'` --no-git-tag-version -y
           git commit -am "${{ steps.release.outputs.tag_name }}"
           git push
