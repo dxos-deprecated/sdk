@@ -67,5 +67,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: dxos-devtools
-          path: packages/extension/dist
+          path: packages/devtools-extension/dist
         if: ${{ steps.release.outputs.release_created }}
