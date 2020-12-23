@@ -18,7 +18,7 @@ jobs:
         uses: technote-space/create-pr-action@v2
         with:
           EXECUTE_COMMANDS: |
-            npx @dxos/version-check upgrade --scope @dxos
+            npx @dxos/version-check upgrade --scope @dxos --tilde
             yarn install
           COMMIT_MESSAGE: 'chore: update DXOS dependencies'
           COMMIT_NAME: 'GitHub Actions'
