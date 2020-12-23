@@ -28,7 +28,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@dxos/botkit": "2.7.46"
+    "@dxos/botkit": "~2.7.46"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
