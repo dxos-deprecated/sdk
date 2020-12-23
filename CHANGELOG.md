@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.49](https://www.github.com/dxos/sdk/compare/v2.7.48...v2.7.49) (2020-12-23)
+
+
+### Bug Fixes
+
+* Upload devtools as artifact ([3ff8514](https://www.github.com/dxos/sdk/commit/3ff85144125680dd1a4910ebff3a5f6952ecf290))
+
 ### [2.7.48](https://www.github.com/dxos/sdk/compare/v2.7.47...v2.7.48) (2020-12-23)
 
 
