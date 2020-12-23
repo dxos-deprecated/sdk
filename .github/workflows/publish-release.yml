@@ -21,35 +21,38 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - name: Build and NPM publish
-        # configure git user
-        - run: git config --global user.email "devops@dxos.org"
-        - run: git config --global user.name "DXOS.org"
+        run: |
+          set -e
 
-        # lint
-        - run: yarn
-        - run: yarn lint:lockfile
-        - run: yarn lint
+          # configure git user
+          git config --global user.email "devops@dxos.org"
+          git config --global user.name "DXOS.org"
 
-        # build
-        - run: yarn build
+          # lint
+          yarn
+          yarn lint:lockfile
+          yarn lint
 
-        # test
-        - run: yarn test
+          # build
+          yarn build
 
-        # clean up the environment
-        - run: git reset --hard
+          # test
+          yarn test
 
-        # set the version
-        - run: VERSION=`cat package.json | grep '"version":' | awk '{ print $2 }' | sed 's/[",]//g'`
-        - run: yarn lerna version $VERSION --no-git-tag-version -y
-        - run: git commit -am "v$VERSION"
-        - run: git push
+          # clean up the environment
+          git reset --hard
 
-        # set the tag
-        - run: git tag -f "v$VERSION"
-        - run: git push --tags -f
+          # set the version
+          VERSION=`cat package.json | grep '"version":' | awk '{ print $2 }' | sed 's/[",]//g'`
+          yarn lerna version $VERSION --no-git-tag-version -y
+          git commit -am "v$VERSION"
+          git push
 
-        # publish to NPM
-        - run: yarn lerna publish from-package --force-publish -y
+          # set the tag
+          git tag -f "v$VERSION"
+          git push --tags -f
+
+          # publish to NPM
+          yarn lerna publish from-package --force-publish -y
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
