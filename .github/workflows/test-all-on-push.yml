@@ -2,7 +2,7 @@
 # Copyright 2020 DXOS.org
 #
 
-name: Run lint, build, and jest tests with coverage on every push to every branch
+name: Run lint, build, and jest tests
 
 on: [push]
 
