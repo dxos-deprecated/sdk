@@ -30,34 +30,37 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
         if: ${{ steps.release.outputs.release_created }}
 
-      - run: git config --global user.email "devops@dxos.org"
-      - run: git config --global user.name "DXOS.org"
+      - name: Lerna Publish
+        run: |
+          set -e
+          git config --global user.email "npm@dxos.network"
+          git config --global user.name "DXOS"
 
-      # build
-      - run: yarn
-      - run: node packages/extension/scripts/update-version.js `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`
-      - run: yarn build
+          # build
+          yarn install --frozen-lockfile
+          yarn build
 
-      # lint and test
-      - run: yarn lint:lockfile
-      - run: yarn lint
-      - run: yarn test
+          # lint and test
+          yarn lint:lockfile
+          yarn lint
+          yarn test
 
-      # clean up the environment
-      - run: git reset --hard
+          # clean up the environment
+          git reset --hard
 
-      # set the version
-      - run: yarn lerna version `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`-alpha.0 --no-git-tag-version -y
-      - run: git commit -am "${{ steps.release.outputs.tag_name }}"-alpha.0
-      - run: git push
+          # set the version
+          node packages/extension/scripts/update-version.js `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`
+          yarn lerna version `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'` --no-git-tag-version -y
+          git commit -am "${{ steps.release.outputs.tag_name }}"
+          git push
 
-      # set the tag
-      - run: git tag -f "${{ steps.release.outputs.tag_name }}"-alpha.0
-      - run: git push --tags -f
-      - run: git push --delete origin "${{ steps.release.outputs.tag_name }}"
+          # set the tag
+          git tag -f "${{ steps.release.outputs.tag_name }}"
+          git push --tags -f
+          git push --delete origin "${{ steps.release.outputs.tag_name }}"
 
-      # publish to NPM
-      - run: yarn lerna publish from-package --force-publish -y --dist-tag="alpha"
+          # publish to NPM
+          yarn lerna publish from-package --force-publish -y --dist-tag="alpha"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: ${{ steps.release.outputs.release_created }}
