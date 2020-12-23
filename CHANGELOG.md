@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.7.48](https://www.github.com/dxos/sdk/compare/v2.7.47...v2.7.48) (2020-12-23)
+
+
+### Bug Fixes
+
+* Version for devtools ([fb9293e](https://www.github.com/dxos/sdk/commit/fb9293e6eef814d5d50d146aebcc1df1daf0df01))
+
 ### [2.7.47](https://www.github.com/dxos/sdk/compare/v2.7.46...v2.7.47) (2020-12-23)
 
 
