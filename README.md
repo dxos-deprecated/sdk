@@ -19,6 +19,10 @@ yarn test
 
 Refer to our [Repo Guidance Doc](https://github.com/dxos/gravity/blob/main/docs/content/devops/git-repos.md#github-workflows-and-actions) for details
 
+## Troubleshooting
+
+Refer to our [DevTools](./packages/devtools-extension/README.md).
+
 ## Contributing
 
 Contributions welcome. Check our [Development Guide](https://github.com/dxos/gravity/blob/main/docs/content/devops/development-guide.md)

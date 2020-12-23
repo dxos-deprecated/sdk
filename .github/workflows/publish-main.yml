@@ -36,6 +36,7 @@ jobs:
 
         # build
         - run: yarn
+        - run: node packages/extension/scripts/update-version.js `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`
         - run: yarn build
 
         # lint and test
