@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.7.47](https://www.github.com/dxos/sdk/compare/v2.7.46...v2.7.47) (2020-12-23)
+
+
+### Bug Fixes
+
+* Releasing for devtools ([#497](https://www.github.com/dxos/sdk/issues/497)) ([5b5323a](https://www.github.com/dxos/sdk/commit/5b5323aa9e51a0439b498d30fe675869d194c7f3))
+* Use Material-ui as a peer dependency ([#495](https://www.github.com/dxos/sdk/issues/495)) ([2ca5b7d](https://www.github.com/dxos/sdk/commit/2ca5b7dbb52104e2c9e6fed2003aba30e903d42f))
+
 ### [2.7.46](https://www.github.com/dxos/sdk/compare/v2.7.45...v2.7.46) (2020-12-22)
 
 
