@@ -36,6 +36,7 @@ jobs:
 
         # build
         - run: yarn
+        - run: node packages/extension/scripts/update-version.js `echo "${{ steps.release.outputs.tag_name }}" | sed 's/^v//'`
         - run: yarn build
 
         # lint and test
@@ -60,4 +61,9 @@ jobs:
         - run: yarn lerna publish from-package --force-publish -y --dist-tag="alpha"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: ${{ steps.release.outputs.release_created }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dxos-devtools
+          path: packages/extension/dist
         if: ${{ steps.release.outputs.release_created }}
