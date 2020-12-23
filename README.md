@@ -1,6 +1,6 @@
 # DXOS SDK
 
-![Github Actions](https://github.com/dxos/sdk/workflows/Run%20all%20tests/badge.svg)
+![Github Actions](https://github.com/dxos/sdk/workflows/Run%20lint,%20build,%20and%20jest%20tests%20with%20coverage%20on%20every%20push%20to%20every%20branch/badge.svg)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square)](https://conventionalcommits.org)
