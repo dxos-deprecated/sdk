@@ -313,7 +313,7 @@ export class Client {
 
         const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
 
-        await createdItem.model._handleDocUpdated(decodedItemSnapshot.data);
+        await createdItem.model.restoreFromSnapshot(decodedItemSnapshot);
       } else {
         throw new Error(`Unhandled model type: ${item.modelType}`);
       }
