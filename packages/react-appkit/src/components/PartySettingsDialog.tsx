@@ -182,7 +182,7 @@ const PartySettingsDialog = ({
       </Snackbar>
 
       <DialogActions>
-        {handleExportToIPFS && (
+        {onExportToIpfs && (
           <Button onClick={handleExportToIPFS} color='secondary' disabled={inProgress || exportInProgress}>
               Export to IPFS
           </Button>

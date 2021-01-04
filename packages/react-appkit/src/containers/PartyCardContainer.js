@@ -75,7 +75,7 @@ const PartyCardContainer = ({ party, ipfs }) => {
         exportInProgress={exportInProgress}
         onNewItemRequested={handleNewItemRequested}
         onExportToFile={handleExportToFile}
-        onExport={ipfs ? handleExportToIpfs : undefined}
+        onExportToIpfs={ipfs ? handleExportToIpfs : undefined}
       />
       <Settings
         party={party}
