@@ -2,10 +2,13 @@
 // Copyright 2020 DXOS.org
 //
 
+import debug from 'debug';
 import { useState, useEffect } from 'react';
 
 import { useRegistry } from './registry';
 import { QueryRecord, WRN_TYPE_BOT_FACTORY } from './types';
+
+const log = debug('dxos:react-client');
 
 interface RegistryBotFactoryRecord {
   topic: string,
@@ -23,7 +26,14 @@ export const useRegistryBotFactories = () => {
     }
 
     const queryRegistry = async () => {
-      const factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY }) as QueryRecord[];
+      let factoriesResult: QueryRecord[];
+      try {
+        factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY });
+      } catch (e) {
+        log('Querying bot factories unsuccessful.');
+        log(e);
+        return;
+      }
       setFactories(factoriesResult.map(({ attributes: { topic, name }, names }) => ({
         topic,
         name,
