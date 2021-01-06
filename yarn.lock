@@ -1492,10 +1492,10 @@
     readable-stream "^3.6.0"
     source-map-support "^0.5.12"
 
-"@dxos/editor-core@~1.0.0-beta.33":
-  version "1.0.0-beta.33"
-  resolved "https://registry.yarnpkg.com/@dxos/editor-core/-/editor-core-1.0.0-beta.33.tgz#1d34666215ba0820306cc96f6f62694e2706c7d3"
-  integrity sha512-0HYUqL0Xg50VpDOvyErSrdgYPggArRQr+rAWDcwGszEDQU5STRvuq6ftT85A2EHueqxJuC9emCQCcPcNGE5tiw==
+"@dxos/editor-core@~1.0.0-beta.34":
+  version "1.0.0-beta.34"
+  resolved "https://registry.yarnpkg.com/@dxos/editor-core/-/editor-core-1.0.0-beta.34.tgz#6ecc5a5590ff032eccc9558b46df734e054b1708"
+  integrity sha512-2804hyKnO6T4AAHVQAn7FoNpjPCIu3oyH7+Vs3Dsc5tqYWnXVoUyw9fkaXpe7ld2aVEwWRhXqq3J4G63CmYu2w==
   dependencies:
     hast-util-to-html "^7.1.1"
     rehype-parse "^7.0.1"
@@ -1582,7 +1582,7 @@
     react-hotkeys "^2.0.0"
     react-resize-aware "^3.0.0"
 
-"@dxos/messenger-model@~1.2.0-alpha.50":
+"@dxos/messenger-model@~1.2.0-alpha.51":
   version "1.2.0-beta.36"
   resolved "https://registry.yarnpkg.com/@dxos/messenger-model/-/messenger-model-1.2.0-beta.36.tgz#afc5784a76e05f15fe1df30842c16e4a44e176b7"
   integrity sha512-a7cqk8JWkT2C1iyzCM+VO+nM2eNOqn4yLbMJ8lbcVEsB0Rq0KYhOXK4y++FTPXrhXFbj3L8C0vNEhSLHMMnixA==
