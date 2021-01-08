@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-import { TransferNames } from '@connext/vector-types';
+import { TransferNames, CoreTransferState } from '@connext/vector-types';
 import { RestServerNodeService, getRandomBytes32 } from '@connext/vector-utils';
 import assert from 'assert';
 import debug from 'debug';
@@ -18,22 +18,22 @@ const log = debug('client');
 
 export const CHARGE_TYPE_PER_REQUEST = 'per-request';
 
-export const encodeObjToBase64 = (obj) => {
+export const encodeObjToBase64 = (obj: Object) => {
   return Buffer.from(JSON.stringify(obj)).toString('base64');
 };
 
-export const decodeBase64ToObj = (str) => {
+export const decodeBase64ToObj = (str: string) => {
   return JSON.parse(Buffer.from(str, 'base64').toString());
 };
 
 /**
  * Get payment details for a transfer.
- * @param {object} transfer
+ * @param {TransferInfo} transfer
  */
-export const getPaymentInfo = (transfer) => {
+export const getPaymentInfo = (transfer: CoreTransferState) => {
   const { assetId, balance, channelAddress, transferId } = transfer;
 
-  const balances = {};
+  const balances: any = {};
   balance.to.forEach((address, index) => {
     balances[address] = utils.formatEther(balance.amount[index]);
   });
@@ -50,11 +50,17 @@ export const getPaymentInfo = (transfer) => {
  * Represents client connection to a Vector server node.
  */
 export class PaymentClient {
+  private readonly _config: any;
+
+  private _connected: boolean;
+
+  private _service: any;
+
   /**
    * @constructor
    * @param {Object} config
    */
-  constructor (config) {
+  constructor (config: any) {
     assert(config);
 
     this._config = config;
@@ -109,7 +115,7 @@ export class PaymentClient {
    * Get wallet balance (uses mnemonic in profile, not server node).
    * @param {string} assetId
    */
-  async getWalletBalance (assetId) {
+  async getWalletBalance (assetId: string) {
     const { mnemonic, provider } = this._config.get('services.payment');
 
     assert(mnemonic, 'Invalid account mnemonic.');
@@ -118,7 +124,7 @@ export class PaymentClient {
     const rpcProvider = new providers.JsonRpcProvider(provider);
     const wallet = Wallet.fromMnemonic(mnemonic).connect(rpcProvider);
 
-    const balance = {};
+    const balance: any = {};
 
     if (assetId === ethers.constants.AddressZero) {
       const ethBalance = await rpcProvider.getBalance(wallet.address);
@@ -140,7 +146,7 @@ export class PaymentClient {
    * @param {string} assetId
    * @param {string} amount
    */
-  async sendFunds (address, assetId, amount) {
+  async sendFunds (address: string, assetId: string, amount: string) {
     const { mnemonic, provider } = this._config.get('services.payment');
 
     assert(mnemonic, 'Invalid account mnemonic.');
@@ -177,7 +183,7 @@ export class PaymentClient {
    * Get channel details.
    * @param {string} channelAddress
    */
-  async getChannelInfo (channelAddress) {
+  async getChannelInfo (channelAddress: string) {
     assert(channelAddress, 'Invalid channel.');
 
     await this._connect();
@@ -195,7 +201,7 @@ export class PaymentClient {
    * Setup a payment channel with a counterparty.
    * @param {string} counterpartyIdentifier
    */
-  async setupChannel (counterpartyIdentifier) {
+  async setupChannel (counterpartyIdentifier: string) {
     assert(counterpartyIdentifier, 'Invalid counterparty ID.');
 
     const { chainId, timeout = DEFAULT_TIMEOUT } = this._config.get('services.payment');
@@ -222,7 +228,7 @@ export class PaymentClient {
    * Get balances for either party in a payment channel.
    * @param {string} channelAddress
    */
-  async getChannelBalances (channelAddress) {
+  async getChannelBalances (channelAddress: string) {
     assert(channelAddress, 'Invalid channel.');
 
     await this._connect();
@@ -232,13 +238,13 @@ export class PaymentClient {
     }
 
     const channel = channelResult.getValue();
-    const balances = {};
+    const balances: any = {};
 
-    channel.assetIds.forEach(assetId => {
+    channel.assetIds.forEach((assetId: string) => {
       balances[assetId] = {};
-      const assetIdx = channel.assetIds.findIndex(id => id === assetId);
+      const assetIdx = channel.assetIds.findIndex((id: string) => id === assetId);
       const assetBalances = channel.balances[assetIdx] || { to: [], amount: [] };
-      assetBalances.to.forEach((address, index) => {
+      assetBalances.to.forEach((address: string, index: number) => {
         balances[assetId][address] = utils.formatEther(assetBalances.amount[index]);
       });
     });
@@ -252,7 +258,7 @@ export class PaymentClient {
    * @param {string} assetId
    * @param {string} amount
    */
-  async addFunds (channelAddress, assetId, amount) {
+  async addFunds (channelAddress: string, assetId: string, amount: string) {
     assert(channelAddress, 'Invalid channel.');
     assert(assetId, 'Invalid asset ID.');
     assert(amount, 'Invalid amount.');
@@ -289,7 +295,7 @@ export class PaymentClient {
    * @param {string} channelAddress
    * @param {string} assetId
    */
-  async reconcileDeposit (channelAddress, assetId) {
+  async reconcileDeposit (channelAddress: string, assetId: string) {
     assert(channelAddress, 'Invalid channel.');
     assert(assetId, 'Invalid asset ID.');
 
@@ -321,7 +327,7 @@ export class PaymentClient {
    * @param {string} assetId
    * @param {string} amount
    */
-  async createTransfer (channelAddress, assetId, amount) {
+  async createTransfer (channelAddress: string, assetId: string, amount: string) {
     assert(channelAddress, 'Invalid channel.');
     assert(assetId, 'Invalid asset ID.');
     assert(amount, 'Invalid amount.');
@@ -360,7 +366,7 @@ export class PaymentClient {
    * Get transfer details.
    * @param {string} transferId
    */
-  async getTransfer (transferId) {
+  async getTransfer (transferId: string) {
     assert(transferId, 'Invalid transferId.');
 
     await this._connect();
@@ -381,7 +387,7 @@ export class PaymentClient {
    * @param {string} transferId
    * @param {string} preImage
    */
-  async redeemTransfer (channelAddress, transferId, preImage) {
+  async redeemTransfer (channelAddress: string, transferId: string, preImage: string) {
     assert(channelAddress, 'Invalid channel.');
     assert(transferId, 'Invalid transferId.');
     assert(preImage, 'Invalid preImage.');
@@ -407,7 +413,7 @@ export class PaymentClient {
    * @param {string} assetId
    * @param {string} amount
    */
-  async withdrawFunds (channelAddress, assetId, amount) {
+  async withdrawFunds (channelAddress: string, assetId: string, amount: string) {
     assert(channelAddress, 'Invalid channel.');
     assert(assetId, 'Invalid asset ID.');
     assert(amount, 'Invalid amount.');
@@ -431,8 +437,8 @@ export class PaymentClient {
    * @param {string} coupon
    * @param {string} contractId
    */
-  async createPayment (coupon, contractId) {
-    let payment;
+  async createPayment (coupon: string, contractId: string) {
+    let payment: any;
 
     if (coupon) {
       payment = decodeBase64ToObj(coupon);
@@ -455,7 +461,7 @@ export class PaymentClient {
    * Resolve payment utility.
    * @param {object} payment
    */
-  async resolvePayment (payment) {
+  async resolvePayment (payment: any) {
     assert(payment, 'Invalid payment.');
 
     const { contractId, transferId, preImage } = payment;
@@ -543,7 +549,7 @@ export class PaymentClient {
    * Get contract from Regstry.
    * @param {string} contractId
    */
-  async _getContract (contractId) {
+  async _getContract (contractId: string) {
     assert(contractId, 'Invalid contractId.');
 
     // Load contract from the registry.
