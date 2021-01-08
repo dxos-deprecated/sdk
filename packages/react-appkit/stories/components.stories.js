@@ -8,9 +8,9 @@ import Box from '@material-ui/core/Box';
 import DebugIcon from '@material-ui/icons/BugReport';
 import ConnectedIcon from '@material-ui/icons/Wifi';
 
-import { createKeyPair, keyToString } from '@dxos/crypto';
+import { createKeyPair, PublicKey } from '@dxos/crypto';
 
-import { MemberAvatar, useAssets, StatusBar, NewItemCreationMenu } from '../src';
+import { MemberAvatar, useAssets, StatusBar, NewItemCreationMenu, InitializeLoader } from '../src';
 import { pads } from './common';
 
 export default {
@@ -19,7 +19,7 @@ export default {
 
 export const withMemberAvatar = () => {
   const member = {
-    publicKey: keyToString(createKeyPair().publicKey),
+    publicKey: PublicKey.from(createKeyPair().publicKey),
     displayName: 'Test name'
   };
 
@@ -32,7 +32,7 @@ export const withMemberAvatar = () => {
 
 export const withNoDisplayName = () => {
   const member = {
-    publicKey: keyToString(createKeyPair().publicKey),
+    publicKey: PublicKey.from(createKeyPair().publicKey),
     displayName: undefined
   };
 
@@ -48,7 +48,7 @@ export const withImages = () => {
 
   return (
     <Box m={2}>
-      <img src={assets.getThumbnail(keyToString(createKeyPair().publicKey))} />
+      <img src={assets.getThumbnail(PublicKey.from(createKeyPair().publicKey).toString())} />
     </Box>
   );
 };
@@ -57,7 +57,7 @@ export const withStatusBar = () => {
   const actions = [
     {
       isActive: () => false,
-      handler: () => {},
+      handler: () => null,
       title: 'Mock debug',
       Icon: DebugIcon
     }
@@ -93,12 +93,20 @@ export const withNewItemCreationMenu = () => {
       {initialized && (
         <NewItemCreationMenu
           open
-          onClose={() => {}}
-          onSelect={() => {}}
+          onClose={() => null}
+          onSelect={() => null}
           pads={pads}
           anchorEl={anchorEl.current}
         />
       )}
+    </Box>
+  );
+};
+
+export const withInitializeLoader = () => {
+  return (
+    <Box m={2}>
+      <InitializeLoader progress={{ haloOpened: false }} />
     </Box>
   );
 };

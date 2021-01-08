@@ -2,6 +2,8 @@
 // Copyright 2020 DXOS.org
 //
 
+// THIS COMPONENT IS NOT USED ANYWHERE
+
 import React from 'react';
 
 import Table from '@material-ui/core/Table';
@@ -15,7 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import YesIcon from '@material-ui/icons/CheckCircleOutline';
 import NoIcon from '@material-ui/icons/RadioButtonUnchecked';
 
-import { humanize, keyToString } from '@dxos/crypto';
+import { humanize } from '@dxos/crypto';
 import { truncateString } from '@dxos/debug';
 
 // TODO(burdon): Move to dxos/react-ux.
@@ -74,18 +76,18 @@ const MemberTable = ({ party, onMemberSelect }) => {
       </TableHead>
       <TableBody>
         {party.members.sort(sorter).map((member) => {
-          const formatDisplay = (key, name) => (key
-            ? `${name || humanize(key)} (${truncateString(keyToString(key), 8)})` : '');
+          const formatDisplay = (key, name) => (
+            key ? `${name || humanize(key)} (${truncateString(key.toString(), 8)})` : ''
+          );
 
-          const key = keyToString(member.publicKey);
+          const key = member.publicKey.toString();
           let admittedBy = '';
           if (member.admittedBy) {
             if (party.key.equals(member.admittedBy)) {
               admittedBy = formatDisplay(member.admittedBy, party.displayName);
             } else {
               const match = party.members.find(other => other.publicKey.equals(member.admittedBy));
-              admittedBy = match ? formatDisplay(member.admittedBy, match.displayName)
-                : formatDisplay(member.admittedBy);
+              admittedBy = match ? formatDisplay(member.admittedBy, match.displayName) : formatDisplay(member.admittedBy);
             }
           }
 

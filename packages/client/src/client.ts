@@ -2,26 +2,32 @@
 // Copyright 2020 DXOS.org
 //
 
+import assert from 'assert';
 import jsondown from 'jsondown';
 import leveljs from 'level-js';
 import memdown from 'memdown';
 
 import { synchronized } from '@dxos/async';
 import { Keyring } from '@dxos/credentials';
-import { humanize, keyToString } from '@dxos/crypto';
-import { ECHO, InvitationOptions, SecretProvider } from '@dxos/echo-db';
+import { humanize, PublicKey } from '@dxos/crypto';
+import * as debug from '@dxos/debug';
+import { ECHO, InvitationOptions, OpenProgress, SecretProvider, sortItemsTopologically } from '@dxos/echo-db';
+import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
 import { ModelConstructor } from '@dxos/model-factory';
-import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
+import { NetworkManager } from '@dxos/network-manager';
+import { ValueUtil } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
 import { Registry } from '@wirelineio/registry-client';
 
+import { DevtoolsContext } from './devtools-context';
 import { isNode } from './platform';
 
 export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
 export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown';
 
+// CAUTION: Breaking changes to this interface require corresponding changes in https://github.com/dxos/kube/blob/main/remote.yml
 export interface ClientConfig {
   storage?: {
     persistent?: boolean,
@@ -30,7 +36,7 @@ export interface ClientConfig {
     path?: string
   },
   swarm?: {
-    signal?: string,
+    signal?: string | string[],
     ice?: {
       urls: string,
       username?: string,
@@ -41,8 +47,13 @@ export interface ClientConfig {
     server: string,
     chainId: string,
   },
+  ipfs?: {
+    server: string,
+    gateway: string,
+  }
   snapshots?: boolean
-  snapshotInterval?: number
+  snapshotInterval?: number,
+  invitationExpiration?: number,
 }
 
 export interface CreateProfileOptions {
@@ -81,7 +92,10 @@ export class Client {
       feedStorage,
       keyStorage,
       snapshotStorage,
-      swarmProvider: new SwarmProvider(swarm),
+      networkManagerOptions: {
+        signal: swarm?.signal ? (Array.isArray(swarm.signal) ? swarm.signal : [swarm.signal]) : undefined,
+        ice: swarm?.ice
+      },
       snapshots,
       snapshotInterval
     });
@@ -109,7 +123,7 @@ export class Client {
    * Initializes internal resources.
    */
   @synchronized
-  async initialize () {
+  async initialize (onProgressCallback?: (progress: OpenProgress) => void) {
     if (this._initialized) {
       return;
     }
@@ -119,7 +133,7 @@ export class Client {
       throw new Error(`Initialize timed out after ${t}s.`);
     }, t * 1000);
 
-    await this._echo.open();
+    await this._echo.open(onProgressCallback);
 
     this._initialized = true;
     clearInterval(timeout);
@@ -130,12 +144,18 @@ export class Client {
    */
   @synchronized
   async destroy () {
+    return this._destroy();
+  }
+
+  /**
+   * Cleanup, release resources.
+   * (To be called from @synchronized method)
+   */
+  private async _destroy () {
     if (!this._initialized) {
       return;
     }
-
     await this._echo.close();
-
     this._initialized = false;
   }
 
@@ -148,7 +168,7 @@ export class Client {
   @synchronized
   async reset () {
     await this._echo.reset();
-    await this.destroy();
+    await this._destroy();
   }
 
   //
@@ -199,7 +219,7 @@ export class Client {
     return {
       username: this._echo.identityDisplayName,
       // TODO(burdon): Why convert to string?
-      publicKey: keyToString(this._echo.identityKey.publicKey)
+      publicKey: this._echo.identityKey.publicKey
     };
   }
 
@@ -222,12 +242,93 @@ export class Client {
   }
 
   /**
+   * This is a minimal solution for party restoration functionality.
+   * It has limitations and hacks:
+   * - We have to treat some models in a special way, this is not a generic solution
+   * - We have to recreate relationship between old IDs in newly created IDs
+   * - This won't work when identities are required, e.g. in chess.
+   * This solution is appropriate only for short term, expected to work only in Teamwork
+   */
+  async createPartyFromSnapshot (snapshot: DatabaseSnapshot) {
+    const party = await this._echo.createParty();
+    const items = snapshot.items ?? [];
+
+    // We have a brand new item ids after creation, which breaks the old structure of id-parentId mapping.
+    // That's why we have a mapping of old ids to new ids, to be able to recover the child-parent relations.
+    const oldToNewIdMap = new Map<string, string>();
+
+    for (const item of sortItemsTopologically(items)) {
+      assert(item.itemId);
+      assert(item.modelType);
+      assert(item.model);
+
+      const model = this.echo.modelFactory.getModel(item.modelType);
+      if (!model) {
+        console.warn('No model found in model factory (could need registering first): ', item.modelType);
+        continue;
+      }
+
+      let parentId: string | undefined;
+      if (item.parentId) {
+        parentId = oldToNewIdMap.get(item.parentId);
+        assert(parentId, 'Unable to recreate child-parent relationship - missing map record');
+        const parentItem = await party.database.getItem(parentId);
+        assert(parentItem, 'Unable to recreate child-parent relationship - parent not created');
+      }
+
+      const createdItem = await party.database.createItem({
+        model: model.constructor,
+        type: item.itemType,
+        parent: parentId
+      });
+
+      oldToNewIdMap.set(item.itemId, createdItem.id);
+
+      if (item.model.array) {
+        for (const mutation of (item.model.array.mutations || [])) {
+          const decodedMutation = model.meta.mutation.decode(mutation.mutation);
+          await (createdItem.model as any).write(decodedMutation);
+        }
+      } else if (item.modelType === 'wrn://protocol.dxos.org/model/object') {
+        assert(item?.model?.custom);
+        assert(model.meta.snapshotCodec);
+        assert(createdItem?.model);
+
+        const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
+        const obj: any = {};
+        assert(decodedItemSnapshot.root);
+        ValueUtil.applyValue(obj, 'root', decodedItemSnapshot.root);
+
+        // The planner board models have a structure in the object model, which needs to be recreated on new ids
+        if (item.itemType === 'dxos.org/type/planner/card' && obj.root.listId) {
+          obj.root.listId = oldToNewIdMap.get(obj.root.listId);
+          assert(obj.root.listId, 'Failed to recreate child-parent structure of a planner card');
+        }
+
+        await createdItem.model.setProperties(obj.root);
+      } else if (item.modelType === 'wrn://protocol.dxos.org/model/text') {
+        assert(item?.model?.custom);
+        assert(model.meta.snapshotCodec);
+        assert(createdItem?.model);
+
+        const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
+
+        await createdItem.model.restoreFromSnapshot(decodedItemSnapshot);
+      } else {
+        throw new Error(`Unhandled model type: ${item.modelType}`);
+      }
+    }
+
+    return party;
+  }
+
+  /**
    * @param partyKey Party publicKey
    * @param secretProvider
    * @param options
    */
-  async createInvitation (partyKey: Uint8Array, secretProvider: SecretProvider, options?: InvitationOptions) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
+  async createInvitation (partyKey: PublicKey, secretProvider: SecretProvider, options?: InvitationOptions) {
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${partyKey.toString()}`));
     return party.createInvitation({
       // TODO(marik-d): Probably an error here.
       secretValidator: async (invitation, secret) => secret && secret.equals((invitation as any).secret),
@@ -241,10 +342,21 @@ export class Client {
    * @param {Buffer} recipientKey Recipient publicKey
    */
   // TODO(burdon): Move to party.
-  async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Uint8Array) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey)}`));
+  async createOfflineInvitation (partyKey: PublicKey, recipientKey: PublicKey) {
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey.toString())}`));
     return party.createOfflineInvitation(recipientKey);
   }
+
+  // TODO(rzadp): Uncomment after updating ECHO.
+  // async createHaloInvitation (secretProvider: SecretProvider, options?: InvitationOptions) {
+  //   return this.echo.createHaloInvitation(
+  //     {
+  //       secretProvider,
+  //       secretValidator: (invitation: any, secret: any) => secret && secret.equals(invitation.secret)
+  //     }
+  //     , options
+  //   );
+  // }
 
   //
   // Contacts
@@ -278,6 +390,21 @@ export class Client {
   // Deprecated
   // TODO(burdon): Separate wrapper for devtools?
   //
+
+  /**
+   * Returns devtools context
+   */
+  getDevtoolsContext (): DevtoolsContext {
+    const devtoolsContext: DevtoolsContext = {
+      client: this,
+      feedStore: this._echo.feedStore,
+      networkManager: this._echo.networkManager,
+      modelFactory: this._echo.modelFactory,
+      keyring: this._echo.keyring,
+      debug
+    };
+    return devtoolsContext;
+  }
 
   /**
    * @deprecated Use echo.keyring

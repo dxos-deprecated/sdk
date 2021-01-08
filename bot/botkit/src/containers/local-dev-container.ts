@@ -2,47 +2,38 @@
 // Copyright 2020 DXOS.org
 //
 
-import fs from 'fs-extra';
-import path from 'path';
+import { SpawnOptions } from '@dxos/protocol-plugin-bot';
 
-import { Spawn } from '@dxos/protocol-plugin-bot';
-
-import { NODE_ENV } from '../env';
-import { LOCAL_BOT_MAIN_FILE, SPAWNED_BOTS_DIR } from '../source-manager';
+import { LOCAL_BOT_MAIN_FILE } from '../source-manager';
 import { CommandInfo, ChildProcessContainer } from './child-process-container';
-import { BotAttributes, LOCAL_BOT_RUN_COMMAND, LOCAL_BOT_RUN_ARGS } from './common';
+
+// Command to spawn to run a bot in local development mode.
+const LOCAL_BOT_RUN_COMMAND = 'yarn';
+
+// Fixed arguments to pass to LOCAL_BOT_RUN_COMMAND.
+const LOCAL_BOT_RUN_ARGS = ['--silent', 'babel-watch', '--use-polling'];
 
 /**
  * Local Bot Container; Used for running bots locally as a node process.
  */
 export class LocalDevBotContainer extends ChildProcessContainer {
-  async getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<BotAttributes> {
-    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
-    await fs.ensureDir(childDir);
-
-    const { command, args } = this._getCommand(options);
-    return { childDir, command, args };
+  constructor (
+    private readonly _nodePath: string
+  ) {
+    super();
   }
 
   /**
    * Get process command (to spawn).
    */
-  protected _getCommand (options: any): CommandInfo {
-    const { botPath } = options;
+  protected _getCommand (installDirectory: string, spawnOptions: SpawnOptions): CommandInfo {
+    const { botPath } = spawnOptions;
     return {
       command: LOCAL_BOT_RUN_COMMAND,
-      args: LOCAL_BOT_RUN_ARGS.concat([botPath || LOCAL_BOT_MAIN_FILE])
+      args: LOCAL_BOT_RUN_ARGS.concat([botPath || LOCAL_BOT_MAIN_FILE]),
+      env: {
+        NODE_PATH: this._nodePath
+      }
     };
-  }
-
-  async getAdditionalOpts (options: any): Promise<any> {
-    const { env } = options;
-
-    if (env === NODE_ENV) {
-      return {
-        NODE_PATH: this._config.get('cli.nodePath')
-      };
-    }
-    return {};
   }
 }

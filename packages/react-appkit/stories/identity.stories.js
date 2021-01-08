@@ -15,7 +15,7 @@ export default {
 export const withRegistration = () => {
   const [open, setOpen] = useState(true);
 
-  const handleFinish = (username, seedPhrase) => {
+  const handleFinishCreate = (username, seedPhrase) => {
     console.log(username, seedPhrase);
     setTimeout(() => {
       setOpen(false);
@@ -24,7 +24,12 @@ export const withRegistration = () => {
 
   return (
     <Box m={2}>
-      <RegistrationDialog open={open} onFinish={handleFinish} />
+      <RegistrationDialog
+        open={open}
+        onFinishCreate={handleFinishCreate}
+        onFinishRestore={() => console.warn('Not implemented in this storybook')}
+        keyringDecrypter={() => console.warn('Not implemented in this storybook')}
+      />
     </Box>
   );
 };

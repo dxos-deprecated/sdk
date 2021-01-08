@@ -5,7 +5,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Authenticator from './Authenticator';
+import DeviceAuthenticator from './DeviceAuthenticator';
 import Members from './Members';
 
 /**
@@ -17,7 +17,7 @@ const SystemRoutes = (router) => {
 
   return (
     <Route exact path={[routes.auth, routes.keys, routes.store, routes.feed, routes.members]}>
-      <Route exact path={routes.auth} component={Authenticator} />
+      <Route exact path={routes.auth} component={DeviceAuthenticator} />
       <Route exact path={routes.members} component={Members} />
     </Route>
   );

@@ -2,43 +2,44 @@
 // Copyright 2020 DXOS.org
 //
 
-import { spawn, SpawnOptions } from 'child_process';
-import { EventEmitter } from 'events';
+import { spawn, SpawnOptions, ChildProcess } from 'child_process';
 import fs from 'fs-extra';
-import moment from 'moment';
-import watch from 'node-watch';
-import path from 'path';
 import kill from 'tree-kill';
 
+import { Event } from '@dxos/async';
 import { keyToString } from '@dxos/crypto';
-import { Spawn } from '@dxos/protocol-plugin-bot';
+import { SpawnOptions as BotSpawnOptions } from '@dxos/protocol-plugin-bot';
 
-import { BotInfo } from '../bot-manager';
+import { BotId, BotInfo } from '../bot-manager';
 import { log, logBot } from '../log';
-import { SPAWNED_BOTS_DIR } from '../source-manager';
-import { BotAttributes, BotContainer, NODE_BOT_MAIN_FILE } from './common';
+import { BotContainer, BotExitEventArgs, ContainerStartOptions } from './common';
 
 export interface CommandInfo {
   command: string
   args: string[]
+  env?: Record<string, string>
+}
+
+interface RunningBot {
+  process: ChildProcess
 }
 
 /**
  * Bot Container; Used for running bot instanced inside specific compute service.
  */
-export class ChildProcessContainer extends EventEmitter implements BotContainer {
-  protected readonly _config: any;
+export abstract class ChildProcessContainer implements BotContainer {
+  readonly botExit = new Event<BotExitEventArgs>();
+
+  private readonly _bots = new Map<BotId, RunningBot>() ;
 
   private _controlTopic?: any;
 
-  constructor (config: any) {
-    super();
+  /**
+   * Get process command (to spawn).
+   */
+  protected abstract _getCommand (installDirectory: string, spawnOptions: BotSpawnOptions): CommandInfo;
 
-    this._config = config;
-  }
-
-  async start (options: any) {
-    const { controlTopic } = options;
+  async start ({ controlTopic }: ContainerStartOptions) {
     this._controlTopic = controlTopic;
   }
 
@@ -46,55 +47,32 @@ export class ChildProcessContainer extends EventEmitter implements BotContainer 
 
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getBotAttributes (botId: string, installDirectory: string, options: Spawn.SpawnOptions): Promise<BotAttributes> {
-    const childDir = path.join(installDirectory, SPAWNED_BOTS_DIR, botId);
-    await fs.ensureDir(childDir);
-
-    const { command, args } = this._getCommand(installDirectory);
-    return { childDir, command, args };
-  }
-
-  /**
-   * Get process command (to spawn).
-   */
-  protected _getCommand (installDirectory: string): CommandInfo {
-    return {
-      command: 'node',
-      args: [path.join(installDirectory, NODE_BOT_MAIN_FILE)]
-    };
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getAdditionalOpts (options: any): Promise<any> {
-    return {};
-  }
-
   /**
    * Start bot instance.
    */
-  async startBot (botId: string, botInfo: BotInfo | undefined, options: any = {}) {
-    const { name, env, childDir, command, args } = botInfo || options;
+  async startBot (botInfo: BotInfo) {
+    const { botId, name, installDirectory, storageDirectory, spawnOptions } = botInfo;
+    await fs.ensureDir(storageDirectory);
+
+    const { command, args, env: childEnv } = this._getCommand(installDirectory, spawnOptions);
 
     const wireEnv = {
       WIRE_BOT_CONTROL_TOPIC: keyToString(this._controlTopic),
       WIRE_BOT_UID: botId,
       WIRE_BOT_NAME: name,
-      WIRE_BOT_CWD: childDir,
-      WIRE_BOT_RESTARTED: (!!botInfo).toString()
+      WIRE_BOT_CWD: storageDirectory,
+      WIRE_BOT_RESTARTED: 'false' // TODO(marik-d): Remove.
     };
-
-    const additionalOptions = await this.getAdditionalOpts(botInfo || options);
 
     const childOptions: SpawnOptions = {
       env: {
         ...process.env,
         NODE_OPTIONS: '',
-        ...additionalOptions,
+        ...childEnv,
         ...wireEnv
       },
 
-      cwd: childDir,
+      cwd: storageDirectory,
 
       // https://nodejs.org/api/child_process.html#child_process_options_detached
       detached: false
@@ -102,42 +80,17 @@ export class ChildProcessContainer extends EventEmitter implements BotContainer 
 
     const botProcess = spawn(command, args, childOptions);
 
-    const timeState = {
-      started: moment.utc(),
-      lastActive: moment.utc()
-    };
+    // TODO(marik-d): Fix this.
+    // TODO(marik-d): Causes leaks.
+    // const timeState = {
+    //   started: moment.utc(),
+    //   lastActive: moment.utc()
+    // };
+    // const watcher = watch(storageDirectory, { recursive: true }, () => {
+    //   timeState.lastActive = moment.utc();
+    // });
 
-    const watcher = watch(childDir, { recursive: true }, () => {
-      timeState.lastActive = moment.utc();
-    });
-
-    if (botInfo) {
-      // Restart.
-      Object.assign(botInfo, {
-        process: botProcess,
-        watcher,
-        stopped: false,
-        ...timeState
-      });
-    } else {
-      // New instance.
-      botInfo = {
-        botId,
-        childDir,
-        process: botProcess,
-        id: options.botName,
-        parties: [],
-        command,
-        args,
-        watcher,
-        stopped: false,
-        name,
-        env,
-        ...timeState
-      };
-    }
-
-    log(`Spawned bot: ${JSON.stringify({ pid: botProcess.pid, command, args, wireEnv, cwd: childDir })}`);
+    log(`Spawned bot: ${JSON.stringify({ pid: botProcess.pid, command, args, wireEnv, cwd: storageDirectory })}`);
 
     botProcess.stdout!.on('data', (data) => {
       logBot[botProcess.pid](`${data}`);
@@ -147,54 +100,30 @@ export class ChildProcessContainer extends EventEmitter implements BotContainer 
       logBot[botProcess.pid](`${data}`);
     });
 
-    botProcess.on('close', code => {
-      this.emit('bot-close', botId, code);
-      log(`Bot pid: ${botProcess.pid} exited with code ${code}.`);
+    botProcess.on('close', exitCode => {
+      this.botExit.emit({ botId, exitCode });
+      log(`Bot pid: ${botProcess.pid} exited with code ${exitCode}.`);
     });
 
     botProcess.on('error', (err) => {
       logBot[botProcess.pid](`Error: ${err}`);
     });
 
-    return botInfo;
-  }
-
-  async stopBot (botInfo: BotInfo): Promise<void> {
-    const { process, watcher } = botInfo;
-
-    return new Promise(resolve => {
-      if (watcher) {
-        watcher.close();
-      }
-      if (process && process.pid) {
-        kill(process.pid, 'SIGKILL', () => {
-          resolve();
-        });
-      }
+    this._bots.set(botId, {
+      process: botProcess
     });
   }
 
-  async killBot (botInfo: BotInfo) {
-    await this.stopBot(botInfo);
-
-    const { childDir } = botInfo;
-    if (childDir) {
-      await fs.remove(childDir);
+  async stopBot (botInfo: BotInfo): Promise<void> {
+    if (!this._bots.has(botInfo.botId)) {
+      return;
     }
-  }
+    const { process } = this._bots.get(botInfo.botId)!;
 
-  serializeBot ({ id, botId, type, childDir, parties, command, args, stopped, name, env }: BotInfo) {
-    return {
-      id,
-      botId,
-      type,
-      name,
-      childDir,
-      parties,
-      command,
-      args,
-      stopped,
-      env
-    };
+    return new Promise(resolve => {
+      kill(process.pid, 'SIGKILL', () => {
+        resolve();
+      });
+    });
   }
 }

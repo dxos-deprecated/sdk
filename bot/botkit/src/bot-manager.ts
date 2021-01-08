@@ -8,11 +8,12 @@ import debug from 'debug';
 import fs, { ensureFileSync } from 'fs-extra';
 import yaml from 'js-yaml';
 import get from 'lodash.get';
+import moment from 'moment';
 import path from 'path';
 
 import { Client, PaymentClient } from '@dxos/client';
-import { keyToString, keyToBuffer, createKeyPair, sha256 } from '@dxos/crypto';
-import { transportProtocolProvider } from '@dxos/network-manager';
+import { keyToString, keyToBuffer, createKeyPair, sha256, PublicKey } from '@dxos/crypto';
+import { StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
   COMMAND_SIGN,
   MESSAGE_CONFIRM,
@@ -21,7 +22,7 @@ import {
   createInvitationMessage,
   createSignResponse,
   createBotCommand,
-  Spawn,
+  SpawnOptions,
   Payment
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
@@ -39,21 +40,21 @@ const logInfo = debug('dxos:botkit');
 // File where information about running bots is stored.
 export const BOTS_DUMP_FILE = 'out/factory-state';
 
+export type BotId = string;
+
 export interface BotInfo {
-  botId: string
+  botId: BotId
   id: string
+  installDirectory: string
+  storageDirectory: string
+  spawnOptions: SpawnOptions
   parties: string[]
   started: any
   lastActive: any
   stopped: boolean
   name: string
-  type?: any
-  childDir: string
-  command: string
-  args: string[]
+  recordName: string
   env: string
-  process: any
-  watcher?: any
 }
 
 interface Options {
@@ -100,7 +101,7 @@ export class BotManager {
     this._emitBotEvent = emitBotEvent;
 
     this._localDev = this._config.get('bot.localDev');
-    this._botsFile = path.join(process.cwd(), BOTS_DUMP_FILE);
+    this._botsFile = path.join(process.cwd(), this._config.get('bot.dumpFile', BOTS_DUMP_FILE));
 
     this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
 
@@ -109,9 +110,9 @@ export class BotManager {
     ensureFileSync(this._botsFile);
 
     for (const container of Object.values(this._botContainers)) {
-      container.on('bot-close', async (botId: string, code: number) => {
+      container.botExit.on(async ({ botId, exitCode }) => {
         const botInfo = this._bots.get(botId);
-        if (!code && botInfo) {
+        if (!exitCode && botInfo) {
           botInfo.stopped = true;
           await this._saveBotsToFile();
         }
@@ -131,8 +132,12 @@ export class BotManager {
   async start () {
     this._plugin = new BotPlugin(this._controlPeerKey, (protocol: any, message: any) => this._botMessageHandler(protocol, message));
     // Join control swarm.
-    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm(this._controlTopic,
-      transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin)) as any;
+    this._leaveControlSwarm = await this._client.networkManager.joinProtocolSwarm({
+      topic: PublicKey.from(this._controlTopic),
+      protocol: transportProtocolProvider(this._controlTopic, this._controlPeerKey, this._plugin),
+      peerId: PublicKey.from(this._controlPeerKey),
+      topology: new StarTopology(PublicKey.from(this._controlPeerKey))
+    });
 
     await this._readBotsFromFile();
 
@@ -151,7 +156,7 @@ export class BotManager {
   /**
    * Spawn bot instance.
    */
-  async spawnBot (botName: string | undefined, options: Spawn.SpawnOptions = {}) {
+  async spawnBot (botName: string | undefined, options: SpawnOptions = {}) {
     let { ipfsCID, env = NATIVE_ENV, name: displayName, id, payment } = options;
     assert(botName || ipfsCID || this._localDev);
 
@@ -172,6 +177,10 @@ export class BotManager {
 
     log(`Spawn bot request for ${botName || ipfsCID || displayName} env: ${env}`);
 
+    if (this._botContainers[env] === undefined) {
+      throw new Error(`Unknown env ${env}. Available envs are: ${Object.keys(this._botContainers)}`);
+    }
+
     assert(id, 'Invalid Bot Id.');
     assert(displayName, 'Invalid Bot Name.');
     assert(payment, 'Invalid payment.');
@@ -184,9 +193,22 @@ export class BotManager {
     const installDirectory = await this._sourceManager.downloadAndInstallBot(id, ipfsCID, options);
     assert(installDirectory, `Invalid install directory for bot: ${botName || ipfsCID}`);
 
-    const params = await this._botContainers[env].getBotAttributes(botId, installDirectory, options);
+    this._bots.set(botId, {
+      botId,
+      id,
+      recordName: botName || id,
+      installDirectory,
+      storageDirectory: path.join(process.cwd(), '.bots', botId),
+      spawnOptions: options,
+      parties: [],
+      stopped: false,
+      name,
+      env,
+      started: 0,
+      lastActive: 0
+    });
 
-    return this._startBot(botId, { botName, env, name, ...params });
+    return this._startBot(botId);
   }
 
   /**
@@ -203,7 +225,8 @@ export class BotManager {
     const botInfo = this._bots.get(botId);
     assert(botInfo, 'Invalid Bot Id');
 
-    await this._botContainers[botInfo.env].killBot(botInfo);
+    await this._botContainers[botInfo.env].stopBot(botInfo);
+    await fs.remove(botInfo.storageDirectory);
     this._bots.delete(botId);
     await this._saveBotsToFile();
 
@@ -213,7 +236,8 @@ export class BotManager {
   async killAllBots () {
     for await (const botInfo of this._bots.values()) {
       if (this._botContainers[botInfo.env]) {
-        await this._botContainers[botInfo.env].killBot(botInfo);
+        await this._botContainers[botInfo.env].stopBot(botInfo);
+        await fs.remove(botInfo.storageDirectory);
       }
     }
     this._bots.clear();
@@ -300,11 +324,14 @@ export class BotManager {
    * @param botId
    * @param options
    */
-  private async _startBot (botId: string, options: any = {}) {
-    let botInfo = this._bots.get(botId);
-    botInfo = await this._botContainers[options.env].startBot(botId, botInfo, options);
+  private async _startBot (botId: string) {
+    const botInfo = this._bots.get(botId);
+    assert(botInfo);
 
-    this._bots.set(botId, botInfo!);
+    log(`_startBot ${JSON.stringify(botInfo)}`);
+    await this._botContainers[botInfo.env].startBot(botInfo);
+    botInfo.started = moment.utc();
+
     await this._saveBotsToFile();
 
     return botId;
@@ -320,15 +347,14 @@ export class BotManager {
 
     await this._botContainers[botInfo.env].stopBot(botInfo);
 
-    if (stopped) {
-      botInfo.stopped = true;
-      await this._saveBotsToFile();
-    }
+    botInfo.stopped = stopped;
+    await this._saveBotsToFile();
+
     log(`Bot '${botId}' stopped.`);
   }
 
   private async _saveBotsToFile () {
-    const data = [...this._bots.values()].map(botInfo => this._botContainers[botInfo.env].serializeBot(botInfo));
+    const data = [...this._bots.values()];
     await fs.writeJSON(this._botsFile, data);
   }
 

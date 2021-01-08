@@ -24,8 +24,8 @@ export const withItemSettingsDialog = () => {
     <Box m={2}>
       <ItemSettings
         open
-        onClose={() => {}}
-        onCancel={() => {}}
+        onClose={() => null}
+        onCancel={() => null}
         item={mockItem}
         closingDisabled
         icon={<Icon />}
@@ -39,8 +39,8 @@ export const withPadSpecificItemSettingsDialog = () => {
     <Box m={2}>
       <ItemSettings
         open
-        onClose={() => {}}
-        onCancel={() => {}}
+        onClose={() => null}
+        onCancel={() => null}
         item={mockItem}
         closingDisabled
         icon={<Icon />}

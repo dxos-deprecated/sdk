@@ -1,6 +1,6 @@
 {
   "name": "@dxos/react-ux",
-  "version": "2.7.14-alpha.0",
+  "version": "2.7.49",
   "description": "React components",
   "keywords": [],
   "license": "AGPL-3.0",
@@ -15,17 +15,17 @@
     "test": "jest --rootDir ./tests --verbose --runInBand"
   },
   "dependencies": {
-    "@dxos/crypto": "^1.0.0-beta.10",
-    "@dxos/debug": "^1.0.0-beta.73",
-    "@material-ui/core": "^4.9.0",
-    "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.42",
+    "@dxos/crypto": "~1.0.7",
+    "@dxos/debug": "~1.0.0-beta.75",
+    "@material-ui/core": "^4.10.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.55",
     "clsx": "^1.0.4",
     "lodash.isplainobject": "^4.0.6",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@dxos/eslint-plugin": "^1.0.8",
+    "@dxos/eslint-plugin": "~1.0.10",
     "@storybook/addon-actions": "^6.0.4",
     "@storybook/addon-knobs": "^6.0.4",
     "@storybook/react": "^6.0.21",

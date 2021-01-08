@@ -12,9 +12,13 @@ describe('RegistrationDialog', () => {
   let finished;
 
   const defaultProps = {
-    onFinish: () => {
+    onFinishCreate: () => {
       finished = true;
-    }
+    },
+    onFinishRestore: () => {
+      finished = true;
+    },
+    keyringDecrypter: () => console.warn('Not implemented in this test.')
   };
 
   const createInputValue = (val) => {
@@ -119,8 +123,6 @@ describe('RegistrationDialog', () => {
     // TODO
     // });
 
-    test('Clicking "Next" leads to Verify Seed Phrase stage', async () => {
-
-    });
+    test.skip('Clicking "Next" leads to Verify Seed Phrase stage', async () => null);
   });
 });

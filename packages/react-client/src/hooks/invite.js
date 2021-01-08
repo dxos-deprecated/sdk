@@ -7,7 +7,7 @@ import { useEffect, useState, useMemo } from 'react';
 
 import { trigger } from '@dxos/async';
 import { generatePasscode } from '@dxos/credentials';
-import { keyToString } from '@dxos/crypto';
+import { PublicKey } from '@dxos/crypto';
 import { InvitationDescriptor } from '@dxos/echo-db';
 
 import { useClient } from './client';
@@ -15,13 +15,13 @@ import { useClient } from './client';
 const encodeInvitation = (invitation) => btoa(JSON.stringify(invitation.toQueryParameters()));
 const decodeInvitation = (code) => InvitationDescriptor.fromQueryParameters(JSON.parse(atob(code)));
 
-const noOp = () => {};
+const noOp = () => null;
 
 /**
  * Hook to redeem an invitation Code and provide the PIN authentication if needed.
  * @param {Object} options
  * @param {(party: Party) => void} options.onDone called once the redeem flow finishes successfully.
- * @param {() => void} options.onError called if the invite flow produces an error.
+ * @param {(error?: string) => void | never} options.onError called if the invite flow produces an error.
  * @returns {[redeemCode: (code: String) => void, setPin: (pin: String) => void ]}
  */
 export function useInvitationRedeemer ({ onDone = noOp, onError = noOp, isOffline = false } = {}) {
@@ -57,28 +57,35 @@ export function useInvitationRedeemer ({ onDone = noOp, onError = noOp, isOfflin
 
 /**
  * Hook to create an Invitation for a given party
- * @param {Buffer} partyKey the Party to create invite for. Required.
+ * @param {PublicKey} partyKey the Party to create invite for. Required.
  * @param {Object} options
  * @param {() => void} options.onDone called once the invite flow finishes successfully.
- * @param {() => void} options.onError called if the invite flow produces an error.
+ * @param {(error?: string) => void | never} options.onError called if the invite flow produces an error.
+ * @param {(() => void) | undefined} options.onExpiration called if the invite flow expired.
+ * @param {number | undefined} options.expiration Optional expiration
  * @returns {[invitationCode: String, pin: String ]}
  */
-export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {}) {
+export function useInvitation (partyKey, { onDone = noOp, onError = noOp, onExpiration = noOp, expiration } = {}) {
   assert(partyKey);
   const client = useClient();
   const [invitationCode, setInvitationCode] = useState();
   const [pin, setPin] = useState();
-  const key = keyToString(partyKey);
+  const key = partyKey.toString();
 
   useEffect(() => {
     client.createInvitation(
-      partyKey,
+      PublicKey.from(partyKey),
       () => {
         const pin = generatePasscode();
         setPin(pin);
         return Buffer.from(pin);
       },
-      { onFinish: () => onDone() })
+      {
+        onFinish: ({ expired }) => {
+          expired ? onExpiration() : onDone();
+        },
+        expiration
+      })
       .then(invitation => setInvitationCode(encodeInvitation(invitation)))
       .catch(error => onError(error));
   }, [key]);
@@ -95,7 +102,7 @@ export function useInvitation (partyKey, { onDone = noOp, onError = noOp } = {})
  * @param {Contact|{ publicKey: {Buffer} }} recipient the recipient for the invitation. Required.
  * @param {Object} options
  * @param {() => void} options.onDone called once the invite flow finishes successfully.
- * @param {() => void} options.onError called if the invite flow produces an error.
+ * @param {(error?: string) => void | never} options.onError called if the invite flow produces an error.
  * @returns {[invitationCode: String ]}
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -104,11 +111,11 @@ export function useOfflineInvitation (partyKey, recipient, { onDone = noOp, onEr
   assert(recipient);
   const client = useClient();
   const [invitationCode, setInvitationCode] = useState();
-  const key = keyToString(partyKey);
-  const recipientKey = keyToString(recipient.publicKey);
+  const key = partyKey.toString();
+  const recipientKey = recipient.publicKey.toString();
 
   useEffect(() => {
-    client.createOfflineInvitation(partyKey, recipient.publicKey)
+    client.createOfflineInvitation(PublicKey.from(partyKey), recipient.publicKey)
       .then(invitation => {
         setInvitationCode(encodeInvitation(invitation));
       })
