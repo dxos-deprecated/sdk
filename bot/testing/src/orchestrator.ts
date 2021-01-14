@@ -31,6 +31,14 @@ const FACTORY_START_TIMEOUT = 5 * 1000;
 export const NODE_ENV = 'node';
 export const BROWSER_ENV = 'browser';
 
+// Dummy payment for tests.
+const payment = {
+  channelAddress: '',
+  transferId: '',
+  preImage: '',
+  contractId: ''
+};
+
 // Get Id information of bot.
 // Important: this regulates how often bot gets downloaded from ipfs.
 const testTime = Date.now();
@@ -96,7 +104,7 @@ export class Orchestrator {
 
   async startAgent (options: SpawnOptions) {
     const { env = NODE_ENV, botPath, ...rest } = options;
-    
+
     assert(botPath);
     if (this._localRun) {
       options = {
@@ -138,7 +146,7 @@ export class Orchestrator {
   async _startBotFactory (): Promise<{ topic: string, process: ChildProcess }> {
     return runWithTimeout(async () => {
       const { publicKey, secretKey } = createKeyPair();
-  
+
       const topic = keyToString(publicKey);
 
       const env = {
@@ -178,7 +186,8 @@ export class Orchestrator {
     const { env } = options;
     const botId = await this._factoryClient.sendSpawnRequest(undefined, {
       ...getBotIdentifiers(botPath, env),
-      ...options
+      ...options,
+      payment
     });
 
     log(`Test Bot ${botId} spawned.`);
@@ -196,7 +205,7 @@ export class Orchestrator {
 
     const invitation = await this._party.createInvitation({ secretValidator });
 
-    await this._factoryClient.sendInvitationRequest(botId, this._party.key.toHex(), {}, invitation.toQueryParameters());
+    await this._factoryClient.sendInvitationRequest(botId, this._party.key.toHex(), {}, invitation.toQueryParameters(), payment);
 
     log(`Bot ${botId} invited.`);
   }
