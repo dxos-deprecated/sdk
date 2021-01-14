@@ -35,7 +35,9 @@ const getWebpackConfig = (botPath: string, buildPath: string, browser = false): 
 
     node: browser
       ? {
-        fs: 'empty'
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
       }
       : undefined,
 
