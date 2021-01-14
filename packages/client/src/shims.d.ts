@@ -9,3 +9,6 @@ declare module '@wirelineio/registry-client';
 
 declare module 'random-access-memory';
 declare module 'jsondown';
+
+declare module 'human-standard-token-abi';
+declare module 'pino';

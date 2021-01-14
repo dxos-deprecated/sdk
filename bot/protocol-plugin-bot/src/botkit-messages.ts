@@ -6,7 +6,7 @@ import assert from 'assert';
 
 import { keyToString } from '@dxos/crypto';
 
-import { Message, SpawnOptions, Status } from './proto';
+import { Message, SpawnOptions, Status, Payment } from './proto';
 
 export const COMMAND_SPAWN = 'dxos.protocol.bot.Spawn';
 export const COMMAND_SPAWN_AND_INVITE = 'dxos.protocol.bot.SpawnAndInvite';
@@ -128,11 +128,12 @@ export const createSpawnResponse = (botId?: string, error?: string): Message => 
 /**
  * Creates a new invitation command message.
  */
-export const createInvitationCommand = (botId: string, topic: Buffer, modelOptions: string, invitation: string): Message => {
+export const createInvitationCommand = (botId: string, topic: Buffer, modelOptions: string, invitation: string, payment: Payment): Message => {
   assert(botId);
   assert(topic);
   assert(modelOptions);
   assert(Buffer.isBuffer(topic));
+  assert(payment);
 
   return {
     message: {
@@ -140,7 +141,8 @@ export const createInvitationCommand = (botId: string, topic: Buffer, modelOptio
       botId,
       topic: keyToString(topic),
       modelOptions,
-      invitation
+      invitation,
+      payment
     }
   };
 };

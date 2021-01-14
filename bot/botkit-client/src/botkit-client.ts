@@ -128,14 +128,14 @@ export class BotFactoryClient extends EventEmitter {
   /**
    * Send request for bot invitation.
    */
-  async sendInvitationRequest (botId: string, partyToJoin: string, spec: Object, invitation: Object) {
+  async sendInvitationRequest (botId: string, partyToJoin: string, spec: Object, invitation: Object, payment: Object) {
     if (!this._connected) {
       await this.connect();
     }
 
     log(`Sending spawn request for party: ${partyToJoin} with invitation id: ${invitation}`);
     const invitationResponse = await this._botPlugin.sendCommand(this._botFactoryTopic,
-      createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation)));
+      createInvitationCommand(botId, keyToBuffer(partyToJoin), JSON.stringify(spec), JSON.stringify(invitation), payment));
     // eslint-disable-next-line camelcase
     assert(invitationResponse?.message?.__type_url === 'dxos.protocol.bot.CommandResponse', 'Invalid response type');
     const { message: { error } } = invitationResponse;

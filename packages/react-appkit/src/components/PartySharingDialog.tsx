@@ -335,7 +335,9 @@ const PartySharingDialog = ({
       assert(botFactoryClient);
       const botUID = await botFactoryClient.sendSpawnRequest(botId);
       assert(botUID);
-      await botFactoryClient.sendInvitationRequest(botUID, party.key.toHex(), spec, invitation.toQueryParameters());
+
+      // TODO(ashwin): Pass valid payment object.
+      await botFactoryClient.sendInvitationRequest(botUID, party.key.toHex(), spec, invitation.toQueryParameters(), {});
       setBotDialogVisible(false);
       // TODO(egorgripasov): Replace 2 calls above once protocol changes are on kube.
       // await botFactoryClient.sendSpawnAndInviteRequest(botId, party.key.toHex(), invitation.toQueryParameters(), {});

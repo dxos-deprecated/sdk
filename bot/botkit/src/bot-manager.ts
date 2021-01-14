@@ -11,7 +11,7 @@ import get from 'lodash.get';
 import moment from 'moment';
 import path from 'path';
 
-import { Client } from '@dxos/client';
+import { Client, PaymentClient } from '@dxos/client';
 import { keyToString, keyToBuffer, createKeyPair, sha256, PublicKey } from '@dxos/crypto';
 import { StarTopology, transportProtocolProvider } from '@dxos/network-manager';
 import {
@@ -22,7 +22,8 @@ import {
   createInvitationMessage,
   createSignResponse,
   createBotCommand,
-  SpawnOptions
+  SpawnOptions,
+  Payment
 } from '@dxos/protocol-plugin-bot';
 import { Registry } from '@wirelineio/registry-client';
 
@@ -79,6 +80,7 @@ export class BotManager {
   private readonly _botsFile: string;
   private readonly _registry: any;
   private readonly _sourceManager: SourceManager;
+  private readonly _paymentClient: PaymentClient;
 
   /**
    * Topic for communications between bots and bot-manager.
@@ -102,6 +104,8 @@ export class BotManager {
     this._botsFile = path.join(process.cwd(), this._config.get('bot.dumpFile', BOTS_DUMP_FILE));
 
     this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
+
+    this._paymentClient = new PaymentClient(this._config);
 
     ensureFileSync(this._botsFile);
 
@@ -153,7 +157,7 @@ export class BotManager {
    * Spawn bot instance.
    */
   async spawnBot (botName: string | undefined, options: SpawnOptions = {}) {
-    let { ipfsCID, env = NATIVE_ENV, name: displayName, id } = options;
+    let { ipfsCID, env = NATIVE_ENV, name: displayName, id, payment } = options;
     assert(botName || ipfsCID || this._localDev);
 
     if (!ipfsCID) {
@@ -179,6 +183,9 @@ export class BotManager {
 
     assert(id, 'Invalid Bot Id.');
     assert(displayName, 'Invalid Bot Name.');
+    assert(payment, 'Invalid payment.');
+
+    await this._paymentClient.resolvePayment(payment);
 
     const botId = keyToString(createKeyPair().publicKey);
     const name = `bot:${displayName} ${chance.animal()}`;
@@ -267,8 +274,10 @@ export class BotManager {
    * @param topic Party to join.
    * @param invitation Invitation.
    */
-  async inviteBot (botId: string, topic: string, invitation: string) {
+  async inviteBot (botId: string, topic: string, invitation: string, payment: Payment) {
     const botInfo = this._bots.get(botId);
+
+    await this._paymentClient.resolvePayment(payment);
 
     assert(botInfo, 'Invalid Bot Id');
     if (botInfo.parties.indexOf(topic) === -1) {

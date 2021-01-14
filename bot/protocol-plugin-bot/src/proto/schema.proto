@@ -12,6 +12,14 @@ message Message {
   google.protobuf.Any message = 1;
 }
 
+// TODO(ashwin): Move to common repo.
+message Payment {
+  string channelAddress = 1;
+  string transferId = 2;
+  string preImage = 3;
+  string contractId = 4;
+}
+
 message SpawnOptions {
   string id = 1;
   string name = 2;
@@ -19,6 +27,9 @@ message SpawnOptions {
   string ipfsCID = 4;
   string ipfsEndpoint = 5;
   string botPath = 6;
+
+  // Payment for bot spawn.
+  Payment payment = 7;
 }
 
 // Command to spawn a bot.
@@ -56,6 +67,9 @@ message Invite {
 
   // Invitation for the case of credentials usage.
   string invitation = 4;
+
+  // Payment for bot invite.
+  Payment payment = 5;
 }
 
 message CommandResponse {

@@ -26,7 +26,7 @@
     "test": "wsrun -s test",
     "test:coverage": "c8 yarn test",
     "test:playwright": "wsrun -s --exclude-missing test:playwright",
-    "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https",
+    "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm github.com codeload.github.com --allowed-schemes \"https:\" \"git+https:\"",
     "version:check": "version-check"
   },
   "devDependencies": {

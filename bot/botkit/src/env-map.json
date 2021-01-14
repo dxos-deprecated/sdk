@@ -18,6 +18,9 @@
   "WIRE_WNS_CHAIN_ID": {
     "path": "services.wns.chainId"
   },
+  "WIRE_PAYMENT_ENDPOINT": {
+    "path": "services.payment.server"
+  },
   "WIRE_IPFS_SERVER": {
     "path": "services.ipfs.server"
   },

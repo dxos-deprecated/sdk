@@ -253,13 +253,15 @@ export class BotFactory {
     assert(botId);
     assert(botConfig);
 
-    const { topic, invitation } = botConfig;
+    const { topic, invitation, payment } = botConfig;
 
     assert(topic);
     log(`Invite bot request for '${botId}': ${JSON.stringify(botConfig)}`);
 
     assert(invitation);
-    await this._botManager!.inviteBot(botId, topic, invitation);
+    assert(payment);
+
+    await this._botManager!.inviteBot(botId, topic, invitation, payment);
   }
 
   async stop () {

@@ -12,6 +12,8 @@
     "test": "jest --rootDir ./src --verbose --forceExit"
   },
   "dependencies": {
+    "@connext/vector-types": "^0.0.25",
+    "@connext/vector-utils": "^0.0.25",
     "@dxos/async": "~1.0.2-alpha.0",
     "@dxos/credentials": "~2.1.16-alpha.0",
     "@dxos/crypto": "~1.0.7",
@@ -33,6 +35,8 @@
     "debug": "^4.1.1",
     "del": "^5.1.0",
     "end-of-stream": "^1.4.4",
+    "ethers": "^5.0.20",
+    "human-standard-token-abi": "^2.0.0",
     "hypertrie": "^3.8.0",
     "jsondown": "dxos/jsondown",
     "level-js": "^5.0.2",
