@@ -43,7 +43,7 @@ export interface ClientConfig {
       credential?: string,
     }[],
   },
-  wns?: {
+  registry?: {
     server: string,
     chainId: string,
   },
@@ -80,7 +80,7 @@ export class Client {
     const {
       storage = {},
       swarm = DEFAULT_SWARM_CONFIG,
-      wns,
+      registry,
       snapshots = false,
       snapshotInterval
     } = config;
@@ -100,7 +100,7 @@ export class Client {
       snapshotInterval
     });
 
-    this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
+    this._registry = registry ? new Registry(registry.server, registry.chainId) : undefined;
   }
 
   get config (): ClientConfig {

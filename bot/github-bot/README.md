@@ -2,7 +2,7 @@
 
 ## Development
 
-BotFactory running in local-dev mode could be used during Bot development process. This will bypass WNS and IPFS and load bot directly from source. In order to start BotFactory, such command could be used from the root folder of the bot package:
+BotFactory running in local-dev mode could be used during Bot development process. This will bypass Registry and IPFS and load bot directly from source. In order to start BotFactory, such command could be used from the root folder of the bot package:
 
 > You could use optional `--reset` argument to prevent restarting of previously spawned bots.
 
