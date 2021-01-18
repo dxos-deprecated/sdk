@@ -6,7 +6,7 @@ import debug from 'debug';
 import { useState, useEffect } from 'react';
 
 import { useRegistry } from './registry';
-import { QueryRecord, WRN_TYPE_BOT_FACTORY } from './types';
+import { QueryRecord, DXN_TYPE_BOT_FACTORY } from './types';
 
 const log = debug('dxos:react-client');
 
@@ -28,7 +28,7 @@ export const useRegistryBotFactories = () => {
     const queryRegistry = async () => {
       let factoriesResult: QueryRecord[];
       try {
-        factoriesResult = await registry.queryRecords({ type: WRN_TYPE_BOT_FACTORY });
+        factoriesResult = await registry.queryRecords({ type: DXN_TYPE_BOT_FACTORY });
       } catch (e) {
         log('Querying bot factories unsuccessful.');
         log(e);
