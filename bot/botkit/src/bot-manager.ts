@@ -24,7 +24,7 @@ import {
   createBotCommand,
   SpawnOptions
 } from '@dxos/protocol-plugin-bot';
-import { Registry } from '@wirelineio/registry-client';
+import { Registry } from '@dxos/registry-client';
 
 import { BOT_CONFIG_FILENAME } from './config';
 import { BotContainer } from './containers/common';

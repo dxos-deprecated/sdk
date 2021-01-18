@@ -18,8 +18,8 @@ import { ModelConstructor } from '@dxos/model-factory';
 import { NetworkManager } from '@dxos/network-manager';
 import { ValueUtil } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
+import { Registry } from '@dxos/registry-client';
 import { raise } from '@dxos/util';
-import { Registry } from '@wirelineio/registry-client';
 
 import { DevtoolsContext } from './devtools-context';
 import { isNode } from './platform';
