@@ -1,0 +1,68 @@
+{
+  "name": "@dxos/protocol-plugin-bot",
+  "version": "2.7.49",
+  "description": "Protocol plugin for managing the life-cycle of bots.",
+  "homepage": "https://github.com/dxos/protocol/tree/master/packages/protocol-plugin-bot#readme",
+  "bugs": {
+    "url": "https://github.com/dxos/protocol/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dxos/protocol.git"
+  },
+  "license": "GPL-3.0",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "yarn build:protobuf && tsc --build",
+    "build:protobuf": "build-protobuf src/proto/schema.proto -o src/proto/gen -s src/proto/substitutions.ts",
+    "coverage": "npm test -- --coverage",
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
+    "lint": "eslint 'src/**/*.{ts,js}'",
+    "prepublishOnly": "npm run build",
+    "test": "jest --verbose --passWithNoTests"
+  },
+  "browserslist": [
+    "> 5%"
+  ],
+  "dependencies": {
+    "@dxos/broadcast": "~1.0.0-beta.11",
+    "@dxos/codec-protobuf": "~1.1.1",
+    "@dxos/crypto": "~1.0.7",
+    "@dxos/protocol": "~1.1.0-beta.21",
+    "debug": "^4.1.1"
+  },
+  "devDependencies": {
+    "@dxos/eslint-plugin": "~1.0.10",
+    "@dxos/feed-store": "~1.2.0-beta.30",
+    "@dxos/protobuf-compiler": "~1.1.1",
+    "coveralls": "^3.0.7",
+    "cpy-cli": "^2.0.0",
+    "del-cli": "^3.0.0",
+    "eslint": "^7.13.0",
+    "jest": "^26.6.3",
+    "ngraph.generators": "^18.0.1",
+    "pump": "^3.0.0",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.0.5",
+    "wait-for-expect": "^3.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "rootDir": "./src",
+    "preset": "ts-jest/presets/default",
+    "testEnvironment": "node"
+  },
+  "eslintConfig": {
+    "extends": "plugin:@dxos/recomended",
+    "ignorePatterns": [
+      "src/proto/gen/*"
+    ]
+  }
+}

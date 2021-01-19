@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 
 import { createClient } from '@dxos/client';
 import { Keyring, KeyStore } from '@dxos/credentials';
-import { logs } from '@dxos/debug';
+import debug, { logs } from '@dxos/debug';
 import metrics from '@dxos/metrics';
 import { createStorage } from '@dxos/random-access-multi-storage';
 
@@ -18,11 +18,11 @@ import { ClientContext } from '../hooks/context';
 const { error } = logs('react-client:Provider');
 
 /**
- * @deprecated
+ * @deprecated Use `ClientProvider` or `ClientInitializer` from @dxos/react-appkit.
  * Feed provider container.
  */
 const ClientContextProvider = ({ config, children }) => {
-  console.warn('ClientContextProvider is being deprecated. Use ClientProvider.');
+  console.warn('ClientContextProvider is being deprecated. Use `ClientProvider` or `ClientInitializer` from @dxos/react-appkit.');
 
   const { client: clientConfig } = config;
 
@@ -86,7 +86,7 @@ const ClientContextProvider = ({ config, children }) => {
 
           // Console access.
           if (config.debug.mode === 'development' || clientConfig.devtools) {
-            window.__DXOS__ = { client, metrics };
+            window.__DXOS__ = client.getDevtoolsContext();
           }
 
           setClient(client);
@@ -99,7 +99,7 @@ const ClientContextProvider = ({ config, children }) => {
     };
 
     // TODO(burdon): Propagate errors?
-    runEffect().then(() => {}, error);
+    runEffect().then(() => null, error);
 
     return () => {
       mounted = false;

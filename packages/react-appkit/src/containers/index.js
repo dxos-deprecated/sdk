@@ -2,17 +2,32 @@
 // Copyright 2020 DXOS.org
 //
 
-export AppBar from './AppBar';
-export AppContainer from './AppContainer';
-export AppKitContextProvider from './AppKitContextProvider';
-export Authenticator from './Authenticator';
-export CheckForErrors from './CheckForErrors';
-export DebugPanel from './DebugPanel';
-export DefaultSidebar from './DefaultSidebar';
-export DefaultSettingsDialog from './DefaultSettingsDialog';
-export DefaultItemList from './DefaultItemList';
-export PartyCardContainer from './PartyCardContainer';
-export Redeem from './Redeem';
-export Registration from './Registration';
-export RequireWallet from './RequireWallet';
-export SystemRoutes from './SystemRoutes';
+import AppBar from './AppBar';
+import AppContainer from './AppContainer';
+import AppKitProvider from './AppKitProvider';
+import CheckForErrors from './CheckForErrors';
+import ClientInitializer from './ClientInitializer';
+import DefaultItemList from './DefaultItemList';
+import DefaultSidebar from './DefaultSidebar';
+import DeviceAuthenticator from './DeviceAuthenticator';
+import PartyCardContainer from './PartyCardContainer';
+import RedeemDialog from './RedeemDialog';
+import Registration from './Registration';
+import RequireWallet from './RequireWallet';
+import SystemRoutes from './SystemRoutes';
+
+export {
+  AppBar,
+  AppContainer,
+  AppKitProvider,
+  DeviceAuthenticator,
+  CheckForErrors,
+  ClientInitializer,
+  DefaultSidebar,
+  DefaultItemList,
+  PartyCardContainer,
+  RedeemDialog,
+  Registration,
+  RequireWallet,
+  SystemRoutes
+};

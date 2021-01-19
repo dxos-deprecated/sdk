@@ -5,13 +5,14 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-import { Bot } from '@dxos/botkit';
+import { Bot } from '@dxos/bot';
 import { docToMarkdown, markdownToDoc } from '@dxos/editor-core';
-import { TextModel, TYPE_TEXT_MODEL_UPDATE } from '@dxos/text-model';
+import { TextModel } from '@dxos/text-model';
 
 import { Repo } from './repo';
 
-const TYPE_EDITOR_DOCUMENT = 'wrn_dxos_org_teamwork_editor_document';
+const EDITOR_TYPE_DOCUMENT = 'dxos.org/type/editor/document@v2';
+
 const REPO_PATH = './repos';
 
 // Timeout after last model update event before saving to filesystem.
@@ -26,7 +27,7 @@ const REPO_PULL_INTERVAL = 60000;
  */
 export class GitHubBot extends Bot {
   /**
-   * @type {Map<String, {documentId: String, displayName: String, topic: String, docModel: Model, lastSave: Number}>}
+   * @type {Map<String, {documentId: String, displayName: String, topic: String, doc: Model, lastSave: Number}>}
    */
   _docs = new Map();
 
@@ -35,18 +36,19 @@ export class GitHubBot extends Bot {
   constructor (config) {
     super(config);
 
-    this.on('party', async (topic) => {
-      await this.joinParty(topic);
+    this.on('party', async (key) => {
+      await this.joinParty(key);
     });
   }
 
-  async botCommandHandler (message) {
-    const command = JSON.parse(message.toString()) || {};
-    let result = {};
+  async _preInit () {
+    this._client.registerModel(TextModel);
+  }
+
+  async botCommandHandler (command) {
     switch (command.type) {
       case 'status': {
-        result = [...this._botParties.values()];
-        break;
+        return [...this._botParties.values()];
       }
       case 'assign': {
         const { topic, repo, username, token } = command;
@@ -55,40 +57,40 @@ export class GitHubBot extends Bot {
           await this._assignRepo(topic, repo, username, token);
           success = true;
         }
-        result = { success };
-        break;
+        return { success };
       }
       default:
         break;
     }
-
-    return Buffer.from(JSON.stringify(result));
   }
 
   /**
    * Join party.
-   * @param {String} topic
+   * @param {PublicKey} key
    */
-  async joinParty (topic) {
+  async joinParty (key) {
+    const topic = key.toHex();
+
     console.log(`Joining party '${topic}'.`);
     this._botParties.set(topic, { topic });
 
-    const model = await this._client.modelFactory.createModel(undefined, { type: [TYPE_EDITOR_DOCUMENT], topic });
+    const party = this._client.echo.getParty(key);
 
-    model.on('update', async () => {
-      if (model.messages) {
-        for (const message of model.messages) {
-          const { itemId, displayName } = message;
-          if (!this._docs.has(itemId)) {
-            console.log(`Opening doc '${itemId}'.`);
-            const docModel = await this._client.modelFactory.createModel(TextModel, { type: [TYPE_TEXT_MODEL_UPDATE], topic, documentId: itemId });
-            this._docs.set(itemId, { documentId: itemId, displayName, docModel, topic });
+    const result = party.database.queryItems({ type: EDITOR_TYPE_DOCUMENT });
 
-            docModel.on('update', async () => this._handleDocUpdate(itemId));
-          }
-        }
-      }
+    result.subscribe(async () => {
+      await this.readDocuments(result.value, topic);
     });
+    await this.readDocuments(result.value, topic);
+  }
+
+  async readDocuments (documents, topic) {
+    for await (const doc of documents) {
+      const documentId = doc.id;
+
+      this._docs.set(documentId, { documentId, doc, topic });
+      this._handleDocUpdate(documentId);
+    }
   }
 
   /**
@@ -124,14 +126,14 @@ export class GitHubBot extends Bot {
    */
   async _handleDocUpdate (documentId) {
     const docInfo = this._docs.get(documentId);
-    const { docModel, topic, lastSave = Date.now() } = docInfo;
+    const { doc, topic, lastSave = Date.now() } = docInfo;
 
     const partyInfo = this._botParties.get(topic) || {};
     const { repo } = partyInfo;
 
     if (repo) {
       const updateDoc = async () => {
-        const text = docToMarkdown(docModel.doc);
+        const text = docToMarkdown(doc.children[0].model.doc);
         const docPath = path.join(repo.repoPath, `${documentId}.md`);
 
         docInfo.lastSave = Date.now();
@@ -164,10 +166,10 @@ export class GitHubBot extends Bot {
           const [, documentId] = match;
           const docInfo = this._docs.get(documentId);
           if (docInfo) {
-            const { docModel } = docInfo;
+            const { doc } = docInfo;
             const text = await fs.readFile(path.join(repoPath, file), 'utf8');
 
-            markdownToDoc(text, docModel.doc);
+            markdownToDoc(text, doc.children[0].model.doc);
           } else {
             // TODO(egorgripasov): Create new doc.
           }

@@ -10,6 +10,9 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme();
 
+// Remove padding.
+export const parameters = { layout: 'fullscreen' }
+
 addDecorator(storyFn => (
   <MuiThemeProvider theme={theme}>
     <CssBaseline />

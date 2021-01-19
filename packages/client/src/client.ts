@@ -2,58 +2,58 @@
 // Copyright 2020 DXOS.org
 //
 
-import defaultsDeep from 'lodash.defaultsdeep';
+import assert from 'assert';
+import jsondown from 'jsondown';
+import leveljs from 'level-js';
 import memdown from 'memdown';
 
-import { Keyring, KeyStore, KeyType } from '@dxos/credentials';
-import { humanize, keyToString } from '@dxos/crypto';
-import {
-  codec, ECHO, PartyManager, PartyFactory, FeedStoreAdapter, IdentityManager, SecretProvider, InvitationOptions, InvitationDescriptor
-} from '@dxos/echo-db';
+import { synchronized } from '@dxos/async';
+import { Keyring } from '@dxos/credentials';
+import { humanize, PublicKey } from '@dxos/crypto';
+import * as debug from '@dxos/debug';
+import { ECHO, InvitationOptions, OpenProgress, SecretProvider, sortItemsTopologically } from '@dxos/echo-db';
+import { DatabaseSnapshot } from '@dxos/echo-protocol';
 import { FeedStore } from '@dxos/feed-store';
-import { ModelConstructor, ModelFactory } from '@dxos/model-factory';
-import { NetworkManager, SwarmProvider } from '@dxos/network-manager';
-import { ObjectModel } from '@dxos/object-model';
+import { ModelConstructor } from '@dxos/model-factory';
+import { NetworkManager } from '@dxos/network-manager';
+import { ValueUtil } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
 import { raise } from '@dxos/util';
+import { Registry } from '@wirelineio/registry-client';
 
-import { defaultClientConfig } from './config';
+import { DevtoolsContext } from './devtools-context';
+import { isNode } from './platform';
 
+export type StorageType = 'ram' | 'idb' | 'chrome' | 'firefox' | 'node';
+export type KeyStorageType = 'ram' | 'leveljs' | 'jsondown';
+
+// CAUTION: Breaking changes to this interface require corresponding changes in https://github.com/dxos/kube/blob/main/remote.yml
 export interface ClientConfig {
-  /**
-   * A random access storage instance.
-   */
-  storage?: any,
-
-  /**
-   * Swarm config.
-   */
-  swarm?: any
-
-  /**
-   * Keyring.
-   */
-  keyring?: Keyring
-
-  /**
-   * Optional. If provided, config.storage is ignored.
-   */
-  feedStore?: FeedStore
-
-  /**
-   * Optional. If provided, config.swarm is ignored.
-   */
-  networkManager?: NetworkManager
-
-  /**
-   * Optional.
-   */
-  partyManager?: PartyManager
-
-  /**
-   * Optional.
-   */
-  registry?: any
+  storage?: {
+    persistent?: boolean,
+    type?: StorageType,
+    keyStorage?: KeyStorageType,
+    path?: string
+  },
+  swarm?: {
+    signal?: string | string[],
+    ice?: {
+      urls: string,
+      username?: string,
+      credential?: string,
+    }[],
+  },
+  wns?: {
+    server: string,
+    chainId: string,
+  },
+  ipfs?: {
+    server: string,
+    gateway: string,
+  }
+  snapshots?: boolean
+  snapshotInterval?: number,
+  invitationExpiration?: number,
 }
 
 export interface CreateProfileOptions {
@@ -68,22 +68,6 @@ export interface CreateProfileOptions {
 export class Client {
   private readonly _config: ClientConfig;
 
-  private readonly _feedStore: FeedStore;
-
-  private readonly _keyring: Keyring;
-
-  private readonly _swarmConfig?: any;
-
-  private readonly _modelFactory: ModelFactory;
-
-  private readonly _identityManager: IdentityManager;
-
-  private readonly _networkManager: NetworkManager;
-
-  private readonly _partyFactory: PartyFactory;
-
-  private readonly _partyManager: PartyManager;
-
   private readonly _echo: ECHO;
 
   private readonly _registry?: any;
@@ -92,114 +76,161 @@ export class Client {
 
   constructor (config: ClientConfig = {}) {
     this._config = config;
-    const { storage, swarm, keyring, feedStore, networkManager, partyManager, registry } = config;
-    this._feedStore = feedStore || new FeedStore(
-      storage || createStorage('dxos-storage-db', 'ram'),
-      { feedOptions: { valueEncoding: codec } });
-    this._keyring = keyring || new Keyring(new KeyStore(memdown()));
-    this._swarmConfig = swarm;
+    // TODO(burdon): Make hierarchical (e.g., snapshot.[enabled, interval])
+    const {
+      storage = {},
+      swarm = DEFAULT_SWARM_CONFIG,
+      wns,
+      snapshots = false,
+      snapshotInterval
+    } = config;
 
-    this._identityManager = new IdentityManager(this._keyring);
-    this._modelFactory = new ModelFactory()
-      .registerModel(ObjectModel);
+    const { feedStorage, keyStorage, snapshotStorage } = createStorageObjects(storage, snapshots);
 
-    this._networkManager = networkManager || new NetworkManager(this._feedStore, new SwarmProvider(this._swarmConfig));
+    // TODO(burdon): Extract constants.
+    this._echo = new ECHO({
+      feedStorage,
+      keyStorage,
+      snapshotStorage,
+      networkManagerOptions: {
+        signal: swarm?.signal ? (Array.isArray(swarm.signal) ? swarm.signal : [swarm.signal]) : undefined,
+        ice: swarm?.ice
+      },
+      snapshots,
+      snapshotInterval
+    });
 
-    const feedStoreAdapter = new FeedStoreAdapter(this._feedStore);
-
-    this._partyFactory = new PartyFactory(this._identityManager, feedStoreAdapter, this._modelFactory, this._networkManager);
-    this._partyManager = partyManager || new PartyManager(this._identityManager, feedStoreAdapter, this._partyFactory);
-
-    this._echo = new ECHO(this._partyManager);
-    this._registry = registry;
+    this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
   }
 
   get config (): ClientConfig {
     return this._config;
   }
 
+  get echo () {
+    return this._echo;
+  }
+
+  get registry () {
+    return this._registry;
+  }
+
+  get initialized () {
+    return this._initialized;
+  }
+
   /**
    * Initializes internal resources.
    */
-  async initialize () {
+  @synchronized
+  async initialize (onProgressCallback?: (progress: OpenProgress) => void) {
     if (this._initialized) {
       return;
     }
 
-    const timeoutId = setTimeout(() => {
-      console.error('Client.initialize is taking more then 3 seconds to complete. Something probably went wrong.');
-    }, 3000);
+    const t = 10;
+    const timeout = setTimeout(() => {
+      throw new Error(`Initialize timed out after ${t}s.`);
+    }, t * 1000);
 
-    await this._keyring.load();
+    await this._echo.open(onProgressCallback);
 
-    // If this has to be done, it should be done thru database.
-    // Actually, the we should move all initialze into database.
-    await this._partyManager.open();
-
-    if (!this._identityManager.halo && this._identityManager.identityKey) {
-      await this._partyManager.createHalo();
-    }
     this._initialized = true;
-    clearInterval(timeoutId);
+    clearInterval(timeout);
   }
 
   /**
    * Cleanup, release resources.
    */
+  @synchronized
   async destroy () {
+    return this._destroy();
+  }
+
+  /**
+   * Cleanup, release resources.
+   * (To be called from @synchronized method)
+   */
+  private async _destroy () {
+    if (!this._initialized) {
+      return;
+    }
     await this._echo.close();
-    await this._networkManager.close();
+    this._initialized = false;
   }
 
   /**
    * Resets and destroys client storage.
    * Warning: Inconsistent state after reset, do not continue to use this client instance.
    */
+  // TODO(burdon): Should not require reloading the page (make re-entrant).
+  //   Recreate echo instance? Big impact on hooks. Test.
+  @synchronized
   async reset () {
-    if (this._feedStore.storage.destroy) {
-      await this._feedStore.storage.destroy();
-    }
-
-    await this._keyring.deleteAllKeyRecords();
+    await this._echo.reset();
+    await this._destroy();
   }
+
+  //
+  // HALO Profile
+  //
 
   /**
    * Create Profile. Add Identity key if public and secret key are provided. Then initializes profile with given username.
    * If not public and secret key are provided it relies on keyring to contain an identity key.
+   * @returns {ProfileInfo} User profile info.
    */
+  // TODO(burdon): Breaks if profile already exists.
+  // TODO(burdon): ProfileInfo is not imported or defined.
+  @synchronized
   async createProfile ({ publicKey, secretKey, username }: CreateProfileOptions = {}) {
-    if (publicKey && secretKey) {
-      await this._keyring.addKeyRecord({ publicKey, secretKey, type: KeyType.IDENTITY });
+    if (this.getProfile()) {
+      throw new Error('Profile already exists.');
     }
 
-    if (!this._identityManager.identityKey) {
-      throw new Error('Cannot create profile. Either no keyPair (public and secret key) was provided or cannot read Identity from keyring.');
+    // TODO(burdon): What if not set?
+    if (publicKey && secretKey) {
+      await this._echo.createIdentity({ publicKey, secretKey });
     }
-    await this._partyManager.createHalo({
-      identityDisplayName: username || keyToString(this._identityManager.identityKey.publicKey)
-    });
+
+    await this._echo.createHalo(username);
+
+    return this.getProfile();
+  }
+
+  /**
+   * @returns true if the profile exists.
+   * @deprecated Use getProfile.
+   */
+  // TODO(burdon): Remove?
+  hasProfile () {
+    return this._echo.identityKey;
   }
 
   /**
    * @returns {ProfileInfo} User profile info.
    */
+  // TODO(burdon): Change to property (currently returns a new object each time).
   getProfile () {
-    if (!this._identityManager.identityKey) return;
-
-    const publicKey = keyToString(this._identityManager.identityKey.publicKey);
+    if (!this._echo.identityKey) {
+      return;
+    }
 
     return {
-      username: publicKey,
-      publicKey
+      username: this._echo.identityDisplayName,
+      // TODO(burdon): Why convert to string?
+      publicKey: this._echo.identityKey.publicKey
     };
   }
 
-  /**
-   * @returns true if the profile exists.
-   */
-  hasProfile () {
-    return !!this.getProfile();
+  // TODO(burdon): Should be part of profile object. Or use standard Result object.
+  subscribeToProfile (cb: () => void): () => void {
+    return this._echo.identityReady.on(cb);
   }
+
+  //
+  // Parties
+  //
 
   /**
    * @deprecated
@@ -211,155 +242,241 @@ export class Client {
   }
 
   /**
-   * @param partyKey Party publicKey
+   * This is a minimal solution for party restoration functionality.
+   * It has limitations and hacks:
+   * - We have to treat some models in a special way, this is not a generic solution
+   * - We have to recreate relationship between old IDs in newly created IDs
+   * - This won't work when identities are required, e.g. in chess.
+   * This solution is appropriate only for short term, expected to work only in Teamwork
    */
-  async createInvitation (partyKey: Uint8Array, secretProvider: SecretProvider, options?: InvitationOptions) {
-    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found ${humanize(partyKey)}`));
+  async createPartyFromSnapshot (snapshot: DatabaseSnapshot) {
+    const party = await this._echo.createParty();
+    const items = snapshot.items ?? [];
+
+    // We have a brand new item ids after creation, which breaks the old structure of id-parentId mapping.
+    // That's why we have a mapping of old ids to new ids, to be able to recover the child-parent relations.
+    const oldToNewIdMap = new Map<string, string>();
+
+    for (const item of sortItemsTopologically(items)) {
+      assert(item.itemId);
+      assert(item.modelType);
+      assert(item.model);
+
+      const model = this.echo.modelFactory.getModel(item.modelType);
+      if (!model) {
+        console.warn('No model found in model factory (could need registering first): ', item.modelType);
+        continue;
+      }
+
+      let parentId: string | undefined;
+      if (item.parentId) {
+        parentId = oldToNewIdMap.get(item.parentId);
+        assert(parentId, 'Unable to recreate child-parent relationship - missing map record');
+        const parentItem = await party.database.getItem(parentId);
+        assert(parentItem, 'Unable to recreate child-parent relationship - parent not created');
+      }
+
+      const createdItem = await party.database.createItem({
+        model: model.constructor,
+        type: item.itemType,
+        parent: parentId
+      });
+
+      oldToNewIdMap.set(item.itemId, createdItem.id);
+
+      if (item.model.array) {
+        for (const mutation of (item.model.array.mutations || [])) {
+          const decodedMutation = model.meta.mutation.decode(mutation.mutation);
+          await (createdItem.model as any).write(decodedMutation);
+        }
+      } else if (item.modelType === 'wrn://protocol.dxos.org/model/object') {
+        assert(item?.model?.custom);
+        assert(model.meta.snapshotCodec);
+        assert(createdItem?.model);
+
+        const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
+        const obj: any = {};
+        assert(decodedItemSnapshot.root);
+        ValueUtil.applyValue(obj, 'root', decodedItemSnapshot.root);
+
+        // The planner board models have a structure in the object model, which needs to be recreated on new ids
+        if (item.itemType === 'dxos.org/type/planner/card' && obj.root.listId) {
+          obj.root.listId = oldToNewIdMap.get(obj.root.listId);
+          assert(obj.root.listId, 'Failed to recreate child-parent structure of a planner card');
+        }
+
+        await createdItem.model.setProperties(obj.root);
+      } else if (item.modelType === 'wrn://protocol.dxos.org/model/text') {
+        assert(item?.model?.custom);
+        assert(model.meta.snapshotCodec);
+        assert(createdItem?.model);
+
+        const decodedItemSnapshot = model.meta.snapshotCodec.decode(item.model.custom);
+
+        await createdItem.model.restoreFromSnapshot(decodedItemSnapshot);
+      } else {
+        throw new Error(`Unhandled model type: ${item.modelType}`);
+      }
+    }
+
+    return party;
+  }
+
+  /**
+   * @param partyKey Party publicKey
+   * @param secretProvider
+   * @param options
+   */
+  async createInvitation (partyKey: PublicKey, secretProvider: SecretProvider, options?: InvitationOptions) {
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${partyKey.toString()}`));
     return party.createInvitation({
-      secretValidator: async (invitation, secret) => secret && secret.equals((invitation as any).secret), // TODO(marik-d): Probably an error here.
+      // TODO(marik-d): Probably an error here.
+      secretValidator: async (invitation, secret) => secret && secret.equals((invitation as any).secret),
       secretProvider
     },
     options);
   }
 
   /**
-   * @deprecated
-   * @param {Buffer} publicKey Party publicKey
-   * @param {Buffer} recipient Recipient publicKey
+   * @param {Buffer} partyKey Party publicKey
+   * @param {Buffer} recipientKey Recipient publicKey
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async createOfflineInvitation (partyKey: Uint8Array, recipientKey: Buffer) {
-    console.warn('createOfflineInvitation deprecated. check Database');
+  // TODO(burdon): Move to party.
+  async createOfflineInvitation (partyKey: PublicKey, recipientKey: PublicKey) {
+    const party = await this.echo.getParty(partyKey) ?? raise(new Error(`Party not found: ${humanize(partyKey.toString())}`));
+    return party.createOfflineInvitation(recipientKey);
   }
 
-  /**
-   * @deprecated
-   * Join a Party by redeeming an Invitation.
-   * @param {InvitationDescriptor} invitation
-   * @param {SecretProvider} secretProvider
-   * @returns {Promise<Party>} The now open Party.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async joinParty (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
-    console.warn('deprecated. Use client.echo');
-  }
+  // TODO(rzadp): Uncomment after updating ECHO.
+  // async createHaloInvitation (secretProvider: SecretProvider, options?: InvitationOptions) {
+  //   return this.echo.createHaloInvitation(
+  //     {
+  //       secretProvider,
+  //       secretValidator: (invitation: any, secret: any) => secret && secret.equals(invitation.secret)
+  //     }
+  //     , options
+  //   );
+  // }
 
-  /**
-   * Redeems an invitation for this Device to be admitted to an Identity.
-   * @param {InvitationDescriptor} invitation
-   * @param {SecretProvider} secretProvider
-   * @returns {Promise<DeviceInfo>}
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async admitDevice (invitation: InvitationDescriptor, secretProvider: SecretProvider) {
-    console.log('client.admitDevice: Device management is not implemented.');
-  }
-
-  /**
-   * @deprecated
-   */
-  getParties () {
-    console.warn('deprecated. Use client.echo');
-  }
-
-  /**
-   * @deprecated
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getParty (partyKey: Uint8Array) {
-    console.warn('deprecated. Use client.echo');
-  }
+  //
+  // Contacts
+  //
 
   /**
    * Returns an Array of all known Contacts across all Parties.
    * @returns {Contact[]}
    */
+  // TODO(burdon): Not implemented.
   async getContacts () {
     console.warn('client.getContacts not impl. Returning []');
     // return this._partyManager.getContacts();
     return [];
   }
 
-  /**
-   * @deprecated
-   */
-  async createSubscription () {
-    console.warn('deprecated');
-  }
+  //
+  // ECHO
+  //
 
   /**
    * Registers a new model.
    */
+  // TODO(burdon): Expose echo directly?
   registerModel (constructor: ModelConstructor<any>): this {
-    this._modelFactory.registerModel(constructor);
-
+    this._echo.modelFactory.registerModel(constructor);
     return this;
   }
 
-  get keyring () {
-    return this._keyring;
+  //
+  // Deprecated
+  // TODO(burdon): Separate wrapper for devtools?
+  //
+
+  /**
+   * Returns devtools context
+   */
+  getDevtoolsContext (): DevtoolsContext {
+    const devtoolsContext: DevtoolsContext = {
+      client: this,
+      feedStore: this._echo.feedStore,
+      networkManager: this._echo.networkManager,
+      modelFactory: this._echo.modelFactory,
+      keyring: this._echo.keyring,
+      debug
+    };
+    return devtoolsContext;
   }
 
-  get echo () {
-    return this._echo;
+  /**
+   * @deprecated Use echo.keyring
+   */
+  get keyring (): Keyring {
+    return this._echo.keyring;
   }
 
-  // keep this for devtools ???
-  get feedStore () {
-    return this._feedStore;
+  /**
+   * @deprecated Use echo.feedStore
+   */
+  get feedStore (): FeedStore {
+    return this._echo.feedStore;
   }
 
-  // TODO(burdon): Remove.
+  /**
+   * @deprecated Use echo.networkManager.
+   */
+  get networkManager (): NetworkManager {
+    return this._echo.networkManager;
+  }
+
   /**
    * @deprecated
    */
   get modelFactory () {
     console.warn('client.modelFactory is deprecated.');
-    return this._modelFactory;
-  }
-
-  // TODO(burdon): Remove.
-  /**
-   * @deprecated
-   */
-  get networkManager () {
-    return this._networkManager;
-  }
-
-  // TODO(burdon): Remove.
-  /**
-   * @deprecated
-   */
-  get partyManager () {
-    console.warn('deprecated. Use client.database');
-    return this._partyManager;
-  }
-
-  get registry () {
-    return this._registry;
+    return this._echo.modelFactory;
   }
 }
 
-/**
- * Client factory.
- * @deprecated
- * @param {RandomAccessAbstract} feedStorage
- * @param {Keyring} keyring
- * @param {Object} config
- * @return {Promise<Client>}
- */
-export const createClient = async (feedStorage?: any, keyring?: Keyring, config: { swarm?: any } = {}) => {
-  config = defaultsDeep({}, config, defaultClientConfig);
-
-  console.warn('createClient is being deprecated. Please use new Client() instead.');
-
-  const client = new Client({
-    storage: feedStorage,
-    swarm: config.swarm,
-    keyring // remove this later but it is required by cli, bots, and tests.
-  });
-
-  await client.initialize();
-
-  return client;
+// TODO(burdon): Shouldn't be here.
+const DEFAULT_SWARM_CONFIG: ClientConfig['swarm'] = {
+  signal: 'ws://localhost:4000',
+  ice: [{ urls: 'stun:stun.wireline.ninja:3478' }]
 };
+
+function createStorageObjects (config: ClientConfig['storage'], snapshotsEnabled: boolean) {
+  const {
+    path = 'dxos/storage',
+    type,
+    keyStorage,
+    persistent = false
+  } = config ?? {};
+
+  if (persistent && type === 'ram') {
+    throw new Error('RAM storage cannot be used in persistent mode.');
+  }
+  if (!persistent && (type !== undefined && type !== 'ram')) {
+    throw new Error('Cannot use a persistent storage in not persistent mode.');
+  }
+  if (persistent && keyStorage === 'ram') {
+    throw new Error('RAM key storage cannot be used in persistent mode.');
+  }
+  if (!persistent && (keyStorage !== 'ram' && keyStorage !== undefined)) {
+    throw new Error('Cannot use a persistent key storage in not persistent mode.');
+  }
+
+  return {
+    feedStorage: createStorage(`${path}/feeds`, persistent ? type : 'ram'),
+    keyStorage: createKeyStorage(`${path}/keystore`, persistent ? keyStorage : 'ram'),
+    snapshotStorage: createStorage(`${path}/snapshots`, persistent && snapshotsEnabled ? type : 'ram')
+  };
+}
+
+function createKeyStorage (path: string, type?: KeyStorageType) {
+  const defaultedType = type ?? (isNode() ? 'jsondown' : 'leveljs');
+
+  switch (defaultedType) {
+    case 'leveljs': return leveljs(path);
+    case 'jsondown': return jsondown(path);
+    case 'ram': return memdown();
+    default: throw new Error(`Invalid type: ${defaultedType}`);
+  }
+}

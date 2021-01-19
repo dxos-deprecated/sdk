@@ -1,5 +1,464 @@
 # Changelog
 
+### [2.7.49](https://www.github.com/dxos/sdk/compare/v2.7.48...v2.7.49) (2020-12-23)
+
+
+### Bug Fixes
+
+* Upload devtools as artifact ([3ff8514](https://www.github.com/dxos/sdk/commit/3ff85144125680dd1a4910ebff3a5f6952ecf290))
+
+### [2.7.48](https://www.github.com/dxos/sdk/compare/v2.7.47...v2.7.48) (2020-12-23)
+
+
+### Bug Fixes
+
+* Version for devtools ([fb9293e](https://www.github.com/dxos/sdk/commit/fb9293e6eef814d5d50d146aebcc1df1daf0df01))
+
+### [2.7.47](https://www.github.com/dxos/sdk/compare/v2.7.46...v2.7.47) (2020-12-23)
+
+
+### Bug Fixes
+
+* Releasing for devtools ([#497](https://www.github.com/dxos/sdk/issues/497)) ([5b5323a](https://www.github.com/dxos/sdk/commit/5b5323aa9e51a0439b498d30fe675869d194c7f3))
+* Use Material-ui as a peer dependency ([#495](https://www.github.com/dxos/sdk/issues/495)) ([2ca5b7d](https://www.github.com/dxos/sdk/commit/2ca5b7dbb52104e2c9e6fed2003aba30e903d42f))
+
+### [2.7.46](https://www.github.com/dxos/sdk/compare/v2.7.45...v2.7.46) (2020-12-22)
+
+
+### Features
+
+* Add initialization loader ([30988b1](https://www.github.com/dxos/sdk/commit/30988b135162e7826e995b8a46686792546b54fc))
+* Control logging output in devtools ([#490](https://www.github.com/dxos/sdk/issues/490)) ([badcb99](https://www.github.com/dxos/sdk/commit/badcb9925a55cfdf1bd06226ba814cafe51000d7))
+
+
+### Bug Fixes
+
+* Fix failing tests ([#491](https://www.github.com/dxos/sdk/issues/491)) ([7eab290](https://www.github.com/dxos/sdk/commit/7eab2904e1d4edc44ded58109abfe60e641a615a))
+
+### [2.7.45](https://www.github.com/dxos/sdk/compare/v2.7.44...v2.7.45) (2020-12-22)
+
+
+### Bug Fixes
+
+* Accept textual party contents for import ([#487](https://www.github.com/dxos/sdk/issues/487)) ([9cd22ae](https://www.github.com/dxos/sdk/commit/9cd22ae11fa293ee7e423b64fce22cca5af3507d))
+
+### [2.7.44](https://www.github.com/dxos/sdk/compare/v2.7.43...v2.7.44) (2020-12-17)
+
+
+### Bug Fixes
+
+* Export devtools context interface ([#478](https://www.github.com/dxos/sdk/issues/478)) ([94d2775](https://www.github.com/dxos/sdk/commit/94d277579199096e85810327092a61a155146950))
+* Update dependencies actions ([#479](https://www.github.com/dxos/sdk/issues/479)) ([3eb9257](https://www.github.com/dxos/sdk/commit/3eb92575e3e44fe154219fd35fe5c71cf1dc83b2))
+* Update ECHO and Mesh ([#481](https://www.github.com/dxos/sdk/issues/481)) ([76758d4](https://www.github.com/dxos/sdk/commit/76758d4786484d63900b228b7e62e46408cb1ae9))
+* UX improvements ([#482](https://www.github.com/dxos/sdk/issues/482)) ([21a9b5e](https://www.github.com/dxos/sdk/commit/21a9b5ef37bcbabc6d965eab3e37b856c88f5038))
+
+### [2.7.43](https://www.github.com/dxos/sdk/compare/v2.7.42...v2.7.43) (2020-12-16)
+
+
+### Bug Fixes
+
+* Trigger version update ([31b9a0b](https://www.github.com/dxos/sdk/commit/31b9a0b5d1bad9d02434a1d7c1473ff508e55c68))
+
+### [2.7.42](https://www.github.com/dxos/sdk/compare/v2.7.41...v2.7.42) (2020-12-16)
+
+
+### Bug Fixes
+
+* Improve bot dialog ([#471](https://www.github.com/dxos/sdk/issues/471)) ([11f3c26](https://www.github.com/dxos/sdk/commit/11f3c26e5427ee66fc1ef38601005619f69beff2))
+
+### [2.7.41](https://www.github.com/dxos/sdk/compare/v2.7.40...v2.7.41) (2020-12-15)
+
+
+### Bug Fixes
+
+* Trigger publish ([9971831](https://www.github.com/dxos/sdk/commit/99718319c451f28375516362a3e52b6c1239b715))
+
+### [2.7.40](https://www.github.com/dxos/sdk/compare/v2.7.39...v2.7.40) (2020-12-15)
+
+
+### Bug Fixes
+
+* Add pending invitations names ([#465](https://www.github.com/dxos/sdk/issues/465)) ([c2dc2bf](https://www.github.com/dxos/sdk/commit/c2dc2bfedcc31b208742df5ec167b3ca4b36158a))
+* Create parties settings dialog ([#463](https://www.github.com/dxos/sdk/issues/463)) ([3724f4b](https://www.github.com/dxos/sdk/commit/3724f4b5959efb10242d2a0124b6c09c741251d7))
+* Dialogs icon and title ([#468](https://www.github.com/dxos/sdk/issues/468)) ([f332a02](https://www.github.com/dxos/sdk/commit/f332a0245bb098b6308c912eda7041ec4e5fe22a))
+* Upgrade to new networking ([#467](https://www.github.com/dxos/sdk/issues/467)) ([11f3e93](https://www.github.com/dxos/sdk/commit/11f3e93d05003f81233b174d580706fc567e7702))
+
+### [2.7.39](https://www.github.com/dxos/sdk/compare/v2.7.38...v2.7.39) (2020-12-14)
+
+
+### Bug Fixes
+
+* Possible undefined member display name ([#462](https://www.github.com/dxos/sdk/issues/462)) ([b3a5725](https://www.github.com/dxos/sdk/commit/b3a572582989c00716294dd5d1398a6fcaec2e94))
+* Refactor react-router to TS ([#459](https://www.github.com/dxos/sdk/issues/459)) ([422d1bf](https://www.github.com/dxos/sdk/commit/422d1bf702437e1830a1e7affb06d40fa1743738))
+
+### [2.7.38](https://www.github.com/dxos/sdk/compare/v2.7.37...v2.7.38) (2020-12-10)
+
+
+### Bug Fixes
+
+* not NetworkManager (yet) ([140fe3f](https://www.github.com/dxos/sdk/commit/140fe3f63ab36ed8cb431134471ca10e8aef05c9))
+* versions ([d1e18b7](https://www.github.com/dxos/sdk/commit/d1e18b7d4c8458b9d016b40556fbf7e00654652b))
+
+### [2.7.37](https://www.github.com/dxos/sdk/compare/v2.7.36...v2.7.37) (2020-12-10)
+
+
+### Bug Fixes
+
+* Observability ([d174b87](https://www.github.com/dxos/sdk/commit/d174b87afc2068b95e9053acabf621cc85341407))
+
+### [2.7.36](https://www.github.com/dxos/sdk/compare/v2.7.35...v2.7.36) (2020-12-10)
+
+
+### Bug Fixes
+
+* Convert react-appkit to TS ([#453](https://www.github.com/dxos/sdk/issues/453)) ([1993903](https://www.github.com/dxos/sdk/commit/199390318a957c391efa61fc9ae2d0bbefcce778))
+* More logging around invitations ([#451](https://www.github.com/dxos/sdk/issues/451)) ([b926590](https://www.github.com/dxos/sdk/commit/b92659024d7c9485d867efe8038246f2fc148c04))
+
+### [2.7.35](https://www.github.com/dxos/sdk/compare/v2.7.34...v2.7.35) (2020-12-09)
+
+
+### Bug Fixes
+
+* redo bot dialog; proper botkit-client destroy. ([#449](https://www.github.com/dxos/sdk/issues/449)) ([7c8058d](https://www.github.com/dxos/sdk/commit/7c8058da7a4d7bd67047f9ee338845c0163e76d4))
+
+### [2.7.34](https://www.github.com/dxos/sdk/compare/v2.7.33...v2.7.34) (2020-12-09)
+
+
+### Bug Fixes
+
+* Fix resetting and add more logging ([0f25197](https://www.github.com/dxos/sdk/commit/0f25197705f9e27a6fee715e3c2ffc32ab7e8f8e))
+* Logging for invites ([1d20c79](https://www.github.com/dxos/sdk/commit/1d20c7972a3aa95f8fa00f5e1210a61b97715638))
+
+### [2.7.33](https://www.github.com/dxos/sdk/compare/v2.7.32...v2.7.33) (2020-12-09)
+
+
+### Bug Fixes
+
+* Introduce sorting by relevant keywords in bot registry ([#443](https://www.github.com/dxos/sdk/issues/443)) ([1d3c9d2](https://www.github.com/dxos/sdk/commit/1d3c9d2c091260b3d9beef2b4fddc574c0392b19))
+* locks are not re-entrant ([#446](https://www.github.com/dxos/sdk/issues/446)) ([5d83381](https://www.github.com/dxos/sdk/commit/5d83381696e2e939f7d588c99268498db5d0c2ec))
+* Use newest echo, add message logger ([#447](https://www.github.com/dxos/sdk/issues/447)) ([f1b4a7c](https://www.github.com/dxos/sdk/commit/f1b4a7c633b3a3da99fee317d6aa270165bb862c))
+
+### [2.7.32](https://www.github.com/dxos/sdk/compare/v2.7.31...v2.7.32) (2020-12-08)
+
+
+### Bug Fixes
+
+* Exact versions for dxos packages ([#438](https://www.github.com/dxos/sdk/issues/438)) ([c86ec3c](https://www.github.com/dxos/sdk/commit/c86ec3c12df3019badd8ee6cbd411e2398b48c68))
+
+### [2.7.31](https://www.github.com/dxos/sdk/compare/v2.7.30...v2.7.31) (2020-12-08)
+
+
+### Bug Fixes
+
+* Upgrade eslint plugin ([#436](https://www.github.com/dxos/sdk/issues/436)) ([aefe8b1](https://www.github.com/dxos/sdk/commit/aefe8b1000b9a4d5441969d44ff50c45f5a91b72))
+
+### [2.7.30](https://www.github.com/dxos/sdk/compare/v2.7.29...v2.7.30) (2020-12-08)
+
+
+### Bug Fixes
+
+* add missing fileds for bf status. ([#434](https://www.github.com/dxos/sdk/issues/434)) ([5e4d708](https://www.github.com/dxos/sdk/commit/5e4d70850634efe479165e7af5283ca664978964))
+
+### [2.7.29](https://www.github.com/dxos/sdk/compare/v2.7.28...v2.7.29) (2020-12-08)
+
+
+### Bug Fixes
+
+* botkit regressions fix & improvements. ([#429](https://www.github.com/dxos/sdk/issues/429)) ([1362a76](https://www.github.com/dxos/sdk/commit/1362a76c8aa0d12769a63f4d531bfe6af04ea272))
+* Safeguards for dialogs ([#432](https://www.github.com/dxos/sdk/issues/432)) ([32e7a3c](https://www.github.com/dxos/sdk/commit/32e7a3cf1d658991f280b8185fcfeae338159b11))
+
+### [2.7.28](https://www.github.com/dxos/sdk/compare/v2.7.27...v2.7.28) (2020-12-07)
+
+
+### Bug Fixes
+
+* Introduce recreating party from a snapshot ([#426](https://www.github.com/dxos/sdk/issues/426)) ([5462df0](https://www.github.com/dxos/sdk/commit/5462df015d55eed04d44ddd7ecb5fef325c382ff))
+
+### [2.7.27](https://www.github.com/dxos/sdk/compare/v2.7.26...v2.7.27) (2020-12-04)
+
+
+### Bug Fixes
+
+* Subscribe to party updates once ([#427](https://www.github.com/dxos/sdk/issues/427)) ([4748b91](https://www.github.com/dxos/sdk/commit/4748b91bb2c5e9ecd3bae9abd48912530850f907))
+
+### [2.7.26](https://www.github.com/dxos/sdk/compare/v2.7.25...v2.7.26) (2020-12-03)
+
+
+### Bug Fixes
+
+* Safeguard for bot factories without names ([#423](https://www.github.com/dxos/sdk/issues/423)) ([4fdb94f](https://www.github.com/dxos/sdk/commit/4fdb94f7abe26ad8a32ec6807f16e7d490e0db74))
+* support self signed cert in BF source manager. ([#421](https://www.github.com/dxos/sdk/issues/421)) ([0537bff](https://www.github.com/dxos/sdk/commit/0537bffd95f1510eac3db87ba620c37e15272756))
+
+### [2.7.25](https://www.github.com/dxos/sdk/compare/v2.7.24...v2.7.25) (2020-12-02)
+
+
+### Bug Fixes
+
+* Trigger release-please ([63799bc](https://www.github.com/dxos/sdk/commit/63799bc0318b452e9783c4fbaae44b0af19de473))
+
+### [2.7.24](https://www.github.com/dxos/sdk/compare/v2.7.23...v2.7.24) (2020-12-02)
+
+
+### Bug Fixes
+
+* Improve party properties usage ([#416](https://www.github.com/dxos/sdk/issues/416)) ([1e8db78](https://www.github.com/dxos/sdk/commit/1e8db78c6050e15cada20eb50e904d98e1b7492e))
+* Spinner and disabled submit in redeem dialog ([#413](https://www.github.com/dxos/sdk/issues/413)) ([6b3b548](https://www.github.com/dxos/sdk/commit/6b3b548557ba91fa4d73464a69685c1053b9ec6f))
+
+### [2.7.23](https://www.github.com/dxos/sdk/compare/v2.7.22...v2.7.23) (2020-11-30)
+
+
+### Bug Fixes
+
+* Update deps. ([#409](https://www.github.com/dxos/sdk/issues/409)) ([c1516a1](https://www.github.com/dxos/sdk/commit/c1516a1742394e048e7c2e0618a1028b60296cfe))
+
+### [2.7.22](https://www.github.com/dxos/sdk/compare/v2.7.21...v2.7.22) (2020-11-28)
+
+
+### Bug Fixes
+
+* use working codec version for now. ([#402](https://www.github.com/dxos/sdk/issues/402)) ([689ebbd](https://www.github.com/dxos/sdk/commit/689ebbd4bd16a4bb6402d518534930ca897af309))
+
+### [2.7.21](https://www.github.com/dxos/sdk/compare/v2.7.20...v2.7.21) (2020-11-27)
+
+
+### Bug Fixes
+
+* Keychain import and export ([#398](https://www.github.com/dxos/sdk/issues/398)) ([4cee55b](https://www.github.com/dxos/sdk/commit/4cee55b5f3cafd4557b629f61c9298dfe9bee95e))
+
+### [2.7.20](https://www.github.com/dxos/sdk/compare/v2.7.19...v2.7.20) (2020-11-27)
+
+
+### Bug Fixes
+
+* Reimplement halo recovery ([#395](https://www.github.com/dxos/sdk/issues/395)) ([7ee9c31](https://www.github.com/dxos/sdk/commit/7ee9c31ad2c002e2d44a6505bc86882ca06f5c04))
+
+### [2.7.19](https://www.github.com/dxos/sdk/compare/v2.7.18...v2.7.19) (2020-11-26)
+
+
+### Bug Fixes
+
+* Remove broken humanize ([8ad4f84](https://www.github.com/dxos/sdk/commit/8ad4f848f0b45f41392d3b5d6a627aa860d95d69))
+
+### [2.7.18](https://www.github.com/dxos/sdk/compare/v2.7.17...v2.7.18) (2020-11-26)
+
+
+### Bug Fixes
+
+* First version of party activation ([#390](https://www.github.com/dxos/sdk/issues/390)) ([84cc1f1](https://www.github.com/dxos/sdk/commit/84cc1f117c95c83af9d4683805a6127978614988)), closes [#387](https://www.github.com/dxos/sdk/issues/387) [#387](https://www.github.com/dxos/sdk/issues/387)
+* Initial attempt at party names ([#388](https://www.github.com/dxos/sdk/issues/388)) ([5c18e80](https://www.github.com/dxos/sdk/commit/5c18e80d7bb96b3b0ea881624176119afb50b0a9))
+
+### [2.7.17](https://www.github.com/dxos/sdk/compare/v2.7.16...v2.7.17) (2020-11-25)
+
+
+### Bug Fixes
+
+* Release SDK with ECHO 2.6.5 ([ca733a0](https://www.github.com/dxos/sdk/commit/ca733a01e78bf4655b2837e409c853259d36d2e1))
+
+### [2.7.16](https://www.github.com/dxos/sdk/compare/v2.7.15...v2.7.16) (2020-11-24)
+
+
+### Bug Fixes
+
+* Device invitation flow uniform with regular invitations ([#378](https://www.github.com/dxos/sdk/issues/378)) ([a436387](https://www.github.com/dxos/sdk/commit/a436387768077de6de415ebc01d373c1d400f694))
+
+### [2.7.15](https://www.github.com/dxos/sdk/compare/v2.7.14...v2.7.15) (2020-11-23)
+
+
+### Bug Fixes
+
+* Add first version of device invite ([#372](https://www.github.com/dxos/sdk/issues/372)) ([dec8ee4](https://www.github.com/dxos/sdk/commit/dec8ee4a045b975b4a6937a7802bb9490930d8df))
+
+### [2.7.14](https://www.github.com/dxos/sdk/compare/v2.7.13...v2.7.14) (2020-11-20)
+
+
+### Bug Fixes
+
+* Export registries ([#363](https://www.github.com/dxos/sdk/issues/363)) ([0d7b55d](https://www.github.com/dxos/sdk/commit/0d7b55dbdac916ae9b73ed738e8337d8d0b77f5e))
+
+### [2.7.13](https://www.github.com/dxos/sdk/compare/v2.7.12...v2.7.13) (2020-11-20)
+
+
+### Bug Fixes
+
+* Trigger publish ([a81428d](https://www.github.com/dxos/sdk/commit/a81428d106406d75876915c95400ab01980f87c7))
+
+### [2.7.12](https://www.github.com/dxos/sdk/compare/v2.7.11...v2.7.12) (2020-11-20)
+
+
+### Bug Fixes
+
+* Bot factory version. ([#357](https://www.github.com/dxos/sdk/issues/357)) ([25daefe](https://www.github.com/dxos/sdk/commit/25daefedca86c624129c5b540a7c8dfaf4c77de8))
+* Update tests ([#346](https://www.github.com/dxos/sdk/issues/346)) ([e7ffce5](https://www.github.com/dxos/sdk/commit/e7ffce5798f937275bc0fcc063d1946df6ef2808))
+
+### [2.7.11](https://www.github.com/dxos/sdk/compare/v2.7.10...v2.7.11) (2020-11-18)
+
+
+### Bug Fixes
+
+* Add more logging. ([#347](https://www.github.com/dxos/sdk/issues/347)) ([962a628](https://www.github.com/dxos/sdk/commit/962a628f7d2580a42a6fedcc4189b34189055087))
+
+### [2.7.10](https://www.github.com/dxos/sdk/compare/v2.7.9...v2.7.10) (2020-11-18)
+
+
+### Bug Fixes
+
+* Remove redundant view-model ([#342](https://www.github.com/dxos/sdk/issues/342)) ([5ba537d](https://www.github.com/dxos/sdk/commit/5ba537dfd01fc4f77f7d07c83e77dc4b59ac91d8))
+
+### [2.7.9](https://www.github.com/dxos/sdk/compare/v2.7.8...v2.7.9) (2020-11-17)
+
+
+### Bug Fixes
+
+* Add a step to build storybook ([#333](https://www.github.com/dxos/sdk/issues/333)) ([e72f918](https://www.github.com/dxos/sdk/commit/e72f918ca7f69837ec4d3cfeab6521511d95b191))
+
+### [2.7.8](https://www.github.com/dxos/sdk/compare/v2.7.7...v2.7.8) (2020-11-17)
+
+
+### Bug Fixes
+
+* Fix jsondown failing build  ([#335](https://www.github.com/dxos/sdk/issues/335)) ([739bff2](https://www.github.com/dxos/sdk/commit/739bff2db14d45c3296fc0487f4463d9b39d3ec7))
+
+### [2.7.7](https://www.github.com/dxos/sdk/compare/v2.7.6...v2.7.7) (2020-11-13)
+
+
+### Bug Fixes
+
+* Fix persistent storage on node ([#326](https://www.github.com/dxos/sdk/issues/326)) ([3f6d8e3](https://www.github.com/dxos/sdk/commit/3f6d8e36a20a14f6801963ce2e4531ea0ae5e3c2))
+* Return profile upon creation ([#318](https://www.github.com/dxos/sdk/issues/318)) ([3d9cda9](https://www.github.com/dxos/sdk/commit/3d9cda962213111b23e9ee311d6b18b0d4eda427))
+
+### [2.7.6](https://www.github.com/dxos/sdk/compare/v2.7.5...v2.7.6) (2020-11-12)
+
+
+### Bug Fixes
+
+* Make profile reactive ([#311](https://www.github.com/dxos/sdk/issues/311)) ([343f0fc](https://www.github.com/dxos/sdk/commit/343f0fc3944244801a3c7fc997dcacddfaf53d14))
+
+### [2.7.5](https://www.github.com/dxos/sdk/compare/v2.7.4...v2.7.5) (2020-11-10)
+
+
+### Bug Fixes
+
+* Bring back bot invites ([#310](https://www.github.com/dxos/sdk/issues/310)) ([b3e54df](https://www.github.com/dxos/sdk/commit/b3e54df6847f3f0d0de126d305316697fcc64bcd))
+* Update echo ([d2615a5](https://www.github.com/dxos/sdk/commit/d2615a55a8450bfd25bd9f47ffd9e8e5715c382f))
+* Update to new echo api ([#301](https://www.github.com/dxos/sdk/issues/301)) ([7303b81](https://www.github.com/dxos/sdk/commit/7303b8172bee1e6d2d90193c767417e815a47f48))
+
+### [2.7.4](https://www.github.com/dxos/sdk/compare/v2.7.3...v2.7.4) (2020-11-04)
+
+
+### Bug Fixes
+
+* Reimplement offline invitations ([#299](https://www.github.com/dxos/sdk/issues/299)) ([d73e7ec](https://www.github.com/dxos/sdk/commit/d73e7ec342e04c0becbde2fc7381b8361d7e079d))
+
+### [2.7.3](https://www.github.com/dxos/sdk/compare/v2.7.2...v2.7.3) (2020-10-30)
+
+
+### Bug Fixes
+
+* Add a function to pre-initialize client ([#292](https://www.github.com/dxos/sdk/issues/292)) ([c23d40b](https://www.github.com/dxos/sdk/commit/c23d40bfce8744f3290a4fe8d8b06de5590e11c5))
+* Trim item names ([#287](https://www.github.com/dxos/sdk/issues/287)) ([4a2f1d9](https://www.github.com/dxos/sdk/commit/4a2f1d9a23bba65c3d4e41eea3906a91b3c411ae))
+
+### [2.7.2](https://www.github.com/dxos/sdk/compare/v2.7.1...v2.7.2) (2020-10-30)
+
+
+### Bug Fixes
+
+* Update ECHO to latest ([#285](https://www.github.com/dxos/sdk/issues/285)) ([f086bc2](https://www.github.com/dxos/sdk/commit/f086bc2210cc59f36feff6601c5414349aaf6431))
+
+### [2.7.1](https://www.github.com/dxos/sdk/compare/v2.7.0...v2.7.1) (2020-10-30)
+
+
+### Bug Fixes
+
+* Use newest ECHO ([6694ce2](https://www.github.com/dxos/sdk/commit/6694ce210d926100a7aff426070a1290c6fad4fb))
+
+## [2.7.0](https://www.github.com/dxos/sdk/compare/v2.6.5...v2.7.0) (2020-10-29)
+
+
+### Features
+
+* Party snapshots ([#275](https://www.github.com/dxos/sdk/issues/275)) ([ebbde8e](https://www.github.com/dxos/sdk/commit/ebbde8eb255dff63304b5bfea0d4284b8dcd5db1))
+
+
+### Bug Fixes
+
+* Allow the user to not specify WNS ([#273](https://www.github.com/dxos/sdk/issues/273)) ([2e2e228](https://www.github.com/dxos/sdk/commit/2e2e228e9f62ced477d46a69acf85e843efef417))
+* Disable broken members link. ([#271](https://www.github.com/dxos/sdk/issues/271)) ([ad588d0](https://www.github.com/dxos/sdk/commit/ad588d0bf61714f52c9d14cc683f000263d5c375))
+
+### [2.6.5](https://www.github.com/dxos/sdk/compare/v2.6.4...v2.6.5) (2020-10-28)
+
+
+### Bug Fixes
+
+* Fix react state leak ([#269](https://www.github.com/dxos/sdk/issues/269)) ([15a4e80](https://www.github.com/dxos/sdk/commit/15a4e80d3cf9b8427b6a36780760bc7d415b700d))
+* Replace error view ([#266](https://www.github.com/dxos/sdk/issues/266)) ([d2f1b83](https://www.github.com/dxos/sdk/commit/d2f1b83579b07bfcd9596b4796c9b5c8a8bb6c29))
+
+### [2.6.4](https://www.github.com/dxos/sdk/compare/v2.6.3...v2.6.4) (2020-10-26)
+
+
+### Bug Fixes
+
+* Fix broken export ([7867dca](https://www.github.com/dxos/sdk/commit/7867dca9a1e16fe978ce5092cff0239c681e07a8))
+
+### [2.6.3](https://www.github.com/dxos/sdk/compare/v2.6.2...v2.6.3) (2020-10-26)
+
+
+### Bug Fixes
+
+* Fix forgotten export ([ca843ff](https://www.github.com/dxos/sdk/commit/ca843ff645f3a5395a68684b3cb4e2a2a19ee763))
+
+### [2.6.2](https://www.github.com/dxos/sdk/compare/v2.6.1...v2.6.2) (2020-10-26)
+
+
+### Bug Fixes
+
+* Transpile nullish coalescing and optional chaining ([e1456a2](https://www.github.com/dxos/sdk/commit/e1456a2c0cb530bfd7849ac4b1810dc0db8d8f3c))
+
+### [2.6.1](https://www.github.com/dxos/sdk/compare/v2.6.0...v2.6.1) (2020-10-26)
+
+
+### Bug Fixes
+
+* Fix 'main' & 'types' fileds in appkit ([218e92a](https://www.github.com/dxos/sdk/commit/218e92a44426badf70749469351b65aa25c82c1c))
+
+## [2.6.0](https://www.github.com/dxos/sdk/compare/v2.5.2...v2.6.0) (2020-10-26)
+
+
+### Features
+
+* Add pad registration to AppKitProvider ([16de2dc](https://www.github.com/dxos/sdk/commit/16de2dc489c760739eaec79be196a610ef4e8c2f))
+* Rename AppKitContextProvider -> AppKitProvider ([3879765](https://www.github.com/dxos/sdk/commit/38797653686e57702912c24ee60acf294f804e50))
+
+
+### Bug Fixes
+
+* Add 'persistent' storage type that selects the default driver for the platform ([be3fc2d](https://www.github.com/dxos/sdk/commit/be3fc2d7910d221a5782a71d5a35772cc91d24e0))
+* Deprecate check for errors ([35e0a40](https://www.github.com/dxos/sdk/commit/35e0a40140b1b72792694940c1effa43b9a11e38))
+
+### [2.5.2](https://www.github.com/dxos/sdk/compare/v2.5.1...v2.5.2) (2020-10-26)
+
+
+### Features
+
+* Rewrite client config ([#258](https://www.github.com/dxos/sdk/issues/258)) ([d52d8e9](https://www.github.com/dxos/sdk/commit/d52d8e9f0937d37d4d9c4e586c48e8966ba60fd5))
+
+
+### Bug Fixes
+
+* Preserve done invitation state ([#256](https://www.github.com/dxos/sdk/issues/256)) ([945fe0f](https://www.github.com/dxos/sdk/commit/945fe0fb7b619cb2a2dcd6813ec0c9afe552aef2))
+
+### [2.5.1](https://www.github.com/dxos/sdk/compare/v2.5.0...v2.5.1) (2020-10-23)
+
+
+### Features
+
+* Restore party item restore functionality ([#253](https://www.github.com/dxos/sdk/issues/253)) ([4ea6819](https://www.github.com/dxos/sdk/commit/4ea6819c51ed723f3e4bd63a24e8871f4cb29583))
+
+
+### Bug Fixes
+
+* automatically close redeem dialog and restore state to initial ([#255](https://www.github.com/dxos/sdk/issues/255)) ([662a493](https://www.github.com/dxos/sdk/commit/662a493f63365310389cc2541d5db06bf87a6836))
+* Increate client initialization warning timeout  ([#252](https://www.github.com/dxos/sdk/issues/252)) ([1920095](https://www.github.com/dxos/sdk/commit/1920095f6675a76d916baa81269ca9f974c35f4a))
+
 ## [2.5.0](https://www.github.com/dxos/sdk/compare/v2.4.0...v2.5.0) (2020-10-22)
 
 

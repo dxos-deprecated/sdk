@@ -5,11 +5,13 @@
 import assert from 'assert';
 import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import TreeView from '@material-ui/lab/TreeView';
+
 import { Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ObjectModel } from '@dxos/object-model';
+import TreeView from '@material-ui/lab/TreeView';
 
+import { keyToBuffer, keyToString, PublicKey } from '@dxos/crypto';
+import { ObjectModel } from '@dxos/object-model';
 import { useParty, useItems } from '@dxos/react-client';
 
 import {
@@ -17,15 +19,14 @@ import {
   // PartyTreeAddItemButton,
   PartyTreeItem
 } from '../components';
-
 import MemberList from '../components/MemberList';
 import { usePads, useAppRouter } from '../hooks';
-import { keyToBuffer } from '@dxos/crypto';
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'grid',
     gridTemplateRows: '1fr auto',
+    gridTemplateColumns: '100%',
     flex: 1
   },
   homeButtonLabel: {
@@ -36,13 +37,16 @@ const useStyles = makeStyles(theme => ({
   },
   homeButtonIcon: {
     marginRight: 8
+  },
+  item: {
+    textOverflow: 'ellipsis'
   }
 }));
 
 const DefaultItemList = () => {
   const router = useAppRouter();
   const { topic, item: active } = useParams();
-  const party = useParty(keyToBuffer(topic));
+  const party = useParty(PublicKey.from(topic));
   const classes = useStyles();
   const [pads] = usePads();
   const items = useItems({ partyKey: keyToBuffer(topic), type: pads.map(pad => pad.type) });
@@ -50,7 +54,7 @@ const DefaultItemList = () => {
   const anchor = useRef();
 
   const handleSelect = (itemId) => {
-    router.push({ topic, item: itemId });
+    router.push({ topic: keyToString(party.key.asUint8Array()), item: itemId });
   };
 
   const handleCreate = async (type) => {
@@ -69,6 +73,7 @@ const DefaultItemList = () => {
       <TreeView>
         {items.map(item => (
           <PartyTreeItem
+            className={classes.item}
             key={item.id}
             id={item.id}
             label={item._model.getProperty('title') || 'Untitled'}

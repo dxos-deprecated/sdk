@@ -1,6 +1,6 @@
 {
   "name": "@dxos/sdk",
-  "version": "2.5.0",
+  "version": "2.7.49",
   "private": true,
   "description": "DXOS SDK monorepo.",
   "homepage": "https://github.com/dxos/sdk#readme",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/dxos/sdk.git"
   },
-  "license": "AGPLv3",
+  "license": "AGPL-3.0",
   "workspaces": {
     "packages": [
       "packages/*",
@@ -19,31 +19,28 @@
     ]
   },
   "scripts": {
-    "build": "lerna run build",
-    "clean": "lerna run clean",
-    "lint": "lerna run lint && npm run lint:lockfile",
-    "lint:fix": "lerna run lint -- --fix",
-    "test": "lerna run test",
-    "posttest": "npm run lint",
-    "lint:staged": "lint-staged",
+    "build": "wsrun -t build",
+    "build:storybook": "wsrun --exclude-missing build:storybook",
+    "clean": "wsrun clean",
+    "lint": "wsrun lint",
+    "test": "wsrun -s test",
+    "test:coverage": "c8 yarn test",
+    "test:playwright": "wsrun -s --exclude-missing test:playwright",
     "lint:lockfile": "lockfile-lint --path yarn.lock --allowed-hosts yarn npm codeload.github.com --validate-https",
-    "precommit": "npm run lint:staged && npm run lint:lockfile"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint:staged && npm run lint:lockfile"
-    }
-  },
-  "lint-staged": {
-    "*.js": "semistandard"
+    "version:check": "version-check"
   },
   "devDependencies": {
+    "@dxos/version-check": "^0.1.0",
+    "@types/chalk": "^2.2.0",
+    "@types/semver": "^7.3.4",
     "babel-eslint": "^10.0.2",
-    "husky": "^3.1.0",
+    "c8": "^7.3.5",
+    "chalk": "^4.1.0",
     "lerna": "^3.19.0",
     "lint-staged": "^9.5.0",
     "lockfile-lint": "^4.3.7",
-    "semistandard": "14.2.0"
+    "semistandard": "14.2.0",
+    "wsrun": "^5.2.4"
   },
   "semistandard": {
     "parser": "babel-eslint",

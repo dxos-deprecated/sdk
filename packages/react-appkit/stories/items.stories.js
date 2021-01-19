@@ -7,10 +7,16 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import Icon from '@material-ui/icons/Settings';
 
-import { ItemSettings } from '../src/components';
+import { ItemSettings } from '../src';
 
 export default {
   title: 'Items'
+};
+
+const mockItem = {
+  model: {
+    getProperty: (propertyName) => propertyName
+  }
 };
 
 export const withItemSettingsDialog = () => {
@@ -18,9 +24,9 @@ export const withItemSettingsDialog = () => {
     <Box m={2}>
       <ItemSettings
         open
-        onClose={() => {}}
-        onCancel={() => {}}
-        item={{ displayName: 'an item' }}
+        onClose={() => null}
+        onCancel={() => null}
+        item={mockItem}
         closingDisabled
         icon={<Icon />}
       />
@@ -33,9 +39,9 @@ export const withPadSpecificItemSettingsDialog = () => {
     <Box m={2}>
       <ItemSettings
         open
-        onClose={() => {}}
-        onCancel={() => {}}
-        item={{ displayName: 'an item' }}
+        onClose={() => null}
+        onCancel={() => null}
+        item={mockItem}
         closingDisabled
         icon={<Icon />}
       >

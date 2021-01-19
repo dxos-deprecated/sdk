@@ -2,20 +2,21 @@
 // Copyright 2020 DXOS.org
 //
 
+import { withKnobs } from '@storybook/addon-knobs';
 import React, { useState } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
-import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
-import { withKnobs } from '@storybook/addon-knobs';
 
-import { ErrorHandler } from '@dxos/debug';
-import { useClient, useParty } from '@dxos/react-client';
-import { ObjectModel } from '@dxos/object-model';
+import Box from '@material-ui/core/Box';
 
-import { AppKitContextProvider, DefaultItemList, PartySettingsDialog } from '../src';
-import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
-import { pads, NoPartyComponent } from './common';
 import { keyToBuffer } from '@dxos/crypto';
+import { ErrorHandler } from '@dxos/debug';
+import { ObjectModel } from '@dxos/object-model';
+import { useClient, useParty } from '@dxos/react-client';
+
+import { AppKitProvider, DefaultItemList, PartySettingsDialog } from '../src';
+import { NoPartyComponent, pads } from './common';
+import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 
 export default {
   title: 'Party Contents',
@@ -43,12 +44,12 @@ const PartySettingsComponent = () => {
 
 export const withPartySettingsDialog = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
+    <AppKitProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={PartySettingsComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
   );
 };
 
@@ -56,7 +57,9 @@ const SidebarComponent = () => {
   const { topic } = useParams();
   const party = useParty(keyToBuffer(topic));
 
-  if (!party) return null;
+  if (!party) {
+    return null;
+  }
 
   const handleCreateItem = async () => {
     const itemId = await party.database.createItem({
@@ -77,11 +80,11 @@ const SidebarComponent = () => {
 
 export const withSidebarItems = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
+    <AppKitProvider initialState={{}} errorHandler={new ErrorHandler()} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={SidebarComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
   );
 };

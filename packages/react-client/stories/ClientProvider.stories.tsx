@@ -2,21 +2,41 @@
 // Copyright 2020 DXOS.org
 //
 
-import leveljs from 'level-js';
 import React, { useState, useEffect } from 'react';
 
 import { Client } from '@dxos/client';
-import { Keyring, KeyStore } from '@dxos/credentials';
-import { createStorage } from '@dxos/random-access-multi-storage';
+import { createKeyPair } from '@dxos/crypto';
+import { Party } from '@dxos/echo-db';
+import { ObjectModel } from '@dxos/object-model';
 
-import { ClientProvider, useClient } from '../src';
+import { ClientProvider, useClient, useItems, useParties, useProfile } from '../src';
 
 const Test = () => {
   const client = useClient();
+  const parties = useParties();
+  const profile = useProfile();
   return (
     <div>
       <h1>Client</h1>
       <pre>{JSON.stringify(client.config)}</pre>
+      <pre>{JSON.stringify(profile)}</pre>
+      <button onClick={() => client.createProfile({ ...createKeyPair(), username: 'foo' })}>Create profile</button>
+      <button onClick={() => client.createParty()}>Create party</button>
+      {parties.map((party: any) => <PartyView key={party.key.toString()} party={party} />)}
+    </div>
+  );
+};
+
+const PartyView = ({ party }: { party: Party }) => {
+  const items = useItems({ partyKey: party.key }) as any;
+
+  return (
+    <div>
+      <p>{party.key.toString()}</p>
+      <button onClick={() => party.database.createItem({ model: ObjectModel })}>Create item</button>
+      <ul>
+        {items.map((item: any) => <li key={item.id}>{item.id}</li>)}
+      </ul>
     </div>
   );
 };
@@ -52,8 +72,11 @@ export const Persistent = () => {
   useEffect(() => {
     setImmediate(async () => {
       const client = new Client({
-        storage: createStorage('react-client/storybook'),
-        keyring: new Keyring(new KeyStore(leveljs('react-client/storybook/keystore')))
+        storage: {
+          persistent: true
+        },
+        snapshots: true,
+        snapshotInterval: 10
       });
       await client.initialize();
       setClient(client);

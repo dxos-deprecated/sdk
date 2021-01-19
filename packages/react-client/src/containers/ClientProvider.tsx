@@ -4,9 +4,7 @@
 
 import React, { ReactNode, useEffect } from 'react';
 
-import { Client } from '@dxos/client';
-import metrics from '@dxos/metrics';
-
+import { Client } from '../../../client';
 import { ClientContext } from '../hooks/context';
 
 export interface ClientProviderProps {
@@ -19,11 +17,11 @@ export interface ClientProviderProps {
  */
 export const ClientProvider = ({ client, children }: ClientProviderProps) => {
   useEffect(() => {
-    (window as any).__DXOS__ = { client, metrics };
+    (window as any).__DXOS__ = client.getDevtoolsContext();
   }, []);
 
   return (
-    <ClientContext.Provider value={{ config: client.config, client, reset: () => client.reset() }}>
+    <ClientContext.Provider value={client}>
       {children}
     </ClientContext.Provider>
   );

@@ -20,7 +20,9 @@ export function useAsync (execute, deps) {
       err => cancelled === false && setState([undefined, err])
     );
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, deps);
 
   return state;

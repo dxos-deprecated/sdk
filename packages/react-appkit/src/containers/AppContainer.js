@@ -3,25 +3,20 @@
 //
 
 import React, { createRef, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { HotKeys, getApplicationKeyMap } from 'react-hotkeys';
+import { useParams } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import DebugIcon from '@material-ui/icons/BugReport';
-import PeopleIcon from '@material-ui/icons/People';
 import ConnectedIcon from '@material-ui/icons/Wifi';
 
 import { useConfig } from '@dxos/react-client';
 import { FullScreen } from '@dxos/react-ux';
 
-import { KeyMap, Layout, StatusBar } from '../components';
-import { Action, useErrorReducer, useLayoutReducer, useActionHandler } from '../hooks';
-
+import { DebugPanel, KeyMap, Layout, Sidebar, StatusBar } from '../components';
+import { useErrorReducer, useLayoutReducer } from '../hooks';
 import AppBar from './AppBar';
-import DebugPanel from './DebugPanel';
-import Sidebar from '../components/Sidebar';
-// import Redeem from './Redeem';
-import RedeemDialog from './Redeem';
+import RedeemDialog from './RedeemDialog';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -43,7 +38,8 @@ const AppContainer = ({
   onHomeNavigation,
   onPartyHomeNavigation,
   onPartyFromFile,
-  onPartyFromIpfs
+  onPartyFromIpfs,
+  onPartiesSettingsOpen
 }) => {
   const classes = useStyles();
   const config = useConfig();
@@ -51,7 +47,6 @@ const AppContainer = ({
   const [{ exceptions: errors }, setErrors] = useErrorReducer();
   const [{ showSidebar, showDebug }, setLayout] = useLayoutReducer();
   const [showKeyMap, setShowKeyMap] = useState(false);
-  const handleAction = useActionHandler();
   const hotKeys = createRef();
   const [redeemOpen, setRedeemOpen] = useState(false);
 
@@ -68,14 +63,6 @@ const AppContainer = ({
       Icon: DebugIcon
     }
   ];
-
-  if (topic) {
-    actions.push({
-      handler: () => handleAction(Action.SHOW_MEMBERS, { topic }),
-      title: 'Show members',
-      Icon: PeopleIcon
-    });
-  }
 
   const indicators = [
     {
@@ -137,6 +124,7 @@ const AppContainer = ({
               onPartyFromFile={onPartyFromFile}
               onPartyFromIpfs={onPartyFromIpfs}
               onRedeemOpen={() => setRedeemOpen(true)}
+              onPartiesSettingsOpen={onPartiesSettingsOpen}
             >
               {appBarContent}
             </AppBar>

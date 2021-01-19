@@ -3,8 +3,9 @@
 //
 
 import React from 'react';
-import { Logo as SharedLogo } from '@dxos/docs-theme';
 import { useStaticQuery, graphql } from 'gatsby';
+
+import { Logo as SharedLogo } from '@dxos/docs-theme';
 
 const query = graphql`
   query {
@@ -18,8 +19,11 @@ const query = graphql`
   }
 `;
 
-export default function Logo () {
+const Logo = () => {
   const { logoImage } = useStaticQuery(query);
 
   return <SharedLogo logoImage={logoImage} />;
-}
+};
+
+export default Logo;
+

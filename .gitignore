@@ -44,3 +44,8 @@ version.json
 .idea
 .temp
 .bots
+
+.yalc
+yalc.lock
+
+storybook-static

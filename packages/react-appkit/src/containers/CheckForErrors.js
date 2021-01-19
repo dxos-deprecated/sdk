@@ -2,11 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
-
 import { useClient, useInitError } from '@dxos/react-client';
 
+/**
+ * @deprecated No longer required.
+ */
 const CheckForErrors = ({ children }) => {
   const initError = useInitError();
   if (initError) {

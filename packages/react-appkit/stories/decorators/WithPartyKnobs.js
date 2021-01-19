@@ -2,12 +2,11 @@
 // Copyright 2020 DXOS.org
 //
 
-import React from 'react';
 import { button, select } from '@storybook/addon-knobs';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 import { useClient, useParties } from '@dxos/react-client';
-import { keyToString } from '@dxos/crypto';
-import { Redirect } from 'react-router-dom';
 
 /**
  * This decorator requires:
@@ -24,14 +23,16 @@ function RenderPartyKnobs ({ story }) {
   const parties = useParties();
 
   const options = parties.reduce((prev, p) => {
-    const key = keyToString(p.key);
+    const key = p.key.toHex();
     return {
       ...prev,
       [key]: key
     };
   }, { None: undefined });
 
-  button('Create Party', () => { client.partyManager.createParty(); });
+  button('Create Party', () => {
+    client.echo.createParty();
+  });
   const partyKey = select('Select Party', options, undefined);
 
   return (

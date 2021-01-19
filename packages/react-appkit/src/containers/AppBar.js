@@ -10,43 +10,42 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import ProfileIcon from '@material-ui/icons/AccountCircle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-
+import ProfileIcon from '@material-ui/icons/AccountCircle';
+import DevicesIcon from '@material-ui/icons/Devices';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import PersonIcon from '@material-ui/icons/Person';
 import ShareIcon from '@material-ui/icons/Share';
 
 import { BotFactoryClient } from '@dxos/botkit-client';
 import { generatePasscode } from '@dxos/credentials';
-import { encrypt, decrypt, keyToBuffer, verify, SIGNATURE_LENGTH, humanize } from '@dxos/crypto';
+import { encrypt, keyToBuffer, verify, SIGNATURE_LENGTH } from '@dxos/crypto';
 import { useClient, useConfig, useProfile } from '@dxos/react-client';
 
 import BotDialog from '../components/BotDialog';
 import ExportKeyringDialog from '../components/ExportKeyringDialog';
-import ImportKeyringDialog from '../components/ImportKeyringDialog';
 import InvitationDialog from '../components/InvitationDialog';
-
-import { Action, useActionHandler, useAppRouter } from '../hooks';
+import { useActionHandler, useAppRouter } from '../hooks';
 
 // TODO(telackey): This file is dead code, and these types no longer exist.
-const InviteDetails = () => {};
+const InviteDetails = () => null;
 const InviteType = null;
 
 const ACTION_USER_INVITATION = 1;
 const ACTION_DEVICE_INVITATION = 2;
 const ACTION_BOT_INVITATION = 3;
 const ACTION_EXPORT_KEYRING = 4;
-const ACTION_IMPORT_KEYRING = 5;
 const ACTION_RESET_STORAGE = 6;
 const ACTION_OPEN_SETTINGS = 7;
 const ACTION_OPEN_PARTY_HOME = 8;
 const ACTION_PARTY_FROM_FILE = 9;
 const ACTION_PARTY_FROM_IPFS = 10;
 const ACTION_OPEN_REDEEM = 11;
+const ACTION_PARTIES_SETTINGS = 12;
 
 const useStyles = makeStyles(theme => ({
   logo: {
@@ -75,13 +74,15 @@ const AppBar = ({
   onPartyHomeNavigation,
   onPartyFromFile,
   onPartyFromIpfs,
-  onRedeemOpen
+  onRedeemOpen,
+  onPartiesSettingsOpen
 }) => {
   const classes = useStyles();
   const client = useClient();
   const config = useConfig();
   const profile = useProfile();
   const router = useAppRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAction = useActionHandler();
 
   const [{ dialog, target } = {}, setDialog] = useState();
@@ -111,7 +112,7 @@ const AppBar = ({
     const { botId, ...rest } = spec;
     const botFactoryClient = new BotFactoryClient(client.networkManager, botFactoryTopic);
 
-    const secretProvider = () => {};
+    const secretProvider = () => null;
 
     // Provided by inviter node.
     const secretValidator = async (invitation, secret) => {
@@ -171,17 +172,17 @@ const AppBar = ({
    * Initiate the device invitation flow.
    */
   const handleDeviceInvite = async () => {
-    const invitation = await client.partyManager.identityManager.deviceManager.addDevice(
-      (invitation, secret) => secret && secret.equals(invitation.secret),
-      () => {
-        const passcode = generatePasscode();
-        setPasscode(passcode);
-        return Buffer.from(passcode);
-      },
-      {
-        onFinish: () => setDialog()
-      }
-    );
+    const secretValidator = (invitation, secret) => secret && secret.equals(invitation.secret);
+    const secretProvider = () => {
+      const passcode = generatePasscode();
+      setPasscode(passcode);
+      return Buffer.from(passcode);
+    };
+    const onFinish = () => setDialog();
+
+    // TODO(rzadp): Uncomment after updating ECHO.
+    // const invitation = await client.createHaloInvitation({ secretProvider, secretValidator }, { onFinish });
+    const invitation = await client.echo._identityManager.halo.invitationManager.createInvitation({ secretProvider, secretValidator }, { onFinish });
 
     setInvitation(invitation);
     setPasscode(null);
@@ -189,16 +190,8 @@ const AppBar = ({
     setDialog({ dialog: ACTION_DEVICE_INVITATION });
   };
 
-  // TODO(burdon): Broken.
-  const keyringEncrypter = async passphrase => {
-    const keyring = await client.keyringStore.getKeyring(topic);
-    return encrypt(keyring.toJSON(), passphrase);
-  };
-
-  // TODO(burdon): Broken.
-  const keyringDecrypter = async (data, passphrase) => {
-    const keyring = await client.keyringStore.getKeyring(topic);
-    await keyring.loadJSON(decrypt(data, passphrase));
+  const keyringEncrypter = passphrase => {
+    return encrypt(client.echo.keyring.toJSON(), passphrase);
   };
 
   //
@@ -230,19 +223,12 @@ const AppBar = ({
       }
     },
 
-    [ACTION_IMPORT_KEYRING]: {
-      label: 'Import keys',
-      handler: () => {
-        setDialog({ dialog: ACTION_IMPORT_KEYRING });
-      }
-    },
-
     [ACTION_RESET_STORAGE]: {
-      label: 'Reset Storage',
+      label: 'Reset storage',
       handler: async () => {
         localStorage.clear();
         await client.reset();
-        handleAction(Action.RELOAD);
+        window.location.reload();
       }
     },
 
@@ -275,9 +261,16 @@ const AppBar = ({
     },
 
     [ACTION_OPEN_REDEEM]: {
-      label: 'Redeem party',
+      label: 'Redeem invitation',
       handler: async () => {
         onRedeemOpen && onRedeemOpen();
+      }
+    },
+
+    [ACTION_PARTIES_SETTINGS]: {
+      label: 'Parties settings',
+      handler: async () => {
+        onPartiesSettingsOpen && onPartiesSettingsOpen();
       }
     }
   };
@@ -296,13 +289,10 @@ const AppBar = ({
   //
 
   const menuItems = [
-    // action(ACTION_DEVICE_INVITATION)
+    action(ACTION_DEVICE_INVITATION)
   ];
 
-  // if (topic) {
-  //   menuItems.push(action(ACTION_EXPORT_KEYRING));
-  //   menuItems.push(action(ACTION_IMPORT_KEYRING));
-  // }
+  // menuItems.push(action(ACTION_EXPORT_KEYRING)); // ISSUE: https://github.com/dxos/echo/issues/339#issuecomment-735918728
 
   if (onSettingsOpened) {
     menuItems.push(action(ACTION_OPEN_SETTINGS));
@@ -312,9 +302,9 @@ const AppBar = ({
   //   menuItems.push(action(ACTION_OPEN_PARTY_HOME));
   // }
 
-  // if (onPartyFromFile) {
-  //   menuItems.push(action(ACTION_PARTY_FROM_FILE));
-  // }
+  if (onPartyFromFile) {
+    menuItems.push(action(ACTION_PARTY_FROM_FILE));
+  }
 
   // if (onPartyFromIpfs) {
   //   menuItems.push(action(ACTION_PARTY_FROM_IPFS));
@@ -324,7 +314,11 @@ const AppBar = ({
     menuItems.push(action(ACTION_OPEN_REDEEM));
   }
 
-  menuItems.push(action(ACTION_RESET_STORAGE));
+  if (onPartiesSettingsOpen) {
+    menuItems.push(action(ACTION_PARTIES_SETTINGS));
+  }
+
+  menuItems.push(action(ACTION_RESET_STORAGE)); // Use devtools https://github.com/dxos/devtools
 
   //
   // Dialogs
@@ -340,6 +334,7 @@ const AppBar = ({
           link={invitation && router.createInvitationUrl(invitation)}
           passcode={passcode}
           title='Invitation User'
+          Icon={PersonIcon}
           message={passcode ? 'The peer has connected.' : 'A passcode will be generated once the remote peer connects.'}
           onClose={handleClose}
         />
@@ -353,6 +348,7 @@ const AppBar = ({
           link={invitation && router.createInvitationUrl(invitation)}
           passcode={passcode}
           title='Authorize Device'
+          Icon={DevicesIcon}
           message={passcode ? 'The peer has connected.' : 'A passcode will be generated once the remote peer connects.'}
           onClose={handleClose}
         />
@@ -376,16 +372,6 @@ const AppBar = ({
           topic={topic}
           onClose={handleClose}
           encrypter={keyringEncrypter}
-        />
-      )
-    },
-    {
-      key: ACTION_IMPORT_KEYRING,
-      dialog: (
-        <ImportKeyringDialog
-          open={dialog === ACTION_IMPORT_KEYRING}
-          onClose={handleClose}
-          decrypter={keyringDecrypter}
         />
       )
     }
@@ -434,7 +420,7 @@ const AppBar = ({
         ))}
 
         <div>
-          <Tooltip title={humanize(profile.username)}>
+          <Tooltip title={profile.username || 'Loading...'}>
             <IconButton color='inherit'>
               <ProfileIcon />
             </IconButton>

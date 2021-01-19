@@ -2,21 +2,26 @@
 // Copyright 2020 DXOS.org
 //
 
+import { withKnobs } from '@storybook/addon-knobs';
 import React, { useState } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
-import Box from '@material-ui/core/Box';
 import StoryRouter from 'storybook-react-router';
-import { withKnobs } from '@storybook/addon-knobs';
 
-import { useClient, useParty } from '@dxos/react-client';
 import { sleep } from '@dxos/async';
-import { ErrorHandler } from '@dxos/debug';
-
-import { AppKitContextProvider, BotDialog, AuthenticatorDialog, PartySharingDialog } from '../src';
-import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
-import { pads, NoPartyComponent } from './common';
-import { useAppRouter } from '../src/hooks';
 import { keyToBuffer } from '@dxos/crypto';
+import { ErrorHandler } from '@dxos/debug';
+import { useClient, useParty } from '@dxos/react-client';
+
+import {
+  useAppRouter,
+  AppKitProvider,
+  BotDialog,
+  PartySharingDialog,
+  RedeemDialog,
+  Theme
+} from '../src';
+import { pads, NoPartyComponent } from './common';
+import { WithClientAndIdentity, WithPartyKnobs } from './decorators';
 
 const errorHandler = new ErrorHandler();
 
@@ -31,102 +36,36 @@ const BotDialogComponent = () => {
 
   const handleSubmit = async ({ bot }) => {
     await sleep(1000);
-    if (bot.includes('will-hang')) return new Promise(() => {});
-    if (bot.includes('will-fail')) throw new Error('Failed deploy');
+    if (bot.includes('will-hang')) {
+      return new Promise(() => null);
+    }
+    if (bot.includes('will-fail')) {
+      throw new Error('Failed deploy');
+    }
     setDeployed(true);
     setOpen(false);
   };
 
   return (
-    <Box m={2}>
+    <Theme>
       <BotDialog
         open={open}
         onClose={() => setOpen(false)}
         onSubmit={handleSubmit}
       />
       {deployed && (<p>Successfully deployed!</p>)}
-    </Box>
+    </Theme>
   );
 };
 
-// TODO(burdon): Fix useRegistry to use Registry object created in context.
 export const withBotDialog = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
+    <AppKitProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={BotDialogComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
-  );
-};
-
-export const withAuthenticatorDialog = () => {
-  const [submitted, setSubmitted] = useState(false);
-  const [open, setOpen] = useState(true);
-
-  if (!open) {
-    return <p>Canceled.</p>;
-  }
-
-  if (submitted) {
-    return <p>Submitted!</p>;
-  }
-
-  return (
-    <Box m={2}>
-      <AuthenticatorDialog
-        onCancel={() => setOpen(false)}
-        onSubmit={() => setSubmitted(true)}
-      />
-    </Box>
-  );
-};
-
-export const withAuthenticatorDialogKnownFlow = () => {
-  const [open, setOpen] = useState(true);
-
-  if (!open) {
-    return <p>Canceled.</p>;
-  }
-
-  return (
-    <Box m={2}>
-      <AuthenticatorDialog
-        onCancel={() => setOpen(false)}
-        isOfflineKeyInvitation
-      />
-    </Box>
-  );
-};
-
-const AuthenticatorDialogErrorComponent = () => {
-  const [open, setOpen] = useState(true);
-  const error = 'ERR_EXTENSION_RESPONSE_FAILED: [responseCode: ERR_EXTENSION_RESPONSE_FAILED [message: [responseCode: ERR_GREET_INVALID_INVITATION] [message: 86a17f482d683a50654926f0d4218c57816c0f85b946386a287f9e424e49fcd6 invalid]]';
-
-  if (!open) {
-    return <p>Canceled.</p>;
-  }
-
-  return (
-    <Box m={2}>
-      <AuthenticatorDialog
-        error={error}
-        onCancel={() => setOpen(false)}
-        onSubmit={() => {}}
-      />
-    </Box>
-  );
-};
-
-export const withAuthenticatorDialogError = () => {
-  return (
-    <AppKitContextProvider initialState={{}} errorHandler={errorHandler} pads={pads} issuesLink='https://github.com/dxos/sdk/issues/new'>
-      <Switch>
-        <Route path='/:topic' exact component={AuthenticatorDialogErrorComponent} />
-        <Route path='/' exact component={NoPartyComponent} />
-      </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
   );
 };
 
@@ -138,7 +77,7 @@ const PartySharingComponent = () => {
   const router = useAppRouter();
 
   return (
-    <Box m={2}>
+    <Theme>
       <PartySharingDialog
         party={party}
         client={client}
@@ -146,17 +85,25 @@ const PartySharingComponent = () => {
         onClose={() => setOpen(false)}
         router={router}
       />
-    </Box>
+    </Theme>
   );
 };
 
 export const withPartySharing = () => {
   return (
-    <AppKitContextProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
+    <AppKitProvider initialState={{}} errorHandler={errorHandler} pads={pads}>
       <Switch>
         <Route path='/:topic' exact component={PartySharingComponent} />
         <Route path='/' exact component={NoPartyComponent} />
       </Switch>
-    </AppKitContextProvider>
+    </AppKitProvider>
+  );
+};
+
+export const withRedeemInvitation = () => {
+  return (
+    <Theme>
+      <RedeemDialog onClose={() => null} />
+    </Theme>
   );
 };

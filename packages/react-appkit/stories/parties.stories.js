@@ -6,7 +6,7 @@ import React from 'react';
 
 import Box from '@material-ui/core/Box';
 
-import { PartyCard } from '../src/components';
+import { PartyCard } from '../src';
 
 export default {
   title: 'Parties'
@@ -15,7 +15,7 @@ export default {
 export const withNewPartyCard = () => {
   return (
     <Box m={2}>
-      <PartyCard onNewParty={() => {}} />
+      <PartyCard onNewParty={() => null} />
     </Box>
   );
 };
