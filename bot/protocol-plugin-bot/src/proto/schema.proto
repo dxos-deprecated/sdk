@@ -23,7 +23,7 @@ message SpawnOptions {
 
 // Command to spawn a bot.
 message Spawn {
-  // Bot WRN (e.g. wrn://example/bot/chess).
+  // Bot DXN (e.g. dxn://example/bot/chess).
   string botName = 1;
   SpawnOptions options = 2;
 }

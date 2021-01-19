@@ -40,7 +40,7 @@ export class SourceManager {
    * @returns Install directory.
    */
   async downloadAndInstallBot (id: string, ipfsCID: string | undefined, options: SpawnOptions): Promise<string> {
-    // Local bot development mode, bypasses WNS/IPFS.
+    // Local bot development mode, bypasses Registry/IPFS.
     if (this._localDev) {
       return process.cwd();
     }

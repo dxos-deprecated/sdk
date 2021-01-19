@@ -193,14 +193,14 @@ const Test = () => {
 
   // TODO(burdon): Use ECHO to get data.
   const [rows] = useState(data);
-  const items = withItems('wrn://dxos.org/item/record');
+  const items = withItems('dxn://dxos.org/item/record');
   const mutator = withItemMutator();
 
   // TODO(burdon): Set initial data.
   console.log('Items:', JSON.stringify({ items: items.map(item => item.model.getProperty('title')) }));
 
   const handleAddRow = async () => {
-    await mutator.createItem('wrn://dxos.org/item/record', { title: 'Test' });
+    await mutator.createItem('dxn://dxos.org/item/record', { title: 'Test' });
     // rows.push({ id: rows.length + 1 });
     // setRows(JSON.parse(JSON.stringify(rows)));
   };

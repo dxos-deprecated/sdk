@@ -24,7 +24,7 @@ import {
   createBotCommand,
   SpawnOptions
 } from '@dxos/protocol-plugin-bot';
-import { Registry } from '@wirelineio/registry-client';
+import { Registry } from '@dxos/registry-client';
 
 import { BOT_CONFIG_FILENAME } from './config';
 import { BotContainer } from './containers/common';
@@ -101,7 +101,7 @@ export class BotManager {
     this._localDev = this._config.get('bot.localDev');
     this._botsFile = path.join(process.cwd(), this._config.get('bot.dumpFile', BOTS_DUMP_FILE));
 
-    this._registry = new Registry(this._config.get('services.wns.server'), this._config.get('services.wns.chainId'));
+    this._registry = new Registry(this._config.get('services.registry.server'), this._config.get('services.registry.chainId'));
 
     ensureFileSync(this._botsFile);
 
