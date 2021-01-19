@@ -1,5 +1,19 @@
 # Changelog
 
+### [2.7.50](https://www.github.com/dxos/sdk/compare/v2.7.49...v2.7.50) (2021-01-19)
+
+
+### Features
+
+* WNS migration ([#507](https://www.github.com/dxos/sdk/issues/507)) ([b615b0f](https://www.github.com/dxos/sdk/commit/b615b0fc9891cdc5f42c5066541336a3b99bb63c))
+
+
+### Bug Fixes
+
+* Fix devtools versioning ([da971e0](https://www.github.com/dxos/sdk/commit/da971e00f6ea3eed29233f0365751455b419af6d))
+* Properly handle recoverable connectivity errors around bot registries ([#505](https://www.github.com/dxos/sdk/issues/505)) ([6496ac0](https://www.github.com/dxos/sdk/commit/6496ac0423c7448336d1f0164914d0670a52278e))
+* Properly restore text model from snapshot ([#502](https://www.github.com/dxos/sdk/issues/502)) ([b8bfad1](https://www.github.com/dxos/sdk/commit/b8bfad122ef2d4aa011aa34e1f50a0e64a18db19))
+
 ### [2.7.49](https://www.github.com/dxos/sdk/compare/v2.7.48...v2.7.49) (2020-12-23)
 
 
