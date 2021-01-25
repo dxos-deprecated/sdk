@@ -10,7 +10,7 @@
   "include": [
     "src",
   ],
-  "ignore": "/node_modules/",
+  "exclude": "/node_modules/",
   "references": [
     { "path": "../client" }
   ]
