@@ -2,7 +2,7 @@
 // Copyright 2020 DXOS.org
 //
 
-// TODO(egorgripasov): Factor out (use config from ~/.wire?).
+// TODO(egorgripasov): Factor out (use config from ~/.dx?).
 export const CONFIG = {
   DX_SIGNAL_ENDPOINT: 'wss://apollo2.kube.moon.dxos.network/dxos/signal',
   DX_ICE_ENDPOINTS: '[{"urls":"stun:apollo1.kube.moon.dxos.network:3478"},{"urls":"turn:apollo1.kube.moon.dxos.network:3478","username":"dxos","credential":"dxos"},{"urls":"stun:apollo2.kube.moon.dxos.network:3478"},{"urls":"turn:apollo2.kube.moon.dxos.network:3478","username":"dxos","credential":"dxos"}]',
