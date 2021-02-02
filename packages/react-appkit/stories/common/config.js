@@ -17,7 +17,7 @@ export const config = {
     mode: 'development'
   },
   services: {
-    registry: {
+    wns: {
       server: 'http://example.com',
       chainId: 'example'
     }
