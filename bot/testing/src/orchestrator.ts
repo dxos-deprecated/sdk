@@ -35,7 +35,7 @@ export const BROWSER_ENV = 'browser';
 // Important: this regulates how often bot gets downloaded from ipfs.
 const testTime = Date.now();
 const getBotIdentifiers = (botPath: string, env: string | undefined) => {
-  const name = `dxn://dxos.org/bot/${env}/${path.basename(botPath)}`;
+  const name = `wrn://dxos/bot/${env}/${path.basename(botPath)}`;
   const id = sha256(`${name}${testTime}`);
   return {
     id,
@@ -57,8 +57,8 @@ export class Orchestrator {
       storage: ram,
       // TODO(egorgripasov): Factor out (use main config).
       swarm: {
-        signal: CONFIG.DX_SIGNAL_ENDPOINT,
-        ice: JSON.parse(CONFIG.DX_ICE_ENDPOINTS)
+        signal: CONFIG.WIRE_SIGNAL_ENDPOINT,
+        ice: JSON.parse(CONFIG.WIRE_ICE_ENDPOINTS)
       }
     });
     this._localRun = local;
@@ -108,14 +108,14 @@ export class Orchestrator {
       let ipfsCID = this._builds.get(buildId);
       if (!ipfsCID) {
         log('Building & publishing bot package...');
-        ipfsCID = await buildAndPublishBot(CONFIG.DX_IPFS_GATEWAY, botPath, env === 'browser');
+        ipfsCID = await buildAndPublishBot(CONFIG.WIRE_IPFS_GATEWAY, botPath, env === 'browser');
         this._builds.set(buildId, ipfsCID);
       }
       options = {
         ...rest,
         env,
         ipfsCID,
-        ipfsEndpoint: CONFIG.DX_IPFS_GATEWAY
+        ipfsEndpoint: CONFIG.WIRE_IPFS_GATEWAY
       };
     }
 
@@ -146,11 +146,11 @@ export class Orchestrator {
         NODE_OPTIONS: '',
         ...CONFIG,
         DEBUG: `bot-factory,bot-factory:*,dxos:botkit*,dxos:testing*,${process.env.DEBUG}`,
-        DX_BOT_RESET: 'true',
-        DX_BOT_TOPIC: topic,
-        DX_BOT_SECRET_KEY: keyToString(secretKey),
-        DX_BOT_LOCAL_DEV: this._localRun.toString(),
-        DX_BOT_DUMP_FILE: path.join(FACTORY_OUT_DIR, topic)
+        WIRE_BOT_RESET: 'true',
+        WIRE_BOT_TOPIC: topic,
+        WIRE_BOT_SECRET_KEY: keyToString(secretKey),
+        WIRE_BOT_LOCAL_DEV: this._localRun.toString(),
+        WIRE_BOT_DUMP_FILE: path.join(FACTORY_OUT_DIR, topic)
       };
 
       const factory = spawn('node', [path.join(__dirname, './bot-factory.js')], { env });
