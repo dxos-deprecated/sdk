@@ -3,8 +3,8 @@
 //
 
 // TODO(burdon): Factor out constants to client.
-export const DXN_TYPE_BOT = 'dxn:bot';
-export const DXN_TYPE_BOT_FACTORY = 'dxn:bot-factory';
+export const WRN_TYPE_BOT = 'wrn:bot';
+export const WRN_TYPE_BOT_FACTORY = 'wrn:bot-factory';
 
 // Registry client has no types
 export interface QueryRecord {

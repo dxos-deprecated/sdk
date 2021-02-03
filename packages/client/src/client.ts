@@ -18,8 +18,8 @@ import { ModelConstructor } from '@dxos/model-factory';
 import { NetworkManager } from '@dxos/network-manager';
 import { ValueUtil } from '@dxos/object-model';
 import { createStorage } from '@dxos/random-access-multi-storage';
-import { Registry } from '@dxos/registry-client';
 import { raise } from '@dxos/util';
+import { Registry } from '@wirelineio/registry-client';
 
 import { DevtoolsContext } from './devtools-context';
 import { isNode } from './platform';
@@ -43,7 +43,7 @@ export interface ClientConfig {
       credential?: string,
     }[],
   },
-  registry?: {
+  wns?: {
     server: string,
     chainId: string,
   },
@@ -80,7 +80,7 @@ export class Client {
     const {
       storage = {},
       swarm = DEFAULT_SWARM_CONFIG,
-      registry,
+      wns,
       snapshots = false,
       snapshotInterval
     } = config;
@@ -100,7 +100,7 @@ export class Client {
       snapshotInterval
     });
 
-    this._registry = registry ? new Registry(registry.server, registry.chainId) : undefined;
+    this._registry = wns ? new Registry(wns.server, wns.chainId) : undefined;
   }
 
   get config (): ClientConfig {

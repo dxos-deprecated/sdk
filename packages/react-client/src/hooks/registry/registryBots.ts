@@ -6,7 +6,7 @@ import debug from 'debug';
 import { useState, useEffect } from 'react';
 
 import { useRegistry } from './registry';
-import { QueryRecord, DXN_TYPE_BOT } from './types';
+import { QueryRecord, WRN_TYPE_BOT } from './types';
 
 const log = debug('dxos:react-client');
 
@@ -33,7 +33,7 @@ export const useRegistryBots = ({ sortByKeywords }: UseRegistryBotsProps = {}) =
     const queryRegistry = async () => {
       let botsResult: QueryRecord[];
       try {
-        botsResult = await registry.queryRecords({ type: DXN_TYPE_BOT });
+        botsResult = await registry.queryRecords({ type: WRN_TYPE_BOT });
       } catch (e) {
         log('Querying bots unsuccessful.');
         log(e);

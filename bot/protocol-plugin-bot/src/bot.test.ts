@@ -81,7 +81,7 @@ describe('test peers in a network graph of 15 peers', () => {
   const topic = crypto.randomBytes(32);
   let graph, peers: any[], connections: any[];
 
-  const command = createSpawnCommand('dxn://dxos.org/bot/chess');
+  const command = createSpawnCommand('wrn://dxos/bot/chess');
 
   beforeAll(async () => {
     graph = generator.balancedBinTree(3);

@@ -6,7 +6,7 @@ import urlJoin from 'url-join';
 
 /**
  * IPFS gateway HTTP methods.
- * Imported from the old appkit
+ * Imported from wirelineio/appkit
  */
 export class IpfsHelper {
   /**
