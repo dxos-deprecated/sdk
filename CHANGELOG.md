@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.9.0](https://www.github.com/dxos/sdk/compare/v2.8.0...v2.9.0) (2021-02-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* Reverted breaking changes from the migration.
+
+### Features
+
+* Revert WNS migration ([#512](https://www.github.com/dxos/sdk/issues/512)) ([79a2dfe](https://www.github.com/dxos/sdk/commit/79a2dfe783920ccab87ca544bbcb990825554749))
+
 ## [2.8.0](https://www.github.com/dxos/sdk/compare/v2.7.49...v2.8.0) (2021-01-19)
 
 
