@@ -12,11 +12,11 @@
     "test": "jest --rootDir ./src --verbose --passWithNoTests"
   },
   "dependencies": {
-    "@dxos/credentials": "~2.1.16-alpha.0",
+    "@dxos/credentials": "~2.1.17-alpha.0",
     "@dxos/crypto": "~1.0.7",
-    "@dxos/debug": "~1.0.0-beta.75",
-    "@dxos/network-devtools": "~1.0.6",
-    "@dxos/react-ux": "^2.9.0",
+    "@dxos/debug": "~1.0.0-beta.78",
+    "@dxos/network-devtools": "~1.0.8",
+    "@dxos/react-ux": "~2.9.0",
     "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.55",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@dxos/eslint-plugin": "~1.0.10",
-    "@dxos/network-manager": "~1.0.6",
+    "@dxos/network-manager": "~1.0.8",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "eslint": "^7.13.0",

@@ -28,9 +28,9 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@dxos/botkit": "^2.9.0",
+    "@dxos/botkit": "~2.9.0",
     "@dxos/editor-core": "~1.0.0-beta.34",
-    "@dxos/text-model": "~2.6.20",
+    "@dxos/text-model": "~2.6.22",
     "simple-git": "^2.20.1"
   },
   "devDependencies": {
